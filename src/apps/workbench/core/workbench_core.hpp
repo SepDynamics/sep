@@ -111,7 +111,7 @@ private:
     std::unique_ptr<EngineTabController> engine_tab_;
     std::unique_ptr<BackendTabController> backend_tab_;
     std::unique_ptr<QuantumSignalGenerator> signal_generator_;
-    std::unique_ptr<MetricsMonitor> metrics_monitor_;
+    std::shared_ptr<MetricsMonitor> metrics_monitor_;
     std::unique_ptr<MultiTimeframeAnalyzer> multi_timeframe_analyzer_;
     
     // Engine components (may be null if service not connected)

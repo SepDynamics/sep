@@ -102,7 +102,7 @@ bool WorkbenchEngine::initialize()
             metrics_.service_connected = (e.state == ConnectionState::CONNECTED);
         });
         signal_generator_ = ::std::make_unique<QuantumSignalGenerator>();
-        metrics_monitor_ = ::std::make_unique<MetricsMonitor>();
+        metrics_monitor_ = ::std::make_shared<MetricsMonitor>();
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
         
         // Initialize renderer and metrics dashboard
@@ -121,10 +121,11 @@ bool WorkbenchEngine::initialize()
         // Set up data flow
         signals_tab_->setOandaConnector(service_connector_->getOandaConnector());
         signals_tab_->setQuantumSignalGenerator(signal_generator_.get());
-        signals_tab_->setMetricsMonitor(metrics_monitor_.get());
+        signals_tab_->setMetricsMonitor(metrics_monitor_);
         signals_tab_->setWorkbenchEngine(this);
         service_connector_->setSignalsTab(signals_tab_.get());
         engine_tab_->setSEPEngine(active_engine_);
+        engine_tab_->setMetricsMonitor(metrics_monitor_);
         engine_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         backend_tab_->setServiceConnector(service_connector_.get());
         backend_tab_->setTradeManager(service_connector_->getTradeManager());

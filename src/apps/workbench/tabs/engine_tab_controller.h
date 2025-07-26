@@ -50,6 +50,7 @@ private:
 
     // Export path buffer
     char correlation_export_path_[512] = "correlation.csv";
+    char metrics_export_path_[512] = "metrics.json";
 };
 
 } // namespace sep::workbench

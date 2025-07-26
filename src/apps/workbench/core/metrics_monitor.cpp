@@ -59,6 +59,7 @@ void MetricsMonitor::shutdown() {
 void MetricsMonitor::clear() {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
     pattern_stats_.clear();
+    pattern_stats_map_.clear();
     system_metrics_ = SystemMetrics{};
     system_metrics_.last_update = std::chrono::steady_clock::now();
     rolling_metrics_ = RollingMetrics{};
@@ -224,25 +225,39 @@ void MetricsMonitor::updateMetrics() {
     auto metrics = engine->computeMetrics();
 
     std::lock_guard<std::mutex> lock(metrics_mutex_);
-    pattern_stats_.clear();
 
     auto now = std::chrono::steady_clock::now();
 
-    // Convert quantum engine metrics to our format
     for (const auto& metric : metrics)
     {
-        PatternStats stats;
-        stats.pattern_id = std::string(metric.pattern_id);
-        stats.coherence = metric.coherence;
-        stats.stability = metric.stability;
-        stats.entropy = metric.entropy;
-        stats.first_seen = now;  // We don't track this in the engine yet
-        stats.last_seen = now;
-        stats.frequency = 1;                       // TODO: Track frequency in engine
-        stats.length = strlen(metric.pattern_id);  // Approximate
-        stats.persistence = 0.0f;
+        std::string id(metric.pattern_id);
+        auto it = pattern_stats_map_.find(id);
+        if (it == pattern_stats_map_.end()) {
+            PatternStats stats;
+            stats.pattern_id = id;
+            stats.coherence = metric.coherence;
+            stats.stability = metric.stability;
+            stats.entropy = metric.entropy;
+            stats.first_seen = now;
+            stats.last_seen = now;
+            stats.frequency = 1;
+            stats.length = strlen(metric.pattern_id);
+            stats.persistence = 0.0f;
+            pattern_stats_map_[id] = stats;
+        } else {
+            auto& s = it->second;
+            s.coherence = metric.coherence;
+            s.stability = metric.stability;
+            s.entropy = metric.entropy;
+            s.last_seen = now;
+            s.frequency += 1;
+        }
+    }
 
-        pattern_stats_.push_back(stats);
+    pattern_stats_.clear();
+    pattern_stats_.reserve(pattern_stats_map_.size());
+    for (const auto& kv : pattern_stats_map_) {
+        pattern_stats_.push_back(kv.second);
     }
 
     calculateSystemMetrics();

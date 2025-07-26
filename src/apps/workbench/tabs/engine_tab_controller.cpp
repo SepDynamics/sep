@@ -63,6 +63,7 @@ void EngineTabController::renderSEPMetricsPanel() {
     }
 
     const auto& system_metrics = metrics_monitor_->getSystemMetrics();
+    const auto& rolling = metrics_monitor_->getRollingMetrics();
 
     ImGui::Text("Coherence: %.3f", system_metrics.avg_coherence);
     ImGui::ProgressBar(system_metrics.avg_coherence, ImVec2(-1, 0));
@@ -72,6 +73,14 @@ void EngineTabController::renderSEPMetricsPanel() {
 
     ImGui::Text("Entropy:   %.3f", system_metrics.avg_entropy);
     ImGui::ProgressBar(1.0f - system_metrics.avg_entropy, ImVec2(-1, 0));
+
+    ImGui::Text("1h Avg Coherence: %.3f", rolling.coherence_1h_avg);
+    ImGui::Text("1h Avg Stability: %.3f", rolling.stability_1h_avg);
+    ImGui::Text("1h Avg Entropy: %.3f", rolling.entropy_1h_avg);
+
+    ImGui::Text("4h Avg Coherence: %.3f", rolling.coherence_4h_avg);
+    ImGui::Text("4h Avg Stability: %.3f", rolling.stability_4h_avg);
+    ImGui::Text("4h Avg Entropy: %.3f", rolling.entropy_4h_avg);
 
     ImGui::Spacing();
     ImGui::Separator();
@@ -109,9 +118,14 @@ void EngineTabController::renderSEPMetricsPanel() {
 
         ImGui::Text("Memory Tiers:");
         for (int i = 0; i < 3; i++) {
-            ImGui::Text("  Tier %d: %.3f coherence, %.3f fragmentation", 
+            ImGui::Text("  Tier %d: %.3f coherence, %.3f fragmentation",
                        i, coherence_metrics.tier_coherence[i], coherence_metrics.tier_fragmentation[i]);
         }
+    }
+
+    ImGui::InputText("Metrics JSON Path", metrics_export_path_, sizeof(metrics_export_path_));
+    if (ImGui::Button("Export Metrics")) {
+        metrics_monitor_->saveMetricsToFile(metrics_export_path_);
     }
 }
 

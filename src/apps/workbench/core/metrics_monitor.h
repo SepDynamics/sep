@@ -151,6 +151,7 @@ private:
     // The actual engine will be created in the implementation
     void* engine_; // Using void* to avoid including the header here
     std::vector<PatternStats> pattern_stats_;
+    std::unordered_map<std::string, PatternStats> pattern_stats_map_;
     SystemMetrics system_metrics_;
     RollingMetrics rolling_metrics_;
     ThresholdSignal latest_signal_;

@@ -283,12 +283,30 @@ void SignalsTabController::renderMainChart() {
         return;
     }
 
-    std::vector<double> xs(candle_data_.size());
-    std::vector<double> open(candle_data_.size());
-    std::vector<double> close(candle_data_.size());
-    std::vector<double> low(candle_data_.size());
-    std::vector<double> high(candle_data_.size());
-    for (size_t i = 0; i < candle_data_.size(); ++i) {
+    ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, ImPlotCond_Always);
+    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300), ImPlotFlags_Crosshairs | ImPlotFlags_NoMenus)) {
+        renderCandlesticks();
+        ImPlot::EndPlot();
+    }
+}
+
+void SignalsTabController::renderCandlesticks() {
+    if (candle_data_.empty()) return;
+
+    static std::vector<double> xs;
+    static std::vector<double> open;
+    static std::vector<double> close;
+    static std::vector<double> low;
+    static std::vector<double> high;
+
+    const size_t count = candle_data_.size();
+    xs.resize(count);
+    open.resize(count);
+    close.resize(count);
+    low.resize(count);
+    high.resize(count);
+
+    for (size_t i = 0; i < count; ++i) {
         xs[i] = static_cast<double>(i);
         open[i] = candle_data_[i].open;
         close[i] = candle_data_[i].close;
@@ -296,55 +314,16 @@ void SignalsTabController::renderMainChart() {
         high[i] = candle_data_[i].high;
     }
 
-    ImPlot::SetNextAxesToFit();
-    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300),
-                          ImPlotFlags_Crosshairs | ImPlotFlags_NoMenus)) {
-        ImPlot::PlotShaded("OHLC", xs.data(), open.data(), close.data(), low.data(), high.data(),
-                               static_cast<int>(xs.size()));
-        ImPlot::EndPlot();
+    ImPlot::PushPlotClipRect();
+    ImPlot::PlotCandlestick("Price", xs.data(), open.data(), close.data(), low.data(), high.data(), static_cast<int>(count));
+
+    ImPlotPoint delta = ImPlot::DragDelta(ImAxis_X1, ImAxis_Y1);
+    if (delta.y != 0.0) {
+        chart_zoom_.price_min -= delta.y;
+        chart_zoom_.price_max -= delta.y;
+        chart_zoom_.is_zoomed = true;
     }
-}
-
-void SignalsTabController::renderCandlesticks() {
-    if (candle_data_.empty() || price_max_ <= price_min_) return;
-
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
-    float candle_width = chart_size_.x / std::min((size_t)candle_data_.size(), (size_t)1440);
-    float body_width = std::max(1.0f, candle_width * 0.8f);
-
-    size_t start_idx = candle_data_.size() > 1440 ? candle_data_.size() - 1440 : 0;
-
-    for (size_t i = start_idx; i < candle_data_.size(); i++) {
-        const auto& candle = candle_data_[i];
-        float x = chart_pos_.x + ((i - start_idx) + 0.5f) * candle_width;
-
-        float high_y = chart_pos_.y + chart_size_.y - ((candle.high - price_min_) / (price_max_ - price_min_)) * chart_size_.y;
-        float low_y = chart_pos_.y + chart_size_.y - ((candle.low - price_min_) / (price_max_ - price_min_)) * chart_size_.y;
-        float open_y = chart_pos_.y + chart_size_.y - ((candle.open - price_min_) / (price_max_ - price_min_)) * chart_size_.y;
-        float close_y = chart_pos_.y + chart_size_.y - ((candle.close - price_min_) / (price_max_ - price_min_)) * chart_size_.y;
-
-        bool is_bullish = candle.close > candle.open;
-        ImU32 wick_color = is_bullish ? IM_COL32(46, 204, 113, 255) : IM_COL32(231, 76, 60, 255);
-        ImU32 body_color = getCandleColor(candle, true);
-
-        draw_list->AddLine(ImVec2(x, high_y), ImVec2(x, low_y), wick_color, 1.0f);
-
-        float body_top = std::min(open_y, close_y);
-        float body_bottom = std::max(open_y, close_y);
-
-        if (std::abs(body_bottom - body_top) < 1.0f) {
-            draw_list->AddLine(ImVec2(x - body_width/2, open_y), ImVec2(x + body_width/2, open_y), body_color, 2.0f);
-        } else {
-            ImVec2 body_min = ImVec2(x - body_width/2, body_top);
-            ImVec2 body_max = ImVec2(x + body_width/2, body_bottom);
-            if (is_bullish) {
-                draw_list->AddRect(body_min, body_max, body_color, 0.0f, 0, 1.5f);
-            } else {
-                draw_list->AddRectFilled(body_min, body_max, body_color);
-            }
-        }
-    }
+    ImPlot::PopPlotClipRect();
 }
 
 void SignalsTabController::renderTechnicalIndicators() {

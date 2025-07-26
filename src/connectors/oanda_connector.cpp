@@ -153,9 +153,6 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
                 out.reserve(candles.size());
                 for (const auto& c : candles) {
                     sep::common::CandleData cd;
-                    std::tm tm{};
-                    std::istringstream ss(c.time);
-                    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
                     cd.timestamp = sep::common::parseTimestamp(c.time);
                     cd.open = c.open;
                     cd.high = c.high;
@@ -342,7 +339,7 @@ double OandaConnector::calculateATR(const std::string& instrument, const std::st
 {
     auto candles = getHistoricalData(instrument, granularity, "", "", periods + 1);
     
-    if (candles.size() < periods) {
+    if (candles.size() < static_cast<size_t>(periods)) {
         last_error_ = "Insufficient candle data for ATR calculation";
         return 0.0;
     }

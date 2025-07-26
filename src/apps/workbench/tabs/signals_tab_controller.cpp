@@ -37,17 +37,24 @@ bool SignalsTabController::initialize() {
 void SignalsTabController::render() {
     ImGui::Columns(2, "SignalsColumns", true);
     ImGui::Begin("Signal Thresholds");
-    ImGui::SliderFloat("Min Coherence", &min_coherence_, 0.0f, 1.0f);
-    ImGui::SliderFloat("Min Stability", &min_stability_, 0.0f, 1.0f);
-    ImGui::SliderFloat("Max Entropy", &max_entropy_, 0.0f, 1.0f);
+    ImGui::Text("BUY thresholds");
+    ImGui::SliderFloat("Buy Coherence", &buy_min_coherence_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Buy Stability", &buy_min_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Buy Max Entropy", &buy_max_entropy_, 0.0f, 1.0f);
+    ImGui::Separator();
+    ImGui::Text("SELL thresholds");
+    ImGui::SliderFloat("Sell Max Stability", &sell_max_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Sell Min Entropy", &sell_min_entropy_, 0.0f, 1.0f);
     if (ImGui::Button("Apply")) {
         if (workbench_engine_) {
             auto* pme = workbench_engine_->getPatternMetricEngine();
             if (pme) {
                 sep::quantum::SignalThresholds thresholds;
-                thresholds.min_coherence = min_coherence_;
-                thresholds.min_stability = min_stability_;
-                thresholds.max_entropy = max_entropy_;
+                thresholds.buy_min_coherence = buy_min_coherence_;
+                thresholds.buy_min_stability = buy_min_stability_;
+                thresholds.buy_max_entropy = buy_max_entropy_;
+                thresholds.sell_max_stability = sell_max_stability_;
+                thresholds.sell_min_entropy = sell_min_entropy_;
                 pme->setSignalThresholds(thresholds);
             }
         }

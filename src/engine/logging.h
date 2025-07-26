@@ -11,6 +11,10 @@
 #include "memory/types.h"
 #include "tracing.h"
 
+namespace sep::quantum {
+    enum class SignalType;
+}
+
 namespace sep::logging {
 
 #ifndef SEP_HAS_OPENTELEMETRY
@@ -62,6 +66,10 @@ class Manager {
 void logPatternDetected(const std::string &pattern_id,
                         std::chrono::system_clock::time_point timestamp);
 
+// Log a detected signal with pattern id and type
+void logSignalDetected(const std::string &pattern_id,
+                       sep::quantum::SignalType type,
+                       std::chrono::system_clock::time_point timestamp);
 // Log executed trade details to the trade_manager logger
 void logTrade(const std::string &instrument,
               double units,

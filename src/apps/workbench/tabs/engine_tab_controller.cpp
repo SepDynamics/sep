@@ -73,6 +73,9 @@ void EngineTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> moni
 
 void EngineTabController::setSEPEngine(core::Engine* engine) {
     sep_engine_ = engine;
+    if (engine && engine != reinterpret_cast<core::Engine*>(service_proxy_engine_)) {
+        local_engine_ = engine;
+    }
 }
 
 void EngineTabController::setPatternMetricEngine(quantum::PatternMetricEngine* pattern_engine) {
@@ -89,6 +92,9 @@ void EngineTabController::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* anal
 
 void EngineTabController::setServiceProxyEngine(core::ServiceProxyEngine* engine) {
     service_proxy_engine_ = engine;
+    if (use_remote_engine_ && service_proxy_engine_) {
+        sep_engine_ = service_proxy_engine_;
+    }
 }
 
 void EngineTabController::renderSEPMetricsPanel() {
@@ -263,6 +269,21 @@ void EngineTabController::renderSEPMetricsPanel() {
 
 void EngineTabController::renderEngineControls() {
     ImGui::Text("Engine Controls:");
+
+    if (service_proxy_engine_) {
+        bool connected = service_proxy_engine_->isConnected();
+        ImGui::Text("Service Status: %s", connected ? "Connected" : "Disconnected");
+        ImGui::SameLine();
+        if (ImGui::Checkbox("Use Remote Engine", &use_remote_engine_)) {
+            if (use_remote_engine_ && connected) {
+                sep_engine_ = service_proxy_engine_;
+            } else if (local_engine_) {
+                sep_engine_ = local_engine_;
+            }
+        }
+    } else {
+        ImGui::Text("Service Status: Offline");
+    }
 
     if (ImGui::Button("Reset Engine State")) {
         resetEngineState();

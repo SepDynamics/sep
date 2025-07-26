@@ -73,7 +73,7 @@ public:
     sep::core::Engine* getEngine() const { return service_engine_; }
     sep::connectors::OandaConnector* getOandaConnector() const { return oanda_connector_.get(); }
     workbench::TradeManager* getTradeManager() const { return trade_manager_.get(); }
-    sep::core::ServiceProxyEngine* getServiceProxyEngine() const { return http_proxy_engine_.get(); }
+    sep::core::ServiceProxyEngine* getServiceProxyEngine() const { return service_proxy_engine_; }
     ServiceHealth getServiceHealth() const;
     
     // Health monitoring
@@ -126,11 +126,12 @@ private:
     // Service engine creation
     sep::core::Engine* createServiceEngineProxy(int socket_fd);
     sep::core::Engine* createLocalEngine();
-    sep::core::Engine* createHttpEngineProxy(int socket_fd);
+    sep::core::ServiceProxyEngine* createHttpEngineProxy(int socket_fd);
     
     // Engine instances
     std::unique_ptr<sep::core::Engine> local_engine_;
     std::unique_ptr<sep::core::ServiceProxyEngine> http_proxy_engine_;
+    sep::core::ServiceProxyEngine* service_proxy_engine_{nullptr};
 
     SignalsTabController* signals_tab_{nullptr};
     MultiTimeframeAnalyzer* mtf_analyzer_{nullptr};

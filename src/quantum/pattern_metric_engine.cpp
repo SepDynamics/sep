@@ -1,5 +1,7 @@
 #include "quantum/pattern_metric_engine.h"
 #include "engine/logging.h"
+#include <algorithm>
+#include <cmath>
 #ifdef _WIN32
 #    include <windows.h>
 #else
@@ -17,6 +19,8 @@ std::vector<sep::quantum::PatternRelationship> sep::quantum::relationships;
 #include "quantum/quantum_processor_cuda.h"
 
 namespace sep::quantum {
+
+
 
 PatternMetricEngine::PatternMetricEngine()
     : qfh_processor_(std::make_unique<QuantumProcessorQFH>()), use_gpu_(false) {
@@ -270,83 +274,16 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
             m.coherence = 0.0f;
         }
         
-        // Calculate stability based on pattern consistency
         if (!p.data.empty()) {
-            float stability = 0.0f;
-            
-            if (p.data.size() == 1) {
-                // Single values are perfectly stable
-                stability = 1.0f;
-            } else {
-                // Calculate how consistent the pattern values are
-                float sum_abs_diffs = 0.0f;
-                float max_value = *std::max_element(p.data.begin(), p.data.end());
-                float min_value = *std::min_element(p.data.begin(), p.data.end());
-                float range = max_value - min_value;
-                
-                if (range < 1e-6f) {
-                    // All values are essentially the same - very stable
-                    stability = 0.95f;
-                } else {
-                    // Calculate normalized differences
-                    for (size_t i = 1; i < p.data.size(); ++i) {
-                        sum_abs_diffs += std::abs(p.data[i] - p.data[i-1]);
-                    }
-                    float avg_change = sum_abs_diffs / (p.data.size() - 1);
-                    float normalized_change = avg_change / (range + 1e-6f);
-                    
-                    // Stability is inverse of normalized change
-                    stability = std::max(0.0f, 1.0f - normalized_change);
-                }
-                
-                // Apply coherence boost - coherent patterns are more stable
-                stability = std::min(1.0f, stability + m.coherence * 0.2f);
-            }
-            
-            m.stability = stability;
+            m.stability = calculateStability(p.data, m.coherence);
         } else {
             m.stability = 0.0f;
         }
         
-        // Calculate entropy based on randomness and unpredictability
         if (!p.data.empty()) {
-            // Use Shannon-like entropy calculation
-            float entropy = 0.0f;
-            
-            if (p.data.size() > 1) {
-                // Calculate differences between consecutive values using preallocated buffer
-                scratch_diffs_.clear();
-                scratch_diffs_.reserve(p.data.size() - 1);
-                for (size_t i = 1; i < p.data.size(); ++i) {
-                    scratch_diffs_.push_back(std::abs(p.data[i] - p.data[i - 1]));
-                }
-
-                // Calculate variance of differences (measure of unpredictability)
-                float diff_mean = 0.0f;
-                for (float diff : scratch_diffs_) {
-                    diff_mean += diff;
-                }
-                diff_mean /= scratch_diffs_.size();
-
-                float diff_variance = 0.0f;
-                for (float diff : scratch_diffs_) {
-                    diff_variance += (diff - diff_mean) * (diff - diff_mean);
-                }
-                diff_variance /= scratch_diffs_.size();
-                
-                // Entropy is higher with more variance in differences
-                entropy = std::sqrt(diff_variance);
-                
-                // Normalize to 0-1 range and add base entropy
-                entropy = std::min(1.0f, entropy + 0.1f);
-            } else {
-                // Single value has low entropy
-                entropy = 0.1f;
-            }
-            
-            m.entropy = entropy;
+            m.entropy = calculateEntropy(p.data);
         } else {
-            m.entropy = 0.5f; // Default entropy for empty patterns
+            m.entropy = 0.5f;
         }
         current_metrics_.push_back(m);
     }

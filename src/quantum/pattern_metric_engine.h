@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <vector>
 #include <deque>
+#include <algorithm>
+#include <cmath>
 
 #include "engine/types.h"
 #include "quantum/processor.h"
@@ -62,6 +64,56 @@ extern float coherence;  ///< Measure of the pattern's internal consistency.
 extern float stability;  ///< Measure of how resistant the pattern is to change.
 extern float entropy;    ///< Measure of the pattern's complexity and randomness.
 extern std::vector<PatternRelationship> relationships;  ///< Relationships to other patterns.
+
+/// @brief Calculate Shannon entropy of a sequence of values.
+/// @param values Input data sequence.
+/// @return Normalized entropy in the range [0,1].
+float calculateEntropy(const std::vector<float>& values);
+
+/// @brief Calculate pattern stability based on value variance and coherence.
+/// @param values Input data sequence.
+/// @param coherence Previously computed coherence value for the pattern.
+/// @return Normalized stability in the range [0,1].
+float calculateStability(const std::vector<float>& values, float coherence);
+
+inline float calculateEntropy(const std::vector<float>& values) {
+    if (values.empty()) return 0.0f;
+    float min_v = *std::min_element(values.begin(), values.end());
+    float max_v = *std::max_element(values.begin(), values.end());
+    if (std::abs(max_v - min_v) < 1e-6f) return 0.0f;
+    size_t bins = std::min<size_t>(16, values.size());
+    std::vector<size_t> hist(bins, 0);
+    float bin_width = (max_v - min_v) / static_cast<float>(bins);
+    for (float v : values) {
+        size_t idx = static_cast<size_t>((v - min_v) / bin_width);
+        if (idx >= bins) idx = bins - 1;
+        hist[idx]++;
+    }
+    float entropy = 0.0f;
+    for (size_t c : hist) {
+        if (c == 0) continue;
+        float p = static_cast<float>(c) / static_cast<float>(values.size());
+        entropy -= p * std::log2(p);
+    }
+    if (bins > 1) entropy /= std::log2(static_cast<float>(bins));
+    return std::clamp(entropy, 0.0f, 1.0f);
+}
+
+inline float calculateStability(const std::vector<float>& values, float coherence) {
+    if (values.empty()) return 0.0f;
+    float mean = 0.0f;
+    for (float v : values) mean += v;
+    mean /= static_cast<float>(values.size());
+    float variance = 0.0f;
+    for (float v : values) {
+        float diff = v - mean;
+        variance += diff * diff;
+    }
+    variance /= static_cast<float>(values.size());
+    float stability = 1.0f / (1.0f + variance);
+    stability *= (0.8f + 0.2f * coherence);
+    return std::clamp(stability, 0.0f, 1.0f);
+}
 
 /**
  * @class PatternMetricEngine

@@ -11,6 +11,7 @@
 #include <cstring> // For std::strlen
 #include <spdlog/spdlog.h>
 #include <cstring>
+#include "quantum/pattern_metric_engine.h"
 
 namespace sep::logging {
 
@@ -137,6 +138,24 @@ void logPatternDetected(const std::string &pattern_id,
     char buf[32];
     std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", std::localtime(&tt));
     logger->info("Pattern detected {} at {}", pattern_id, buf);
+}
+
+void logSignalDetected(const std::string &pattern_id,
+                       sep::quantum::SignalType type,
+                       std::chrono::system_clock::time_point timestamp)
+{
+    auto logger = spdlog::get("pattern_engine");
+    if (!logger) return;
+
+    std::time_t tt = std::chrono::system_clock::to_time_t(timestamp);
+    char buf[32];
+    std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", std::localtime(&tt));
+
+    const char* type_str = (type == sep::quantum::SignalType::BUY)
+                               ? "BUY"
+                               : (type == sep::quantum::SignalType::SELL ? "SELL" : "HOLD");
+
+    logger->info("Signal {} for pattern {} at {}", type_str, pattern_id, buf);
 }
 
 }  // namespace sep::logging

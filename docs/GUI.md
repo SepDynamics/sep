@@ -1,13 +1,14 @@
 # SEP Engine Workbench GUI Architecture
 
 ## Current Problem Analysis
-The SEP Workbench GUI (`src/apps/workbench/workbench_core.cpp`) is disorganized, with overlapping responsibilities and compilation issues preventing chart rendering. The refactoring plan adopts a 3-tab architecture with a focus on clear visual layouts and robust chart rendering to address these issues.
+The SEP Workbench GUI (`src/apps/workbench/workbench_core.cpp`) is disorganized, with overlapping responsibilities and **critical compilation issues preventing chart rendering and overall application launch**. The refactoring plan adopts a 3-tab architecture with a focus on clear visual layouts and robust chart rendering to address these issues.
 
 ### Current Architecture Issues
 - **TradingHUD** (`src/apps/workbench/core_old/trading_hud.cpp`, 549+ lines): Monolithic, handling charts, signals, and trading.
 - **MetricsDashboard** (`src/apps/workbench/core_old/metrics_dashboard.cpp`): Duplicates signal and OANDA integration.
-- **Chart Rendering Failure**: ImGui errors (`core.NullDereference` in `imgui.cpp`) prevent chart display.
-- **Build Warnings**: `cert-err33-c`, `security.FloatLoopCounter` in `signals_tab_controller.cpp`, `imgui_demo.cpp`.
+- **Chart Rendering Failure**: **Compilation errors involving `CandleData` and `std::deque` in `data_parser.cpp` and `engine.cu` are directly preventing chart display.**
+- **Core Application Launch Failure**: `workbench_main.cpp` and `engine_tab_controller.h` are failing to compile due to undeclared types (`ServiceProxyEngine`, `backtester`).
+- **Build Warnings**: `cert-err33-c`, `security.FloatLoopCounter` in `imgui_impl_opengl3.cpp`, `imgui_demo.cpp`, `signals_tab_controller.cpp`. These need to be addressed after critical errors.
 - **Tight Coupling**: Components lack separation, complicating updates.
 
 ### Component Responsibility Overlap
@@ -166,16 +167,13 @@ NEW BACKEND COMPONENTS:
 
 ## Detailed Refactoring Plan
 
-### Phase 1: Chart Rendering & Component Separation
-#### 1.1 Fix ImGui Compilation Issues
-```cpp
-// Address null pointer dereferences in imgui.cpp
-if (window != nullptr) {
-    window->RootWindowForNav->Flags; // Line 6168
-}
-```
+### Phase 1: Critical Build Fixes & Chart Rendering
+#### 1.1 Fix Critical Compilation Issues
+- **Action**: Address `error: invalid application of 'sizeof' to an incomplete type 'sep::workbench::CandleData'` by ensuring `src/apps/workbench/core/common_structs.h` is properly and fully included before its types are used in template instantiations (e.g., `std::deque<CandleData>`) in `data_parser.h` and `engine.cu`.
+- **Action**: Resolve `error: function definition is not allowed here` in `src/engine/logging.cpp` by ensuring functions are defined within the correct namespace scope and not nested improperly.
+- **Action**: Fix `error: no type named 'ServiceProxyEngine'` and `error: use of undeclared identifier 'backtester'` by adding necessary `#include` statements (`core/service_proxy_engine.h`, `backtester/backtester.h`) and qualifying namespaces (`sep::workbench::backtester::`) where these types are used in `workbench_main.cpp` and `engine_tab_controller.h`.
 
-#### 1.2 Break Down TradingHUD
+#### 1.2 Break Down TradingHUD (Post-Compilation Fixes)
 ```cpp
 // Current: Monolithic TradingHUD
 class TradingHUD { /* 549+ lines */ };
@@ -195,7 +193,7 @@ class EngineMonitor { // ENGINE TAB
 };
 ```
 
-#### 1.3 Consolidate OANDA Integration
+#### 1.3 Consolidate OANDA Integration (Post-Compilation Fixes)
 ```cpp
 // Proposed: Centralized Service
 class OandaService {
@@ -203,7 +201,7 @@ class OandaService {
 };
 ```
 
-### Phase 2: Tab-Specific Implementation
+### Phase 2: Tab-Specific Implementation (Post-Compilation Fixes)
 #### 2.1 SIGNALS Tab Architecture
 ```cpp
 class SignalsTabController {
@@ -259,7 +257,7 @@ public:
 };
 ```
 
-### Phase 3: Data Flow Architecture
+### Phase 3: Data Flow Architecture (Post-Compilation Fixes)
 #### 3.1 Event-Driven Communication
 ```cpp
 class EventBus {
@@ -282,15 +280,19 @@ class SignalManager {
 ```
 
 ## Implementation Priority
-1. **Chart Rendering** (Critical):
-   - Fix ImGui errors to render candlestick and metric charts.
-   - Implement SignalAnalysisPanel and MarketChartRenderer.
-2. **SIGNALS Tab** (Immediate Value):
+1. **Critical Build Errors (IMMEDIATE)**:
+   - Address the "incomplete type" and "function definition" errors that are blocking the entire build.
+   - Fix "undeclared identifier" issues for core classes.
+2. **Chart Rendering** (Critical, post-build fixes):
+   - Fix remaining ImGui `cert-err33-c` warnings (casting return values to `void`).
+   - Fix `security.FloatLoopCounter` in `imgui_demo.cpp` (replace floating-point loop counters).
+   - Implement `MarketChartRenderer` to display candlestick and metric charts.
+3. **SIGNALS Tab** (Immediate Value, post-charting):
    - Extract signal processing from TradingHUD.
    - Add interactive chart controls.
-3. **BACKEND Tab** (Infrastructure):
+4. **BACKEND Tab** (Infrastructure):
    - Build TradingTerminal and BacktestingSuite.
-4. **ENGINE Tab** (Diagnostics):
+5. **ENGINE Tab** (Diagnostics):
    - Refactor MetricsDashboard for diagnostic plots.
 
 ## UI/UX Design Principles
@@ -299,14 +301,14 @@ class SignalManager {
 - **BACKEND Tab**: Reliable status indicators, safety-focused trading UI.
 
 ## Migration Path
-1. **Fix Build Issues**: Address ImGui errors for chart rendering.
+1. **Fix Build Issues**: Address all critical and high-priority compilation errors to enable a clean build.
 2. **SIGNALS Tab**: Implement candlestick and metric charts.
 3. **BACKEND Tab**: Build trading and backtesting UI.
 4. **ENGINE Tab**: Add diagnostic plots.
 5. **Integration**: Connect tabs via EventBus.
 
 ## Success Metrics
-- **Chart Rendering**: Candlestick and metric charts visible at >10Hz.
+- **Chart Rendering**: Candlestick and metric charts visible at >10Hz after compilation is fixed.
 - **Tab Separation**: Components <200 lines, non-overlapping responsibilities.
 - **Maintainability**: Independent updates per tab.
 - **User Experience**: Intuitive chart interactions.
@@ -314,7 +316,5 @@ class SignalManager {
 
 ## Current Status
 - **Implemented**: Basic dashboard (`workbench_core.cpp`), partial SignalsTabController.
-- **Blocked**: Chart rendering due to ImGui errors.
-- **Next Steps**: Fix build issues, complete Signals Tab charts.
-
-This architecture ensures a scalable, chart-focused GUI aligned with trading objectives.
+- **Blocked**: **CRITICAL compilation errors preventing the entire application from building and running.**
+- **Next Steps**: Focus entirely on resolving the build errors listed in Section 1.1 of the refactoring plan.

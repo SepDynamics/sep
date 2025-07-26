@@ -44,6 +44,10 @@ void BackendTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> mon
 
 void BackendTabController::setServiceConnector(ServiceConnector* connector) {
     service_connector_ = connector;
+    if (service_connector_ && service_connector_->getOandaConnector()) {
+        trade_manager_ = std::make_unique<sep::workbench::TradeManager>(
+            service_connector_->getOandaConnector());
+    }
 }
 
 void BackendTabController::renderDataSourceSelector() {
@@ -79,8 +83,8 @@ void BackendTabController::renderDataSourceSelector() {
 void BackendTabController::renderOrderManagementPanel() {
     ImGui::Begin("Paper Trading");
     if (ImGui::Checkbox("Enable Paper Trading", &paper_trading_)) {
-        if (service_connector_) {
-            // service_connector_->getTradeManager()->setPaperTrading(paper_trading_);
+        if (trade_manager_) {
+            trade_manager_->setPaperTrading(paper_trading_);
         }
     }
     ImGui::End();
@@ -91,32 +95,25 @@ void BackendTabController::renderOrderManagementPanel() {
     ImGui::InputInt("Units", &units_);
 
     if (ImGui::Button("Place Buy Order")) {
-        if (service_connector_) {
-            nlohmann::json order_details;
-            order_details["order"]["instrument"] = instrument_buffer_;
-            order_details["order"]["units"] = std::to_string(units_);
-            order_details["order"]["type"] = "MARKET";
-            order_details["order"]["timeInForce"] = "FOK";
-            order_details["order"]["positionFill"] = "DEFAULT";
-            service_connector_->getOandaConnector()->placeOrder(order_details);
+        if (trade_manager_ && service_connector_) {
+            auto md = service_connector_->getOandaConnector()->getMarketData(instrument_buffer_);
+            trade_manager_->placeOrder(instrument_buffer_, units_, md.ask, stop_loss_pips_, take_profit_pips_);
         }
     }
 
     ImGui::SameLine();
 
     if (ImGui::Button("Place Sell Order")) {
-        if (service_connector_) {
-            nlohmann::json order_details;
-            order_details["order"]["instrument"] = instrument_buffer_;
-            order_details["order"]["units"] = std::to_string(-units_);
-            order_details["order"]["type"] = "MARKET";
-            order_details["order"]["timeInForce"] = "FOK";
-            order_details["order"]["positionFill"] = "DEFAULT";
-            service_connector_->getOandaConnector()->placeOrder(order_details);
+        if (trade_manager_ && service_connector_) {
+            auto md = service_connector_->getOandaConnector()->getMarketData(instrument_buffer_);
+            trade_manager_->placeOrder(instrument_buffer_, -units_, md.bid, stop_loss_pips_, take_profit_pips_);
         }
     }
 
     if (ImGui::Button("Refresh Orders and Positions")) {
+        if (trade_manager_) {
+            // no-op: local orders already stored
+        }
         if (service_connector_) {
             open_positions_ = service_connector_->getOandaConnector()->getOpenPositions();
             orders_ = service_connector_->getOandaConnector()->getOrders();
@@ -126,6 +123,11 @@ void BackendTabController::renderOrderManagementPanel() {
     ImGui::Text("Open Positions:");
     if (!open_positions_.is_null()) {
         ImGui::TextUnformatted(open_positions_.dump(4).c_str());
+    }
+
+    if (trade_manager_) {
+        ImGui::Text("Local Positions: %zu", trade_manager_->getPositions().size());
+        ImGui::Text("Local Orders: %zu", trade_manager_->getOrders().size());
     }
 
     ImGui::Text("Orders:");
@@ -138,7 +140,12 @@ void BackendTabController::renderOrderManagementPanel() {
 
 void BackendTabController::renderBacktesterPanel() {
     ImGui::Begin("Risk Management");
-    ImGui::SliderFloat("Risk Percentage", &risk_percentage_, 0.1f, 5.0f, "%.2f%%");
+    if (ImGui::SliderFloat("Risk Percentage", &risk_percentage_, 0.1f, 5.0f, "%.2f%%")) {
+        if (trade_manager_) trade_manager_->setRiskPercentage(risk_percentage_ / 100.0);
+    }
+    if (trade_manager_) {
+        ImGui::Text("Account Balance: %.2f", trade_manager_->getAccountBalance());
+    }
     ImGui::InputFloat("Stop Loss (pips)", &stop_loss_pips_);
     ImGui::InputFloat("Take Profit (pips)", &take_profit_pips_);
     ImGui::End();
@@ -165,7 +172,7 @@ void BackendTabController::renderBacktesterPanel() {
             }
 
             sep::core::ServiceProxyEngine proxy("localhost", 8080);
-            validation_result_ = proxy.validate_signal(signals, prices);
+            validation_result_ = proxy.validateSignals(signals, prices);
         }
     }
 

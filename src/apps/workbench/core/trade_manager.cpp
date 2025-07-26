@@ -20,6 +20,9 @@ nlohmann::json TradeManager::placeOrder(const std::string& instrument,
     double pips_to_risk = stop_loss_pips;
     double pip_value = 0.0001;
     double position_size = risk_amount / (pips_to_risk * pip_value);
+    if (units == 0) {
+        units = position_size;
+    }
     if (paper_trading_) {
         std::lock_guard<std::mutex> lock(mutex_);
         Order order;

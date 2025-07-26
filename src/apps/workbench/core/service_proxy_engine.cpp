@@ -153,5 +153,50 @@ sep::workbench::SignalValidator::ValidationResult ServiceProxyEngine::validate_s
     return validator.validate_signal(signals, prices);
 }
 
+sep::workbench::SignalValidator::ValidationResult ServiceProxyEngine::validateSignals(
+    const std::vector<sep::quantum::Signal>& signals,
+    const std::vector<float>& prices) {
+    if (signals.empty() || prices.size() < 2) {
+        return {0.0, 1.0};
+    }
+
+    size_t correct_predictions = 0;
+    size_t total_predictions = 0;
+    size_t false_positives = 0;
+
+    for (size_t i = 0; i < signals.size() - 1 && i < prices.size() - 1; ++i) {
+        const auto& sig = signals[i];
+        float current = prices[i];
+        float next = prices[i + 1];
+
+        float change = (next - current) / current;
+        bool up = change > 0.0001f;
+        bool down = change < -0.0001f;
+
+        if (sig.confidence > 0.7f) {
+            bool buy = sig.type == sep::quantum::SignalType::BUY;
+            bool sell = sig.type == sep::quantum::SignalType::SELL;
+
+            if (buy || sell) {
+                ++total_predictions;
+                if ((buy && up) || (sell && down)) {
+                    ++correct_predictions;
+                } else if ((buy && down) || (sell && up)) {
+                    ++false_positives;
+                }
+            }
+        }
+    }
+
+    double accuracy = total_predictions > 0 ?
+                          static_cast<double>(correct_predictions) / total_predictions :
+                          0.0;
+    double false_rate = total_predictions > 0 ?
+                           static_cast<double>(false_positives) / total_predictions :
+                           0.0;
+
+    return {accuracy, false_rate};
+}
+
 } // namespace core
 } // namespace sep

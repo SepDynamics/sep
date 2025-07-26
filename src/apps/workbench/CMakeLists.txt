@@ -24,6 +24,7 @@ target_include_directories(sep_workbench_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/src/connectors
     ${CMAKE_SOURCE_DIR}/src/glad
     ${imgui_SOURCE_DIR}
+    ${implot_SOURCE_DIR}
     ${imgui_SOURCE_DIR}/backends
 )
 
@@ -34,6 +35,7 @@ target_link_libraries(sep_workbench_lib PUBLIC
     sep_memory
     sep_connectors
     imgui
+    implot
     glad
     OpenGL::GL
     glfw
@@ -49,6 +51,7 @@ target_link_libraries(sep_workbench PRIVATE
     sep_workbench_lib
     sep_backtester
     imgui
+    implot
     sep_audio
     sep_quantum
     sep_memory  

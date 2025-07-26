@@ -3,6 +3,7 @@
 #include "quantum/pattern_metric_engine.h"
 #include "apps/workbench/config.hpp"
 #include "core/metrics_monitor.h"
+
 #include <implot.h>
 #include <algorithm>
 #include <numeric>

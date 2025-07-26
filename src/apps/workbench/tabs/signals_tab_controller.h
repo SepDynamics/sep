@@ -11,6 +11,7 @@
 #include "connectors/oanda_connector.h"
 #include "signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/config.hpp"
+#include "apps/workbench/core/common_structs.h"
 
 namespace sep::workbench {
 

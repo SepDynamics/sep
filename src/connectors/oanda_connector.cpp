@@ -151,6 +151,24 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
                 if (candles.size() != static_cast<size_t>(48 * 60)) {
                     last_error_ += " - expected 2880 got " + std::to_string(candles.size());
                 }
+            } else if (instrument == "EUR_USD") {
+                std::vector<sep::common::CandleData> out;
+                out.reserve(candles.size());
+                for (const auto& c : candles) {
+                    sep::common::CandleData cd;
+                    std::tm tm{};
+                    std::istringstream ss(c.time);
+                    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+                    cd.time = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+                    cd.open = c.open;
+                    cd.high = c.high;
+                    cd.low = c.low;
+                    cd.close = c.close;
+                    cd.volume = c.volume;
+                    out.push_back(cd);
+                }
+                DataParser parser;
+                parser.saveValidatedCandlesJSON(out, "eur_usd_m1_48h.json");
             }
         }
         

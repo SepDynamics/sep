@@ -21,9 +21,10 @@ std::string DataLoader::load_48h_sample()
     return fallback;
 }
 
-void DataLoader::load_data(const std::string& file_path)
+std::vector<common::CandleData> DataLoader::load_data(const std::string& file_path)
 {
     data_ = JsonDataParser::parse(file_path);
+    return data_;
 }
 
 } // namespace backtester

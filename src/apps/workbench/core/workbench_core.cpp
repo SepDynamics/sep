@@ -13,6 +13,7 @@
 #include "apps/workbench/tabs/signals_tab_controller.h"
 #include "apps/workbench/tabs/engine_tab_controller.h"
 #include "apps/workbench/tabs/backend_tab_controller.h"
+#include "apps/workbench/backtester/data/data_loader.h"
 
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/core/metrics_monitor.h"
@@ -150,7 +151,17 @@ bool WorkbenchEngine::initialize()
             auto oanda_ptr = service_connector_->getOandaConnector();
             std::cout << "[WorkbenchEngine] OANDA connector available: " << (oanda_ptr ? "Yes" : "No") << std::endl;
         }
-        
+
+        const char* skip_env = std::getenv("SEP_SKIP_FETCH");
+        if (!skip_env && signals_tab_) {
+            backtester::DataLoader loader;
+            auto candles = loader.load_data("eur_usd_m1_48h.json");
+            if (!candles.empty()) {
+                std::deque<sep::common::CandleData> dq(candles.begin(), candles.end());
+                signals_tab_->setCandleData(dq);
+            }
+        }
+
         transitionTo(ApplicationState::LANDING_PAGE);
 
         std::cout << "[WorkbenchEngine] Initialization complete!" << std::endl;

@@ -102,10 +102,10 @@ public:
 
     // Order tracking
     void refreshOrders();
-    const std::vector<OrderInfo>& pendingOrders() const { return pending_orders_; }
-    const std::vector<OrderInfo>& filledOrders() const { return filled_orders_; }
-    const std::vector<OrderInfo>& canceledOrders() const { return canceled_orders_; }
-    void setOrderCallback(std::function<void(const OrderInfo&)> cb) { order_callback_ = std::move(cb); }
+    const std::vector<common::OrderInfo>& pendingOrders() const { return pending_orders_; }
+    const std::vector<common::OrderInfo>& filledOrders() const { return filled_orders_; }
+    const std::vector<common::OrderInfo>& canceledOrders() const { return canceled_orders_; }
+    void setOrderCallback(std::function<void(const common::OrderInfo&)> cb) { order_callback_ = std::move(cb); }
 
 private:
     std::string api_key_;
@@ -157,10 +157,10 @@ private:
     void streamPriceData(const std::string& instruments);
 
     // Order caches
-    std::vector<OrderInfo> pending_orders_;
-    std::vector<OrderInfo> filled_orders_;
-    std::vector<OrderInfo> canceled_orders_;
-    std::function<void(const OrderInfo&)> order_callback_;
+    std::vector<common::OrderInfo> pending_orders_;
+    std::vector<common::OrderInfo> filled_orders_;
+    std::vector<common::OrderInfo> canceled_orders_;
+    std::function<void(const common::OrderInfo&)> order_callback_;
 };
 
 } // namespace connectors

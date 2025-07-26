@@ -17,7 +17,7 @@ BackendTabController::~BackendTabController() { shutdown(); }
 bool BackendTabController::initialize() {
     std::cout << "[BackendTabController] Initializing..." << std::endl;
     globalEventBus().subscribe<OrderUpdateEvent>([this](const OrderUpdateEvent& e) {
-        auto it = std::find_if(order_cache_.begin(), order_cache_.end(), [&](const connectors::OrderInfo& o) { return o.id == e.info.id; });
+        auto it = std::find_if(order_cache_.begin(), order_cache_.end(), [&](const sep::common::OrderInfo& o) { return o.id == e.info.id; });
         if (it == order_cache_.end()) {
             order_cache_.push_back(e.info);
         } else {
@@ -149,8 +149,8 @@ void BackendTabController::renderOrderManagementPanel() {
     ImGui::Text("Orders:");
     for (const auto& o : order_cache_) {
         const char* status_str = "PENDING";
-        if (o.status == connectors::OrderStatus::FILLED) status_str = "FILLED";
-        else if (o.status == connectors::OrderStatus::CANCELED) status_str = "CANCELED";
+        if (o.status == common::OrderStatus::FILLED) status_str = "FILLED";
+        else if (o.status == common::OrderStatus::CANCELED) status_str = "CANCELED";
         ImGui::Text("%s %s %.0f @ %.5f [%s]", o.id.c_str(), o.instrument.c_str(), o.units, o.price, status_str);
     }
 

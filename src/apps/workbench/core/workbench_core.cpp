@@ -14,6 +14,7 @@
 #include "apps/workbench/tabs/engine_tab_controller.h"
 #include "apps/workbench/tabs/backend_tab_controller.h"
 #include "apps/workbench/backtester/data/data_loader.h"
+#include "apps/workbench/backtester/ui/backtester_tab_controller.h"
 
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/core/metrics_monitor.h"
@@ -118,7 +119,7 @@ bool WorkbenchEngine::initialize()
         signals_tab_ = std::make_unique<workbench::SignalsTabController>();
         engine_tab_ = std::make_unique<workbench::EngineTabController>();
         backend_tab_ = std::make_unique<workbench::BackendTabController>();
-        backtester_tab_ = std::make_unique<workbench::BacktesterTabController>();
+        backtester_tab_ = std::make_unique<BacktesterTabController>();
 
         signals_tab_->initialize();
         engine_tab_->initialize();
@@ -719,7 +720,7 @@ void WorkbenchEngine::renderTabs()
 void WorkbenchEngine::updateData()
 {
     // Real implementation of data fetching pipeline (DATA.md integration)
-    std::deque<CandleData> candle_data;
+    std::deque<common::CandleData> candle_data;
     bool fetched = false;
     if (service_connector_ && service_connector_->getOandaConnector()) {
         auto oanda_connector = service_connector_->getOandaConnector();
@@ -758,8 +759,8 @@ void WorkbenchEngine::updateData()
     }
 
     if (!fetched && service_connector_) {
-        candle_data = std::deque<CandleData>(service_connector_->getInitialData().begin(),
-                                             service_connector_->getInitialData().end());
+        candle_data = std::deque<common::CandleData>(service_connector_->getInitialData().begin(),
+                                     service_connector_->getInitialData().end());
         if (signals_tab_ && !candle_data.empty()) {
             signals_tab_->setCandleData(candle_data);
             auto init_signals = service_connector_->getInitialSignals();
@@ -804,12 +805,12 @@ void WorkbenchEngine::updateData()
                     const auto& metrics = pme->computeMetrics();
                     
                     // Convert metrics to SEP signals
-                    std::deque<SEPSignalData> sep_signals;
+                    std::deque<common::SEPSignalData> sep_signals;
                     for (size_t i = 0; i < std::min(metrics.size(), candle_data.size()); i++) {
                         const auto& metric = metrics[i];
                         const auto& candle = candle_data[candle_data.size() - metrics.size() + i];
                         
-                        SEPSignalData signal;
+                        common::SEPSignalData signal;
                         signal.coherence = metric.coherence;
                         signal.stability = metric.stability;
                         signal.entropy = metric.entropy;
@@ -819,15 +820,15 @@ void WorkbenchEngine::updateData()
                         
                         // Threshold-based signal classification (TODO.md Phase 1.3)
                         if (metric.coherence > 0.8f && metric.stability > 0.7f && metric.entropy < 0.2f) {
-                            signal.signal_type = SEPSignalData::STRONG_BUY;
+                            signal.signal_type = common::MultiTimeframeSignal::STRONG_BUY;
                         } else if (metric.coherence > 0.7f && metric.stability > 0.6f && metric.entropy < 0.3f) {
-                            signal.signal_type = SEPSignalData::BUY;
+                            signal.signal_type = common::MultiTimeframeSignal::BUY;
                         } else if (metric.coherence < 0.2f && metric.stability < 0.3f && metric.entropy > 0.8f) {
-                            signal.signal_type = SEPSignalData::STRONG_SELL;
+                            signal.signal_type = common::MultiTimeframeSignal::STRONG_SELL;
                         } else if (metric.coherence < 0.3f && metric.stability < 0.4f && metric.entropy > 0.7f) {
-                            signal.signal_type = SEPSignalData::SELL;
+                            signal.signal_type = common::MultiTimeframeSignal::SELL;
                         } else {
-                            signal.signal_type = SEPSignalData::NEUTRAL;
+                            signal.signal_type = common::MultiTimeframeSignal::NEUTRAL;
                         }
                         
                         sep_signals.push_back(signal);

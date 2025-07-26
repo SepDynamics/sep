@@ -26,6 +26,7 @@ if(SEP_USE_CUDA)
     
     # Now enable CUDA language
     enable_language(CUDA)
+    find_package(CUDAToolkit REQUIRED)
     
     # Add flags for better diagnostics and features
     set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --allow-unsupported-compiler --extended-lambda --display-error-number")

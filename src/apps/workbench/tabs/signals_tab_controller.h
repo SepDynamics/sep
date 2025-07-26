@@ -116,7 +116,7 @@ private:
     void updateHoverInfo();
     void calculateEnhancedHoverMetrics();
     void detectTrendLines();
-    ImU32 getSignalColor(SignalType signal_type);
+    ImU32 getSignalColor(sep::common::MultiTimeframeSignal signal_type);
     ImU32 getCandleColor(const sep::common::CandleData& candle, bool is_body = true);
 };
 

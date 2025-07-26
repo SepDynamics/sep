@@ -465,7 +465,7 @@ MarketData OandaConnector::parseMarketData(const nlohmann::json& price_data) {
     }
 
     if (price_data.contains("time")) {
-        market_data.timestamp = parseTimestamp(price_data["time"]);
+        market_data.timestamp = sep::common::time_point_to_nanoseconds(sep::common::parseTimestamp(price_data["time"].get<std::string>()));
     }
     
     if (price_data.contains("bids") && !price_data["bids"].empty()) {
@@ -568,14 +568,14 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
     if (response.response_code == 201) {
         try {
             auto json_resp = nlohmann::json::parse(response.data);
-            OrderInfo info;
+            sep::common::OrderInfo info;
             if (json_resp.contains("orderCreateTransaction")) {
                 const auto& tx = json_resp["orderCreateTransaction"];
                 info.id = tx.value("id", "");
                 info.instrument = tx.value("instrument", "");
                 info.units = std::stod(tx.value("units", "0"));
                 info.price = tx.contains("price") ? std::stod(tx["price"].get<std::string>()) : 0.0;
-                info.status = OrderStatus::PENDING;
+                info.status = sep::common::OrderStatus::PENDING;
                 pending_orders_.push_back(info);
                 if (order_callback_) order_callback_(info);
                 // publish order update to UI if available
@@ -587,7 +587,7 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.instrument = tx.value("instrument", "");
                 info.units = std::stod(tx.value("units", "0"));
                 info.price = std::stod(tx.value("price", "0"));
-                info.status = OrderStatus::FILLED;
+                info.status = sep::common::OrderStatus::FILLED;
                 filled_orders_.push_back(info);
                 if (order_callback_) order_callback_(info);
                 // publish order update to UI if available
@@ -648,12 +648,12 @@ void OandaConnector::refreshOrders() {
     auto pending_json = fetch_state("PENDING");
     if (pending_json.contains("orders")) {
         for (const auto& o : pending_json["orders"]) {
-            OrderInfo info;
+            sep::common::OrderInfo info;
             info.id = o.value("id", "");
             info.instrument = o.value("instrument", "");
             info.units = std::stod(o.value("units", "0"));
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
-            info.status = OrderStatus::PENDING;
+            info.status = sep::common::OrderStatus::PENDING;
             pending_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
             // publish order update to UI if available
@@ -664,12 +664,12 @@ void OandaConnector::refreshOrders() {
     auto filled_json = fetch_state("FILLED");
     if (filled_json.contains("orders")) {
         for (const auto& o : filled_json["orders"]) {
-            OrderInfo info;
+            sep::common::OrderInfo info;
             info.id = o.value("id", "");
             info.instrument = o.value("instrument", "");
             info.units = std::stod(o.value("units", "0"));
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
-            info.status = OrderStatus::FILLED;
+            info.status = sep::common::OrderStatus::FILLED;
             filled_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
             // publish order update to UI if available
@@ -680,12 +680,12 @@ void OandaConnector::refreshOrders() {
     auto canceled_json = fetch_state("CANCELLED");
     if (canceled_json.contains("orders")) {
         for (const auto& o : canceled_json["orders"]) {
-            OrderInfo info;
+            sep::common::OrderInfo info;
             info.id = o.value("id", "");
             info.instrument = o.value("instrument", "");
             info.units = std::stod(o.value("units", "0"));
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
-            info.status = OrderStatus::CANCELED;
+            info.status = sep::common::OrderStatus::CANCELED;
             canceled_orders_.push_back(info);
             if (order_callback_) order_callback_(info);
             // publish order update to UI if available
@@ -791,8 +791,7 @@ bool OandaConnector::saveEURUSDM1_48h(const std::string& output_file)
 
 int64_t OandaConnector::parseTimestamp(const std::string& time_str)
 {
-    auto tp = sep::common::parseTimestamp(time_str);
-    return std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch()).count();
+    return sep::common::time_point_to_nanoseconds(sep::common::parseTimestamp(time_str));
 }
 
 DataValidationResult OandaConnector::validateCandle(const OandaCandle& candle)

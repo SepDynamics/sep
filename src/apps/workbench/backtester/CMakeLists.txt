@@ -7,6 +7,7 @@ add_library(sep_backtester STATIC
     core/backtester_engine.cpp
     core/performance_metrics.cpp
     strategies/sep_signal_strategy.cpp
+    ui/backtester_tab_controller.cpp
 )
 
 add_executable(data_loader_test data/data_loader_test.cpp)

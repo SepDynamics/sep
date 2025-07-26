@@ -27,14 +27,14 @@ std::vector<sep::common::CandleData> JsonDataParser::parse(const std::string& fi
         ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
         auto timestamp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
-        candles.emplace_back(
+        candles.emplace_back(sep::common::CandleData{
             item.at("open").get<double>(),
             item.at("high").get<double>(),
             item.at("low").get<double>(),
             item.at("close").get<double>(),
-            item.at("volume").get<int>(),
+            item.at("volume").get<double>(),
             timestamp
-        );
+        });
     }
 
     return candles;

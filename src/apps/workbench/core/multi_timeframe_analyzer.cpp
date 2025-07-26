@@ -173,7 +173,7 @@ std::vector<sep::common::CandleData> MultiTimeframeAnalyzer::resampleCandles(
     auto start_time = source_candles[0].timestamp;
     auto interval_duration = std::chrono::minutes(target_interval_minutes);
     
-    sep::common::CandleData current_candle{std::chrono::system_clock::now(), 0, 0, 0, 0, 0};
+    sep::common::CandleData current_candle{0, 0, 0, 0, 0, std::chrono::system_clock::now()};
     bool candle_started = false;
     
     for (const auto& candle : source_candles) {
@@ -578,7 +578,7 @@ MultiTimeframeAnalyzer::PerformanceStats MultiTimeframeAnalyzer::getPerformanceS
         // Estimate memory usage based on pattern count and data structures
         size_t estimated_bytes = stats.total_patterns_tracked * sizeof(quantum::PatternMetrics);
         for (const auto& [tf, tf_data] : timeframe_data_) {
-            estimated_bytes += tf_data.candles.size() * sizeof(CandleData);
+            estimated_bytes += tf_data.candles.size() * sizeof(common::CandleData);
         }
         stats.memory_usage_mb = estimated_bytes / (1024.0f * 1024.0f);
     }

@@ -1,66 +1,63 @@
+### TODO.md
+
 # SEP Engine Development Roadmap
 
-## Current Objective: **Resolve Post-Refactoring Build Errors**
+## Current Objective: Implement Core Features and Address Technical Debt
 
-The primary goal is to restore the project to a compilable state. The critical architectural refactoring is complete, but it has introduced a new set of build errors. All feature development remains blocked until these are fixed.
+The project has successfully resolved all post-refactoring compilation errors and now has a stable, buildable foundation. The primary objective is to implement the core features of the trading workbench and address high-priority technical debt identified by static analysis.
 
-## Phase 1: Critical Build Fixes & Testbed Completion
+## Phase 1: Feature Implementation & Stabilization
 
-This phase is entirely focused on fixing the new build errors and establishing a stable foundation for future work.
+This phase focuses on bringing the core functionalities of the workbench to life and improving code quality.
 
-### 1.1: Critical Build Error Resolution (Top Priority)
--   **Status**: **IN PROGRESS**. The major architectural flaw is fixed, but cleanup is required.
+### 1.1: Critical Build Error Resolution
+-   **Status**: **DONE**
+-   **Summary**: The architectural decoupling of the backend from the GUI is complete. All resulting compilation errors related to type mismatches, API changes, and namespace issues have been resolved. The project now compiles successfully.
+
+### 1.2: Implement Chart Rendering (Top Priority)
+-   **Status**: **NOT STARTED**
 -   **Priority**: **CRITICAL (BLOCKING)**
--   **Estimated Time**: 2-4 days
 -   **Tasks**:
-    -   [x] **Decouple Core Logic from GUI**:
-        -   **Action**: Create `src/common/financial_data_types.h` and move shared data structures into it. (DONE)
-        -   **Action**: Remove the include chain that caused backend components to depend on `imgui.h`. (DONE)
-    -   [ ] **Fix Data Type and API Mismatches**:
-        -   **Action**: Correct all `assigning to 'uint64_t' from incompatible type 'std::chrono::time_point'` errors. Implement a standard utility to convert `time_point` to a `uint64_t` epoch value (e.g., milliseconds or nanoseconds) and use it in `data_parser.cpp` and `oanda_connector.cpp`.
-        -   **Action**: Update all modules to use the correct members for refactored structs like `sep::common::SEPSignalData` and `sep::common::CorrelationMetrics`. This will fix errors like `no member named 'coherence'` in `service_connector.cpp` and `signals_tab_controller.cpp`.
-        -   **Action**: Fix the `no member named 'parseTimestamp' in namespace 'sep::common'` error by implementing or moving the utility function into `financial_data_types.h/cpp`.
-        -   **Action**: Correct the API call in `service_connector.cpp` that fails with `no member named 'oanda' in 'sep::config::ConfigManager'`.
-    -   [ ] **Standardize Namespaces and Includes**:
-        -   **Action**: Resolve all `unknown type name 'OrderInfo'` and `unknown type name 'CandleData'` errors. Ensure `common/financial_data_types.h` is included and that types are referenced via `sep::common::`.
-        -   **Action**: Fix the `no viable conversion` error in `engine_tab_controller.cpp` by ensuring all `CorrelationMetrics` objects use the `sep::common` namespace.
-    -   [ ] **Correct Constructor Calls**:
-        -   **Action**: Fix the `no matching constructor for initialization of 'sep::common::CandleData'` error in `json_data_parser.cpp` and `signals_tab_controller.cpp` by providing the correct arguments.
-    -   [ ] **Address Minor Compilation and Static Analysis Errors**:
-        -   **Action**: Add `#include <cstdint>` to `emitterutils.cpp` to resolve the `CRITICAL` static analysis finding for `uint16_t` and `uint32_t` undeclared identifiers.
-        -   **Action**: Fix any remaining typos or minor syntax errors identified in the build log.
+    -   [ ] Render candlestick charts in `SignalsTabController` using `implot`.
+    -   [ ] Add real-time plots below the main chart for Coherence, Stability, and Entropy metrics.
+    -   [ ] Implement interactive features like zoom, pan, and crosshair for chart analysis.
 
-### 1.2: 48-Hour Sample Data Setup
--   **Status**: **BLOCKED**
--   **Priority**: High (Post-Build-Fix)
--   **Dependencies**: **Phase 1.1 Complete**
--   **Tasks**:
-    -   [ ] Verify `OandaConnector` can fetch and save 48 hours of EUR/USD M1 data.
-    -   [ ] Implement `DataLoader` to load this sample data into the workbench.
-
-### 1.3: Chart Rendering in Signals Tab
--   **Status**: **BLOCKED**
--   **Priority**: Critical (Post-Build-Fix)
--   **Dependencies**: **Phase 1.1 Complete**
--   **Tasks**:
-    -   [ ] Render candlestick charts using `implot` in `SignalsTabController`.
-    -   [ ] Add real-time plots for coherence, stability, and entropy.
-    -   [ ] Implement zoom/pan functionality.
-
-## Phase 2: Trading Preparation (Post-Build-Fix)
-
-### 2.1: Backtesting Framework
+### 1.3: Integrate Live Data Feed
 -   **Status**: **BLOCKED**
 -   **Priority**: High
--   **Dependencies**: **Phase 1 Complete**
+-   **Dependencies**: **Phase 1.2 Complete**
 -   **Tasks**:
-    -   [ ] Integrate `PatternMetricEngine` signals into the `Backtester`.
-    -   [ ] Implement UI for backtesting in the `BackendTab`.
+    -   [ ] Connect the `OandaConnector`'s live price stream to the `MultiTimeframeAnalyzer`.
+    -   [ ] Ensure the `SignalsTabController` chart updates in real-time with new data.
+    -   [ ] Feed live data into the `PatternMetricEngine` to generate real-time signals.
 
-## Technical Debt & Static Analysis Issues (Lower Priority)
-
--   **Static Analysis Findings**: The static analysis report (`report.md`) found numerous `HIGH` and `MEDIUM` severity issues, primarily in third-party libraries.
+### 1.4: Backtesting Framework Implementation
+-   **Status**: **BLOCKED**
+-   **Priority**: High
+-   **Dependencies**: **Phase 1.3 Complete**
 -   **Tasks**:
-    -   [ ] Address `[CRITICAL]` `undeclared identifier` error in `emitterutils.cpp` by including `<cstdint>`. (Moved to Phase 1.1)
-    -   [ ] Investigate and address `[HIGH]` severity issues in `imgui` source code (`bugprone-incorrect-roundings`, `bugprone-sizeof-expression`). These may require patching or updating the library.
-    -   [ ] Review `[MEDIUM]` `bugprone-undefined-memory-manipulation` warnings (`memset` on non-TriviallyCopyable types) in `imgui` and replace with proper C++ initialization.
+    -   [ ] Fully integrate the `PatternMetricEngine` signals into the `Backtester` logic.
+    -   [ ] Implement the UI for loading data, running backtests, and viewing results in the `BackendTabController`.
+    -   [ ] Display performance metrics (P&L, Win Rate, Sharpe Ratio) and an equity curve chart.
+
+## Phase 2: Technical Debt and Static Analysis Cleanup
+
+This phase runs in parallel with feature development and focuses on improving code quality based on the `report.md` findings.
+
+### 2.1: Critical Static Analysis Fixes
+-   **Status**: **NOT STARTED**
+-   **Priority**: High
+-   **Tasks**:
+    -   [ ] **`emitterutils.cpp`**: Address `CRITICAL` `undeclared identifier` errors by including `<cstdint>`.
+    -   [ ] **`glm` Experimental Extensions**: Address `CRITICAL` errors by adding `#define GLM_ENABLE_EXPERIMENTAL` to the CMake configuration before including GLM headers. This will fix issues in `component_wise.hpp`, `norm.hpp`, and `quaternion.hpp`.
+    -   [ ] **PipeWire Null Dereference**: Investigate the `HIGH` severity null pointer dereference in `/usr/include/spa-0.2/spa/pod/parser.h`. This is likely an external library issue but should be understood.
+
+### 2.2: High-Priority Code Quality Improvements
+-   **Status**: **NOT STARTED**
+-   **Priority**: Medium
+-   **Tasks**:
+    -   [ ] **`imgui` / `implot` Issues**: The majority of `HIGH` severity issues (`bugprone-incorrect-roundings`, `bugprone-sizeof-expression`, `core.NullDereference`) are within third-party libraries. Plan to either update these libraries to a newer version or document the accepted risk.
+    -   [ ] **`sep` Source Code**:
+        -   Address `clang-diagnostic-double-promotion` warnings across the codebase (e.g., in `data_parser.cpp`, `oanda_connector.cpp`, `sep_demo_app.cpp`) to ensure floating-point precision is handled correctly.
+        -   Fix `deadcode.DeadStores` and `unused-parameter` warnings to improve code clarity and remove unnecessary variables.
+        -   Review and fix potential sign-comparison issues (`clang-diagnostic-sign-compare`) in `oanda_connector.cpp`.

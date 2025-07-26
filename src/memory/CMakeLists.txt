@@ -6,10 +6,13 @@ add_sep_library(sep_memory
         quantum_coherence_manager.cpp
         redis_manager.cpp
     DEPENDENCIES
-        sep_quantum
+        sep_engine
+        sep_common
         fmt::fmt
         Threads::Threads
         TBB::tbb
+        CUDA::cudart
+        CUDA::cuda_driver
 )
 
 target_include_directories(sep_memory PUBLIC

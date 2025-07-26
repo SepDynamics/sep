@@ -21,6 +21,13 @@ add_sep_library(sep_quantum
         qbsa_cuda.cu
         quantum_processor_cuda.cu
     DEPENDENCIES
+    sep_memory
+    sep_common
+    fmt::fmt
+    spdlog::spdlog
+    nlohmann_json::nlohmann_json
+    CUDA::cudart
+    CUDA::cuda_driver
 )
 
 target_include_directories(sep_quantum PUBLIC

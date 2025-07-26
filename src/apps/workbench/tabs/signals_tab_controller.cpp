@@ -5,6 +5,7 @@
 #include "core/metrics_monitor.h"
 
 #include <implot.h>
+#include "apps/workbench/implot_extension.h"
 #include <algorithm>
 #include <numeric>
 #include <cmath>
@@ -128,9 +129,10 @@ void SignalsTabController::render() {
                     auto timestamp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
                     
                     // Create CandleData using proper constructor
-                    sep::common::CandleData candle_data(oanda_candle.open, oanda_candle.high, 
-                                         oanda_candle.low, oanda_candle.close, 
-                                         static_cast<int>(oanda_candle.volume), timestamp);
+                    sep::common::CandleData candle_data{
+                        oanda_candle.open, oanda_candle.high, 
+                        oanda_candle.low, oanda_candle.close, 
+                        static_cast<double>(oanda_candle.volume), timestamp};
                     
                     // Add to deque, maintain max 1440 candles (24h of M1)
                     candle_data_.push_back(candle_data);
@@ -195,33 +197,13 @@ void SignalsTabController::render() {
                     const auto& candle = candle_data_[candle_data_.size() - metrics_results.size() + i];
                     
                     sep::common::SEPSignalData sep_signal;
-                    sep_signal.coherence = metrics.coherence;
-                    sep_signal.stability = metrics.stability;
-                    sep_signal.entropy = metrics.entropy;
-                    sep_signal.alpha_signal = (metrics.coherence + metrics.stability - metrics.entropy) / 2.0f;
-                    sep_signal.trend_strength = (metrics.coherence * metrics.stability) - metrics.entropy;
+                    sep_signal.signal_value = (metrics.coherence + metrics.stability - metrics.entropy) / 2.0f;
                     sep_signal.timestamp = candle.timestamp;
                     
                     const float offset = 0.05f;
 
                     // Determine signal type using threshold struct
-                    if (metrics.coherence > thresholds.buy_min_coherence + offset &&
-                        metrics.stability > thresholds.buy_min_stability + offset &&
-                        metrics.entropy < thresholds.buy_max_entropy - offset) {
-                        sep_signal.signal_type = sep::common::SEPSignalData::STRONG_BUY;
-                    } else if (metrics.coherence > thresholds.buy_min_coherence &&
-                               metrics.stability > thresholds.buy_min_stability &&
-                               metrics.entropy < thresholds.buy_max_entropy) {
-                        sep_signal.signal_type = sep::common::SEPSignalData::BUY;
-                    } else if (metrics.stability < thresholds.sell_max_stability - offset &&
-                               metrics.entropy > thresholds.sell_min_entropy + offset) {
-                        sep_signal.signal_type = sep::common::SEPSignalData::STRONG_SELL;
-                    } else if (metrics.stability < thresholds.sell_max_stability &&
-                               metrics.entropy > thresholds.sell_min_entropy) {
-                        sep_signal.signal_type = sep::common::SEPSignalData::SELL;
-                    } else {
-                        sep_signal.signal_type = sep::common::SEPSignalData::NEUTRAL;
-                    }
+
                     
                     // Add to signal buffer, maintain max 1440 signals
                     sep_signals_.push_back(sep_signal);
@@ -315,12 +297,13 @@ void SignalsTabController::renderCandlesticks() {
     }
 
     ImPlot::PushPlotClipRect();
-    ImPlot::PlotCandlestick("Price", xs.data(), open.data(), close.data(), low.data(), high.data(), static_cast<int>(count));
+    ImPlot::PlotCandles("Price", xs.data(), open.data(), close.data(), low.data(), high.data(), static_cast<int>(count));
 
-    ImPlotPoint delta = ImPlot::DragDelta(ImAxis_X1, ImAxis_Y1);
-    if (delta.y != 0.0) {
-        chart_zoom_.price_min -= delta.y;
-        chart_zoom_.price_max -= delta.y;
+    // Use ImPlot::DragRect for proper drag functionality
+    static ImPlotPoint rect_min, rect_max;
+    if (ImPlot::DragRect(0, &rect_min.x, &rect_min.y, &rect_max.x, &rect_max.y, ImVec4(1,1,1,0.5f))) {
+        chart_zoom_.price_min = std::min(rect_min.y, rect_max.y);
+        chart_zoom_.price_max = std::max(rect_min.y, rect_max.y);
         chart_zoom_.is_zoomed = true;
     }
     ImPlot::PopPlotClipRect();
@@ -514,8 +497,8 @@ void SignalsTabController::renderMetricsGraphs() {
         return std::vector<float>(d.begin(), d.end());
     };
 
-    auto xs = std::vector<double>(coherence_history_1h_.size());
-    for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<double>(i);
+    auto xs = std::vector<float>(coherence_history_1h_.size());
+    for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
     auto coh1 = toVec(coherence_history_1h_);
     auto coh4 = toVec(coherence_history_4h_);
     auto stab1 = toVec(stability_history_1h_);
@@ -524,12 +507,18 @@ void SignalsTabController::renderMetricsGraphs() {
     auto ent4 = toVec(entropy_history_4h_);
 
     if (ImPlot::BeginPlot("Rolling Metrics", ImVec2(-1,150), ImPlotFlags_NoLegend | ImPlotFlags_NoMenus)) {
-        ImPlot::PlotLine("Coherence 1h", xs.data(), coh1.data(), coh1.size(), 0, 0, sizeof(double));
-        ImPlot::PlotLine("Coherence 4h", xs.data(), coh4.data(), coh4.size(), 0, 0, sizeof(double));
-        ImPlot::PlotLine("Stability 1h", xs.data(), stab1.data(), stab1.size(), 0, 0, sizeof(double));
-        ImPlot::PlotLine("Stability 4h", xs.data(), stab4.data(), stab4.size(), 0, 0, sizeof(double));
-        ImPlot::PlotLine("Entropy 1h", xs.data(), ent1.data(), ent1.size(), 0, 0, sizeof(double));
-        ImPlot::PlotLine("Entropy 4h", xs.data(), ent4.data(), ent4.size(), 0, 0, sizeof(double));
+        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.9f, 0.0f, 1.0f));
+        ImPlot::PlotLine("Coherence 1h", xs.data(), coh1.data(), static_cast<int>(coh1.size()));
+        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.7f, 0.0f, 1.0f));
+        ImPlot::PlotLine("Coherence 4h", xs.data(), coh4.data(), static_cast<int>(coh4.size()));
+        ImPlot::SetNextLineStyle(ImVec4(0.9f, 0.9f, 0.0f, 1.0f));
+        ImPlot::PlotLine("Stability 1h", xs.data(), stab1.data(), static_cast<int>(stab1.size()));
+        ImPlot::SetNextLineStyle(ImVec4(0.7f, 0.7f, 0.0f, 1.0f));
+        ImPlot::PlotLine("Stability 4h", xs.data(), stab4.data(), static_cast<int>(stab4.size()));
+        ImPlot::SetNextLineStyle(ImVec4(0.9f, 0.0f, 0.0f, 1.0f));
+        ImPlot::PlotLine("Entropy 1h", xs.data(), ent1.data(), static_cast<int>(ent1.size()));
+        ImPlot::SetNextLineStyle(ImVec4(0.7f, 0.0f, 0.0f, 1.0f));
+        ImPlot::PlotLine("Entropy 4h", xs.data(), ent4.data(), static_cast<int>(ent4.size()));
         ImPlot::EndPlot();
     }
 }
@@ -580,7 +569,7 @@ void SignalsTabController::renderHoverInfo() {
                 
             ImGui::TextColored(ohlc_color, "O: %.5f  H: %.5f", candle.open, candle.high);
             ImGui::TextColored(ohlc_color, "L: %.5f  C: %.5f", candle.low, candle.close);
-            ImGui::Text("Volume: %d (%.1fx avg)", candle.volume, hover_info_.volume_profile);
+            ImGui::Text("Volume: %.0f (%.1fx avg)", candle.volume, hover_info_.volume_profile);
             
             ImGui::Spacing();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "Momentum & Analysis:");
@@ -991,14 +980,14 @@ void SignalsTabController::detectTrendLines() {
     }
 }
 
-ImU32 SignalsTabController::getSignalColor(sep::common::SEPSignalData::SignalType signal_type) {
+ImU32 SignalsTabController::getSignalColor(sep::common::MultiTimeframeSignal signal_type) {
     switch (signal_type) {
-        case sep::common::SEPSignalData::STRONG_BUY:  return IM_COL32(0, 255, 0, 255);
-        case sep::common::SEPSignalData::BUY:         return IM_COL32(144, 238, 144, 255);
-        case sep::common::SEPSignalData::NEUTRAL:     return IM_COL32(255, 255, 0, 255);
-        case sep::common::SEPSignalData::SELL:        return IM_COL32(255, 165, 0, 255);
-        case sep::common::SEPSignalData::STRONG_SELL: return IM_COL32(255, 0, 0, 255);
-        default:                         return IM_COL32(128, 128, 128, 255);
+        case sep::common::MultiTimeframeSignal::STRONG_BUY:  return IM_COL32(0, 255, 0, 255);
+        case sep::common::MultiTimeframeSignal::BUY:         return IM_COL32(144, 238, 144, 255);
+        case sep::common::MultiTimeframeSignal::NEUTRAL:     return IM_COL32(255, 255, 0, 255);
+        case sep::common::MultiTimeframeSignal::SELL:        return IM_COL32(255, 165, 0, 255);
+        case sep::common::MultiTimeframeSignal::STRONG_SELL: return IM_COL32(255, 0, 0, 255);
+        default:                                             return IM_COL32(128, 128, 128, 255);
     }
 }
 

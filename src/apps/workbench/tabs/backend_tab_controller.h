@@ -65,7 +65,7 @@ private:
     int units_ = 1000;
     nlohmann::json open_positions_;
     nlohmann::json orders_;
-    std::vector<sep::connectors::OrderInfo> order_cache_;
+    std::vector<sep::common::OrderInfo> order_cache_;
     bool paper_trading_ = false;
 
     std::vector<std::string> trade_history_;

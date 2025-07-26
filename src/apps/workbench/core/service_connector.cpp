@@ -38,9 +38,9 @@ ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 
 ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
-    auto& cfg = sep::config::ConfigManager::getInstance().oanda();
-    std::string api_key = cfg.demo_api_key.empty() ? cfg.api_key : cfg.demo_api_key;
-    std::string account_id = cfg.demo_account_id.empty() ? cfg.account_id : cfg.demo_account_id;
+    auto& cfg = sep::workbench::Config::getInstance();
+    std::string api_key = cfg.oanda().demo_api_key.empty() ? cfg.oanda().api_key : cfg.oanda().demo_api_key;
+    std::string account_id = cfg.oanda().demo_account_id.empty() ? cfg.oanda().account_id : cfg.oanda().demo_account_id;
     if (api_key.empty() || account_id.empty()) {
         const char* env_key = std::getenv("OANDA_API_KEY");
         const char* env_id = std::getenv("OANDA_ACCOUNT_ID");
@@ -59,7 +59,7 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         oanda_connector_ = std::make_unique<connectors::OandaConnector>(api_key, account_id, true);
         trade_manager_ = std::make_unique<workbench::TradeManager>(oanda_connector_.get());
         trade_manager_->setRiskPercentage(0.02);
-        trade_manager_->setPaperTrading(cfg.paper_trading);
+        trade_manager_->setPaperTrading(cfg.oanda().paper_trading);
         std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
         std::cout << "[ServiceConnector] API Key length: " << api_key.length() << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
@@ -896,14 +896,8 @@ void ServiceConnector::loadInitialData(const std::string& path)
     DataParser parser;
     auto candles = parser.parseQuantJSON(path);
     initial_data_.clear();
-    for (const auto& c : candles)
-    {
-        std::tm tm = {};
-        std::istringstream ss(c.time);
-        ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-        auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-        initial_data_.emplace_back(c.open, c.high, c.low, c.close, static_cast<int>(c.volume), ts);
-    }
+    initial_data_.clear();
+    initial_data_.insert(initial_data_.end(), candles.begin(), candles.end());
     if (signals_tab_ && !initial_data_.empty())
     {
         signals_tab_->setCandleData(initial_data_);
@@ -937,23 +931,10 @@ void ServiceConnector::loadInitialData(const std::string& path)
             const auto& m = metrics[i];
             const auto& candle = initial_data_[initial_data_.size() - metrics.size() + i];
             common::SEPSignalData sig;
-            sig.coherence = m.coherence;
-            sig.stability = m.stability;
-            sig.entropy = m.entropy;
-            sig.alpha_signal = (m.coherence + m.stability - m.entropy) / 2.0f;
-            sig.trend_strength = (m.coherence * m.stability) - m.entropy;
+            sig.signal_value = (m.coherence + m.stability - m.entropy) / 2.0f;
             sig.timestamp = candle.timestamp;
 
-            if (m.coherence > 0.8f && m.stability > 0.7f && m.entropy < 0.2f)
-                sig.signal_type = common::SEPSignalData::STRONG_BUY;
-            else if (m.coherence > 0.7f && m.stability > 0.6f && m.entropy < 0.3f)
-                sig.signal_type = common::SEPSignalData::BUY;
-            else if (m.coherence < 0.2f && m.stability < 0.3f && m.entropy > 0.8f)
-                sig.signal_type = common::SEPSignalData::STRONG_SELL;
-            else if (m.coherence < 0.3f && m.stability < 0.4f && m.entropy > 0.7f)
-                sig.signal_type = common::SEPSignalData::SELL;
-            else
-                sig.signal_type = common::SEPSignalData::NEUTRAL;
+
 
             initial_signals_.push_back(sig);
         }

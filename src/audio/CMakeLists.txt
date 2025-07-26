@@ -1,5 +1,4 @@
 
-
 # Install headers
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/audio/
         DESTINATION include/sep/audio
@@ -46,6 +45,8 @@ target_link_libraries(sep_audio
         ${FFTW_LIBRARIES}
     PUBLIC
         sep_engine
+        CUDA::cudart
+        CUDA::cuda_driver
 )
 
 # Configure symbol visibility

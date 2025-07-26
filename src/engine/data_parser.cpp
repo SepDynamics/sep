@@ -190,7 +190,7 @@ std::vector<quantum::Pattern> DataParser::parseCSV(const std::string& path)
         if (!values.empty()) {
             quantum::Pattern pattern;
             pattern.id = std::to_string(line_num);
-            pattern.timestamp = std::chrono::system_clock::now();
+            pattern.timestamp = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
 
             // Map values to pattern fields
             if (values.size() >= 1) pattern.position.x = values[0];
@@ -211,8 +211,8 @@ std::vector<quantum::Pattern> DataParser::parseCSV(const std::string& path)
             pattern.attributes = glm::vec4(0.0f);
             pattern.amplitude = {1.0f, 0.0f};
             pattern.momentum = glm::vec3(0.0f);
-            pattern.last_accessed = std::chrono::system_clock::now();
-            pattern.last_modified = std::chrono::system_clock::now();
+            pattern.last_accessed = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
+            pattern.last_modified = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
             
             patterns.push_back(pattern);
         }
@@ -239,7 +239,7 @@ std::vector<quantum::Pattern> DataParser::parseBinary(const uint8_t* data, size_
     for (size_t i = 0; i < num_patterns; ++i) {
         quantum::Pattern pattern;
         pattern.id = std::to_string(i);
-        pattern.timestamp = std::chrono::system_clock::now();
+        pattern.timestamp = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
 
         size_t offset = i * floats_per_pattern;
         pattern.position = glm::vec4(float_data[offset], float_data[offset + 1], float_data[offset + 2], float_data[offset + 3]);
@@ -258,8 +258,8 @@ std::vector<quantum::Pattern> DataParser::parseBinary(const uint8_t* data, size_
         pattern.attributes = glm::vec4(0.0f);
         pattern.amplitude = {1.0f, 0.0f};
         pattern.momentum = glm::vec3(0.0f);
-        pattern.last_accessed = std::chrono::system_clock::now();
-        pattern.last_modified = std::chrono::system_clock::now();
+        pattern.last_accessed = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
+        pattern.last_modified = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
 
         patterns.push_back(pattern);
     }
@@ -532,7 +532,7 @@ std::vector<quantum::Pattern> DataParser::candlesToPatterns(
         quantum::Pattern pattern;
 
         // Use timestamp as unique ID
-        pattern.id = std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(candle.timestamp.time_since_epoch()).count());
+        pattern.id = std::to_string(sep::common::time_point_to_nanoseconds(candle.timestamp));
 
         // Map OHLC to position vector (raw data, no normalization)
         pattern.position.x = candle.open;
@@ -544,9 +544,9 @@ std::vector<quantum::Pattern> DataParser::candlesToPatterns(
         pattern.data.push_back(static_cast<float>(candle.volume));
         
         // Set timestamp
-        pattern.timestamp = candle.timestamp;
-        pattern.last_accessed = candle.timestamp;
-        pattern.last_modified = candle.timestamp;
+        pattern.timestamp = sep::common::time_point_to_nanoseconds(candle.timestamp);
+        pattern.last_accessed = sep::common::time_point_to_nanoseconds(candle.timestamp);
+        pattern.last_modified = sep::common::time_point_to_nanoseconds(candle.timestamp);
         
         // Initialize quantum state with defaults - let the quantum algorithms determine these
         pattern.generation = 0;
@@ -633,8 +633,7 @@ bool DataParser::saveValidatedCandlesJSON(const std::vector<sep::common::CandleD
 
 uint64_t DataParser::parseTimestamp(const std::string& timestamp) const
 {
-    auto tp = sep::common::parseTimestamp(timestamp);
-    return std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count();
+    return sep::common::time_point_to_nanoseconds(sep::common::parseTimestamp(timestamp));
 }
 
 bool DataParser::exportCorrelationCSV(const std::string& path,

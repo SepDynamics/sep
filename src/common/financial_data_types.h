@@ -13,20 +13,42 @@ struct CandleData {
     double low;
     double close;
     double volume;
+
+    CandleData() = default;
+    
+    CandleData(double o, double h, double l, double c, double v,
+               std::chrono::time_point<std::chrono::system_clock> ts)
+        : timestamp(ts), open(o), high(h), low(l), close(c), volume(v) {}
+};
+
+enum class MultiTimeframeSignal {
+    STRONG_BUY,
+    BUY,
+    NEUTRAL,
+    SELL,
+    STRONG_SELL
 };
 
 struct SEPSignalData {
-    // Assuming some fields based on the name
     std::string signal_id;
     std::chrono::time_point<std::chrono::system_clock> timestamp;
     double signal_value;
+    double coherence;
+    double stability;
+    double entropy;
+    double alpha_signal;
+    double trend_strength;
+    MultiTimeframeSignal signal_type;
 };
 
 struct CorrelationMetrics {
-    // Assuming some fields based on the name
-    std::string metric_id;
-    double correlation_coefficient;
-    double p_value;
+    double coherence_pearson;
+    double coherence_spearman;
+    double stability_pearson;
+    double stability_spearman;
+    double entropy_pearson;
+    double entropy_spearman;
+    int sample_count;
 };
 
 
@@ -39,5 +61,10 @@ struct OrderInfo {
     double price{0};
     OrderStatus status{OrderStatus::PENDING};
 };
+
+std::chrono::time_point<std::chrono::system_clock> parseTimestamp(const std::string& timestamp_str);
+
+// Convert a time_point to nanoseconds since epoch
+int64_t time_point_to_nanoseconds(const std::chrono::time_point<std::chrono::system_clock>& tp);
 
 } // namespace sep::common

@@ -63,6 +63,16 @@ void TradingHUD::render() {
     
     // Handle mouse input for hover info
     handleMouseInput();
+
+    if (trade_manager_) {
+        positions_ = trade_manager_->getPositions();
+        account_info_.balance = trade_manager_->getAccountBalance();
+        account_info_.realized_pl = trade_manager_->getRealizedPnL();
+        account_info_.unrealized_pl = 0.0;
+        for (const auto& p : positions_) {
+            account_info_.unrealized_pl += p.unrealized_pl;
+        }
+    }
     
     // Main trading HUD window - FIXED POSITION
     ImGui::SetNextWindowPos(window_positions_.trading_hud_pos, ImGuiCond_Always);
@@ -681,9 +691,15 @@ void TradingHUD::renderTradingControls() {
     
     // Performance metrics
     ImGui::Text("Session Performance");
-    ImGui::Text("P&L: +$0.00");  // TODO: Calculate from actual trades
-    ImGui::Text("Win Rate: 0.0%%");
-    ImGui::Text("Trades: 0");
+    double total_pnl = account_info_.realized_pl + account_info_.unrealized_pl;
+    ImGui::Text("P&L: %.2f", total_pnl);
+    if (trade_manager_) {
+        ImGui::Text("Win Rate: %.1f%%", trade_manager_->getWinLossRatio() * 100.0);
+        ImGui::Text("Trades: %zu", trade_manager_->getOrders().size());
+    } else {
+        ImGui::Text("Win Rate: 0.0%%");
+        ImGui::Text("Trades: 0");
+    }
 }
 
 // Technical indicator calculations
@@ -2912,38 +2928,12 @@ void TradingHUD::updateCoherenceStrategy() {
 void TradingHUD::executeCoherenceTrade(bool is_buy) {
     if (!trade_manager_ || !oanda_connector_) return;
     
-    // Get current price for the selected instrument
-    double current_price = 0.0;
-    if (oanda_connector_) {
-        try {
-            auto market_data = oanda_connector_->getMarketData(selected_instrument_);
-            current_price = (market_data.bid + market_data.ask) / 2.0;
-            
-            // Validate price is reasonable (basic sanity check)
-            if (current_price <= 0.0 || current_price > 10.0) {
-                std::cerr << "ERROR: Invalid price from OANDA: " << current_price 
-                          << " for " << selected_instrument_ << std::endl;
-                return; // Don't execute trade with invalid price
-            }
-        } catch (const std::exception& e) {
-            std::cerr << "ERROR: Failed to get current price from OANDA: " << e.what() << std::endl;
-            return; // Don't execute trade without valid price
-        }
+    trade_manager_->setRiskConfig({coherence_strategy_.stop_loss_pips, 0.0});
+    if (is_buy) {
+        trade_manager_->executeBuy(selected_instrument_, coherence_strategy_.position_size_units);
     } else {
-        std::cerr << "CRITICAL: OANDA connector not available for live pricing" << std::endl;
-        return; // Never execute trades without real pricing
+        trade_manager_->executeSell(selected_instrument_, coherence_strategy_.position_size_units);
     }
-    
-    // Calculate position size (positive for buy, negative for sell)
-    double units = is_buy ? coherence_strategy_.position_size_units : -coherence_strategy_.position_size_units;
-    
-    // Place the trade
-    auto result = trade_manager_->placeOrder(
-        selected_instrument_,
-        units,
-        current_price,
-        coherence_strategy_.stop_loss_pips
-    );
     
     // Update strategy statistics
     coherence_strategy_.total_trades++;

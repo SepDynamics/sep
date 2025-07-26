@@ -115,6 +115,44 @@ nlohmann::json TradeManager::placeOrder(const std::string& instrument,
     return result;
 }
 
+nlohmann::json TradeManager::executeBuy(const std::string& instrument, double units) {
+    if (!oanda_connector_) {
+        return {{"error", "OANDA connector not initialized"}};
+    }
+    try {
+        auto md = oanda_connector_->getMarketData(instrument);
+        double price = md.ask;
+        auto res = placeOrder(instrument, std::abs(units), price,
+                              risk_config_.stop_loss_pips, risk_config_.take_profit_pips);
+        if (res.contains("error")) {
+            logger_->error("executeBuy failed: {}", res["error"].get<std::string>());
+        }
+        return res;
+    } catch (const std::exception& e) {
+        logger_->error("executeBuy exception: {}", e.what());
+        return {{"error", e.what()}};
+    }
+}
+
+nlohmann::json TradeManager::executeSell(const std::string& instrument, double units) {
+    if (!oanda_connector_) {
+        return {{"error", "OANDA connector not initialized"}};
+    }
+    try {
+        auto md = oanda_connector_->getMarketData(instrument);
+        double price = md.bid;
+        auto res = placeOrder(instrument, -std::abs(units), price,
+                              risk_config_.stop_loss_pips, risk_config_.take_profit_pips);
+        if (res.contains("error")) {
+            logger_->error("executeSell failed: {}", res["error"].get<std::string>());
+        }
+        return res;
+    } catch (const std::exception& e) {
+        logger_->error("executeSell exception: {}", e.what());
+        return {{"error", e.what()}};
+    }
+}
+
 void TradeManager::updateOrderStatus(const std::string& order_id, OrderState state) {
     std::lock_guard<std::mutex> lock(mutex_);
     auto it = std::find_if(orders_.begin(), orders_.end(),

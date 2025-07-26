@@ -82,8 +82,9 @@ graph TB
     # From errors.txt:
     error: field has incomplete type 'sep::workbench::CorrelationMetrics'
     error: member access into incomplete type 'const sep::workbench::CorrelationMetrics'
+    error: no viable overloaded '=' for std::chrono::time_point
     ```
--   **Conclusion**: A forward declaration of `CorrelationMetrics` is used, but the full definition is never included before its members are accessed. The header containing the struct definition must be included in `data_parser.cpp`.
+-   **Conclusion**: A forward declaration of `CorrelationMetrics` is used, but the full definition is never included. The header containing the struct must be included. Additionally, string-based timestamps are being incorrectly assigned to `std::chrono::time_point` members without proper parsing.
 
 ### 2. **Multi-Timeframe Analyzer (`multi_timeframe_analyzer.cpp`)**
 -   **Function**: Resamples and analyzes market data across different timeframes.
@@ -95,15 +96,16 @@ graph TB
     error: no viable conversion from 'vector<sep::workbench::CandleData>' to 'const vector<sep::common::CandleData>'
     error: member access into incomplete type 'const sep::workbench::CandleData'
     ```
--   **Conclusion**: A major refactoring has occurred, creating a mismatch between the class declaration and its implementation. There is a critical namespace conflict between `sep::workbench::CandleData` and `sep::common::CandleData`, and the `CandleData` struct is being used as an incomplete type, indicating a missing header include.
+-   **Conclusion**: A major refactoring has created a mismatch between the class declaration and its implementation. There is a critical namespace conflict between `sep::workbench::CandleData` and `sep::common::CandleData`, and the `CandleData` struct is being used as an incomplete type, indicating a missing header include.
 
 ### 3. **OANDA Connector (`oanda_connector.cpp`)**
 -   **Function**: Fetches market data and handles trade execution with the OANDA API.
 -   **Status**: **BUILD FAILED**.
--   **Error Analysis**:
+-   **Error Analysis**: The build fails because it indirectly includes a GUI header:
     ```
-    # From errors.txt:
-    /sep/src/apps/workbench/core/ui_layout_manager.h:6:10: fatal error: 'imgui.h' file not found
+    # From build_log.txt:
+    fatal error: 'imgui.h' file not found
+    # Included from: .../src/apps/workbench/core/ui_layout_manager.h
     ```
 -   **Conclusion**: A backend data connector should **never** include a GUI library. This indicates a severe architectural flaw where headers are improperly chained. The dependency on `ui_layout_manager.h` must be removed.
 

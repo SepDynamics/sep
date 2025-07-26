@@ -1,3 +1,4 @@
+
 # SEP Engine Development Roadmap
 
 ## Current Objective: **Resolve Critical Build Failures**
@@ -14,19 +15,20 @@ This phase is entirely focused on fixing the build and establishing a stable fou
 -   **Estimated Time**: 3-5 days
 -   **Tasks**:
     -   [ ] **Decouple Core Logic from GUI**:
-        -   **Action**: Ensure `sep::workbench::CorrelationMetrics` has its full definition included in `data_parser.cpp` (likely by including `multi_timeframe_analyzer.h` or a dedicated types header) to fix `incomplete type` errors.
-        -   **Action**: Identify and remove the include chain that causes `oanda_connector.cpp` to include `imgui.h`. Backend components must not depend on GUI libraries.
-        -   **Action**: Move core data structures like `CandleData` to a common, GUI-independent header (`src/common/financial_data_types.h`) and resolve the `sep::workbench::CandleData` vs. `sep::common::CandleData` namespace conflicts in `multi_timeframe_analyzer.cpp` and `backtester.cpp`.
-    -   [ ] **Fix Refactoring Mismatches**:
-        -   **Action**: In `multi_timeframe_analyzer.cpp`, update the function signatures for `ingestMarketData`, `ingestHistoricalData`, `resampleCandles`, and `analyzeTimeframe` to match their declarations in the corresponding header file.
-        -   **Action**: In `data_loader_test.cpp`, update method calls from `loadData` and `getCandleData` to their current correct names (e.g., `load_data`, `get_data`).
-        -   **Action**: In `json_data_parser.cpp`, correct the namespace for `CandleData`. It seems `sep::workbench` namespace for data types has been deprecated in favor of `sep::common`.
+        -   **Action**: Create `src/common/financial_data_types.h` and move `CandleData`, `SEPSignalData`, and `CorrelationMetrics` into it.
+        -   **Action**: Identify and remove the include chain that causes `oanda_connector.cpp` to depend on `ui_layout_manager.h` and thus `imgui.h`. Backend components must not depend on GUI libraries.
+        -   **Action**: Update `data_parser.cpp` to include the new common types header to resolve `incomplete type 'sep::workbench::CorrelationMetrics'` errors.
+    -   [ ] **Fix Namespace and Refactoring Mismatches**:
+        -   **Action**: Standardize all modules on `sep::common::CandleData` to resolve the namespace conflicts in `multi_timeframe_analyzer.cpp`, `backtester.cpp`, and `json_data_parser.cpp`.
+        -   **Action**: In `multi_timeframe_analyzer.cpp`, update the function signatures for `ingestMarketData`, `ingestHistoricalData`, `resampleCandles`, and `analyzeTimeframe` to match their declarations in the header file.
+        -   **Action**: In `data_loader_test.cpp`, update method calls from `loadData` and `getCandleData` to their current correct names (`load_data` and `get_data`).
+        -   **Action**: Correct the `std::chrono::time_point` assignment errors in `data_parser.cpp` and `oanda_connector.cpp` by properly parsing the string timestamps.
     -   [ ] **Resolve Missing Header Includes**:
-        -   **Action**: Fix the `'backtester/data_loader.h' file not found` errors in multiple workbench files. This is likely a CMake `target_include_directories` issue or an incorrect relative path.
-        -   **Action**: Ensure `imgui.h` is correctly included where it is actually needed (e.g., in `ui_layout_manager.h`) and that the `imgui` library is properly linked.
+        -   **Action**: Fix the `'backtester/data_loader.h' file not found` errors in workbench files by correcting the `target_include_directories` in `apps/workbench/CMakeLists.txt`.
+        -   **Action**: Ensure `implot` is properly configured as a dependency so `implot.h` can be included in GUI components without errors.
     -   [ ] **Address Minor Compilation Errors**:
-        -   **Action**: Fix the typo (`undeclared identifier 's'`) in `pattern_metric_engine.cpp`.
         -   **Action**: Add `#include <cstdint>` to `emitterutils.cpp` to resolve `uint16_t` and `uint32_t` undeclared identifier errors.
+        -   **Action**: Fix any remaining typos or minor syntax errors identified in the build log.
 
 ### 1.2: 48-Hour Sample Data Setup
 -   **Status**: **BLOCKED**
@@ -41,7 +43,6 @@ This phase is entirely focused on fixing the build and establishing a stable fou
 -   **Priority**: Critical (Post-Build-Fix)
 -   **Dependencies**: **Phase 1.1 Complete**
 -   **Tasks**:
-    -   [ ] Integrate `implot` as a third-party dependency.
     -   [ ] Render candlestick charts using `implot` in `SignalsTabController`.
     -   [ ] Add real-time plots for coherence, stability, and entropy.
     -   [ ] Implement zoom/pan functionality.
@@ -77,6 +78,6 @@ This phase is entirely focused on fixing the build and establishing a stable fou
 
 -   **Static Analysis Findings**: The static analysis report (`report.md`) found numerous `HIGH` and `MEDIUM` severity issues, primarily in third-party libraries like `imgui` and `yaml-cpp`.
 -   **Tasks**:
-    -   [ ] Investigate and address `[HIGH]` severity issues in `imgui` source code (`incorrect roundings`, `sizeof` on pointers). These may require patching or updating the library.
+    -   [ ] Investigate and address `[HIGH]` severity issues in `imgui` source code (`bugprone-incorrect-roundings`, `bugprone-sizeof-expression`). These may require patching or updating the library.
     -   [ ] Address `[MEDIUM]` `cert-err33-c` (ignored `fprintf`/`sprintf` return value) warnings in `imgui` to improve code quality.
     -   [ ] Review `[MEDIUM]` `bugprone-undefined-memory-manipulation` warnings (`memset` on non-TriviallyCopyable types) in `imgui` and replace with proper C++ initialization.

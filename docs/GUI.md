@@ -7,10 +7,11 @@ The SEP Workbench GUI is currently **unbuildable and non-functional**. Critical 
 The immediate goal is to refactor the code to resolve these build errors. The proposed 3-tab architecture remains the target design *after* the build is stabilized.
 
 ### Primary Compilation Blockers
--   **Fatal Header Conflict**: Core backend files like `oanda_connector.cpp` and `data_parser.cpp` fail to build because they indirectly include `imgui.h`. This is the most severe issue and points to an incorrect dependency chain.
--   **Missing/Incorrect Includes**: Multiple files fail due to missing headers (e.g., `'backtester/data_loader.h'`) or using forward declarations where full definitions are needed (leading to `incomplete type` errors).
--   **Refactoring Mismatches**: Numerous errors like `out-of-line definition does not match` and `no member named 'loadData'` indicate that source files were not updated after their corresponding headers were changed.
--   **Namespace Conflicts**: The codebase is inconsistent in its use of `sep::workbench::CandleData` vs. `sep::common::CandleData`, causing type mismatch errors.
+-   **Fatal Header Conflict**: Core backend files like `oanda_connector.cpp` and `data_parser.cpp` fail to build because they are forced to include GUI headers like `imgui.h` through a broken include chain (`ui_layout_manager.h`). This is the most severe issue.
+-   **Incomplete Types & Missing Definitions**: Multiple files (`multi_timeframe_analyzer.cpp`, `data_parser.cpp`) fail because they use forward-declared types like `CorrelationMetrics` and `CandleData` without ever including the full struct definition, leading to `incomplete type` errors.
+-   **Refactoring Mismatches**: Numerous errors like `out-of-line definition does not match` and `no member named 'loadData'` indicate that source files (`.cpp`) were not updated after their corresponding headers (`.h`) were changed during refactoring.
+-   **Namespace Conflicts**: The codebase is inconsistent in its use of `sep::workbench::CandleData` vs. `sep::common::CandleData`, causing type mismatch and `no viable conversion` errors.
+-   **Missing Include Paths**: The build system cannot find `'backtester/data_loader.h'`, indicating a misconfigured `CMakeLists.txt`.
 
 ## Proposed 3-Tab Architecture (Post-Build-Fix)
 
@@ -34,10 +35,10 @@ The GUI will be organized into three distinct tabs to separate concerns and impr
 This phase focuses exclusively on making the project compilable again.
 
 #### 1.1: Decouple Core Logic from GUI
--   **Action**: Create `src/common/financial_data_types.h`. Move all non-GUI data structures (`CandleData`, `SEPSignalData`) into this new header.
+-   **Action**: Create `src/common/financial_data_types.h`. Move all non-GUI data structures (`CandleData`, `SEPSignalData`, `CorrelationMetrics`) into this new header.
 -   **Action**: Create a new GUI-specific types header (e.g., `apps/workbench/core/ui_types.h`) for structs that use ImGui types like `ChartZoom` and `EnhancedHoverInfo`.
 -   **Action**: Update all core engine and connector files (`data_parser.h`, `oanda_connector.cpp`, etc.) to include `financial_data_types.h` and remove any direct or indirect dependency on GUI headers. This will eliminate the `fatal error: 'imgui.h' file not found` in backend components.
--   **Action**: Ensure full definitions of structs like `CorrelationMetrics` and `CandleData` are included before they are used to fix all `incomplete type` errors.
+-   **Action**: Ensure full definitions of structs are included in the `.cpp` files that use them to fix all `incomplete type` errors.
 
 #### 1.2: Fix Namespace and Refactoring Errors
 -   **Action**: Standardize on the `sep::common` namespace for shared financial data types across the entire project to resolve `no viable conversion` errors.
@@ -45,7 +46,7 @@ This phase focuses exclusively on making the project compilable again.
 -   **Action**: Correct method names in test files, such as changing `dataLoader.loadData(...)` to `dataLoader.load_data(...)` in `data_loader_test.cpp`.
 
 #### 1.3: Resolve Missing Dependencies and Includes
--   **Action**: Correct the include path for `backtester/data_loader.h` in all workbench files. This may require updating `target_include_directories` in the relevant `CMakeLists.txt`.
+-   **Action**: Correct the include path for `backtester/data_loader.h` in all workbench files. This requires updating `target_include_directories` in the relevant `CMakeLists.txt`.
 -   **Action**: Properly integrate `implot` as a third-party dependency so `implot.h` can be included in GUI components.
 
 ### Phase 2: Tab-Specific Implementation (Post-Build-Fix)

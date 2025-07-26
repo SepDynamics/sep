@@ -1,3 +1,4 @@
+
 # SEP Engine Trading Platform - Build Failure Resolution Phase
 
 ## Current Status: **CRITICAL BUILD FAILURE** - All Development Blocked
@@ -8,26 +9,26 @@ The SEP Engine is a quantum-inspired trading platform designed to process market
 
 ## Primary Objective: Fix the Build
 
-1.  **Resolve Header Dependency Conflicts**: ✅
-    -   **Top Priority**: Refactor core data structures (e.g., `CandleData`, `CorrelationMetrics`) out of GUI-specific headers and into neutral, shared libraries. This will fix the `fatal error: 'imgui.h' file not found` and `incomplete type` errors in the core engine and backend connectors.
+1.  **Resolve Header Dependency Conflicts**: The most severe issue is a flawed architecture where backend components depend on GUI libraries.
+    -   **Top Priority**: Refactor core data structures (e.g., `CandleData`, `CorrelationMetrics`) out of GUI-specific headers and into a common, GUI-independent header (`src/common/financial_data_types.h`). This will fix the `fatal error: 'imgui.h' file not found` and `incomplete type` errors in the core engine and backend connectors.
 
-2.  **Correct Refactoring Errors**: ✅
-    -   Update source files (`.cpp`) to match their corresponding header (`.h`) declarations, resolving `out-of-line definition does not match` errors.
-    -   Fix incorrect API usage and typos (e.g., `loadData` vs. `load_data` in `data_loader_test.cpp`).
+2.  **Correct Refactoring Errors**: The codebase has numerous mismatches between header declarations and source file implementations.
+    -   Update source files (`.cpp`) to match their corresponding header (`.h`) declarations, resolving `out-of-line definition does not match` errors in `multi_timeframe_analyzer.cpp`.
+    -   Fix incorrect method names and API usage (e.g., `loadData` vs. `load_data` in `data_loader_test.cpp`).
     -   Resolve missing header includes (e.g., `'backtester/data_loader.h' file not found`) by correcting CMake `include_directories` or file paths.
 
-3.  **Address Miscellaneous Compilation Errors**: ✅
-    -   Fix namespace issues where types are used without correct qualification (e.g., `sep::workbench::CandleData` vs. `sep::common::CandleData`).
-    -   Add missing standard headers like `<cstdint>` where required.
+3.  **Unify Data Types and Namespaces**: The project uses conflicting data types like `sep::workbench::CandleData` and `sep::common::CandleData`.
+    -   Standardize on a single, common namespace (`sep::common`) for all shared financial data types to eliminate type conversion errors.
+    -   Add missing standard headers like `<cstdint>` in `emitterutils.cpp` to resolve undeclared identifier errors.
 
 ## Architecture (Post-Build-Fix)
 
 The intended architecture, detailed in [DATA.md](DATA.md) and [GUI.md](GUI.md), remains the goal once the project is compilable.
 
 -   **Data Pipeline**: Market Data → Data Ingestion Layer → Quantum Processing → Real-time Analysis → Trading & Visualization
--   **GUI**: A 3-tab workbench for Signals, Engine Diagnostics, and Backend Operations.
+-   **GUI**: A 3-tab workbench for **Signals**, **Engine Diagnostics**, and **Backend Operations**.
 
-## Key Components Status (Compilation)
+## Key Components Compilation Status
 
 -   **DataParser** (`src/engine/data_parser.cpp`): **BUILD FAILED.** Blocked by `incomplete type` errors for `CorrelationMetrics` due to a missing header include.
 -   **MultiTimeframeAnalyzer** (`src/apps/workbench/core/multi_timeframe_analyzer.cpp`): **BUILD FAILED.** Multiple errors due to signature mismatches, namespace confusion between `workbench::CandleData` and `common::CandleData`, and incomplete type access.

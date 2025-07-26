@@ -1,6 +1,7 @@
 #include "drug_optimizer.hpp"
 
 #include <cstdlib>
+#include <algorithm>
 
 #include "../simple_renderer.h"
 // Include glm_config.h before any GLM headers to ensure GLM_ENABLE_EXPERIMENTAL is defined
@@ -32,8 +33,11 @@ namespace workbench {
 
 float DrugOptimizerDemo::computeBindingScore(const MoleculePose& pose) {
 #ifdef SEP_EXT_CHEM
-    // Placeholder for external chemistry library integration
-    return external_chemistry_score(pose.position.x, pose.position.y, pose.position.z);
+    // Approximate binding affinity when external chemistry extensions are enabled
+    float distance = glm::length(pose.position);
+    float orientation_factor = 1.0f - glm::length(pose.orientation) / 3.0f;
+    orientation_factor = std::max(0.0f, orientation_factor);
+    return orientation_factor / (1.0f + distance);
 #else
     return 1.0f / (1.0f + glm::length2(pose.position));
 #endif

@@ -1,5 +1,13 @@
 #include "quantum/pattern_metric_engine.h"
 #include "engine/logging.h"
+#ifdef _WIN32
+#    include <windows.h>
+#else
+#    include <sys/mman.h>
+#    include <sys/stat.h>
+#    include <fcntl.h>
+#    include <unistd.h>
+#endif
 
 char sep::quantum::pattern_id[sep::compat::PatternData::MAX_ID_LENGTH];
 float sep::quantum::coherence = 0.0f;
@@ -48,9 +56,58 @@ void PatternMetricEngine::ingestFile(const std::string& filepath)
     }
 }
 
-void PatternMetricEngine::ingestMappedFile([[maybe_unused]] const std::string& filepath)
+void PatternMetricEngine::ingestMappedFile(const std::string& filepath)
 {
-    // Implementation for memory-mapped file ingestion would go here.
+#ifdef _WIN32
+    HANDLE file = CreateFileA(filepath.c_str(), GENERIC_READ, FILE_SHARE_READ,
+                              nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (file == INVALID_HANDLE_VALUE) {
+        return;
+    }
+
+    LARGE_INTEGER size{};
+    if (!GetFileSizeEx(file, &size)) {
+        CloseHandle(file);
+        return;
+    }
+
+    HANDLE mapping = CreateFileMappingA(file, nullptr, PAGE_READONLY, 0, 0, nullptr);
+    if (!mapping) {
+        CloseHandle(file);
+        return;
+    }
+
+    void* data = MapViewOfFile(mapping, FILE_MAP_READ, 0, 0, 0);
+    if (data) {
+        ingestData(static_cast<uint8_t*>(data), static_cast<size_t>(size.QuadPart));
+        UnmapViewOfFile(data);
+    }
+
+    CloseHandle(mapping);
+    CloseHandle(file);
+#else
+    int fd = open(filepath.c_str(), O_RDONLY);
+    if (fd == -1) {
+        return;
+    }
+
+    struct stat sb {};
+    if (fstat(fd, &sb) == -1) {
+        close(fd);
+        return;
+    }
+
+    void* map = mmap(nullptr, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (map == MAP_FAILED) {
+        close(fd);
+        return;
+    }
+
+    ingestData(static_cast<uint8_t*>(map), static_cast<size_t>(sb.st_size));
+
+    munmap(map, sb.st_size);
+    close(fd);
+#endif
 }
 
 void PatternMetricEngine::evolvePatterns() {

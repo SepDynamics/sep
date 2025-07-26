@@ -3,6 +3,7 @@
 #include <spdlog/spdlog.h>
 
 #include <fstream>
+#include <algorithm>
 
 namespace sep
 {
@@ -153,6 +154,47 @@ namespace sep
                 {
                     auto& oanda = json["oanda"];
                     oanda_ = {oanda.value("api_key", ""), oanda.value("account_id", ""), oanda.value("sandbox", true)};
+                }
+                else
+                {
+                    const char* env_key = std::getenv("OANDA_API_KEY");
+                    const char* env_id = std::getenv("OANDA_ACCOUNT_ID");
+                    if (env_key && env_id)
+                    {
+                        oanda_ = {env_key, env_id, true};
+                    }
+                    else
+                    {
+                        std::ifstream kfile("keys.txt");
+                        if (kfile.is_open())
+                        {
+                            std::string line;
+                            while (std::getline(kfile, line))
+                            {
+                                if (line.find("OANDA_API_KEY") != std::string::npos)
+                                {
+                                    auto pos = line.find('=');
+                                    if (pos != std::string::npos)
+                                    {
+                                        std::string val = line.substr(pos + 1);
+                                        val.erase(std::remove(val.begin(), val.end(), '"'), val.end());
+                                        oanda_.api_key = val;
+                                    }
+                                }
+                                else if (line.find("OANDA_ACCOUNT_ID") != std::string::npos)
+                                {
+                                    auto pos = line.find('=');
+                                    if (pos != std::string::npos)
+                                    {
+                                        std::string val = line.substr(pos + 1);
+                                        val.erase(std::remove(val.begin(), val.end(), '"'), val.end());
+                                        oanda_.account_id = val;
+                                    }
+                                }
+                            }
+                            oanda_.sandbox = true;
+                        }
+                    }
                 }
 
                 return true;

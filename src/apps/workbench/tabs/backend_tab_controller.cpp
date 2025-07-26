@@ -79,9 +79,13 @@ void BackendTabController::renderDataSourceSelector() {
 void BackendTabController::renderOrderManagementPanel() {
     ImGui::Begin("Paper Trading");
     if (ImGui::Checkbox("Enable Paper Trading", &paper_trading_)) {
-        if (service_connector_) {
-            // service_connector_->getTradeManager()->setPaperTrading(paper_trading_);
+        if (trade_manager_) {
+            trade_manager_->setPaperTrading(paper_trading_);
         }
+    }
+    if (trade_manager_) {
+        ImGui::Text("Balance: %.2f", trade_manager_->getAccountBalance());
+        ImGui::Text("Realized PnL: %.2f", trade_manager_->getRealizedPnL());
     }
     ImGui::End();
 
@@ -91,28 +95,16 @@ void BackendTabController::renderOrderManagementPanel() {
     ImGui::InputInt("Units", &units_);
 
     if (ImGui::Button("Place Buy Order")) {
-        if (service_connector_) {
-            nlohmann::json order_details;
-            order_details["order"]["instrument"] = instrument_buffer_;
-            order_details["order"]["units"] = std::to_string(units_);
-            order_details["order"]["type"] = "MARKET";
-            order_details["order"]["timeInForce"] = "FOK";
-            order_details["order"]["positionFill"] = "DEFAULT";
-            service_connector_->getOandaConnector()->placeOrder(order_details);
+        if (trade_manager_) {
+            trade_manager_->placeOrder(instrument_buffer_, units_, 0.0f, stop_loss_pips_, take_profit_pips_);
         }
     }
 
     ImGui::SameLine();
 
     if (ImGui::Button("Place Sell Order")) {
-        if (service_connector_) {
-            nlohmann::json order_details;
-            order_details["order"]["instrument"] = instrument_buffer_;
-            order_details["order"]["units"] = std::to_string(-units_);
-            order_details["order"]["type"] = "MARKET";
-            order_details["order"]["timeInForce"] = "FOK";
-            order_details["order"]["positionFill"] = "DEFAULT";
-            service_connector_->getOandaConnector()->placeOrder(order_details);
+        if (trade_manager_) {
+            trade_manager_->placeOrder(instrument_buffer_, -units_, 0.0f, stop_loss_pips_, take_profit_pips_);
         }
     }
 

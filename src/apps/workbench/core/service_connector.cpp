@@ -4,6 +4,7 @@
 #include "engine.h"
 #include "service_proxy_engine.h"
 #include "config.h"
+#include "../config.hpp"
 
 #include <iostream>
 #include <thread>
@@ -31,19 +32,24 @@ ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 
 ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
-    const char* api_key = std::getenv("OANDA_API_KEY");
-    const char* account_id = std::getenv("OANDA_ACCOUNT_ID");
-    if (api_key && account_id) {
-        // Use practice server (sandbox=true) for safe testing
-        oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, true);
-        std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
-        std::cout << "[ServiceConnector] API Key length: " << strlen(api_key) << std::endl;
-        std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
-    } else {
-        std::cout << "[ServiceConnector] ERROR: OANDA credentials not found in environment" << std::endl;
-        std::cout << "[ServiceConnector] API Key: " << (api_key ? "FOUND" : "NOT FOUND") << std::endl;
-        std::cout << "[ServiceConnector] Account ID: " << (account_id ? "FOUND" : "NOT FOUND") << std::endl;
+    auto& cfg = sep::workbench::Config::getInstance().oanda();
+    std::string api_key = cfg.api_key;
+    std::string account_id = cfg.account_id;
+    if (api_key.empty() || account_id.empty()) {
+        const char* env_key = std::getenv("OANDA_API_KEY");
+        const char* env_id = std::getenv("OANDA_ACCOUNT_ID");
+        if (env_key) api_key = env_key;
+        if (env_id) account_id = env_id;
     }
+
+    if (!api_key.empty() && !account_id.empty()) {
+        oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id, true);
+        trade_manager_ = std::make_unique<workbench::TradeManager>(oanda_connector_.get());
+        std::cout << "[ServiceConnector] OANDA connector configured" << std::endl;
+    } else {
+        std::cout << "[ServiceConnector] ERROR: OANDA credentials not provided" << std::endl;
+    }
+
     std::cout << "[ServiceConnector] Initialized with config: "
                << config.service_address << ":" << config.service_port << std::endl;
 }
@@ -51,6 +57,7 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
 ServiceConnector::~ServiceConnector() {
     disconnect();
     stopHealthMonitoring();
+    trade_manager_.reset();
 }
 
 bool ServiceConnector::connect() {

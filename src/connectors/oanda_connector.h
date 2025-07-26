@@ -49,6 +49,16 @@ struct DataValidationResult
     std::vector<std::string> warnings;
 };
 
+enum class OrderStatus { PENDING, FILLED, CANCELED };
+
+struct OrderInfo {
+    std::string id;
+    std::string instrument;
+    double units{0};
+    double price{0};
+    OrderStatus status{OrderStatus::PENDING};
+};
+
 class OandaConnector {
 public:
     OandaConnector(const std::string& api_key, const std::string& account_id, bool sandbox = true);
@@ -93,6 +103,12 @@ public:
     std::string getLastError() const { return last_error_; }
     bool hasError() const { return !last_error_.empty(); }
 
+    // Order tracking
+    void refreshOrders();
+    const std::vector<OrderInfo>& pendingOrders() const { return pending_orders_; }
+    const std::vector<OrderInfo>& filledOrders() const { return filled_orders_; }
+    const std::vector<OrderInfo>& canceledOrders() const { return canceled_orders_; }
+
 private:
     std::string api_key_;
     std::string account_id_;
@@ -134,7 +150,12 @@ private:
     std::thread stream_thread_;
     std::string stream_buffer_;
     void streamPriceData(const std::string& instruments);
-};
+
+    // Order caches
+    std::vector<OrderInfo> pending_orders_;
+    std::vector<OrderInfo> filled_orders_;
+    std::vector<OrderInfo> canceled_orders_;
+}; 
 
 } // namespace connectors
 }  // namespace sep

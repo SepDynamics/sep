@@ -491,7 +491,27 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
 
     if (response.response_code == 201) {
         try {
-            return nlohmann::json::parse(response.data);
+            auto json_resp = nlohmann::json::parse(response.data);
+            OrderInfo info;
+            if (json_resp.contains("orderCreateTransaction")) {
+                const auto& tx = json_resp["orderCreateTransaction"];
+                info.id = tx.value("id", "");
+                info.instrument = tx.value("instrument", "");
+                info.units = std::stod(tx.value("units", "0"));
+                info.price = tx.contains("price") ? std::stod(tx["price"].get<std::string>()) : 0.0;
+                info.status = OrderStatus::PENDING;
+                pending_orders_.push_back(info);
+            }
+            if (json_resp.contains("orderFillTransaction")) {
+                const auto& tx = json_resp["orderFillTransaction"];
+                info.id = tx.value("id", "");
+                info.instrument = tx.value("instrument", "");
+                info.units = std::stod(tx.value("units", "0"));
+                info.price = std::stod(tx.value("price", "0"));
+                info.status = OrderStatus::FILLED;
+                filled_orders_.push_back(info);
+            }
+            return json_resp;
         } catch (const std::exception& e) {
             last_error_ = "Failed to parse placeOrder response: " + std::string(e.what());
             return nlohmann::json{{"error", last_error_}};
@@ -526,6 +546,60 @@ nlohmann::json OandaConnector::getOrders() {
     
     last_error_ = "Failed to get orders: " + response.data;
     return nlohmann::json{ {"error", last_error_} };
+}
+
+void OandaConnector::refreshOrders() {
+    auto fetch_state = [this](const std::string& state) -> nlohmann::json {
+        std::string endpoint = "/v3/accounts/" + account_id_ + "/orders?state=" + state;
+        CurlResponse res = makeRequest(endpoint, "GET");
+        if (res.response_code == 200) {
+            return nlohmann::json::parse(res.data);
+        }
+        return {};
+    };
+
+    pending_orders_.clear();
+    filled_orders_.clear();
+    canceled_orders_.clear();
+
+    auto pending_json = fetch_state("PENDING");
+    if (pending_json.contains("orders")) {
+        for (const auto& o : pending_json["orders"]) {
+            OrderInfo info;
+            info.id = o.value("id", "");
+            info.instrument = o.value("instrument", "");
+            info.units = std::stod(o.value("units", "0"));
+            info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
+            info.status = OrderStatus::PENDING;
+            pending_orders_.push_back(info);
+        }
+    }
+
+    auto filled_json = fetch_state("FILLED");
+    if (filled_json.contains("orders")) {
+        for (const auto& o : filled_json["orders"]) {
+            OrderInfo info;
+            info.id = o.value("id", "");
+            info.instrument = o.value("instrument", "");
+            info.units = std::stod(o.value("units", "0"));
+            info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
+            info.status = OrderStatus::FILLED;
+            filled_orders_.push_back(info);
+        }
+    }
+
+    auto canceled_json = fetch_state("CANCELLED");
+    if (canceled_json.contains("orders")) {
+        for (const auto& o : canceled_json["orders"]) {
+            OrderInfo info;
+            info.id = o.value("id", "");
+            info.instrument = o.value("instrument", "");
+            info.units = std::stod(o.value("units", "0"));
+            info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
+            info.status = OrderStatus::CANCELED;
+            canceled_orders_.push_back(info);
+        }
+    }
 }
 
 void OandaConnector::setupSampleData(const std::string& instrument, const std::string& granularity, const std::string& output_file) {

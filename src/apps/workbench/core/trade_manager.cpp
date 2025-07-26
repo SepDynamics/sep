@@ -97,11 +97,19 @@ void TradeManager::updatePositions(const Order& order) {
                            [&](const Position& p) { return p.instrument == order.instrument; });
 
     if (it != positions_.end()) {
-        double existing_units = it->size;
-        double existing_value = existing_units * it->average_price;
-        double new_value = order.units * order.price;
-
+        double prev_units = it->size;
+        double prev_avg = it->average_price;
         it->size += order.units;
+        if ((prev_units > 0 && it->size < prev_units) || (prev_units < 0 && it->size > prev_units)) {
+            // closing part of position
+            double close_units = order.units;
+            double pnl = (order.price - prev_avg) * close_units;
+            if (prev_units < 0) pnl = -pnl;
+            realized_pnl_ += pnl;
+            account_balance_ += pnl;
+        }
+        double existing_value = prev_units * prev_avg;
+        double new_value = order.units * order.price;
         if (it->size == 0) {
             it->average_price = 0;
         } else {
@@ -110,6 +118,7 @@ void TradeManager::updatePositions(const Order& order) {
     } else {
         Position new_position(order.instrument, order.units, order.price);
         positions_.push_back(new_position);
+        account_balance_ -= order.units * order.price;
     }
 }
 

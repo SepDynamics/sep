@@ -23,9 +23,11 @@ public:
 
     void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
     void setServiceConnector(ServiceConnector* connector);
+    void setTradeManager(TradeManager* manager) { trade_manager_ = manager; }
 
 private:
     ServiceConnector* service_connector_ = nullptr;
+    TradeManager* trade_manager_ = nullptr;
     void renderDataSourceSelector();
     void renderBacktesterPanel();
     void renderOrderManagementPanel();

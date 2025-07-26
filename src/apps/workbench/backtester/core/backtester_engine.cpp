@@ -5,6 +5,8 @@
 #include <numeric>
 #include <vector>
 
+#include "apps/workbench/backtester/strategies/sep_signal_strategy.h"
+
 BacktesterEngine::BacktesterEngine() {
 }
 
@@ -13,6 +15,10 @@ BacktesterEngine::~BacktesterEngine() {
 
 sep::workbench::backtester::BacktestResult BacktesterEngine::run(const std::string& dataset_path) {
     sep::quantum::PatternMetricEngine engine;
+    if (engine.init(nullptr) != sep::SEPResult::SUCCESS) {
+        std::cerr << "Failed to initialize PatternMetricEngine" << std::endl;
+        return {};
+    }
     return run(dataset_path, &engine);
 }
 
@@ -23,10 +29,10 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     if (dataset_path == "EURUSD_48H") {
         loader.load_48h_sample();
     } else {
-        loader.loadData(dataset_path);
+        loader.load_data(dataset_path);
     }
 
-    const auto& candles = loader.getCandleData();
+    const auto& candles = loader.get_data();
     sep::workbench::backtester::BacktestResult result{};
     if (candles.empty()) {
         return result;
@@ -47,7 +53,8 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     engine_ref.evolvePatterns();
     engine_ref.computeMetrics();
 
-    const auto& signals = engine_ref.getSignals();
+    SEPSignalStrategy strategy;
+    auto signals = strategy.execute(candles);
     std::vector<float> prices;
     prices.reserve(candles.size());
     for (const auto& candle : candles) {

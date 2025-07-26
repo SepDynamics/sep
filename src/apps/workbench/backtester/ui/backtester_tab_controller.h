@@ -13,5 +13,6 @@ public:
 private:
     std::unique_ptr<BacktesterEngine> engine_;
     sep::workbench::backtester::BacktestResult result_{};
+    bool running_ = false;
     char dataset_path_[512] = "eur_usd_m1_48h.json";
 };

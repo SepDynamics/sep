@@ -40,6 +40,11 @@ struct Position {
           open_time(std::chrono::system_clock::now()) {}
 };
 
+struct RiskConfig {
+    double stop_loss_pips{20.0};
+    double take_profit_pips{0.0};
+};
+
 class TradeManager {
 public:
     TradeManager(sep::connectors::OandaConnector* connector);
@@ -50,6 +55,12 @@ public:
                               double current_price,
                               double stop_loss_pips,
                               double take_profit_pips);
+
+    nlohmann::json executeBuy(const std::string& instrument, double units);
+    nlohmann::json executeSell(const std::string& instrument, double units);
+
+    void setRiskConfig(const RiskConfig& cfg) { risk_config_ = cfg; }
+    const RiskConfig& getRiskConfig() const { return risk_config_; }
 
     void setAccountBalance(double balance) { account_balance_ = balance; }
     double getAccountBalance() const { return account_balance_; }
@@ -100,6 +111,8 @@ private:
     std::vector<double> roi_history_;
     std::vector<double> win_loss_history_;
     std::vector<double> balance_history_;
+
+    RiskConfig risk_config_;
 };
 
 } // namespace workbench

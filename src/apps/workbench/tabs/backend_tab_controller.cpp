@@ -114,8 +114,8 @@ void BackendTabController::renderOrderManagementPanel() {
 
     if (ImGui::Button("Place Buy Order")) {
         if (trade_manager_ && service_connector_) {
-            auto md = service_connector_->getOandaConnector()->getMarketData(instrument_buffer_);
-            trade_manager_->placeOrder(instrument_buffer_, units_, md.ask, stop_loss_pips_, take_profit_pips_);
+            trade_manager_->setRiskConfig({stop_loss_pips_, take_profit_pips_});
+            trade_manager_->executeBuy(instrument_buffer_, units_);
         }
     }
 
@@ -123,8 +123,8 @@ void BackendTabController::renderOrderManagementPanel() {
 
     if (ImGui::Button("Place Sell Order")) {
         if (trade_manager_ && service_connector_) {
-            auto md = service_connector_->getOandaConnector()->getMarketData(instrument_buffer_);
-            trade_manager_->placeOrder(instrument_buffer_, -units_, md.bid, stop_loss_pips_, take_profit_pips_);
+            trade_manager_->setRiskConfig({stop_loss_pips_, take_profit_pips_});
+            trade_manager_->executeSell(instrument_buffer_, units_);
         }
     }
 

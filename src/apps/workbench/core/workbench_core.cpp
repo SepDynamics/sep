@@ -115,6 +115,7 @@ bool WorkbenchEngine::initialize()
         signals_tab_ = std::make_unique<workbench::SignalsTabController>();
         engine_tab_ = std::make_unique<workbench::EngineTabController>();
         backend_tab_ = std::make_unique<workbench::BackendTabController>();
+        backtester_tab_ = std::make_unique<workbench::BacktesterTabController>();
 
         signals_tab_->initialize();
         engine_tab_->initialize();
@@ -688,6 +689,11 @@ void WorkbenchEngine::renderTabs()
             if (ImGui::BeginTabItem("Backend"))
             {
                 backend_tab_->render();
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Backtester"))
+            {
+                backtester_tab_->render();
                 ImGui::EndTabItem();
             }
             ImGui::EndTabBar();

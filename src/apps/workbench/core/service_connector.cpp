@@ -49,19 +49,17 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         std::cout << "[ServiceConnector] API Key length: " << strlen(api_key) << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
         if (oanda_connector_->initialize()) {
-            oanda_connector_->fetchHistoricalData("EUR_USD", "eur_usd_m1_48h.json");
-            sep::DataParser parser;
-            auto candles = parser.parseQuantJSON("eur_usd_m1_48h.json");
-            for (const auto& c : candles) {
-                std::tm tm = {};
-                std::istringstream ss(c.time);
-                ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-                auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-                initial_data_.emplace_back(c.open, c.high, c.low, c.close, (int)c.volume, ts);
+            if (oanda_connector_->fetchHistoricalData("EUR_USD", "eur_usd_m1_48h.json")) {
+                loadInitialData("eur_usd_m1_48h.json");
+            } else {
+                loadInitialData("eur_usd_m1_48h.json");
             }
+        } else {
+            loadInitialData("eur_usd_m1_48h.json");
         }
     } else {
         std::cout << "[ServiceConnector] ERROR: OANDA credentials not provided" << std::endl;
+        loadInitialData("eur_usd_m1_48h.json");
     }
 
     std::cout << "[ServiceConnector] Initialized with config: "
@@ -852,6 +850,25 @@ sep::core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
         std::cerr << "[ServiceConnector] Exception creating HTTP proxy engine: " << e.what() << std::endl;
         // Fallback to local engine
         return createLocalEngine();
+    }
+}
+
+void ServiceConnector::loadInitialData(const std::string& path)
+{
+    sep::DataParser parser;
+    auto candles = parser.parseQuantJSON(path);
+    initial_data_.clear();
+    for (const auto& c : candles)
+    {
+        std::tm tm = {};
+        std::istringstream ss(c.time);
+        ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+        auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+        initial_data_.emplace_back(c.open, c.high, c.low, c.close, static_cast<int>(c.volume), ts);
+    }
+    if (signals_tab_ && !initial_data_.empty())
+    {
+        signals_tab_->setCandleData(initial_data_);
     }
 }
 

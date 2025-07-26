@@ -1,6 +1,7 @@
 #include "data_parser.h"
 
 #include <nlohmann/json.hpp>
+#include <cmath>
 
 #include "engine/standard_includes.h"
 #include "quantum/types.h"
@@ -517,6 +518,13 @@ void DataParser::writeQuantJSON(const std::vector<CandleData>& candles, const st
     j["candles"] = nlohmann::json::array();
     for (const auto& c : candles)
     {
+        if (!std::isfinite(c.open) || !std::isfinite(c.high) || !std::isfinite(c.low) ||
+            !std::isfinite(c.close) || c.high < c.low)
+        {
+            std::cerr << "[DataParser] Invalid candle data at " << c.time << std::endl;
+            continue;
+        }
+
         nlohmann::json cj;
         cj["time"] = c.time;
         cj["volume"] = c.volume;

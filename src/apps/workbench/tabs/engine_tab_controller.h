@@ -10,6 +10,8 @@
 #include "engine/engine.h"
 #include "quantum/coherence_manager.h"
 #include "quantum/pattern_metric_engine.h"
+#include "../backtester/backtester.h"
+#include "../backtester/data_loader.h"
 
 namespace sep::workbench {
 
@@ -51,6 +53,17 @@ private:
     // Export path buffer
     char correlation_export_path_[512] = "correlation.csv";
     char metrics_export_path_[512] = "metrics.json";
+
+    // Strategy optimization
+    std::unique_ptr<backtester::Backtester> backtester_;
+    std::unique_ptr<backtester::DataLoader> data_loader_;
+    char dataset_path_[512] = "";
+    float opt_coherence_{0.7f};
+    float opt_stability_{0.6f};
+    float opt_entropy_{0.3f};
+    backtester::BacktestResult last_result_{};
+
+    void renderStrategyOptimization();
 };
 
 } // namespace sep::workbench

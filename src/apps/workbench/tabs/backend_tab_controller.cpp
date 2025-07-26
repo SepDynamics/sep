@@ -33,6 +33,7 @@ void BackendTabController::render() {
     ImGui::Separator();
     renderBacktesterPanel();
     renderOrderManagementPanel();
+    renderTradeHistoryPanel();
 
     ImGui::NextColumn();
 
@@ -269,6 +270,34 @@ void BackendTabController::handleStartProcessing() {
 
 void BackendTabController::handleStopProcessing() {
     if(monitor_) monitor_->stopProcessing();
+}
+
+void BackendTabController::updateTradeHistory() {
+    trade_history_.clear();
+    std::ifstream file("trades.log");
+    std::string line;
+    while (std::getline(file, line)) {
+        trade_history_.push_back(line);
+    }
+}
+
+void BackendTabController::renderTradeHistoryPanel() {
+    ImGui::Begin("Trade History");
+    if (ImGui::Button("Refresh")) {
+        updateTradeHistory();
+    }
+    if (trade_manager_) {
+        const auto& roi = trade_manager_->getROIHistory();
+        const auto& wl = trade_manager_->getWinLossHistory();
+        if (!roi.empty())
+            ImGui::PlotLines("ROI", roi.data(), roi.size(), 0, nullptr, -1.0f, 1.0f, ImVec2(0,80));
+        if (!wl.empty())
+            ImGui::PlotLines("Win/Loss", wl.data(), wl.size(), 0, nullptr, 0.0f, 1.0f, ImVec2(0,80));
+    }
+    for (const auto& l : trade_history_) {
+        ImGui::TextUnformatted(l.c_str());
+    }
+    ImGui::End();
 }
 
 } // namespace sep::workbench

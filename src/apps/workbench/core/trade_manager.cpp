@@ -66,7 +66,7 @@ nlohmann::json TradeManager::placeOrder(const std::string& instrument,
         updatePositions(order);
         sep::logging::logTrade(instrument, units, current_price, 0.0);
         paper_instrument_ = instrument;
-        if (paper_trading_ && !paper_thread_active_) {
+        if (paper_trading_) {
             startPaperTrading(instrument);
         }
         return {{"paper_trade", "success"}};
@@ -152,9 +152,13 @@ void TradeManager::updatePositions(const Order& order) {
             else if (pnl < 0)
                 loss_count_++;
             sep::logging::logTrade(order.instrument, order.units, order.price, pnl);
+            win_loss_history_.push_back(getWinLossRatio());
+            if (win_loss_history_.size() > 200) win_loss_history_.erase(win_loss_history_.begin());
             double roi = getROI();
             if (roi < -0.05)
                 sep::logging::logAnomaly("ROI below -5%");
+            roi_history_.push_back(roi);
+            if (roi_history_.size() > 200) roi_history_.erase(roi_history_.begin());
         }
         double existing_value = prev_units * prev_avg;
         double new_value = order.units * order.price;
@@ -174,28 +178,35 @@ void TradeManager::updatePositions(const Order& order) {
 void TradeManager::startPaperTrading(const std::string& instrument)
 {
     paper_instrument_ = instrument;
-    if (paper_thread_active_) return;
-    paper_thread_active_ = true;
-    paper_thread_ = std::thread([this]() {
-        while (paper_thread_active_) {
-            if (oanda_connector_) {
-                auto md = oanda_connector_->getMarketData(paper_instrument_);
-                std::lock_guard<std::mutex> lock(mutex_);
-                for (auto& pos : positions_) {
-                    pos.current_price = (pos.size > 0) ? md.bid : md.ask;
-                    pos.unrealized_pl = (pos.current_price - pos.average_price) * pos.size;
-                }
-            }
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+    if (!oanda_connector_) return;
+
+    oanda_connector_->setPriceCallback([this](const sep::connectors::MarketData& md) {
+        std::lock_guard<std::mutex> lock(mutex_);
+        for (auto& pos : positions_) {
+            if (pos.instrument != md.instrument) continue;
+            pos.current_price = (pos.size > 0) ? md.bid : md.ask;
+            pos.unrealized_pl = (pos.current_price - pos.average_price) * pos.size;
+        }
+
+        double total_pl = realized_pnl_;
+        for (const auto& p : positions_) total_pl += p.unrealized_pl;
+        if (starting_balance_ != 0.0) {
+            roi_history_.push_back(total_pl / starting_balance_);
+            if (roi_history_.size() > 200) roi_history_.erase(roi_history_.begin());
         }
     });
+
+    if (oanda_connector_->startPriceStream({instrument})) {
+        paper_thread_active_ = true;
+    }
 }
 
 void TradeManager::stopPaperTrading()
 {
     paper_thread_active_ = false;
-    if (paper_thread_.joinable())
-        paper_thread_.join();
+    if (oanda_connector_) {
+        oanda_connector_->stopPriceStream();
+    }
 }
 
 double TradeManager::getWinLossRatio() const
@@ -210,6 +221,9 @@ double TradeManager::getROI() const
     if (starting_balance_ == 0.0) return 0.0;
     return realized_pnl_ / starting_balance_;
 }
+
+const std::vector<double>& TradeManager::getROIHistory() const { return roi_history_; }
+const std::vector<double>& TradeManager::getWinLossHistory() const { return win_loss_history_; }
 
 } // namespace workbench
 } // namespace sep

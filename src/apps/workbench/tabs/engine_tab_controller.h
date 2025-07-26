@@ -31,6 +31,7 @@ public:
     void setPatternMetricEngine(sep::quantum::PatternMetricEngine* pattern_engine);
     void setCoherenceManager(sep::quantum::CoherenceManager* coherence_manager);
     void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer);
+    void setServiceProxyEngine(sep::core::ServiceProxyEngine* engine);
 
 private:
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
@@ -38,6 +39,7 @@ private:
     sep::quantum::PatternMetricEngine* pattern_engine_ = nullptr;
     sep::quantum::CoherenceManager* coherence_manager_ = nullptr;
     MultiTimeframeAnalyzer* multi_timeframe_analyzer_ = nullptr;
+    sep::core::ServiceProxyEngine* service_proxy_engine_ = nullptr;
 
     // Rendering functions
     void renderSEPMetricsPanel();

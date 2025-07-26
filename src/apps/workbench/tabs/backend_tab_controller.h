@@ -12,6 +12,8 @@
 #include "../backtester/data/data_loader.h"
 #include "quantum/pattern_metric_engine.h"
 #include "../core/service_proxy_engine.h"
+#include <vector>
+#include <fstream>
 
 namespace sep::workbench {
 
@@ -34,6 +36,8 @@ private:
     void renderDataSourceSelector();
     void renderBacktesterPanel();
     void renderOrderManagementPanel();
+    void renderTradeHistoryPanel();
+    void updateTradeHistory();
 
     void handleDataLoad();
     void handleClearData();
@@ -62,6 +66,8 @@ private:
     nlohmann::json orders_;
     std::vector<sep::connectors::OrderInfo> order_cache_;
     bool paper_trading_ = false;
+
+    std::vector<std::string> trade_history_;
     std::vector<float> equity_curve_;
 };
 

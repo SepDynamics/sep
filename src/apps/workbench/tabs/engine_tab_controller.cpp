@@ -56,6 +56,10 @@ void EngineTabController::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* anal
     multi_timeframe_analyzer_ = analyzer;
 }
 
+void EngineTabController::setServiceProxyEngine(sep::core::ServiceProxyEngine* engine) {
+    service_proxy_engine_ = engine;
+}
+
 void EngineTabController::renderSEPMetricsPanel() {
     ImGui::Text("SEP Real-Time Metrics");
     ImGui::Separator();
@@ -290,11 +294,19 @@ void EngineTabController::renderStrategyOptimization()
     ImGui::Begin("Strategy Optimization");
     ImGui::InputText("Dataset", dataset_path_, sizeof(dataset_path_));
     if (ImGui::Button("Run Backtest")) {
-        if (pattern_engine_ && dataset_path_[0] != '\0') {
-            data_loader_->load_data(dataset_path_);
-            backtester_->run(pattern_engine_, data_loader_.get());
-            last_result_ = backtester_->getResult();
-            opt_coherence_ = 0.5f + last_result_.win_rate * 0.5f;
+        if (dataset_path_[0] != '\0') {
+            if (service_proxy_engine_) {
+                float coh, stab, ent;
+                last_result_ = service_proxy_engine_->optimize_strategy(dataset_path_, coh, stab, ent);
+                opt_coherence_ = coh;
+                opt_stability_ = stab;
+                opt_entropy_ = ent;
+            } else if (pattern_engine_) {
+                data_loader_->load_data(dataset_path_);
+                backtester_->run(pattern_engine_, data_loader_.get());
+                last_result_ = backtester_->getResult();
+                opt_coherence_ = 0.5f + last_result_.win_rate * 0.5f;
+            }
         }
     }
     ImGui::Text("Win Rate: %.2f", last_result_.win_rate);

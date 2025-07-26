@@ -164,6 +164,19 @@ void SignalsTabController::render() {
                 pme->evolvePatterns();
                 const auto& metrics_results = pme->computeMetrics();
                 
+                // Determine thresholds either from MetricsMonitor or user settings
+                sep::quantum::SignalThresholds thresholds;
+                if (metrics_monitor_) {
+                    thresholds = metrics_monitor_->calculateSignalThresholds();
+                } else {
+                    thresholds.buy_min_coherence = buy_min_coherence_;
+                    thresholds.buy_min_stability = buy_min_stability_;
+                    thresholds.buy_max_entropy = buy_max_entropy_;
+                    thresholds.sell_max_stability = sell_max_stability_;
+                    thresholds.sell_min_entropy = sell_min_entropy_;
+                }
+                pme->setSignalThresholds(thresholds);
+
                 // Convert metrics to SEP signal data
                 for (size_t i = 0; i < std::min(metrics_results.size(), candle_data_.size()); i++) {
                     const auto& metrics = metrics_results[i];
@@ -177,42 +190,22 @@ void SignalsTabController::render() {
                     sep_signal.trend_strength = (metrics.coherence * metrics.stability) - metrics.entropy;
                     sep_signal.timestamp = candle.timestamp;
                     
-                    // Dynamic thresholds based on rolling averages (Phase 1.3 Pattern Discovery)
-                    float coherence_threshold_high = 0.8f;
-                    float coherence_threshold_low = 0.3f;
-                    float stability_threshold_high = 0.7f;
-                    float stability_threshold_low = 0.3f;
-                    float entropy_threshold_low = 0.2f;
-                    float entropy_threshold_high = 0.7f;
-                    
-                    // Adapt thresholds based on 24-hour rolling averages if MetricsMonitor is available
-                    if (metrics_monitor_) {
-                        const auto& rolling = metrics_monitor_->getRollingMetrics();
-                        // Set thresholds as 1.2x and 0.8x of 24-hour averages for adaptivity
-                        coherence_threshold_high = std::max(0.6f, rolling.coherence_24h_avg * 1.2f);
-                        coherence_threshold_low = std::min(0.4f, rolling.coherence_24h_avg * 0.8f);
-                        stability_threshold_high = std::max(0.6f, rolling.stability_24h_avg * 1.2f);
-                        stability_threshold_low = std::min(0.4f, rolling.stability_24h_avg * 0.8f);
-                        entropy_threshold_low = std::max(0.1f, rolling.entropy_24h_avg * 0.8f);
-                        entropy_threshold_high = std::min(0.8f, rolling.entropy_24h_avg * 1.2f);
-                    }
-                    
-                    // Determine signal type using adaptive thresholds
-                    if (metrics.coherence > coherence_threshold_high && 
-                        metrics.stability > stability_threshold_high && 
-                        metrics.entropy < entropy_threshold_low) {
+                    const float offset = 0.05f;
+
+                    // Determine signal type using threshold struct
+                    if (metrics.coherence > thresholds.buy_min_coherence + offset &&
+                        metrics.stability > thresholds.buy_min_stability + offset &&
+                        metrics.entropy < thresholds.buy_max_entropy - offset) {
                         sep_signal.signal_type = SEPSignalData::STRONG_BUY;
-                    } else if (metrics.coherence > coherence_threshold_high * 0.9f && 
-                               metrics.stability > stability_threshold_high * 0.85f && 
-                               metrics.entropy < entropy_threshold_low * 1.5f) {
+                    } else if (metrics.coherence > thresholds.buy_min_coherence &&
+                               metrics.stability > thresholds.buy_min_stability &&
+                               metrics.entropy < thresholds.buy_max_entropy) {
                         sep_signal.signal_type = SEPSignalData::BUY;
-                    } else if (metrics.coherence < coherence_threshold_low && 
-                               metrics.stability < stability_threshold_low && 
-                               metrics.entropy > entropy_threshold_high) {
+                    } else if (metrics.stability < thresholds.sell_max_stability - offset &&
+                               metrics.entropy > thresholds.sell_min_entropy + offset) {
                         sep_signal.signal_type = SEPSignalData::STRONG_SELL;
-                    } else if (metrics.coherence < coherence_threshold_low * 1.2f && 
-                               metrics.stability < stability_threshold_low * 1.2f && 
-                               metrics.entropy > entropy_threshold_high * 0.9f) {
+                    } else if (metrics.stability < thresholds.sell_max_stability &&
+                               metrics.entropy > thresholds.sell_min_entropy) {
                         sep_signal.signal_type = SEPSignalData::SELL;
                     } else {
                         sep_signal.signal_type = SEPSignalData::NEUTRAL;

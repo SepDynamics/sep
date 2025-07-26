@@ -35,24 +35,29 @@ void MemoryTierPanel::render() {
 
 void MemoryTierPanel::renderTierInfo(const char* tier_name, memory::MemoryTierEnum tier) {
     if (ImGui::TreeNode(tier_name)) {
-        // Since getTierStats doesn't exist, we'll show placeholder info
         ImGui::Text("Tier: %s", tier_name);
         ImGui::Text("Status: Active");
         
-        // Show some mock statistics
-        float usage = 0.0f;
+        // Get real memory statistics from the memory manager
+        auto& memory_manager = sep::memory::MemoryTierManager::getInstance();
+        float usage = memory_manager.getTierUtilization(tier);
+        float fragmentation = memory_manager.getTierFragmentation(tier);
+        
         switch (tier) {
             case memory::MemoryTierEnum::STM:
-                usage = 0.3f;
-                ImGui::Text("Capacity: 1024 blocks");
+                ImGui::Text("Capacity: Short-term memory");
+                ImGui::Text("Utilization: %.1f%%", usage * 100.0f);
+                ImGui::Text("Fragmentation: %.1f%%", fragmentation * 100.0f);
                 break;
             case memory::MemoryTierEnum::MTM:
-                usage = 0.5f;
-                ImGui::Text("Capacity: 4096 blocks");
+                ImGui::Text("Capacity: Medium-term memory");
+                ImGui::Text("Utilization: %.1f%%", usage * 100.0f);
+                ImGui::Text("Fragmentation: %.1f%%", fragmentation * 100.0f);
                 break;
             case memory::MemoryTierEnum::LTM:
-                usage = 0.7f;
-                ImGui::Text("Capacity: 16384 blocks");
+                ImGui::Text("Capacity: Long-term memory");
+                ImGui::Text("Utilization: %.1f%%", usage * 100.0f);
+                ImGui::Text("Fragmentation: %.1f%%", fragmentation * 100.0f);
                 break;
             case memory::MemoryTierEnum::HOST:
             case memory::MemoryTierEnum::DEVICE:
@@ -220,13 +225,19 @@ void SystemMetricsPanel::updateMetrics() {
     
     if (elapsed < 100) return; // Update every 100ms
     
-    // Update memory metrics
-    metrics_.memory_allocated = 0;
-    metrics_.memory_fragmented = 0;
+    // Update real memory metrics from memory manager
+    auto& memory_manager = sep::memory::MemoryTierManager::getInstance();
+    float stm_util = memory_manager.getTierUtilization(memory::MemoryTierEnum::STM);
+    float mtm_util = memory_manager.getTierUtilization(memory::MemoryTierEnum::MTM);
+    float ltm_util = memory_manager.getTierUtilization(memory::MemoryTierEnum::LTM);
     
-    // Mock memory metrics since getTierStats doesn't exist
-    metrics_.memory_allocated = 1024 * 1024; // 1MB
-    metrics_.memory_fragmented = 102400; // 100KB
+    float stm_frag = memory_manager.getTierFragmentation(memory::MemoryTierEnum::STM);
+    float mtm_frag = memory_manager.getTierFragmentation(memory::MemoryTierEnum::MTM);
+    float ltm_frag = memory_manager.getTierFragmentation(memory::MemoryTierEnum::LTM);
+    
+    // Aggregate memory metrics from all tiers
+    metrics_.memory_allocated = static_cast<size_t>((stm_util + mtm_util + ltm_util) * 1024 * 1024);
+    metrics_.memory_fragmented = static_cast<size_t>((stm_frag + mtm_frag + ltm_frag) * 1024 * 256);
     
     // Update pattern metrics
     auto patterns = processor_->getPatterns();

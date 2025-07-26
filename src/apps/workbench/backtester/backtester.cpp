@@ -10,7 +10,32 @@ Backtester::Backtester() {
     result_ = {};
 }
 
-void Backtester::run(const std::vector<float>& prices, const std::vector<MetricsMonitor::ThresholdSignal>& signals) {
+void Backtester::run(sep::quantum::PatternMetricEngine* engine, DataLoader* data_loader) {
+    if (!engine || !data_loader) {
+        return;
+    }
+
+    const auto& candles = data_loader->getCandleData();
+    if (candles.empty()) {
+        return;
+    }
+
+    std::vector<uint8_t> byte_stream;
+    for (const auto& candle : candles) {
+        const uint8_t* candle_bytes = reinterpret_cast<const uint8_t*>(&candle);
+        byte_stream.insert(byte_stream.end(), candle_bytes, candle_bytes + sizeof(CandleData));
+    }
+
+    engine->ingestData(byte_stream.data(), byte_stream.size());
+    engine->evolvePatterns();
+    engine->computeMetrics();
+    const auto& signals = engine->getSignals();
+
+    std::vector<float> prices;
+    for (const auto& candle : candles) {
+        prices.push_back(candle.close);
+    }
+
     if (prices.empty() || signals.empty()) {
         return;
     }
@@ -20,10 +45,10 @@ void Backtester::run(const std::vector<float>& prices, const std::vector<Metrics
     int losses = 0;
 
     for (size_t i = 0; i < signals.size(); ++i) {
-        if (signals[i].signal_type == MetricsMonitor::ThresholdSignal::BUY) {
+        if (signals[i].type == sep::quantum::SignalType::BUY) {
             if (i + 1 < prices.size()) {
                 Trade trade;
-                trade.type = SignalType::BUY;
+                trade.type = sep::workbench::backtester::SignalType::BUY;
                 trade.entry_price = prices[i];
                 trade.exit_price = prices[i + 1];
                 trade.holding_period = 1;
@@ -35,10 +60,10 @@ void Backtester::run(const std::vector<float>& prices, const std::vector<Metrics
                     losses++;
                 }
             }
-        } else if (signals[i].signal_type == MetricsMonitor::ThresholdSignal::SELL) {
+        } else if (signals[i].type == sep::quantum::SignalType::SELL) {
             if (i + 1 < prices.size()) {
                 Trade trade;
-                trade.type = SignalType::SELL;
+                trade.type = sep::workbench::backtester::SignalType::SELL;
                 trade.entry_price = prices[i];
                 trade.exit_price = prices[i + 1];
                 trade.holding_period = 1;

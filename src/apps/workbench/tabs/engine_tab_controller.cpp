@@ -16,9 +16,12 @@ bool EngineTabController::initialize() {
 }
 
 void EngineTabController::render() {
+    ImGui::Columns(2, "EngineColumns", true);
     renderSEPMetricsPanel();
     renderEngineControls();
     renderCorrelationPanel();
+
+    ImGui::Columns(1);
 }
 
 void EngineTabController::shutdown() {}
@@ -162,6 +165,7 @@ void EngineTabController::resetEngineState() {
 }
 
 void EngineTabController::renderCorrelationPanel() {
+    ImGui::NextColumn();
     ImGui::Begin("Correlation Analysis");
 
     if (!multi_timeframe_analyzer_) {

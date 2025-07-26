@@ -1,4 +1,5 @@
 #include "quantum/pattern_metric_engine.h"
+#include "engine/logging.h"
 
 char sep::quantum::pattern_id[sep::compat::PatternData::MAX_ID_LENGTH];
 float sep::quantum::coherence = 0.0f;
@@ -252,18 +253,21 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
         current_metrics_.push_back(m);
 
         // Signal generation
+        auto logger = sep::logging::Manager::getInstance().getLogger("pattern_engine");
         if (m.stability < signal_thresholds_.min_stability && m.entropy > signal_thresholds_.max_entropy) {
             Signal s;
             s.type = SignalType::SELL;
             s.confidence = (1.0f - m.stability) * m.entropy;
             s.pattern_id = m.pattern_id;
             current_signals_.push_back(s);
+            if(logger) logger->info("SELL signal generated for pattern {}: confidence={}", s.pattern_id, s.confidence);
         } else if (m.coherence > signal_thresholds_.min_coherence && m.stability > signal_thresholds_.min_stability) {
             Signal s;
             s.type = SignalType::BUY;
             s.confidence = m.coherence * m.stability;
             s.pattern_id = m.pattern_id;
             current_signals_.push_back(s);
+            if(logger) logger->info("BUY signal generated for pattern {}: confidence={}", s.pattern_id, s.confidence);
         }
     }
     return current_metrics_;
@@ -320,7 +324,38 @@ std::vector<sep::compat::PatternData> PatternMetricEngine::extractPatternsFromBy
 }
 
 void PatternMetricEngine::processBuffer([[maybe_unused]] bool is_final_chunk) {
-    // Placeholder for buffer processing logic
+    // Real buffer processing implementation
+    std::lock_guard<std::mutex> lock(engine_mutex_);
+    
+    // Process streaming buffer data
+    if (!stream_buffer_.empty()) {
+        // Extract patterns from the buffered data
+        auto extracted_patterns = extractPatternsFromBytes(
+            reinterpret_cast<const uint8_t*>(stream_buffer_.data()), 
+            stream_buffer_.size()
+        );
+        
+        // Add extracted patterns to our current pattern set
+        for (const auto& pattern : extracted_patterns) {
+            current_patterns_.push_back(pattern);
+        }
+        
+        // Clear the buffer after processing
+        stream_buffer_.clear();
+        
+        // If this is the final chunk, finalize processing
+        if (is_final_chunk) {
+            // Run pattern evolution on all accumulated patterns
+            evolvePatterns();
+            
+            // Compute final metrics
+            computeMetrics();
+            
+            std::cout << "[PatternMetricEngine] Processed final chunk: " 
+                      << current_patterns_.size() << " patterns, "
+                      << current_metrics_.size() << " metrics computed" << std::endl;
+        }
+    }
 }
 
 } // namespace sep::quantum

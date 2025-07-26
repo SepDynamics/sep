@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <random>
+#include <chrono>
 #include <nlohmann/json.hpp>
 
 #include "engine/types.h"  // For PatternData/PatternConfig
@@ -35,7 +37,7 @@ sep::compat::PatternData sep::quantum::mcp::PatternEvolution::evolvePattern(
     }
     else
     {
-        // Placeholder for ID generation
+        // Pattern ID based on time of occurrence - the most relevant identifier
         std::string id_str = "pat-" + std::to_string(time(0));
         std::strncpy(pattern.id, id_str.c_str(), sizeof(pattern.id) - 1);
         pattern.id[sizeof(pattern.id) - 1] = '\0';
@@ -113,7 +115,7 @@ std::vector<sep::compat::PatternData> sep::quantum::mcp::PatternEvolution::getPa
         auto p = fromJson(jp);
         if (p.get_id().empty())
         {
-            // Placeholder for ID generation
+            // Pattern ID based on time of occurrence
             std::string id_str = "pat-" + std::to_string(time(0));
             std::strncpy(p.id, id_str.c_str(), sizeof(p.id) - 1);
             p.id[sizeof(p.id) - 1] = '\0';

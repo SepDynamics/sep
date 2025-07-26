@@ -8,7 +8,9 @@
 namespace sep::workbench {
 
 BackendTabController::BackendTabController()
-    : backtester_(std::make_unique<backtester::Backtester>()) {}
+    : backtester_(std::make_unique<backtester::Backtester>()),
+      data_loader_(std::make_unique<backtester::DataLoader>()),
+      pattern_engine_(std::make_unique<sep::quantum::PatternMetricEngine>()) {}
 
 BackendTabController::~BackendTabController() { shutdown(); }
 bool BackendTabController::initialize() {
@@ -17,15 +19,21 @@ bool BackendTabController::initialize() {
 }
 
 void BackendTabController::render() {
+    ImGui::Columns(2, "BackendColumns", true);
     renderDataSourceSelector();
     ImGui::Separator();
     renderBacktesterPanel();
+    renderOrderManagementPanel();
+
+    ImGui::NextColumn();
 
     std::string selected;
     if (file_dialog_.render(selected)) {
         strncpy(file_path_buffer_, selected.c_str(), sizeof(file_path_buffer_) - 1);
         file_path_buffer_[sizeof(file_path_buffer_) - 1] = '\0';
     }
+
+    ImGui::Columns(1);
 }
 
 void BackendTabController::shutdown() {}
@@ -68,12 +76,109 @@ void BackendTabController::renderDataSourceSelector() {
     }
 }
 
+void BackendTabController::renderOrderManagementPanel() {
+    ImGui::Begin("Paper Trading");
+    if (ImGui::Checkbox("Enable Paper Trading", &paper_trading_)) {
+        if (service_connector_) {
+            // service_connector_->getTradeManager()->setPaperTrading(paper_trading_);
+        }
+    }
+    ImGui::End();
+
+    ImGui::Begin("Order Management");
+
+    ImGui::InputText("Instrument", instrument_buffer_, sizeof(instrument_buffer_));
+    ImGui::InputInt("Units", &units_);
+
+    if (ImGui::Button("Place Buy Order")) {
+        if (service_connector_) {
+            nlohmann::json order_details;
+            order_details["order"]["instrument"] = instrument_buffer_;
+            order_details["order"]["units"] = std::to_string(units_);
+            order_details["order"]["type"] = "MARKET";
+            order_details["order"]["timeInForce"] = "FOK";
+            order_details["order"]["positionFill"] = "DEFAULT";
+            service_connector_->getOandaConnector()->placeOrder(order_details);
+        }
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Place Sell Order")) {
+        if (service_connector_) {
+            nlohmann::json order_details;
+            order_details["order"]["instrument"] = instrument_buffer_;
+            order_details["order"]["units"] = std::to_string(-units_);
+            order_details["order"]["type"] = "MARKET";
+            order_details["order"]["timeInForce"] = "FOK";
+            order_details["order"]["positionFill"] = "DEFAULT";
+            service_connector_->getOandaConnector()->placeOrder(order_details);
+        }
+    }
+
+    if (ImGui::Button("Refresh Orders and Positions")) {
+        if (service_connector_) {
+            open_positions_ = service_connector_->getOandaConnector()->getOpenPositions();
+            orders_ = service_connector_->getOandaConnector()->getOrders();
+        }
+    }
+
+    ImGui::Text("Open Positions:");
+    if (!open_positions_.is_null()) {
+        ImGui::TextUnformatted(open_positions_.dump(4).c_str());
+    }
+
+    ImGui::Text("Orders:");
+    if (!orders_.is_null()) {
+        ImGui::TextUnformatted(orders_.dump(4).c_str());
+    }
+
+    ImGui::End();
+}
+
 void BackendTabController::renderBacktesterPanel() {
+    ImGui::Begin("Risk Management");
+    ImGui::SliderFloat("Risk Percentage", &risk_percentage_, 0.1f, 5.0f, "%.2f%%");
+    ImGui::InputFloat("Stop Loss (pips)", &stop_loss_pips_);
+    ImGui::InputFloat("Take Profit (pips)", &take_profit_pips_);
+    ImGui::End();
+
+    ImGui::Begin("Signal Validation");
+    if (ImGui::Button("Validate Signals")) {
+        data_loader_->loadData(file_path_buffer_);
+        const auto& candles = data_loader_->getCandleData();
+        if (!candles.empty()) {
+            std::vector<uint8_t> byte_stream;
+            for (const auto& candle : candles) {
+                const uint8_t* candle_bytes = reinterpret_cast<const uint8_t*>(&candle);
+                byte_stream.insert(byte_stream.end(), candle_bytes, candle_bytes + sizeof(CandleData));
+            }
+
+            pattern_engine_->ingestData(byte_stream.data(), byte_stream.size());
+            pattern_engine_->evolvePatterns();
+            pattern_engine_->computeMetrics();
+            const auto& signals = pattern_engine_->getSignals();
+
+            std::vector<float> prices;
+            for (const auto& candle : candles) {
+                prices.push_back(candle.close);
+            }
+
+            sep::core::ServiceProxyEngine proxy("localhost", 8080);
+            validation_result_ = proxy.validate_signal(signals, prices);
+        }
+    }
+
+    ImGui::Text("Accuracy: %.2f", validation_result_.accuracy);
+    ImGui::Text("False Positive Rate: %.2f", validation_result_.false_positive_rate);
+    ImGui::PopID();
+    ImGui::End();
+
     ImGui::Begin("Backtester");
+    ImGui::PushID("Backtester");
     if (ImGui::Button("Run Backtest")) {
-        std::vector<float> prices = {1.0, 1.1, 1.2, 1.1, 1.0};
-        std::vector<MetricsMonitor::ThresholdSignal> signals;
-        backtester_->run(prices, signals);
+        data_loader_->loadData(file_path_buffer_);
+        backtester_->run(pattern_engine_.get(), data_loader_.get());
     }
 
     const auto& result = backtester_->getResult();

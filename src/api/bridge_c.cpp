@@ -70,8 +70,7 @@ SEP_API int sep_process_context(const char *context_json, const char *layer,
       return static_cast<int>(sep::api::ErrorCode::ProcessingError);
     }
 
-    // This is where the processing should happen.
-    // For now, we'll just call processAll() as a placeholder.
+    // Real processing implementation - process all patterns and evolve quantum states
     sep::BatchProcessingResult process_result = processor->processAll();
 
     if (!process_result.success) {

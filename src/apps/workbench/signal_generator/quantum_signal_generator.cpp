@@ -1,12 +1,10 @@
 #include "quantum_signal_generator.h"
 
-#include "logistic_chaos_strategy.h"
-
 namespace sep::workbench {
 
 QuantumSignalGenerator::QuantumSignalGenerator() {
-    // Set a default strategy
-    strategy_ = std::make_unique<LogisticChaosStrategy>();
+    // No default strategy - signals must come from real market data processing
+    strategy_ = nullptr;
 }
 
 void QuantumSignalGenerator::setStrategy(std::unique_ptr<SignalStrategy> strategy) {

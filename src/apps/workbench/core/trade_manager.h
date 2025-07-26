@@ -44,11 +44,14 @@ public:
     nlohmann::json placeOrder(const std::string& instrument,
                               double units,
                               double current_price,
-                              double stop_loss_pips);
+                              double stop_loss_pips,
+                              double take_profit_pips);
 
     void updateOrderStatus(const std::string& order_id, OrderState state);
     const std::vector<Order>& getOrders() const;
     const std::vector<Position>& getPositions() const;
+
+    void setPaperTrading(bool paper_trading);
 
 private:
     void updatePositions(const Order& order);
@@ -57,6 +60,9 @@ private:
     std::vector<Order> orders_;
     std::vector<Position> positions_;
     std::mutex mutex_;
+    double account_balance_ = 100000.0;
+    double risk_percentage_ = 0.02;
+    bool paper_trading_ = false;
 };
 
 } // namespace workbench

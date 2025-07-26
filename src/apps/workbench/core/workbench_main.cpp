@@ -1,5 +1,6 @@
 #include "std_includes.h"
 #include "workbench_core.hpp"
+#include "engine/logging.h"
 
 // Global workbench instance for signal handling
 static sep::workbench::WorkbenchEngine* g_workbench = nullptr;
@@ -14,6 +15,10 @@ void signalHandler(int signal) {
 }
 
 int main(int argc, char* argv[]) {
+    sep::logging::Manager::initialize();
+    sep::logging::LoggerConfig config;
+    config.file.path = "pattern_engine.log";
+    sep::logging::Manager::getInstance().createLogger("pattern_engine", config);
     // Install signal handlers
     (void)std::signal(SIGINT, signalHandler);
     (void)std::signal(SIGTERM, signalHandler);

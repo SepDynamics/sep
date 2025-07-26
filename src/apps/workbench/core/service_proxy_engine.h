@@ -1,13 +1,16 @@
 #pragma once
 
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "backtester/backtester.h"
 #include "engine/engine.h"
 #include "engine/standard_includes.h"
 #include "quantum/qbsa.h"
 #include "quantum/types.h"
-#include <string>
-#include <memory>
-#include <vector>
-#include <cstdint>
+#include "signal_validator.h"
 
 namespace sep {
 namespace core {
@@ -37,6 +40,9 @@ public:
                       sep::cuda::QSHResult& qsh_result);
 
     bool isConnected() const { return is_connected_; }
+
+    sep::workbench::SignalValidator::ValidationResult validate_signal(
+        const std::vector<sep::quantum::Signal>& signals, const std::vector<float>& prices);
 
 private:
     std::string service_address_;

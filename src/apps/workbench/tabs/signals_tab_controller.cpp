@@ -25,6 +25,7 @@ bool SignalsTabController::initialize() {
 }
 
 void SignalsTabController::render() {
+    ImGui::Columns(2, "SignalsColumns", true);
     ImGui::Begin("Signal Thresholds");
     static float min_coherence = 0.7f;
     static float min_stability = 0.6f;
@@ -46,25 +47,143 @@ void SignalsTabController::render() {
     }
     ImGui::End();
 
+    ImGui::NextColumn();
+
     if (metrics_monitor_) {
+        ImGui::Begin("SEP Engine Metrics");
         const auto& system_metrics = metrics_monitor_->getSystemMetrics();
+        const auto& rolling_metrics = metrics_monitor_->getRollingMetrics();
+
         ImGui::Text("Avg Coherence: %.3f", system_metrics.avg_coherence);
         ImGui::Text("Avg Stability: %.3f", system_metrics.avg_stability);
         ImGui::Text("Avg Entropy: %.3f", system_metrics.avg_entropy);
+
+        ImGui::Separator();
+        ImGui::Text("1-Hour Rolling Averages");
+        ImGui::Text("Coherence: %.3f", rolling_metrics.coherence_1h_avg);
+        ImGui::Text("Stability: %.3f", rolling_metrics.stability_1h_avg);
+        ImGui::Text("Entropy: %.3f", rolling_metrics.entropy_1h_avg);
+
+        ImGui::Separator();
+        ImGui::Text("24-Hour Rolling Averages");
+        ImGui::Text("Coherence: %.3f", rolling_metrics.coherence_24h_avg);
+        ImGui::Text("Stability: %.3f", rolling_metrics.stability_24h_avg);
+        ImGui::Text("Entropy: %.3f", rolling_metrics.entropy_24h_avg);
+
+        ImGui::End();
     }
 
+    // Real data fetching implementation
     if (oanda_connector_) {
-        // This is a placeholder for fetching real data
-        // candle_data_ = oanda_connector_->getCandleData();
+        try {
+            // Fetch latest 24 hours of EUR/USD M1 data using correct method
+            auto now = std::chrono::system_clock::now();
+            auto day_ago = now - std::chrono::hours(24);
+            
+            // Format time strings for OANDA API
+            auto now_t = std::chrono::system_clock::to_time_t(now);
+            auto day_ago_t = std::chrono::system_clock::to_time_t(day_ago);
+            
+            std::string from_time = std::to_string(day_ago_t);
+            std::string to_time = std::to_string(now_t);
+            
+            auto latest_candles = oanda_connector_->getHistoricalData("EUR_USD", "M1", from_time, to_time, 1440);
+            if (!latest_candles.empty()) {
+                // Update our candle data buffer with new data
+                for (const auto& oanda_candle : latest_candles) {
+                    // Parse OANDA timestamp (RFC 3339 format)
+                    std::tm tm = {};
+                    std::istringstream ss(oanda_candle.time);
+                    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+                    auto timestamp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+                    
+                    // Create CandleData using proper constructor
+                    CandleData candle_data(oanda_candle.open, oanda_candle.high, 
+                                         oanda_candle.low, oanda_candle.close, 
+                                         static_cast<int>(oanda_candle.volume), timestamp);
+                    
+                    // Add to deque, maintain max 1440 candles (24h of M1)
+                    candle_data_.push_back(candle_data);
+                    if (candle_data_.size() > 1440) {
+                        candle_data_.pop_front();
+                    }
+                }
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "[SignalsTab] OANDA fetch error: " << e.what() << std::endl;
+        }
     }
-    if (signal_generator_) {
-        // This is a placeholder for fetching real data
-        // sep_signals_ = signal_generator_->getSignals();
+    
+    if (signal_generator_ && workbench_engine_) {
+        try {
+            // Get latest SEP signals from pattern metric engine
+            auto* pme = workbench_engine_->getPatternMetricEngine();
+            if (pme && !candle_data_.empty()) {
+                // Convert latest candle data to raw bytes for SEP processing
+                std::vector<uint8_t> candle_bytes;
+                for (const auto& candle : candle_data_) {
+                    // Convert OHLC data to bytes (4 floats = 16 bytes per candle)
+                    float ohlc[4] = {
+                        static_cast<float>(candle.open),
+                        static_cast<float>(candle.high),
+                        static_cast<float>(candle.low),
+                        static_cast<float>(candle.close)
+                    };
+                    
+                    const uint8_t* byte_ptr = reinterpret_cast<const uint8_t*>(ohlc);
+                    candle_bytes.insert(candle_bytes.end(), byte_ptr, byte_ptr + sizeof(ohlc));
+                }
+                
+                // Ingest the OHLC data into the pattern engine
+                pme->ingestData(candle_bytes.data(), candle_bytes.size());
+                
+                // Evolve patterns and compute metrics
+                pme->evolvePatterns();
+                const auto& metrics_results = pme->computeMetrics();
+                
+                // Convert metrics to SEP signal data
+                for (size_t i = 0; i < std::min(metrics_results.size(), candle_data_.size()); i++) {
+                    const auto& metrics = metrics_results[i];
+                    const auto& candle = candle_data_[candle_data_.size() - metrics_results.size() + i];
+                    
+                    SEPSignalData sep_signal;
+                    sep_signal.coherence = metrics.coherence;
+                    sep_signal.stability = metrics.stability;
+                    sep_signal.entropy = metrics.entropy;
+                    sep_signal.alpha_signal = (metrics.coherence + metrics.stability - metrics.entropy) / 2.0f;
+                    sep_signal.trend_strength = (metrics.coherence * metrics.stability) - metrics.entropy;
+                    sep_signal.timestamp = candle.timestamp;
+                    
+                    // Determine signal type based on thresholds (Phase 1.3 Pattern Discovery)
+                    if (metrics.coherence > 0.8f && metrics.stability > 0.7f && metrics.entropy < 0.2f) {
+                        sep_signal.signal_type = SEPSignalData::STRONG_BUY;
+                    } else if (metrics.coherence > 0.7f && metrics.stability > 0.6f && metrics.entropy < 0.3f) {
+                        sep_signal.signal_type = SEPSignalData::BUY;
+                    } else if (metrics.coherence < 0.2f && metrics.stability < 0.3f && metrics.entropy > 0.8f) {
+                        sep_signal.signal_type = SEPSignalData::STRONG_SELL;
+                    } else if (metrics.coherence < 0.3f && metrics.stability < 0.4f && metrics.entropy > 0.7f) {
+                        sep_signal.signal_type = SEPSignalData::SELL;
+                    } else {
+                        sep_signal.signal_type = SEPSignalData::NEUTRAL;
+                    }
+                    
+                    // Add to signal buffer, maintain max 1440 signals
+                    sep_signals_.push_back(sep_signal);
+                    if (sep_signals_.size() > 1440) {
+                        sep_signals_.pop_front();
+                    }
+                }
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "[SignalsTab] SEP signal generation error: " << e.what() << std::endl;
+        }
     }
     handleMouseInput();
     setupChartArea();
     renderMainChart();
     renderHoverInfo();
+
+    ImGui::Columns(1);
 }
 
 void SignalsTabController::shutdown() {

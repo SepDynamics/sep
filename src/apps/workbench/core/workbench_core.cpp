@@ -17,6 +17,7 @@
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/core/metrics_monitor.h"
 #include "apps/workbench/core/multi_timeframe_analyzer.h"
+#include "engine/data_parser.h"
 
 // Include ImGui headers
 #include "imgui.h"
@@ -326,8 +327,6 @@ void WorkbenchEngine::renderFrame()
     if (layout_manager_) {
         layout_manager_->render();
     }
-    
-    renderTabs();
     
     renderTabs();
     
@@ -683,19 +682,120 @@ void WorkbenchEngine::renderTabs()
 
 void WorkbenchEngine::updateData()
 {
+    // Real implementation of data fetching pipeline (DATA.md integration)
     if (service_connector_ && service_connector_->getOandaConnector()) {
         auto oanda_connector = service_connector_->getOandaConnector();
-        // Fetch candle data
-        // This is a placeholder for fetching real data
-        std::deque<CandleData> candle_data;
-        signals_tab_->setCandleData(candle_data);
+        try {
+            // Fetch 48-hour sample data (TODO.md Phase 1.1)
+            auto now = std::chrono::system_clock::now();
+            auto hours_48_ago = now - std::chrono::hours(48);
+            
+            auto now_t = std::chrono::system_clock::to_time_t(now);
+            auto hours_48_ago_t = std::chrono::system_clock::to_time_t(hours_48_ago);
+            
+            std::string from_time = std::to_string(hours_48_ago_t);
+            std::string to_time = std::to_string(now_t);
+            
+            // Fetch historical EUR/USD M1 data
+            auto historical_candles = oanda_connector->getHistoricalData("EUR_USD", "M1", from_time, to_time, 2880);
+            
+            std::deque<CandleData> candle_data;
+            for (const auto& oanda_candle : historical_candles) {
+                // Parse OANDA timestamp (RFC 3339 format: "2021-04-07T00:00:00.000000000Z")
+                std::tm tm = {};
+                std::istringstream ss(oanda_candle.time);
+                ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+                auto timestamp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+                
+                CandleData candle(oanda_candle.open, oanda_candle.high, 
+                                oanda_candle.low, oanda_candle.close, 
+                                static_cast<int>(oanda_candle.volume), timestamp);
+                candle_data.push_back(candle);
+            }
+            
+            // Update signals tab with fetched data
+            if (signals_tab_) {
+                signals_tab_->setCandleData(candle_data);
+            }
+            
+            std::cout << "[WorkbenchEngine] Fetched " << candle_data.size() 
+                      << " candles from OANDA" << std::endl;
+                      
+        } catch (const std::exception& e) {
+            std::cerr << "[WorkbenchEngine] OANDA data fetch error: " << e.what() << std::endl;
+        }
     }
 
-    if (active_engine_) {
-        // Fetch SEP signals
-        // This is a placeholder for fetching real data
-        std::deque<SEPSignalData> sep_signals;
-        signals_tab_->setSEPSignals(sep_signals);
+    // Process SEP signals through pattern metric engine (DATA.md pipeline)
+    if (active_engine_ && signals_tab_) {
+        try {
+            auto* pme = active_engine_->getPatternMetricEngine();
+            if (pme) {
+                // Get current candle data to process
+                auto candle_data = signals_tab_->getCandleData();
+                if (!candle_data.empty()) {
+                    // Convert candle data to bytes for pattern processing
+                    std::vector<uint8_t> price_data;
+                    for (const auto& candle : candle_data) {
+                        float ohlc[4] = {
+                            static_cast<float>(candle.open),
+                            static_cast<float>(candle.high),
+                            static_cast<float>(candle.low),
+                            static_cast<float>(candle.close)
+                        };
+                        
+                        const uint8_t* byte_ptr = reinterpret_cast<const uint8_t*>(ohlc);
+                        price_data.insert(price_data.end(), byte_ptr, byte_ptr + sizeof(ohlc));
+                    }
+                    
+                    // Clear previous patterns and ingest new data
+                    pme->clear();
+                    pme->ingestData(price_data.data(), price_data.size());
+                    
+                    // Process patterns and compute metrics
+                    pme->evolvePatterns();
+                    const auto& metrics = pme->computeMetrics();
+                    
+                    // Convert metrics to SEP signals
+                    std::deque<SEPSignalData> sep_signals;
+                    for (size_t i = 0; i < std::min(metrics.size(), candle_data.size()); i++) {
+                        const auto& metric = metrics[i];
+                        const auto& candle = candle_data[candle_data.size() - metrics.size() + i];
+                        
+                        SEPSignalData signal;
+                        signal.coherence = metric.coherence;
+                        signal.stability = metric.stability;
+                        signal.entropy = metric.entropy;
+                        signal.alpha_signal = (metric.coherence + metric.stability - metric.entropy) / 2.0f;
+                        signal.trend_strength = (metric.coherence * metric.stability) - metric.entropy;
+                        signal.timestamp = candle.timestamp;
+                        
+                        // Threshold-based signal classification (TODO.md Phase 1.3)
+                        if (metric.coherence > 0.8f && metric.stability > 0.7f && metric.entropy < 0.2f) {
+                            signal.signal_type = SEPSignalData::STRONG_BUY;
+                        } else if (metric.coherence > 0.7f && metric.stability > 0.6f && metric.entropy < 0.3f) {
+                            signal.signal_type = SEPSignalData::BUY;
+                        } else if (metric.coherence < 0.2f && metric.stability < 0.3f && metric.entropy > 0.8f) {
+                            signal.signal_type = SEPSignalData::STRONG_SELL;
+                        } else if (metric.coherence < 0.3f && metric.stability < 0.4f && metric.entropy > 0.7f) {
+                            signal.signal_type = SEPSignalData::SELL;
+                        } else {
+                            signal.signal_type = SEPSignalData::NEUTRAL;
+                        }
+                        
+                        sep_signals.push_back(signal);
+                    }
+                    
+                    // Update signals tab with processed SEP signals
+                    signals_tab_->setSEPSignals(sep_signals);
+                    
+                    std::cout << "[WorkbenchEngine] Generated " << sep_signals.size() 
+                              << " SEP signals from " << metrics.size() << " patterns" << std::endl;
+                }
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "[WorkbenchEngine] SEP signal processing error: " << e.what() << std::endl;
+        }
     }
 }
 

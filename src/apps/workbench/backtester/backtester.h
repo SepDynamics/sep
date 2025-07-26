@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/metrics_monitor.h"
-#include "signal_generator/signal_types.h"
+#include "quantum/pattern_metric_engine.h"
+#include "data/data_loader.h"
 #include <vector>
 #include <string>
 
@@ -27,7 +27,7 @@ class Backtester {
 public:
     Backtester();
 
-    void run(const std::vector<float>& prices, const std::vector<MetricsMonitor::ThresholdSignal>& signals);
+    void run(sep::quantum::PatternMetricEngine* engine, DataLoader* data_loader);
     const BacktestResult& getResult() const;
 
 private:

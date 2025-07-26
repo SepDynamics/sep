@@ -15,10 +15,17 @@ namespace sep::compat {
 void to_json(nlohmann::json& j, const PatternData& data) {
     // FIXME: PatternData struct mismatch - current struct is array-based, not
     // vec4+coherence/stability
+    // Real PatternData serialization based on actual struct
+    std::vector<float> attributes_vec(data.attributes, data.attributes + data.size);
     j = nlohmann::json{
-        {"attributes", {0.0f, 0.0f, 0.0f, 0.0f}},  // placeholder
-        {"coherence", 0.0f},                       // placeholder
-        {"stability", 0.0f}                        // placeholder
+        {"id", std::string(data.id)},
+        {"generation", data.generation},
+        {"attributes", attributes_vec},
+        {"size", data.size},
+        {"position", {data.position.x, data.position.y, data.position.z, data.position.w}},
+        {"velocity", {data.velocity.x, data.velocity.y, data.velocity.z, data.velocity.w}},
+        {"coherence", data.coherence},
+        {"relationship_count", data.relationship_count}
     };
 }
 

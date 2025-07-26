@@ -29,12 +29,12 @@ private:
     bool visible_ = true;
     bool testing_running_ = false;
 
-    // Strategy configuration
-    int current_strategy_idx_ = 0;
-    // Parameters for LogisticChaosStrategy
-    float chaos_r_ = 3.7f;
+    // Real market data signal thresholds
+    float coherence_threshold_ = 0.7f;
+    float stability_threshold_ = 0.6f;
+    float entropy_threshold_ = 0.5f;
 
-    // Performance metrics
+    // Performance metrics from real trading
     float win_rate_ = 0.0f;
     float pnl_ = 0.0f;
 };

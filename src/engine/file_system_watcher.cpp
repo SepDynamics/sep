@@ -3,6 +3,8 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <sys/stat.h>
+#include <ctime>
 
 namespace sep {
 namespace core {
@@ -16,8 +18,30 @@ public:
 
     void start() {
         running_ = true;
-        // This is a placeholder. A real implementation would use inotify on Linux,
-        // FSEvents on macOS, or ReadDirectoryChangesW on Windows.
+        
+        // Real file system monitoring implementation using basic polling
+        std::thread([this]() {
+            std::time_t last_check = std::time(nullptr);
+            
+            while (running_) {
+                try {
+                    // Simple polling approach - check if file exists and is newer
+                    struct stat st;
+                    if (stat(path_.c_str(), &st) == 0) {
+                        if (st.st_mtime > last_check) {
+                            if (callback_) {
+                                callback_(path_);
+                            }
+                            last_check = st.st_mtime;
+                        }
+                    }
+                } catch (...) {
+                    // Ignore errors in monitoring
+                }
+                
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000)); // Poll every second
+            }
+        }).detach();
         while (running_) {
             std::cout << "Watching for changes in " << path_ << std::endl;
             // Sleep for a while to avoid busy-waiting.

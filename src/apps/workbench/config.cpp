@@ -149,6 +149,12 @@ namespace sep
                     cosmo_.time_step = cosmo["time_step"].get<float>();
                 }
 
+                if (json.contains("oanda"))
+                {
+                    auto& oanda = json["oanda"];
+                    oanda_ = {oanda.value("api_key", ""), oanda.value("account_id", ""), oanda.value("sandbox", true)};
+                }
+
                 return true;
             }
             catch (const std::exception& e)
@@ -266,6 +272,8 @@ namespace sep
                       {"survival", digital_physics_.rules.survival}}}};
 
                 json["cosmo"] = {{"box_size", cosmo_.box_size}, {"time_step", cosmo_.time_step}};
+
+                json["oanda"] = {{"api_key", oanda_.api_key}, {"account_id", oanda_.account_id}, {"sandbox", oanda_.sandbox}};
 
                 std::ofstream file(path);
                 if (!file.is_open())

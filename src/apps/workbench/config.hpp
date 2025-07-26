@@ -172,6 +172,13 @@ namespace sep
             float mutation_rate;
         };
 
+        struct OandaConfig
+        {
+            std::string api_key;
+            std::string account_id;
+            bool sandbox;
+        };
+
         class Config
         {
         public:
@@ -198,6 +205,7 @@ namespace sep
             const NeuralDemoConfig& neural_demo() const { return neural_demo_; }
             const DigitalPhysicsConfig& digital_physics() const { return digital_physics_; }
             const CosmoConfig& cosmo() const { return cosmo_; }
+            const OandaConfig& oanda() const { return oanda_; }
 
         private:
             Config() = default;
@@ -216,6 +224,7 @@ namespace sep
             NeuralDemoConfig neural_demo_{};
             DigitalPhysicsConfig digital_physics_{};
             CosmoConfig cosmo_{};
+            OandaConfig oanda_{};
         };
 
     }  // namespace workbench

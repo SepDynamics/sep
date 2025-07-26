@@ -49,8 +49,14 @@ bool SignalsTabController::initialize() {
     ImPlotInputMap& map = ImPlot::GetInputMap();
     map.Pan = ImGuiMouseButton_Middle;
     map.Fit = ImGuiMouseButton_Right;
+    map.BoxSelect = ImGuiMouseButton_Left;
+    map.ContextMenu = ImGuiMouseButton_Right;
     map.ZoomMod = ImGuiMod_Ctrl;
-    plot_flags_ = ImPlotFlags_Crosshairs;
+    plot_flags_ = ImPlotFlags_Crosshairs | ImPlotFlags_NoMenus | ImPlotFlags_NoLegend;
+
+    if (metrics_monitor_) {
+        metrics_monitor_->startProcessing();
+    }
     return true;
 }
 
@@ -676,74 +682,77 @@ void SignalsTabController::renderHoverInfo() {
 }
 
 void SignalsTabController::renderCrosshair() {
-    if (!show_crosshair_ || !ImGui::IsWindowHovered()) return;
-    
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    ImVec2 mouse_pos = crosshair_pos_;
-    
-    draw_list->AddLine(
-        ImVec2(mouse_pos.x, chart_pos_.y),
-        ImVec2(mouse_pos.x, chart_pos_.y + chart_size_.y),
-        IM_COL32(128, 128, 128, 128), 1.0f
-    );
-    
-    draw_list->AddLine(
-        ImVec2(chart_pos_.x, mouse_pos.y),
-        ImVec2(chart_pos_.x + chart_size_.x, mouse_pos.y),
-        IM_COL32(128, 128, 128, 128), 1.0f
-    );
-    
-    double price = screenToPrice(mouse_pos.y);
-    std::string price_str = std::to_string(price).substr(0, 7);
-    
-    ImVec2 label_pos = ImVec2(chart_pos_.x + chart_size_.x + 5, mouse_pos.y - 10);
-    draw_list->AddRectFilled(
-        label_pos,
-        ImVec2(label_pos.x + 60, label_pos.y + 20),
-        IM_COL32(40, 40, 40, 200)
-    );
-    draw_list->AddText(ImVec2(label_pos.x + 5, label_pos.y + 3),
-        IM_COL32(255, 255, 255, 255), price_str.c_str());
+    if (!show_crosshair_ || !ImPlot::IsPlotHovered()) return;
 
-    auto t = screenToTime(mouse_pos.x);
+    ImDrawList* draw_list = ImPlot::GetPlotDrawList();
+    ImVec2 plot_pos = ImPlot::GetPlotPos();
+    ImVec2 plot_size = ImPlot::GetPlotSize();
+    ImVec2 mouse_pos = crosshair_pos_;
+
+    draw_list->AddLine(ImVec2(mouse_pos.x, plot_pos.y),
+                       ImVec2(mouse_pos.x, plot_pos.y + plot_size.y),
+                       IM_COL32(128, 128, 128, 128), 1.0f);
+    draw_list->AddLine(ImVec2(plot_pos.x, mouse_pos.y),
+                       ImVec2(plot_pos.x + plot_size.x, mouse_pos.y),
+                       IM_COL32(128, 128, 128, 128), 1.0f);
+
+    ImPlotPoint plot = ImPlot::PixelsToPlot(mouse_pos);
+    char price_text[32];
+    (void)snprintf(price_text, sizeof(price_text), "%.5f", plot.y);
+
+    ImVec2 label_pos = ImVec2(plot_pos.x + plot_size.x + 5, mouse_pos.y - 10);
+    draw_list->AddRectFilled(label_pos,
+                             ImVec2(label_pos.x + 60, label_pos.y + 20),
+                             IM_COL32(40, 40, 40, 200));
+    draw_list->AddText(ImVec2(label_pos.x + 5, label_pos.y + 3),
+                       IM_COL32(255, 255, 255, 255), price_text);
+
+    size_t idx = static_cast<size_t>(plot.x + 0.5);
+    idx = std::clamp(idx, size_t(0), candle_data_.empty() ? 0 : candle_data_.size() - 1);
+    auto t = candle_data_.empty() ? std::chrono::system_clock::now() : candle_data_[idx].timestamp;
     std::time_t tt = std::chrono::system_clock::to_time_t(t);
     char time_buf[16];
     std::strftime(time_buf, sizeof(time_buf), "%H:%M", std::localtime(&tt));
-    ImVec2 time_pos = ImVec2(mouse_pos.x - 30, chart_pos_.y + chart_size_.y + 5);
-    draw_list->AddRectFilled(ImVec2(time_pos.x - 2, time_pos.y - 2), ImVec2(time_pos.x + 34, time_pos.y + 16), IM_COL32(40,40,40,200));
+    ImVec2 time_pos = ImVec2(mouse_pos.x - 30, plot_pos.y + plot_size.y + 5);
+    draw_list->AddRectFilled(ImVec2(time_pos.x - 2, time_pos.y - 2),
+                             ImVec2(time_pos.x + 34, time_pos.y + 16),
+                             IM_COL32(40,40,40,200));
     draw_list->AddText(time_pos, IM_COL32(255,255,255,255), time_buf);
 }
 
 void SignalsTabController::renderChartGrid() {
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    
+    ImDrawList* draw_list = ImPlot::GetPlotDrawList();
+
     const int num_price_lines = 8;
     ImU32 grid_color = IM_COL32(40, 40, 50, 128);
-    
+    ImPlotRect limits = ImPlot::GetPlotLimits();
+
     for (int i = 0; i <= num_price_lines; i++) {
-        float y = chart_pos_.y + (chart_size_.y * i / num_price_lines);
-        draw_list->AddLine(ImVec2(chart_pos_.x, y), 
-                           ImVec2(chart_pos_.x + chart_size_.x, y), 
-                           grid_color);
-        
-        double price = price_max_ - ((price_max_ - price_min_) * i / num_price_lines);
+        double price = ImLerp(limits.YMin, limits.YMax, i / (double)num_price_lines);
+        ImVec2 p1 = ImPlot::PlotToPixels(ImPlotPoint(limits.XMin, price));
+        ImVec2 p2 = ImPlot::PlotToPixels(ImPlotPoint(limits.XMax, price));
+        drawDashedHorizontal(draw_list, p1.x, p2.x, p1.y, grid_color);
+
         char price_text[32];
-        (void)sprintf(price_text, "%.5f", price);
-        draw_list->AddText(ImVec2(chart_pos_.x - 70, y - 8), 
-                           IM_COL32(150, 150, 160, 255), price_text);
+        (void)snprintf(price_text, sizeof(price_text), "%.5f", price);
+        draw_list->AddText(ImVec2(p1.x - 60, p1.y - 8), IM_COL32(150,150,160,255), price_text);
     }
-    
+
     const int num_time_lines = 6;
     for (int i = 0; i <= num_time_lines; i++) {
-        float x = chart_pos_.x + (chart_size_.x * i / num_time_lines);
-        draw_list->AddLine(ImVec2(x, chart_pos_.y), 
-                           ImVec2(x, chart_pos_.y + chart_size_.y), 
-                           grid_color);
-        
+        double xval = ImLerp(limits.XMin, limits.XMax, i / (double)num_time_lines);
+        ImVec2 p1 = ImPlot::PlotToPixels(ImPlotPoint(xval, limits.YMin));
+        ImVec2 p2 = ImPlot::PlotToPixels(ImPlotPoint(xval, limits.YMax));
+        draw_list->AddLine(p1, p2, grid_color);
+
+        size_t idx = static_cast<size_t>(xval + 0.5);
+        idx = std::clamp(idx, size_t(0), candle_data_.empty() ? 0 : candle_data_.size() - 1);
+        auto t = candle_data_.empty() ? std::chrono::system_clock::now() : candle_data_[idx].timestamp;
         char time_text[16];
-        (void)sprintf(time_text, "%02d:00", (24 - (i * 4)) % 24);
-        draw_list->AddText(ImVec2(x - 15, chart_pos_.y + chart_size_.y + 5), 
-                           IM_COL32(150, 150, 160, 255), time_text);
+        std::time_t tt = std::chrono::system_clock::to_time_t(t);
+        std::strftime(time_text, sizeof(time_text), "%H:%M", std::localtime(&tt));
+        draw_list->AddText(ImVec2(p1.x - 20, ImPlot::GetPlotPos().y + ImPlot::GetPlotSize().y + 5),
+                           IM_COL32(150,150,160,255), time_text);
     }
 }
 
@@ -818,14 +827,10 @@ void SignalsTabController::setupChartArea() {
 }
 
 void SignalsTabController::handleMouseInput() {
-    ImVec2 mouse_pos = ImGui::GetMousePos();
-
-    if (mouse_pos.x >= chart_pos_.x && mouse_pos.x <= chart_pos_.x + chart_size_.x &&
-        mouse_pos.y >= chart_pos_.y && mouse_pos.y <= chart_pos_.y + chart_size_.y) {
-
+    if (ImPlot::IsPlotHovered()) {
         hover_info_.active = true;
-        hover_info_.position = mouse_pos;
-        crosshair_pos_ = mouse_pos;
+        crosshair_pos_ = ImGui::GetMousePos();
+        hover_info_.position = crosshair_pos_;
         updateHoverInfo();
     } else {
         hover_info_.active = false;
@@ -833,38 +838,28 @@ void SignalsTabController::handleMouseInput() {
 }
 
 void SignalsTabController::updateHoverInfo() {
-    if (!hover_info_.active) return;
-    
-    hover_info_.price = screenToPrice(hover_info_.position.y);
-    hover_info_.time = screenToTime(hover_info_.position.x);
-    
-    hover_info_.nearest_candle = nullptr;
-    hover_info_.nearest_sep_signal = nullptr;
-    
-    auto time_diff_min = std::chrono::duration_cast<std::chrono::minutes>(
-        std::chrono::system_clock::duration::max()).count();
-    
-    for (auto& candle : candle_data_) {
-        auto diff = std::abs(std::chrono::duration_cast<std::chrono::minutes>(
-            hover_info_.time - candle.timestamp).count());
-        if (diff < time_diff_min) {
-            time_diff_min = diff;
-            hover_info_.nearest_candle = &candle;
+    if (!hover_info_.active || candle_data_.empty()) return;
+
+    ImPlotPoint plot_pos = ImPlot::PixelsToPlot(hover_info_.position);
+
+    hover_info_.price = plot_pos.y;
+
+    size_t idx = static_cast<size_t>(plot_pos.x + 0.5);
+    idx = std::clamp(idx, size_t(0), candle_data_.size() - 1);
+    hover_info_.time = candle_data_[idx].timestamp;
+    hover_info_.nearest_candle = &candle_data_[idx];
+
+    auto nearest_sep = sep_signals_.end();
+    auto min_diff = std::chrono::system_clock::duration::max();
+    for (auto it = sep_signals_.begin(); it != sep_signals_.end(); ++it) {
+        auto diff = it->timestamp > hover_info_.time ? it->timestamp - hover_info_.time : hover_info_.time - it->timestamp;
+        if (diff < min_diff) {
+            min_diff = diff;
+            nearest_sep = it;
         }
     }
-    
-    time_diff_min = std::chrono::duration_cast<std::chrono::minutes>(
-        std::chrono::system_clock::duration::max()).count();
-    
-    for (auto& signal : sep_signals_) {
-        auto diff = std::abs(std::chrono::duration_cast<std::chrono::minutes>(
-            hover_info_.time - signal.timestamp).count());
-        if (diff < time_diff_min) {
-            time_diff_min = diff;
-            hover_info_.nearest_sep_signal = &signal;
-        }
-    }
-    
+    hover_info_.nearest_sep_signal = nearest_sep != sep_signals_.end() ? &*nearest_sep : nullptr;
+
     calculateEnhancedHoverMetrics();
 }
 

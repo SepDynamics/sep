@@ -28,6 +28,7 @@ private:
     ServiceConnector* service_connector_ = nullptr;
     void renderDataSourceSelector();
     void renderBacktesterPanel();
+    void renderOrderManagementPanel();
 
     void handleDataLoad();
     void handleClearData();
@@ -48,7 +49,7 @@ private:
     float risk_percentage_ = 2.0f;
     float stop_loss_pips_ = 20.0f;
     float take_profit_pips_ = 40.0f;
-    sep::core::SignalValidator::ValidationResult validation_result_;
+    sep::workbench::SignalValidator::ValidationResult validation_result_;
     char instrument_buffer_[64] = "EUR_USD";
     int units_ = 1000;
     nlohmann::json open_positions_;

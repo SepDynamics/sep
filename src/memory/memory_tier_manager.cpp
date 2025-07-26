@@ -141,6 +141,32 @@ MemoryTierManager::MemoryTierManager(const Config &cfg)
             }
         }
 
+        float MemoryTierManager::getTierUtilization(MemoryTierEnum tier) const
+        {
+            MemoryTier* target_tier = nullptr;
+            switch (tier)
+            {
+                case MemoryTierEnum::STM:
+                    target_tier = stm_.get();
+                    break;
+                case MemoryTierEnum::MTM:
+                    target_tier = mtm_.get();
+                    break;
+                case MemoryTierEnum::LTM:
+                    target_tier = ltm_.get();
+                    break;
+                default:
+                    return 0.0f;
+            }
+            
+            if (!target_tier) return 0.0f;
+            
+            std::size_t total_size = target_tier->getSize();
+            std::size_t used_size = target_tier->getUsedSpace();
+            
+            return total_size > 0 ? static_cast<float>(used_size) / static_cast<float>(total_size) : 0.0f;
+        }
+
         float MemoryTierManager::getTierFragmentation(MemoryTierEnum tier) const
         {
             switch (tier)

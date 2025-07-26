@@ -1,14 +1,14 @@
 #pragma once
 
 #include "quantum/pattern_metric_engine.h"
-#include "data/data_loader.h"
+#include "data_loader.h"
 #include <vector>
 #include <string>
 
 namespace sep::workbench::backtester {
 
 struct Trade {
-    SignalType type;
+    sep::quantum::SignalType type;
     float entry_price;
     float exit_price;
     int holding_period;

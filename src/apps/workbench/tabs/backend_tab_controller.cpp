@@ -145,8 +145,8 @@ void BackendTabController::renderBacktesterPanel() {
 
     ImGui::Begin("Signal Validation");
     if (ImGui::Button("Validate Signals")) {
-        data_loader_->loadData(file_path_buffer_);
-        const auto& candles = data_loader_->getCandleData();
+        data_loader_->load_data(file_path_buffer_);
+        const auto& candles = data_loader_->get_data();
         if (!candles.empty()) {
             std::vector<uint8_t> byte_stream;
             for (const auto& candle : candles) {
@@ -169,7 +169,7 @@ void BackendTabController::renderBacktesterPanel() {
         }
     }
 
-    ImGui::Text("Accuracy: %.2f", validation_result_.accuracy);
+    ImGui::Text("Accuracy: %.2f", validation_result_.predictive_accuracy);
     ImGui::Text("False Positive Rate: %.2f", validation_result_.false_positive_rate);
     ImGui::PopID();
     ImGui::End();
@@ -177,7 +177,7 @@ void BackendTabController::renderBacktesterPanel() {
     ImGui::Begin("Backtester");
     ImGui::PushID("Backtester");
     if (ImGui::Button("Run Backtest")) {
-        data_loader_->loadData(file_path_buffer_);
+        data_loader_->load_data(file_path_buffer_);
         backtester_->run(pattern_engine_.get(), data_loader_.get());
     }
 

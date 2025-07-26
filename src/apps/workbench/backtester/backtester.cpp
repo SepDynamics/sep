@@ -15,7 +15,7 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine, DataLoader* data
         return;
     }
 
-    const auto& candles = data_loader->getCandleData();
+    const auto& candles = data_loader->get_data();
     if (candles.empty()) {
         return;
     }
@@ -48,7 +48,7 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine, DataLoader* data
         if (signals[i].type == sep::quantum::SignalType::BUY) {
             if (i + 1 < prices.size()) {
                 Trade trade;
-                trade.type = sep::workbench::backtester::SignalType::BUY;
+                trade.type = sep::quantum::SignalType::BUY;
                 trade.entry_price = prices[i];
                 trade.exit_price = prices[i + 1];
                 trade.holding_period = 1;
@@ -63,7 +63,7 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine, DataLoader* data
         } else if (signals[i].type == sep::quantum::SignalType::SELL) {
             if (i + 1 < prices.size()) {
                 Trade trade;
-                trade.type = sep::workbench::backtester::SignalType::SELL;
+                trade.type = sep::quantum::SignalType::SELL;
                 trade.entry_price = prices[i];
                 trade.exit_price = prices[i + 1];
                 trade.holding_period = 1;

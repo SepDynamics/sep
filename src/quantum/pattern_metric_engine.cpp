@@ -253,21 +253,21 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
         current_metrics_.push_back(m);
 
         // Signal generation
-        auto logger = sep::logging::Manager::getInstance().getLogger("pattern_engine");
+        // auto logger = sep::logging::Manager::getInstance().getLogger("pattern_engine");
         if (m.stability < signal_thresholds_.min_stability && m.entropy > signal_thresholds_.max_entropy) {
             Signal s;
             s.type = SignalType::SELL;
             s.confidence = (1.0f - m.stability) * m.entropy;
             s.pattern_id = m.pattern_id;
             current_signals_.push_back(s);
-            if(logger) logger->info("SELL signal generated for pattern {}: confidence={}", s.pattern_id, s.confidence);
+            // if(logger) logger->info("SELL signal generated for pattern {}: confidence={}", s.pattern_id, s.confidence);
         } else if (m.coherence > signal_thresholds_.min_coherence && m.stability > signal_thresholds_.min_stability) {
             Signal s;
             s.type = SignalType::BUY;
             s.confidence = m.coherence * m.stability;
             s.pattern_id = m.pattern_id;
             current_signals_.push_back(s);
-            if(logger) logger->info("BUY signal generated for pattern {}: confidence={}", s.pattern_id, s.confidence);
+            // if(logger) logger->info("BUY signal generated for pattern {}: confidence={}", s.pattern_id, s.confidence);
         }
     }
     return current_metrics_;

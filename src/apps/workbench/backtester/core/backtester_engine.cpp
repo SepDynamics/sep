@@ -99,3 +99,10 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
 
     return result;
 }
+
+sep::workbench::backtester::BacktestResult BacktesterEngine::run(
+    const std::string& dataset_path,
+    sep::quantum::PatternMetricEngine* engine) {
+    SEPSignalStrategy default_strategy;
+    return run(dataset_path, engine, &default_strategy);
+}

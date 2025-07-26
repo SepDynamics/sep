@@ -141,6 +141,7 @@ bool WorkbenchEngine::initialize()
         signals_tab_->initialize();
         engine_tab_->initialize();
         backend_tab_->initialize();
+        backend_tab_->setMetricsMonitor(metrics_monitor_);
 
         // Set up data flow
         signals_tab_->setOandaConnector(service_connector_->getOandaConnector());

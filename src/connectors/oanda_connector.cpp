@@ -382,7 +382,7 @@ double OandaConnector::calculateATR(const std::string& instrument, const std::st
 int OandaConnector::getVolatilityLevel(double current_atr, const std::string& instrument) {
     // Fetch last 90 days of daily candles for a stable volatility baseline
     auto candles = getHistoricalData(instrument, "D", "", "", 90);
-    if (candles.size() < 20) { // Need a reasonable number of candles
+    if (candles.size() < 20u) { // Need a reasonable number of candles
         last_error_ = "Insufficient historical data for volatility calculation.";
         return 1; // Default to low volatility
     }
@@ -862,7 +862,7 @@ DataValidationResult OandaConnector::validateCandleSequence(const std::vector<Oa
                                                             const std::string& granularity)
 {
     DataValidationResult result{true};
-    if (candles.size() < 2) return result;  // Not enough data to check sequence
+    if (candles.size() < 2u) return result;  // Not enough data to check sequence
 
     for (size_t i = 0; i < candles.size(); ++i)
     {
@@ -902,7 +902,7 @@ DataValidationResult OandaConnector::validateCandleSequence(const std::vector<Oa
 std::vector<double> OandaConnector::calculateHistoricalATRs(const std::vector<OandaCandle>& candles)
 {
     std::vector<double> atrs;
-    if (candles.size() < 15) return atrs;
+    if (candles.size() < 15u) return atrs;
 
     std::vector<double> true_ranges;
     for (size_t i = 1; i < candles.size(); ++i)
@@ -913,12 +913,12 @@ std::vector<double> OandaConnector::calculateHistoricalATRs(const std::vector<Oa
         true_ranges.push_back(tr);
     }
 
-    if (true_ranges.size() < 14) return atrs;
+    if (true_ranges.size() < 14u) return atrs;
 
     double first_atr = std::accumulate(true_ranges.begin(), true_ranges.begin() + 14, 0.0) / 14.0;
     atrs.push_back(first_atr);
 
-    for (size_t i = 14; i < true_ranges.size(); ++i)
+    for (size_t i = 14u; i < true_ranges.size(); ++i)
     {
         double next_atr = (atrs.back() * 13 + true_ranges[i]) / 14.0;
         atrs.push_back(next_atr);

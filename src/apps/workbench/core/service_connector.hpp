@@ -90,7 +90,7 @@ public:
     const ConnectionConfig& getConfig() const { return config_; }
 
     void setSignalsTab(SignalsTabController* tab);
-    void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer) { mtf_analyzer_ = analyzer; }
+    void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer);
     const std::deque<common::CandleData>& getInitialData() const { return initial_data_; }
 
 private:

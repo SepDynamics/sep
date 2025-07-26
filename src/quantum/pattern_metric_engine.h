@@ -25,7 +25,7 @@ namespace sep::quantum {
         float buy_min_coherence{0.7f};
         float buy_min_stability{0.6f};
         float buy_max_entropy{0.3f};
-        float sell_max_stability{0.4f};
+        float sell_max_stability{0.3f};
         float sell_min_entropy{0.7f};
     };
 

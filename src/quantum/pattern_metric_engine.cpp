@@ -427,16 +427,21 @@ void PatternMetricEngine::generateSignals() {
     }
 }
 
+// Evaluate signal based on threshold rules defined in docs/TODO.md
 SignalType PatternMetricEngine::evaluateSignal(const PatternMetrics& m) const {
+    // Example rule: stability < 0.3 && entropy > 0.7 triggers SELL
     if (m.stability < signal_thresholds_.sell_max_stability &&
         m.entropy > signal_thresholds_.sell_min_entropy) {
         return SignalType::SELL;
     }
+
+    // Example rule: coherence/stability high with low entropy triggers BUY
     if (m.coherence > signal_thresholds_.buy_min_coherence &&
         m.stability > signal_thresholds_.buy_min_stability &&
         m.entropy < signal_thresholds_.buy_max_entropy) {
         return SignalType::BUY;
     }
+
     return SignalType::HOLD;
 }
 

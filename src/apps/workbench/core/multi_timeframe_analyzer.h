@@ -127,6 +127,10 @@ private:
     // Rolling history of analyzed metrics per timeframe
     std::map<std::string, std::deque<TimeframeMetrics>> metrics_history_;
     size_t max_metrics_history_ = 1000;
+
+    // Correlation history per timeframe
+    std::map<std::string, std::deque<CorrelationMetrics>> correlation_history_;
+    size_t max_correlation_history_ = 1000;
     
     // Internal methods
     std::vector<CandleData> resampleCandles(
@@ -188,6 +192,7 @@ public:
     std::string getStatusReport() const;
 
     CorrelationMetrics calculateCorrelationMetrics(const std::string& timeframe);
+    std::deque<CorrelationMetrics> getCorrelationHistory(const std::string& timeframe) const;
 };
 
 // Helper functions for timeframe conversions

@@ -145,6 +145,13 @@ void MultiTimeframeAnalyzer::updateAllTimeframes(const std::string& instrument) 
         if (metrics_history_[tf].size() > max_metrics_history_) {
             metrics_history_[tf].pop_front();
         }
+
+        // Update correlation history using latest metrics and price moves
+        auto corr = calculateCorrelationMetrics(tf);
+        correlation_history_[tf].push_back(corr);
+        if (correlation_history_[tf].size() > max_correlation_history_) {
+            correlation_history_[tf].pop_front();
+        }
     }
 }
 
@@ -691,6 +698,13 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
     correlation_metrics.entropy_spearman = spearman(entropy_values, price_moves);
 
     return correlation_metrics;
+}
+
+std::deque<CorrelationMetrics> MultiTimeframeAnalyzer::getCorrelationHistory(const std::string& timeframe) const {
+    if (correlation_history_.count(timeframe)) {
+        return correlation_history_.at(timeframe);
+    }
+    return {};
 }
 
 // TimeframeUtils implementation

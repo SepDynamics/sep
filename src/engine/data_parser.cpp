@@ -588,4 +588,25 @@ bool DataParser::exportCorrelationCSV(const std::string& path,
     return true;
 }
 
+bool DataParser::exportCorrelationJSON(const std::string& path,
+                                       const std::map<std::string, workbench::CorrelationMetrics>& data) const {
+    nlohmann::json j;
+    for (const auto& [tf, metrics] : data) {
+        j[tf] = {
+            {"coh_pearson", metrics.coherence_pearson},
+            {"coh_spearman", metrics.coherence_spearman},
+            {"stab_pearson", metrics.stability_pearson},
+            {"stab_spearman", metrics.stability_spearman},
+            {"entropy_pearson", metrics.entropy_pearson},
+            {"entropy_spearman", metrics.entropy_spearman}
+        };
+    }
+    std::ofstream file(path);
+    if (!file.is_open()) {
+        return false;
+    }
+    file << j.dump(2);
+    return true;
+}
+
 } // namespace sep

@@ -37,6 +37,7 @@ private:
     void renderBacktesterPanel();
     void renderOrderManagementPanel();
     void renderTradeHistoryPanel();
+    void renderBacktestingSuite();
     void updateTradeHistory();
 
     void handleDataLoad();

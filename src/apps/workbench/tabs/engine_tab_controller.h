@@ -47,6 +47,9 @@ private:
     std::vector<sep::quantum::PatternMetrics> getCurrentPatternMetrics();
     sep::quantum::CoherenceManager::CoherenceMetrics getCoherenceMetrics();
     void resetEngineState();
+
+    // Export path buffer
+    char correlation_export_path_[512] = "correlation.csv";
 };
 
 } // namespace sep::workbench

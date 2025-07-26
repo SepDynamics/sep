@@ -8,6 +8,7 @@
 #include <sstream>
 #include <thread>
 #include "engine/data_parser.h"
+#include <mutex>
 
 namespace sep {
 namespace connectors {
@@ -222,7 +223,18 @@ size_t OandaConnector::StreamCallback(void* contents, size_t size, size_t nmemb,
 }
 
 OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endpoint, const std::string& method, const std::string& data) {
-    enforceRateLimit();
+    {
+        std::lock_guard<std::mutex> lock(request_mutex_);
+        auto it = response_cache_.find(endpoint);
+        if (it != response_cache_.end()) {
+            auto age = std::chrono::steady_clock::now() - it->second.timestamp;
+            if (age < std::chrono::seconds(2)) {
+                return it->second.response;
+            }
+        }
+    }
+
+    enforceRateLimit(endpoint);
     
     CurlResponse response;
     
@@ -266,6 +278,11 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
     {
         std::cerr << "OANDA API Error: " << response.response_code << " - " << response.data
                   << std::endl;
+    }
+
+    {
+        std::lock_guard<std::mutex> lock(request_mutex_);
+        response_cache_[endpoint] = {response, std::chrono::steady_clock::now()};
     }
 
     return response;
@@ -437,17 +454,26 @@ OandaCandle OandaConnector::parseCandle(const nlohmann::json& candle_data) {
     return candle;
 }
 
-void OandaConnector::enforceRateLimit()
+void OandaConnector::enforceRateLimit(const std::string& endpoint)
 {
+    std::unique_lock<std::mutex> lock(request_mutex_);
     auto now = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_request_time_);
-
     if (elapsed.count() < 50)
-    {  // OANDA allows 100 req/sec, 10ms, but being conservative
+    {
         std::this_thread::sleep_for(std::chrono::milliseconds(50 - elapsed.count()));
     }
 
+    auto it = endpoint_last_request_.find(endpoint);
+    if (it != endpoint_last_request_.end()) {
+        auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - it->second);
+        if (diff.count() < 250) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(250 - diff.count()));
+        }
+    }
+
     last_request_time_ = std::chrono::steady_clock::now();
+    endpoint_last_request_[endpoint] = last_request_time_;
 }
 
 void OandaConnector::streamPriceData(const std::string& instruments)

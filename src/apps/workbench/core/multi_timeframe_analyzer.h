@@ -58,9 +58,12 @@ struct TimeframeMetrics {
 };
 
 struct CorrelationMetrics {
-    double coherence_price_correlation = 0.0;
-    double stability_price_correlation = 0.0;
-    double entropy_price_correlation = 0.0;
+    double coherence_pearson = 0.0;
+    double coherence_spearman = 0.0;
+    double stability_pearson = 0.0;
+    double stability_spearman = 0.0;
+    double entropy_pearson = 0.0;
+    double entropy_spearman = 0.0;
 };
 
 struct MultiTimeframeSignal {

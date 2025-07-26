@@ -27,20 +27,17 @@ bool SignalsTabController::initialize() {
 void SignalsTabController::render() {
     ImGui::Columns(2, "SignalsColumns", true);
     ImGui::Begin("Signal Thresholds");
-    static float min_coherence = 0.7f;
-    static float min_stability = 0.6f;
-    static float max_entropy = 0.3f;
-    ImGui::SliderFloat("Min Coherence", &min_coherence, 0.0f, 1.0f);
-    ImGui::SliderFloat("Min Stability", &min_stability, 0.0f, 1.0f);
-    ImGui::SliderFloat("Max Entropy", &max_entropy, 0.0f, 1.0f);
+    ImGui::SliderFloat("Min Coherence", &min_coherence_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Min Stability", &min_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Max Entropy", &max_entropy_, 0.0f, 1.0f);
     if (ImGui::Button("Apply")) {
         if (workbench_engine_) {
             auto* pme = workbench_engine_->getPatternMetricEngine();
             if (pme) {
                 sep::quantum::SignalThresholds thresholds;
-                thresholds.min_coherence = min_coherence;
-                thresholds.min_stability = min_stability;
-                thresholds.max_entropy = max_entropy;
+                thresholds.min_coherence = min_coherence_;
+                thresholds.min_stability = min_stability_;
+                thresholds.max_entropy = max_entropy_;
                 pme->setSignalThresholds(thresholds);
             }
         }
@@ -50,7 +47,7 @@ void SignalsTabController::render() {
     ImGui::NextColumn();
 
     if (metrics_monitor_) {
-        ImGui::Begin("SEP Engine Metrics");
+        (void)ImGui::Begin("SEP Engine Metrics");
         const auto& system_metrics = metrics_monitor_->getSystemMetrics();
         const auto& rolling_metrics = metrics_monitor_->getRollingMetrics();
 
@@ -695,7 +692,7 @@ void SignalsTabController::renderChartGrid() {
         
         double price = price_max_ - ((price_max_ - price_min_) * i / num_price_lines);
         char price_text[32];
-        sprintf(price_text, "%.5f", price);
+        (void)sprintf(price_text, "%.5f", price);
         draw_list->AddText(ImVec2(chart_pos_.x - 70, y - 8), 
                            IM_COL32(150, 150, 160, 255), price_text);
     }
@@ -708,7 +705,7 @@ void SignalsTabController::renderChartGrid() {
                            grid_color);
         
         char time_text[16];
-        sprintf(time_text, "%02d:00", (24 - (i * 4)) % 24);
+        (void)sprintf(time_text, "%02d:00", (24 - (i * 4)) % 24);
         draw_list->AddText(ImVec2(x - 15, chart_pos_.y + chart_size_.y + 5), 
                            IM_COL32(150, 150, 160, 255), time_text);
     }

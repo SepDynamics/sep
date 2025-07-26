@@ -44,6 +44,10 @@ public:
     sep::workbench::SignalValidator::ValidationResult validate_signal(
         const std::vector<sep::quantum::Signal>& signals, const std::vector<float>& prices);
 
+    sep::workbench::SignalValidator::ValidationResult validateSignals(
+        const std::vector<sep::quantum::Signal>& signals,
+        const std::vector<float>& prices);
+
 private:
     std::string service_address_;
     int service_port_;

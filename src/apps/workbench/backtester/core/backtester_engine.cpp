@@ -58,7 +58,21 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     std::vector<sep::quantum::Signal> engine_signals = engine_ref.getSignals();
     std::vector<sep::quantum::Signal> signals = engine_signals;
     if (strategy) {
-        signals = strategy->execute(candles, engine_signals);
+        std::vector<sep::quantum::Signal> strat_signals =
+            strategy->execute(candles, engine_signals);
+        if (!strat_signals.empty()) {
+            size_t merge_size =
+                std::min(strat_signals.size(), engine_signals.size());
+            for (size_t i = 0; i < merge_size; ++i) {
+                if (strat_signals[i].type != sep::quantum::SignalType::HOLD) {
+                    signals[i] = strat_signals[i];
+                }
+            }
+            if (strat_signals.size() > engine_signals.size()) {
+                signals.insert(signals.end(), strat_signals.begin() + merge_size,
+                               strat_signals.end());
+            }
+        }
     }
     std::vector<float> prices;
     prices.reserve(candles.size());

@@ -59,17 +59,23 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         std::cout << "[ServiceConnector] API Key length: " << api_key.length() << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
         if (oanda_connector_->initialize()) {
-            if (oanda_connector_->fetchHistoricalData("EUR_USD", "eur_usd_m1_48h.json")) {
-                loadInitialData("eur_usd_m1_48h.json");
+            if (oanda_connector_->fetchHistoricalData("EUR_USD", "Testing/OANDA/eurusd_48h.json")) {
+                loadInitialData("Testing/OANDA/eurusd_48h.json");
             } else {
-                loadInitialData("eur_usd_m1_48h.json");
+                DataLoader loader;
+                loader.load_48h_sample();
+                loadInitialData("Testing/OANDA/eurusd_48h.json");
             }
         } else {
-            loadInitialData("eur_usd_m1_48h.json");
+            DataLoader loader;
+            loader.load_48h_sample();
+            loadInitialData("Testing/OANDA/eurusd_48h.json");
         }
     } else {
         std::cout << "[ServiceConnector] ERROR: OANDA credentials not provided" << std::endl;
-        loadInitialData("eur_usd_m1_48h.json");
+        DataLoader loader;
+        loader.load_48h_sample();
+        loadInitialData("Testing/OANDA/eurusd_48h.json");
     }
 
     std::cout << "[ServiceConnector] Initialized with config: "

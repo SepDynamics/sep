@@ -10,6 +10,8 @@
 #include <iterator>
 #include <numeric>
 #include <thread>
+#include <unordered_map>
+#include <mutex>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 
@@ -126,8 +128,15 @@ private:
     std::vector<double> calculateHistoricalATRs(const std::vector<OandaCandle>& candles);
 
     // Rate limiting
-    void enforceRateLimit();
+    void enforceRateLimit(const std::string& endpoint);
     std::chrono::steady_clock::time_point last_request_time_;
+    std::unordered_map<std::string, std::chrono::steady_clock::time_point> endpoint_last_request_;
+    struct CachedResponse {
+        CurlResponse response;
+        std::chrono::steady_clock::time_point timestamp;
+    };
+    std::unordered_map<std::string, CachedResponse> response_cache_;
+    std::mutex request_mutex_;
     
     // Streaming support
     std::atomic<bool> streaming_active_{false};

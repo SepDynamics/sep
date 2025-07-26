@@ -92,6 +92,15 @@ bool WorkbenchEngine::initialize()
         // landing_page_ = std::make_unique<LandingPage>(this);
         renderer_ = ::std::make_unique<Renderer>();
         layout_manager_ = ::std::make_unique<UILayoutManager>();
+
+        // Subscribe to basic events
+        globalEventBus().subscribe<PanelVisibilityEvent>([](const PanelVisibilityEvent& e) {
+            std::cout << "[EventBus] Panel " << e.panel_id
+                      << (e.visible ? " shown" : " hidden") << std::endl;
+        });
+        globalEventBus().subscribe<ConnectionStateEvent>([this](const ConnectionStateEvent& e) {
+            metrics_.service_connected = (e.state == ConnectionState::CONNECTED);
+        });
         signal_generator_ = ::std::make_unique<QuantumSignalGenerator>();
         metrics_monitor_ = ::std::make_unique<MetricsMonitor>();
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();

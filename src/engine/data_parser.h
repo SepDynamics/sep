@@ -79,6 +79,8 @@ public:
                                const std::map<std::string, workbench::CorrelationMetrics>& data) const;
     bool exportCorrelationHistoryCSV(const std::string& path,
                                      const std::map<std::string, std::deque<workbench::CorrelationMetrics>>& history) const;
+    bool exportCorrelationForBacktester(const std::string& path,
+                                        const std::deque<workbench::CorrelationMetrics>& metrics) const;
 
 private:
     // Format detection

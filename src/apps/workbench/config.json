@@ -10,7 +10,14 @@
     "cuda_enabled": true,
     "metrics_enabled": true,
     "log_level": "info",
-    "patterns_file": "forex/final_symmetry.json"
+    "patterns_file": "forex/final_symmetry.json",
+    "signal_thresholds": {
+      "buy_min_coherence": 0.7,
+      "buy_min_stability": 0.6,
+      "buy_max_entropy": 0.3,
+      "sell_max_stability": 0.3,
+      "sell_min_entropy": 0.7
+    }
   },
   "demos": {
     "genesis_pattern": {

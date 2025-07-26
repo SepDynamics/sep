@@ -53,8 +53,8 @@ private:
     FileDialog file_dialog_;
 
     // UI State
-    char file_path_buffer_[512] = "Testing/OANDA/eurusd_48h.json";
-    char backtest_file_buffer_[512] = "Testing/OANDA/eurusd_48h.json";
+    char file_path_buffer_[512] = "eur_usd_m1_48h.json";
+    char backtest_file_buffer_[512] = "eur_usd_m1_48h.json";
     int data_source_type_{0};  // 0=File, 1=Live Stream, 2=Generated
     char export_path_buffer_[512] = "metrics_export.json";
     float risk_percentage_ = 2.0f;

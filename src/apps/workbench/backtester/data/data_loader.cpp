@@ -12,28 +12,12 @@ DataLoader::DataLoader() {}
 DataLoader::~DataLoader() {}
 
 void DataLoader::loadData(const std::string& filepath) {
-    m_candleData = JsonDataParser::parse(filepath);
+    load_data(filepath);
 }
 
-const std::vector<sep::workbench::CandleData>& DataLoader::getCandleData() const {
-    return m_candleData;
-}
-
-void DataLoader::load_48h_sample() {
-    namespace fs = std::filesystem;
-    const std::string output = "Testing/OANDA/eurusd_48h.json";
-
-    sep::connectors::OandaConnector connector("", "", true);
-    if (!connector.initialize()) {
-        return;
-    }
-
-    auto candles = connector.getHistoricalData("EUR_USD", "M1", "", "", 48 * 60);
-    connector.shutdown();
-
-    std::vector<sep::CandleData> export_candles;
-    export_candles.reserve(candles.size());
-
+void DataLoader::load_data(const std::string& filepath) {
+    sep::DataParser parser;
+    auto candles = parser.parseQuantJSON(filepath);
     m_candleData.clear();
     m_candleData.reserve(candles.size());
 
@@ -44,18 +28,24 @@ void DataLoader::load_48h_sample() {
         auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
         m_candleData.emplace_back(c.open, c.high, c.low, c.close,
                                   static_cast<int>(c.volume), tp);
+    }
+}
 
-        sep::CandleData cd;
-        cd.time = c.time;
-        cd.volume = static_cast<uint64_t>(c.volume);
-        cd.open = static_cast<float>(c.open);
-        cd.high = static_cast<float>(c.high);
-        cd.low = static_cast<float>(c.low);
-        cd.close = static_cast<float>(c.close);
-        export_candles.push_back(cd);
+const std::vector<sep::workbench::CandleData>& DataLoader::getCandleData() const {
+    return m_candleData;
+}
+
+void DataLoader::load_48h_sample() {
+    namespace fs = std::filesystem;
+    const std::string output = "eur_usd_m1_48h.json";
+
+    if (!fs::exists(output)) {
+        sep::connectors::OandaConnector connector("", "", true);
+        if (connector.initialize()) {
+            connector.saveEURUSDM1_48h(output);
+            connector.shutdown();
+        }
     }
 
-    fs::create_directories("Testing/OANDA");
-    sep::DataParser parser;
-    parser.saveValidatedCandlesJSON(export_candles, output);
+    load_data(output);
 }

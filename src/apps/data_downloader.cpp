@@ -16,7 +16,7 @@ int main() {
     std::cout << "OandaConnector initialized successfully." << std::endl;
 
     // Setup 48-hour sample data for EUR_USD
-    connector.setupSampleData("EUR_USD", "M1", "Testing/OANDA/eurusd_48h.json");
+    connector.setupSampleData("EUR_USD", "M1", "eur_usd_m1_48h.json");
 
     if (connector.hasError()) {
         std::cerr << "Error setting up sample data: " << connector.getLastError() << std::endl;

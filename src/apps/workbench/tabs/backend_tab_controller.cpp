@@ -222,7 +222,7 @@ void BackendTabController::renderBacktestingSuite() {
     }
     ImGui::SameLine();
     if (ImGui::Button("Run 48h Sample")) {
-        strncpy(backtest_file_buffer_, "Testing/OANDA/eurusd_48h.json", sizeof(backtest_file_buffer_) - 1);
+        strncpy(backtest_file_buffer_, "eur_usd_m1_48h.json", sizeof(backtest_file_buffer_) - 1);
         backtest_file_buffer_[sizeof(backtest_file_buffer_) - 1] = '\0';
         data_loader_->load_data(backtest_file_buffer_);
         backtester_->run(pattern_engine_.get(), data_loader_.get());

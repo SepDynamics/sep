@@ -3,7 +3,7 @@
 
 int main() {
     DataLoader dataLoader;
-    dataLoader.loadData("Testing/OANDA/eurusd_48h.json");
+    dataLoader.loadData("eur_usd_m1_48h.json");
 
     const auto& candleData = dataLoader.getCandleData();
 

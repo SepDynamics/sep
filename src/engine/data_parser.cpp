@@ -402,13 +402,67 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
         nlohmann::json j;
         file >> j;
         
-        if (!j.contains("candles") || !j["candles"].is_array()) {
-            std::cerr << "Error: JSON file does not contain 'candles' array" << std::endl;
-            return candles;
-        }
-        
-        int index = 0;
-        for (const auto& candle_json : j["candles"]) {
+        if (j.is_array()) {
+            int index = 0;
+            for (const auto& candle_json : j) {
+                CandleData candle;
+
+                bool valid = true;
+
+                if (candle_json.contains("time") && candle_json["time"].is_string()) {
+                    candle.time = candle_json["time"].get<std::string>();
+                } else {
+                    std::cerr << "[DataParser] Missing time at index " << index << "\n";
+                    valid = false;
+                }
+
+                if (candle_json.contains("volume") && candle_json["volume"].is_number()) {
+                    candle.volume = candle_json["volume"].get<uint64_t>();
+                } else {
+                    candle.volume = 0;
+                }
+
+                if (candle_json.contains("open") && candle_json["open"].is_number())
+                    candle.open = candle_json["open"].get<float>();
+                else
+                    valid = false;
+                if (candle_json.contains("high") && candle_json["high"].is_number())
+                    candle.high = candle_json["high"].get<float>();
+                else
+                    valid = false;
+                if (candle_json.contains("low") && candle_json["low"].is_number())
+                    candle.low = candle_json["low"].get<float>();
+                else
+                    valid = false;
+                if (candle_json.contains("close") && candle_json["close"].is_number())
+                    candle.close = candle_json["close"].get<float>();
+                else
+                    valid = false;
+
+                if (!candles.empty()) {
+                    auto prev_ts = parseTimestamp(candles.back().time);
+                    auto cur_ts = parseTimestamp(candle.time);
+                    if (cur_ts <= prev_ts) {
+                        std::cerr << "[DataParser] Non-increasing timestamp at index " << index << "\n";
+                        valid = false;
+                    } else if (cur_ts - prev_ts != 60000) {
+                        std::cerr << "[DataParser] Missing candle between " << candles.back().time
+                                  << " and " << candle.time << "\n";
+                    }
+                }
+
+                if (valid)
+                    candles.push_back(candle);
+                index++;
+            }
+        } else {
+            if (!j.contains("candles") || !j["candles"].is_array()) {
+                std::cerr << "Error: JSON file does not contain 'candles' array" << std::endl;
+                return candles;
+            }
+
+            int index = 0;
+            for (const auto& candle_json : j["candles"]) {
             CandleData candle;
             
             // Parse time
@@ -457,9 +511,10 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
                 }
             }
 
-            if (valid_prices)
-                candles.push_back(candle);
-            index++;
+                if (valid_prices)
+                    candles.push_back(candle);
+                index++;
+            }
         }
         
     } catch (const std::exception& e) {

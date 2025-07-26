@@ -41,6 +41,9 @@ bool SignalsTabController::initialize() {
     buy_max_entropy_ = th.buy_max_entropy;
     sell_max_stability_ = th.sell_max_stability;
     sell_min_entropy_ = th.sell_min_entropy;
+    // Ensure dependent components are routed through the standard setters
+    setMetricsMonitor(metrics_monitor_);
+    setQuantumSignalGenerator(signal_generator_);
     return true;
 }
 
@@ -139,6 +142,9 @@ void SignalsTabController::render() {
                     if (candle_data_.size() > 1440) {
                         candle_data_.pop_front();
                     }
+                }
+                if (auto_detect_trends_) {
+                    detectTrendLines();
                 }
             }
         } catch (const std::exception& e) {
@@ -249,10 +255,16 @@ void SignalsTabController::setWorkbenchEngine(WorkbenchEngine* engine) {
 
 void SignalsTabController::setCandleData(const std::deque<sep::common::CandleData>& data) {
     candle_data_ = data;
+    if (auto_detect_trends_) {
+        detectTrendLines();
+    }
 }
 
 void SignalsTabController::setCandleData(const std::vector<sep::common::CandleData>& data) {
     candle_data_.assign(data.begin(), data.end());
+    if (auto_detect_trends_) {
+        detectTrendLines();
+    }
 }
 
 void SignalsTabController::setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals) {

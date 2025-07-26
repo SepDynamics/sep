@@ -123,6 +123,7 @@ bool WorkbenchEngine::initialize()
         signals_tab_->setQuantumSignalGenerator(signal_generator_.get());
         signals_tab_->setMetricsMonitor(metrics_monitor_.get());
         signals_tab_->setWorkbenchEngine(this);
+        service_connector_->setSignalsTab(signals_tab_.get());
         engine_tab_->setSEPEngine(active_engine_);
         engine_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         backend_tab_->setServiceConnector(service_connector_.get());

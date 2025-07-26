@@ -83,6 +83,11 @@ private:
     void renderHoverInfo();
     void renderCrosshair();
     void renderChartGrid();
+    void renderMetricsGraphs();
+
+    std::deque<float> coherence_history_;
+    std::deque<float> stability_history_;
+    std::deque<float> entropy_history_;
 
     // Utility functions
     ImVec2 priceToScreen(double price, std::chrono::system_clock::time_point time);

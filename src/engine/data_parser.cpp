@@ -406,6 +406,7 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
             return candles;
         }
         
+        int index = 0;
         for (const auto& candle_json : j["candles"]) {
             CandleData candle;
             
@@ -437,7 +438,27 @@ std::vector<CandleData> DataParser::parseQuantJSON(const std::string& path)
                 }
             }
             
-            candles.push_back(candle);
+            bool valid_prices = true;
+            if (candle.high < candle.low ||
+                candle.open > candle.high || candle.open < candle.low ||
+                candle.close > candle.high || candle.close < candle.low)
+            {
+                std::cerr << "[DataParser] Invalid OHLC at index " << index << "\n";
+                valid_prices = false;
+            }
+
+            if (!candles.empty()) {
+                auto prev_ts = parseTimestamp(candles.back().time);
+                auto cur_ts = parseTimestamp(candle.time);
+                if (cur_ts - prev_ts != 60000) {
+                    std::cerr << "[DataParser] Missing candle between " << candles.back().time
+                              << " and " << candle.time << "\n";
+                }
+            }
+
+            if (valid_prices)
+                candles.push_back(candle);
+            index++;
         }
         
     } catch (const std::exception& e) {
@@ -488,6 +509,31 @@ std::vector<sep::quantum::Pattern> DataParser::candlesToPatterns(
     }
     
     return patterns;
+}
+
+void DataParser::writeQuantJSON(const std::vector<CandleData>& candles, const std::string& path) const
+{
+    nlohmann::json j;
+    j["candles"] = nlohmann::json::array();
+    for (const auto& c : candles)
+    {
+        nlohmann::json cj;
+        cj["time"] = c.time;
+        cj["volume"] = c.volume;
+        cj["mid"] = {
+            {"o", std::to_string(c.open)},
+            {"h", std::to_string(c.high)},
+            {"l", std::to_string(c.low)},
+            {"c", std::to_string(c.close)}
+        };
+        j["candles"].push_back(cj);
+    }
+
+    std::ofstream file(path);
+    if (file.is_open())
+    {
+        file << j.dump(4);
+    }
 }
 
 uint64_t DataParser::parseTimestamp(const std::string& timestamp) const

@@ -90,6 +90,7 @@ public:
 
     // Sample Data
     void setupSampleData(const std::string& instrument, const std::string& granularity, const std::string& output_file);
+    bool fetchHistoricalData(const std::string& instrument, const std::string& output_file);
 
     // Error handling
     std::string getLastError() const { return last_error_; }

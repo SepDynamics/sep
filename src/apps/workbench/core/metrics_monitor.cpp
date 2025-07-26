@@ -328,11 +328,13 @@ void MetricsMonitor::calculateRollingMetrics() {
 
     // Calculate 24h averages
     auto cutoff_24h = now - std::chrono::hours(24);
+    auto cutoff_4h = now - std::chrono::hours(4);
     auto cutoff_1h = now - std::chrono::hours(1);
     
     float sum_coherence_24h = 0, sum_stability_24h = 0, sum_entropy_24h = 0;
+    float sum_coherence_4h = 0, sum_stability_4h = 0, sum_entropy_4h = 0;
     float sum_coherence_1h = 0, sum_stability_1h = 0, sum_entropy_1h = 0;
-    int count_24h = 0, count_1h = 0;
+    int count_24h = 0, count_4h = 0, count_1h = 0;
     
     // Collect oldest and newest values for trend calculation
     float oldest_coherence = 0, oldest_stability = 0, oldest_entropy = 0;
@@ -356,6 +358,13 @@ void MetricsMonitor::calculateRollingMetrics() {
             newest_coherence = snap.coherence;
             newest_stability = snap.stability;
             newest_entropy = snap.entropy;
+        }
+
+        if (snap.timestamp >= cutoff_4h) {
+            sum_coherence_4h += snap.coherence;
+            sum_stability_4h += snap.stability;
+            sum_entropy_4h += snap.entropy;
+            count_4h++;
         }
         
         if (snap.timestamp >= cutoff_1h) {
@@ -388,6 +397,12 @@ void MetricsMonitor::calculateRollingMetrics() {
         rolling_metrics_.coherence_1h_avg = sum_coherence_1h / count_1h;
         rolling_metrics_.stability_1h_avg = sum_stability_1h / count_1h;
         rolling_metrics_.entropy_1h_avg = sum_entropy_1h / count_1h;
+    }
+
+    if (count_4h > 0) {
+        rolling_metrics_.coherence_4h_avg = sum_coherence_4h / count_4h;
+        rolling_metrics_.stability_4h_avg = sum_stability_4h / count_4h;
+        rolling_metrics_.entropy_4h_avg = sum_entropy_4h / count_4h;
     }
 
     rolling_metrics_.last_calculation = now;

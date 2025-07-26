@@ -87,6 +87,10 @@ void BackendTabController::renderOrderManagementPanel() {
             trade_manager_->setPaperTrading(paper_trading_);
         }
     }
+    if (trade_manager_) {
+        ImGui::Text("Balance: %.2f", trade_manager_->getAccountBalance());
+        ImGui::Text("Realized PnL: %.2f", trade_manager_->getRealizedPnL());
+    }
     ImGui::End();
 
     ImGui::Begin("Order Management");

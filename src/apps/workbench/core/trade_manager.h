@@ -56,6 +56,9 @@ public:
     const std::vector<Order>& getOrders() const;
     const std::vector<Position>& getPositions() const;
 
+    double getAccountBalance() const { return account_balance_; }
+    double getRealizedPnL() const { return realized_pnl_; }
+
     void setPaperTrading(bool paper_trading);
 
 private:
@@ -66,6 +69,7 @@ private:
     std::vector<Position> positions_;
     std::mutex mutex_;
     double account_balance_ = 100000.0;
+    double realized_pnl_ = 0.0;
     double risk_percentage_ = 0.02;
     bool paper_trading_ = false;
 };

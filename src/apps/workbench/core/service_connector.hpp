@@ -9,6 +9,7 @@
 
 #include "connectors/oanda_connector.h"
 #include "service_proxy_engine.h"
+#include "trade_manager.h"
 #include "tabs/signals_tab_controller.h"
 #include "core/common_structs.h"
 
@@ -66,6 +67,7 @@ public:
     // Service interaction
     sep::core::Engine* getEngine() const { return service_engine_; }
     sep::connectors::OandaConnector* getOandaConnector() const { return oanda_connector_.get(); }
+    workbench::TradeManager* getTradeManager() const { return trade_manager_.get(); }
     ServiceHealth getServiceHealth() const;
     
     // Health monitoring
@@ -93,6 +95,7 @@ private:
     // Service connection
     sep::core::Engine* service_engine_{nullptr};
     std::unique_ptr<sep::connectors::OandaConnector> oanda_connector_;
+    std::unique_ptr<workbench::TradeManager> trade_manager_;
     void* service_handle_{nullptr}; // Platform-specific handle
     
     // Health monitoring

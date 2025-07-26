@@ -33,6 +33,15 @@ namespace sep
                            engine.value("metrics_enabled", false),
                            engine.value("log_level", std::string{"info"}),
                            engine.value("patterns_file", std::string{"forex/final_symmetry.json"})};
+                if (engine.contains("signal_thresholds"))
+                {
+                    auto& th = engine["signal_thresholds"];
+                    signal_thresholds_.buy_min_coherence = th.value("buy_min_coherence", 0.7f);
+                    signal_thresholds_.buy_min_stability = th.value("buy_min_stability", 0.6f);
+                    signal_thresholds_.buy_max_entropy = th.value("buy_max_entropy", 0.3f);
+                    signal_thresholds_.sell_max_stability = th.value("sell_max_stability", 0.3f);
+                    signal_thresholds_.sell_min_entropy = th.value("sell_min_entropy", 0.7f);
+                }
 
                 auto& genesis = json["demos"]["genesis_pattern"];
                 auto& initial = genesis["initial_pattern"];
@@ -259,7 +268,13 @@ namespace sep
                 json["engine"] = {{"cuda_enabled", engine_.cuda_enabled},
                                   {"metrics_enabled", engine_.metrics_enabled},
                                   {"log_level", engine_.log_level},
-                                  {"patterns_file", engine_.patterns_file}};
+                                  {"patterns_file", engine_.patterns_file},
+                                  {"signal_thresholds",
+                                   {{"buy_min_coherence", signal_thresholds_.buy_min_coherence},
+                                    {"buy_min_stability", signal_thresholds_.buy_min_stability},
+                                    {"buy_max_entropy", signal_thresholds_.buy_max_entropy},
+                                    {"sell_max_stability", signal_thresholds_.sell_max_stability},
+                                    {"sell_min_entropy", signal_thresholds_.sell_min_entropy}}}};
 
                 json["demos"]["genesis_pattern"] = {
                     {"initial_pattern",

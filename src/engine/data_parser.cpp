@@ -665,4 +665,24 @@ bool DataParser::exportCorrelationHistoryCSV(const std::string& path,
     return true;
 }
 
+bool DataParser::exportCorrelationForBacktester(const std::string& path,
+                                                const std::deque<workbench::CorrelationMetrics>& metrics) const {
+    std::ofstream file(path);
+    if (!file.is_open()) {
+        return false;
+    }
+    file << "index,coh_pearson,coh_spearman,stab_pearson,stab_spearman,entropy_pearson,entropy_spearman\n";
+    size_t idx = 0;
+    for (const auto& m : metrics) {
+        file << idx++ << ','
+             << m.coherence_pearson << ','
+             << m.coherence_spearman << ','
+             << m.stability_pearson << ','
+             << m.stability_spearman << ','
+             << m.entropy_pearson << ','
+             << m.entropy_spearman << "\n";
+    }
+    return true;
+}
+
 } // namespace sep

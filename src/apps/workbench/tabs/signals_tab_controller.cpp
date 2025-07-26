@@ -1,6 +1,7 @@
 #include "signals_tab_controller.h"
 #include "apps/workbench/core/workbench_core.hpp"
 #include "quantum/pattern_metric_engine.h"
+#include "apps/workbench/config.hpp"
 #include "core/metrics_monitor.h"
 #include <algorithm>
 #include <numeric>
@@ -31,6 +32,12 @@ SignalsTabController::~SignalsTabController() {
 
 bool SignalsTabController::initialize() {
     std::cout << "[SignalsTabController] Initializing..." << std::endl;
+    const auto& th = Config::getInstance().signal_thresholds();
+    buy_min_coherence_ = th.buy_min_coherence;
+    buy_min_stability_ = th.buy_min_stability;
+    buy_max_entropy_ = th.buy_max_entropy;
+    sell_max_stability_ = th.sell_max_stability;
+    sell_min_entropy_ = th.sell_min_entropy;
     return true;
 }
 
@@ -56,6 +63,8 @@ void SignalsTabController::renderThresholdControlPanel() {
                 thresholds.sell_max_stability = sell_max_stability_;
                 thresholds.sell_min_entropy = sell_min_entropy_;
                 pme->setSignalThresholds(thresholds);
+                Config::getInstance().set_signal_thresholds(thresholds);
+                Config::getInstance().save("src/apps/workbench/config.json");
             }
         }
     }

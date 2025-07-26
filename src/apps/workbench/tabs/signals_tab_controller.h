@@ -10,6 +10,7 @@
 #include "imgui.h"
 #include "connectors/oanda_connector.h"
 #include "signal_generator/quantum_signal_generator.h"
+#include "apps/workbench/config.hpp"
 
 namespace sep::workbench {
 

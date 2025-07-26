@@ -301,6 +301,8 @@ void EngineTabController::renderCorrelationPanel() {
             std::map<std::string, workbench::CorrelationMetrics> data{{selected_timeframe, correlation_metrics}};
             bool csv_ok = parser.exportCorrelationCSV(path_str, data);
             bool json_ok = parser.exportCorrelationJSON(path_str + ".json", data);
+            auto history = multi_timeframe_analyzer_->getCorrelationHistory(selected_timeframe);
+            parser.exportCorrelationForBacktester(path_str + ".bt.csv", history);
             if (!csv_ok || !json_ok) {
                 std::cerr << "[EngineTabController] Failed to export correlation metrics" << std::endl;
                 correlation_export_status_ = "Export failed";

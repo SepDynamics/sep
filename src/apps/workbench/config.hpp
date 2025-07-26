@@ -26,6 +26,14 @@ namespace sep
             bool metrics_enabled;
             std::string log_level;
             std::string patterns_file;
+            struct SignalThresholds
+            {
+                float buy_min_coherence{0.7f};
+                float buy_min_stability{0.6f};
+                float buy_max_entropy{0.3f};
+                float sell_max_stability{0.3f};
+                float sell_min_entropy{0.7f};
+            } signal_thresholds;
         };
 
         struct GenesisPatternConfig
@@ -210,6 +218,8 @@ namespace sep
             const DigitalPhysicsConfig& digital_physics() const { return digital_physics_; }
             const CosmoConfig& cosmo() const { return cosmo_; }
             const OandaConfig& oanda() const { return oanda_; }
+            const EngineConfig::SignalThresholds& signal_thresholds() const { return signal_thresholds_; }
+            void set_signal_thresholds(const EngineConfig::SignalThresholds& th) { signal_thresholds_ = th; }
 
         private:
             Config() = default;
@@ -229,6 +239,7 @@ namespace sep
             DigitalPhysicsConfig digital_physics_{};
             CosmoConfig cosmo_{};
             OandaConfig oanda_{};
+            EngineConfig::SignalThresholds signal_thresholds_{};
         };
 
     }  // namespace workbench

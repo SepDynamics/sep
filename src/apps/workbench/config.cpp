@@ -153,17 +153,30 @@ namespace sep
                 if (json.contains("oanda"))
                 {
                     auto& oanda = json["oanda"];
-                    oanda_ = {oanda.value("api_key", ""), oanda.value("account_id", ""), oanda.value("sandbox", true)};
+                    oanda_.api_key = oanda.value("api_key", "");
+                    oanda_.account_id = oanda.value("account_id", "");
+                    oanda_.demo_api_key = oanda.value("demo_api_key", "");
+                    oanda_.demo_account_id = oanda.value("demo_account_id", "");
+                    oanda_.sandbox = oanda.value("sandbox", true);
                 }
                 else
                 {
                     const char* env_key = std::getenv("OANDA_API_KEY");
                     const char* env_id = std::getenv("OANDA_ACCOUNT_ID");
+                    const char* env_demo_key = std::getenv("OANDA_DEMO_API_KEY");
+                    const char* env_demo_id = std::getenv("OANDA_DEMO_ACCOUNT_ID");
                     if (env_key && env_id)
                     {
-                        oanda_ = {env_key, env_id, true};
+                        oanda_.api_key = env_key;
+                        oanda_.account_id = env_id;
+                        oanda_.sandbox = true;
                     }
-                    else
+                    if (env_demo_key && env_demo_id)
+                    {
+                        oanda_.demo_api_key = env_demo_key;
+                        oanda_.demo_account_id = env_demo_id;
+                    }
+                    if (!(env_key && env_id) && !(env_demo_key && env_demo_id))
                     {
                         std::ifstream kfile("keys.txt");
                         if (kfile.is_open())
@@ -189,6 +202,26 @@ namespace sep
                                         std::string val = line.substr(pos + 1);
                                         val.erase(std::remove(val.begin(), val.end(), '"'), val.end());
                                         oanda_.account_id = val;
+                                    }
+                                }
+                                else if (line.find("OANDA_DEMO_API_KEY") != std::string::npos)
+                                {
+                                    auto pos = line.find('=');
+                                    if (pos != std::string::npos)
+                                    {
+                                        std::string val = line.substr(pos + 1);
+                                        val.erase(std::remove(val.begin(), val.end(), '"'), val.end());
+                                        oanda_.demo_api_key = val;
+                                    }
+                                }
+                                else if (line.find("OANDA_DEMO_ACCOUNT_ID") != std::string::npos)
+                                {
+                                    auto pos = line.find('=');
+                                    if (pos != std::string::npos)
+                                    {
+                                        std::string val = line.substr(pos + 1);
+                                        val.erase(std::remove(val.begin(), val.end(), '"'), val.end());
+                                        oanda_.demo_account_id = val;
                                     }
                                 }
                             }
@@ -315,7 +348,11 @@ namespace sep
 
                 json["cosmo"] = {{"box_size", cosmo_.box_size}, {"time_step", cosmo_.time_step}};
 
-                json["oanda"] = {{"api_key", oanda_.api_key}, {"account_id", oanda_.account_id}, {"sandbox", oanda_.sandbox}};
+                json["oanda"] = {{"api_key", oanda_.api_key},
+                                   {"account_id", oanda_.account_id},
+                                   {"demo_api_key", oanda_.demo_api_key},
+                                   {"demo_account_id", oanda_.demo_account_id},
+                                   {"sandbox", oanda_.sandbox}};
 
                 std::ofstream file(path);
                 if (!file.is_open())

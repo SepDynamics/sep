@@ -85,19 +85,35 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
     int count) {
     
     std::vector<OandaCandle> candles;
-    
+
+    std::string use_from = from;
+    std::string use_to = to;
+
+    // Convenience: if requesting exactly 48 hours of M1 data without explicit
+    // range, compute timestamps automatically.
+    if (granularity == "M1" && count == 48 * 60 && from.empty() && to.empty())
+    {
+        auto now = std::chrono::system_clock::now();
+        auto start = now - std::chrono::hours(48);
+        use_from = std::to_string(std::chrono::system_clock::to_time_t(start));
+        use_to = std::to_string(std::chrono::system_clock::to_time_t(now));
+    }
+
     std::string endpoint = "/v3/instruments/" + instrument + "/candles";
     endpoint += "?granularity=" + granularity;
-    
-    if (count > 0) {
+
+    if (count > 0)
+    {
         endpoint += "&count=" + std::to_string(count);
     }
-    
-    if (!from.empty()) {
-        endpoint += "&from=" + from;
+
+    if (!use_from.empty())
+    {
+        endpoint += "&from=" + use_from;
     }
-    if (!to.empty()) {
-        endpoint += "&to=" + to;
+    if (!use_to.empty())
+    {
+        endpoint += "&to=" + use_to;
     }
 
     auto response = makeRequest(endpoint);
@@ -118,6 +134,20 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
 
         for (const auto& candle_json : json_response["candles"]) {
             candles.push_back(parseCandle(candle_json));
+        }
+
+        // Perform integrity validation for 48h M1 datasets
+        if (granularity == "M1" && count == 48 * 60) {
+            auto validation = validateCandleSequence(candles, granularity);
+            if (!validation.valid || candles.size() != static_cast<size_t>(48 * 60)) {
+                last_error_ = "Missing or invalid candles detected";
+                for (const auto& err : validation.errors) {
+                    last_error_ += " - " + err;
+                }
+                if (candles.size() != static_cast<size_t>(48 * 60)) {
+                    last_error_ += " - expected 2880 got " + std::to_string(candles.size());
+                }
+            }
         }
         
     } catch (const std::exception& e) {
@@ -528,6 +558,8 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.price = tx.contains("price") ? std::stod(tx["price"].get<std::string>()) : 0.0;
                 info.status = OrderStatus::PENDING;
                 pending_orders_.push_back(info);
+                if (order_callback_) order_callback_(info);
+                sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
             }
             if (json_resp.contains("orderFillTransaction")) {
                 const auto& tx = json_resp["orderFillTransaction"];
@@ -537,6 +569,8 @@ nlohmann::json OandaConnector::placeOrder(const nlohmann::json& order_details) {
                 info.price = std::stod(tx.value("price", "0"));
                 info.status = OrderStatus::FILLED;
                 filled_orders_.push_back(info);
+                if (order_callback_) order_callback_(info);
+                sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
             }
             return json_resp;
         } catch (const std::exception& e) {
@@ -599,6 +633,8 @@ void OandaConnector::refreshOrders() {
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
             info.status = OrderStatus::PENDING;
             pending_orders_.push_back(info);
+            if (order_callback_) order_callback_(info);
+            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
         }
     }
 
@@ -612,6 +648,8 @@ void OandaConnector::refreshOrders() {
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
             info.status = OrderStatus::FILLED;
             filled_orders_.push_back(info);
+            if (order_callback_) order_callback_(info);
+            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
         }
     }
 
@@ -625,6 +663,8 @@ void OandaConnector::refreshOrders() {
             info.price = o.contains("price") ? std::stod(o["price"].get<std::string>()) : 0.0;
             info.status = OrderStatus::CANCELED;
             canceled_orders_.push_back(info);
+            if (order_callback_) order_callback_(info);
+            sep::workbench::globalEventBus().publish(sep::workbench::OrderUpdateEvent{info});
         }
     }
 }

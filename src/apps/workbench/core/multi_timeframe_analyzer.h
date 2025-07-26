@@ -123,6 +123,10 @@ private:
     // Historical analysis for trend detection
     std::deque<MultiTimeframeSignal> signal_history_;
     size_t max_signal_history_ = 500;
+
+    // Rolling history of analyzed metrics per timeframe
+    std::map<std::string, std::deque<TimeframeMetrics>> metrics_history_;
+    size_t max_metrics_history_ = 1000;
     
     // Internal methods
     std::vector<CandleData> resampleCandles(

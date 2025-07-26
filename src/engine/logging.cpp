@@ -156,6 +156,25 @@ void logSignalDetected(const std::string &pattern_id,
                                : (type == sep::quantum::SignalType::SELL ? "SELL" : "HOLD");
 
     logger->info("Signal {} for pattern {} at {}", type_str, pattern_id, buf);
+void logTrade(const std::string &instrument,
+              double units,
+              double price,
+              double pnl)
+{
+    auto logger = spdlog::get("trade_manager");
+    if (!logger) return;
+    logger->info("Trade {} {:.0f} @ {:.5f} pnl {:.5f}",
+                 instrument,
+                 units,
+                 price,
+                 pnl);
+}
+
+void logAnomaly(const std::string &message)
+{
+    auto logger = spdlog::get("trade_manager");
+    if (!logger) return;
+    logger->warn("Anomaly detected: {}", message);
 }
 
 }  // namespace sep::logging

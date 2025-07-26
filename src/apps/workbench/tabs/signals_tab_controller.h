@@ -28,7 +28,7 @@ public:
 
     void setOandaConnector(sep::connectors::OandaConnector* connector);
     void setQuantumSignalGenerator(QuantumSignalGenerator* generator);
-    void setMetricsMonitor(MetricsMonitor* monitor);
+    void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
     void setWorkbenchEngine(WorkbenchEngine* engine);
 
     void setCandleData(const std::deque<CandleData>& data);
@@ -38,7 +38,7 @@ public:
 private:
     sep::connectors::OandaConnector* oanda_connector_ = nullptr;
     QuantumSignalGenerator* signal_generator_ = nullptr;
-    MetricsMonitor* metrics_monitor_ = nullptr;
+    std::shared_ptr<MetricsMonitor> metrics_monitor_;
     WorkbenchEngine* workbench_engine_ = nullptr;
     // Chart data
     std::deque<CandleData> candle_data_;

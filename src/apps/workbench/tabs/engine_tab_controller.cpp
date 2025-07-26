@@ -9,7 +9,9 @@
 
 namespace sep::workbench {
 
-EngineTabController::EngineTabController() {}
+EngineTabController::EngineTabController()
+    : backtester_(std::make_unique<backtester::Backtester>()),
+      data_loader_(std::make_unique<backtester::DataLoader>()) {}
 
 EngineTabController::~EngineTabController() { shutdown(); }
 bool EngineTabController::initialize() {
@@ -27,6 +29,7 @@ void EngineTabController::render() {
 
         renderEngineControls();
         renderCorrelationPanel();
+        renderStrategyOptimization();
         ImGui::EndTabItem();
     }
 }
@@ -63,6 +66,7 @@ void EngineTabController::renderSEPMetricsPanel() {
     }
 
     const auto& system_metrics = metrics_monitor_->getSystemMetrics();
+    const auto& rolling = metrics_monitor_->getRollingMetrics();
 
     ImGui::Text("Coherence: %.3f", system_metrics.avg_coherence);
     ImGui::ProgressBar(system_metrics.avg_coherence, ImVec2(-1, 0));
@@ -72,6 +76,14 @@ void EngineTabController::renderSEPMetricsPanel() {
 
     ImGui::Text("Entropy:   %.3f", system_metrics.avg_entropy);
     ImGui::ProgressBar(1.0f - system_metrics.avg_entropy, ImVec2(-1, 0));
+
+    ImGui::Text("1h Avg Coherence: %.3f", rolling.coherence_1h_avg);
+    ImGui::Text("1h Avg Stability: %.3f", rolling.stability_1h_avg);
+    ImGui::Text("1h Avg Entropy: %.3f", rolling.entropy_1h_avg);
+
+    ImGui::Text("4h Avg Coherence: %.3f", rolling.coherence_4h_avg);
+    ImGui::Text("4h Avg Stability: %.3f", rolling.stability_4h_avg);
+    ImGui::Text("4h Avg Entropy: %.3f", rolling.entropy_4h_avg);
 
     ImGui::Spacing();
     ImGui::Separator();
@@ -109,9 +121,14 @@ void EngineTabController::renderSEPMetricsPanel() {
 
         ImGui::Text("Memory Tiers:");
         for (int i = 0; i < 3; i++) {
-            ImGui::Text("  Tier %d: %.3f coherence, %.3f fragmentation", 
+            ImGui::Text("  Tier %d: %.3f coherence, %.3f fragmentation",
                        i, coherence_metrics.tier_coherence[i], coherence_metrics.tier_fragmentation[i]);
         }
+    }
+
+    ImGui::InputText("Metrics JSON Path", metrics_export_path_, sizeof(metrics_export_path_));
+    if (ImGui::Button("Export Metrics")) {
+        metrics_monitor_->saveMetricsToFile(metrics_export_path_);
     }
 }
 
@@ -245,6 +262,34 @@ void EngineTabController::renderCorrelationPanel() {
         parser.exportCorrelationCSV(correlation_export_path_, data);
     }
 
+    ImGui::End();
+}
+
+void EngineTabController::renderStrategyOptimization()
+{
+    ImGui::Begin("Strategy Optimization");
+    ImGui::InputText("Dataset", dataset_path_, sizeof(dataset_path_));
+    if (ImGui::Button("Run Backtest")) {
+        if (pattern_engine_ && dataset_path_[0] != '\0') {
+            data_loader_->load_data(dataset_path_);
+            backtester_->run(pattern_engine_, data_loader_.get());
+            last_result_ = backtester_->getResult();
+            opt_coherence_ = 0.5f + last_result_.win_rate * 0.5f;
+        }
+    }
+    ImGui::Text("Win Rate: %.2f", last_result_.win_rate);
+    ImGui::SliderFloat("Coherence", &opt_coherence_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Stability", &opt_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Entropy", &opt_entropy_, 0.0f, 1.0f);
+    if (ImGui::Button("Apply Thresholds")) {
+        if (pattern_engine_) {
+            sep::quantum::SignalThresholds th;
+            th.min_coherence = opt_coherence_;
+            th.min_stability = opt_stability_;
+            th.max_entropy = opt_entropy_;
+            pattern_engine_->setSignalThresholds(th);
+        }
+    }
     ImGui::End();
 }
 

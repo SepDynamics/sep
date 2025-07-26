@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <cstring>
 
 #include "imgui.h"
 
@@ -15,6 +16,14 @@ BackendTabController::BackendTabController()
 BackendTabController::~BackendTabController() { shutdown(); }
 bool BackendTabController::initialize() {
     std::cout << "[BackendTabController] Initializing..." << std::endl;
+    globalEventBus().subscribe<OrderUpdateEvent>([this](const OrderUpdateEvent& e) {
+        auto it = std::find_if(order_cache_.begin(), order_cache_.end(), [&](const sep::connectors::OrderInfo& o) { return o.id == e.info.id; });
+        if (it == order_cache_.end()) {
+            order_cache_.push_back(e.info);
+        } else {
+            *it = e.info;
+        }
+    });
     return true;
 }
 
@@ -135,8 +144,11 @@ void BackendTabController::renderOrderManagementPanel() {
     }
 
     ImGui::Text("Orders:");
-    if (!orders_.is_null()) {
-        ImGui::TextUnformatted(orders_.dump(4).c_str());
+    for (const auto& o : order_cache_) {
+        const char* status_str = "PENDING";
+        if (o.status == sep::connectors::OrderStatus::FILLED) status_str = "FILLED";
+        else if (o.status == sep::connectors::OrderStatus::CANCELED) status_str = "CANCELED";
+        ImGui::Text("%s %s %.0f @ %.5f [%s]", o.id.c_str(), o.instrument.c_str(), o.units, o.price, status_str);
     }
 
     ImGui::End();
@@ -176,7 +188,7 @@ void BackendTabController::renderBacktesterPanel() {
             }
 
             sep::core::ServiceProxyEngine proxy("localhost", 8080);
-            validation_result_ = proxy.validateSignals(signals, prices);
+            validation_result_ = proxy.validateSignalsAgainstHistory(signals, prices);
         }
     }
 
@@ -187,8 +199,16 @@ void BackendTabController::renderBacktesterPanel() {
 
     ImGui::Begin("Backtester");
     ImGui::PushID("Backtester");
+    ImGui::InputText("Dataset", backtest_file_buffer_, sizeof(backtest_file_buffer_));
     if (ImGui::Button("Run Backtest")) {
-        data_loader_->load_data(file_path_buffer_);
+        data_loader_->load_data(backtest_file_buffer_);
+        backtester_->run(pattern_engine_.get(), data_loader_.get());
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Run 48h Sample")) {
+        strncpy(backtest_file_buffer_, "eur_usd_m1_48h.json", sizeof(backtest_file_buffer_) - 1);
+        backtest_file_buffer_[sizeof(backtest_file_buffer_) - 1] = '\0';
+        data_loader_->load_data(backtest_file_buffer_);
         backtester_->run(pattern_engine_.get(), data_loader_.get());
     }
 

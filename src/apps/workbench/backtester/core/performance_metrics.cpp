@@ -18,33 +18,49 @@ float PerformanceMetrics::computeSharpeRatio(const std::vector<float>& pnl_serie
     for (float p : pnl_series) {
         sum += p;
     }
-    float avg = sum / pnl_series.size();
 
-    float var = 0.0f;
+    float mean = sum / static_cast<float>(pnl_series.size());
+
+    float variance = 0.0f;
     for (float p : pnl_series) {
-        var += (p - avg) * (p - avg);
+        float diff = p - mean;
+        variance += diff * diff;
     }
-    float std_dev = std::sqrt(var / pnl_series.size());
+
+    if (pnl_series.size() > 1) {
+        variance /= static_cast<float>(pnl_series.size() - 1);
+    }
+
+    float std_dev = std::sqrt(variance);
     if (std_dev == 0.0f) {
         return 0.0f;
     }
-    return avg / std_dev;
+
+    float sharpe = mean / std_dev;
+    sharpe *= std::sqrt(static_cast<float>(pnl_series.size()));
+    return sharpe;
 }
 
 float PerformanceMetrics::computeMaxDrawdown(const std::vector<float>& pnl_series) {
-    float running_total = 0.0f;
+    if (pnl_series.empty()) {
+        return 0.0f;
+    }
+
+    float equity = 0.0f;
     float peak = 0.0f;
-    float max_drawdown = 0.0f;
+    float max_dd = 0.0f;
 
     for (float p : pnl_series) {
-        running_total += p;
-        if (running_total > peak) {
-            peak = running_total;
+        equity += p;
+        if (equity > peak) {
+            peak = equity;
         }
-        float drawdown = peak - running_total;
-        if (drawdown > max_drawdown) {
-            max_drawdown = drawdown;
+
+        float drawdown = peak - equity;
+        if (drawdown > max_dd) {
+            max_dd = drawdown;
         }
     }
-    return max_drawdown;
+
+    return max_dd;
 }

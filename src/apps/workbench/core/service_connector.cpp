@@ -34,13 +34,20 @@ ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
     auto& cfg = sep::workbench::Config::getInstance().oanda();
-    std::string api_key = cfg.api_key;
-    std::string account_id = cfg.account_id;
+    std::string api_key = cfg.demo_api_key.empty() ? cfg.api_key : cfg.demo_api_key;
+    std::string account_id = cfg.demo_account_id.empty() ? cfg.account_id : cfg.demo_account_id;
     if (api_key.empty() || account_id.empty()) {
         const char* env_key = std::getenv("OANDA_API_KEY");
         const char* env_id = std::getenv("OANDA_ACCOUNT_ID");
-        if (env_key) api_key = env_key;
-        if (env_id) account_id = env_id;
+        const char* env_demo_key = std::getenv("OANDA_DEMO_API_KEY");
+        const char* env_demo_id = std::getenv("OANDA_DEMO_ACCOUNT_ID");
+        if (env_demo_key && env_demo_id) {
+            api_key = env_demo_key;
+            account_id = env_demo_id;
+        } else {
+            if (env_key) api_key = env_key;
+            if (env_id) account_id = env_id;
+        }
     }
 
     if (!api_key.empty() && !account_id.empty()) {
@@ -49,19 +56,17 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         std::cout << "[ServiceConnector] API Key length: " << strlen(api_key) << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
         if (oanda_connector_->initialize()) {
-            oanda_connector_->fetchHistoricalData("EUR_USD", "eur_usd_m1_48h.json");
-            sep::DataParser parser;
-            auto candles = parser.parseQuantJSON("eur_usd_m1_48h.json");
-            for (const auto& c : candles) {
-                std::tm tm = {};
-                std::istringstream ss(c.time);
-                ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-                auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-                initial_data_.emplace_back(c.open, c.high, c.low, c.close, (int)c.volume, ts);
+            if (oanda_connector_->fetchHistoricalData("EUR_USD", "eur_usd_m1_48h.json")) {
+                loadInitialData("eur_usd_m1_48h.json");
+            } else {
+                loadInitialData("eur_usd_m1_48h.json");
             }
+        } else {
+            loadInitialData("eur_usd_m1_48h.json");
         }
     } else {
         std::cout << "[ServiceConnector] ERROR: OANDA credentials not provided" << std::endl;
+        loadInitialData("eur_usd_m1_48h.json");
     }
 
     std::cout << "[ServiceConnector] Initialized with config: "
@@ -852,6 +857,25 @@ sep::core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
         std::cerr << "[ServiceConnector] Exception creating HTTP proxy engine: " << e.what() << std::endl;
         // Fallback to local engine
         return createLocalEngine();
+    }
+}
+
+void ServiceConnector::loadInitialData(const std::string& path)
+{
+    sep::DataParser parser;
+    auto candles = parser.parseQuantJSON(path);
+    initial_data_.clear();
+    for (const auto& c : candles)
+    {
+        std::tm tm = {};
+        std::istringstream ss(c.time);
+        ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+        auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+        initial_data_.emplace_back(c.open, c.high, c.low, c.close, static_cast<int>(c.volume), ts);
+    }
+    if (signals_tab_ && !initial_data_.empty())
+    {
+        signals_tab_->setCandleData(initial_data_);
     }
 }
 

@@ -269,15 +269,13 @@ void SignalsTabController::renderMainChart() {
 
     updatePriceRange();
 
+    if (auto_detect_trends_) {
+        detectTrendLines();
+    }
+
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    if (!draw_list) return;
-    if (!draw_list) return;
-    if (!draw_list) return;
-    if (!draw_list) return;
-    if (!draw_list) return;
-    if (!draw_list) return;
-    if (!draw_list) return;
-    if (!draw_list) return;
+    if (!draw_list)
+        return;
 
     ImU32 bg_color = IM_COL32(15, 15, 25, 255);
     draw_list->AddRectFilled(chart_pos_, 
@@ -302,6 +300,10 @@ void SignalsTabController::renderMainChart() {
 
     if (show_volume_) {
         renderVolumeChart();
+    }
+
+    if (show_crosshair_) {
+        renderCrosshair();
     }
 }
 
@@ -699,7 +701,7 @@ void SignalsTabController::renderCrosshair() {
     if (!ImGui::IsWindowHovered()) return;
     
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    ImVec2 mouse_pos = ImGui::GetMousePos();
+    ImVec2 mouse_pos = crosshair_pos_;
     
     draw_list->AddLine(
         ImVec2(mouse_pos.x, chart_pos_.y),
@@ -713,7 +715,7 @@ void SignalsTabController::renderCrosshair() {
         IM_COL32(128, 128, 128, 128), 1.0f
     );
     
-    double price = screenToPrice(mouse_pos.y - chart_pos_.y);
+    double price = screenToPrice(mouse_pos.y);
     std::string price_str = std::to_string(price).substr(0, 7);
     
     ImVec2 label_pos = ImVec2(chart_pos_.x + chart_size_.x + 5, mouse_pos.y - 10);
@@ -843,6 +845,7 @@ void SignalsTabController::handleMouseInput() {
         
         hover_info_.active = true;
         hover_info_.position = mouse_pos;
+        crosshair_pos_ = mouse_pos;
         updateHoverInfo();
 
         ImGuiIO& io = ImGui::GetIO();

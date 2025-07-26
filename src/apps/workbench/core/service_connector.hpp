@@ -132,6 +132,10 @@ private:
 
     SignalsTabController* signals_tab_{nullptr};
     std::deque<CandleData> initial_data_;
+    std::deque<SEPSignalData> initial_signals_;
+
+public:
+    const std::deque<SEPSignalData>& getInitialSignals() const { return initial_signals_; }
 
     void loadInitialData(const std::string& path);
 };

@@ -4,6 +4,7 @@
 #include "engine.h"
 #include "service_proxy_engine.h"
 #include "config.h"
+#include "quantum/pattern_metric_engine.h"
 #include "ui_layout_manager.h"
 
 #include <iostream>
@@ -884,6 +885,61 @@ void ServiceConnector::loadInitialData(const std::string& path)
     if (signals_tab_ && !initial_data_.empty())
     {
         signals_tab_->setCandleData(initial_data_);
+    }
+
+    // Generate initial SEP signals using the pattern metric engine
+    initial_signals_.clear();
+    if (!initial_data_.empty())
+    {
+        sep::quantum::PatternMetricEngine engine;
+        std::vector<uint8_t> bytes;
+        bytes.reserve(initial_data_.size() * sizeof(float) * 4);
+        for (const auto& candle : initial_data_)
+        {
+            float ohlc[4] = {
+                static_cast<float>(candle.open),
+                static_cast<float>(candle.high),
+                static_cast<float>(candle.low),
+                static_cast<float>(candle.close)
+            };
+            const uint8_t* ptr = reinterpret_cast<const uint8_t*>(ohlc);
+            bytes.insert(bytes.end(), ptr, ptr + sizeof(ohlc));
+        }
+
+        engine.ingestData(bytes.data(), bytes.size());
+        engine.evolvePatterns();
+        const auto& metrics = engine.computeMetrics();
+
+        for (size_t i = 0; i < std::min(metrics.size(), initial_data_.size()); ++i)
+        {
+            const auto& m = metrics[i];
+            const auto& candle = initial_data_[initial_data_.size() - metrics.size() + i];
+            SEPSignalData sig;
+            sig.coherence = m.coherence;
+            sig.stability = m.stability;
+            sig.entropy = m.entropy;
+            sig.alpha_signal = (m.coherence + m.stability - m.entropy) / 2.0f;
+            sig.trend_strength = (m.coherence * m.stability) - m.entropy;
+            sig.timestamp = candle.timestamp;
+
+            if (m.coherence > 0.8f && m.stability > 0.7f && m.entropy < 0.2f)
+                sig.signal_type = SEPSignalData::STRONG_BUY;
+            else if (m.coherence > 0.7f && m.stability > 0.6f && m.entropy < 0.3f)
+                sig.signal_type = SEPSignalData::BUY;
+            else if (m.coherence < 0.2f && m.stability < 0.3f && m.entropy > 0.8f)
+                sig.signal_type = SEPSignalData::STRONG_SELL;
+            else if (m.coherence < 0.3f && m.stability < 0.4f && m.entropy > 0.7f)
+                sig.signal_type = SEPSignalData::SELL;
+            else
+                sig.signal_type = SEPSignalData::NEUTRAL;
+
+            initial_signals_.push_back(sig);
+        }
+
+        if (signals_tab_ && !initial_signals_.empty())
+        {
+            signals_tab_->setSEPSignals(initial_signals_);
+        }
     }
 }
 

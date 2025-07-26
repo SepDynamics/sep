@@ -740,6 +740,10 @@ void WorkbenchEngine::updateData()
                                              service_connector_->getInitialData().end());
         if (signals_tab_ && !candle_data.empty()) {
             signals_tab_->setCandleData(candle_data);
+            auto init_signals = service_connector_->getInitialSignals();
+            if (!init_signals.empty()) {
+                signals_tab_->setSEPSignals(init_signals);
+            }
         }
         if (!candle_data.empty()) {
             std::cout << "[WorkbenchEngine] Loaded " << candle_data.size()

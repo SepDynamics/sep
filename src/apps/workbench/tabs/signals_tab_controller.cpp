@@ -2,6 +2,7 @@
 #include "apps/workbench/core/workbench_core.hpp"
 #include "quantum/pattern_metric_engine.h"
 #include "core/metrics_monitor.h"
+#include <implot.h>
 #include <algorithm>
 #include <numeric>
 #include <cmath>
@@ -258,6 +259,10 @@ void SignalsTabController::setCandleData(const std::deque<CandleData>& data) {
     candle_data_ = data;
 }
 
+void SignalsTabController::setCandleData(const std::vector<CandleData>& data) {
+    candle_data_.assign(data.begin(), data.end());
+}
+
 void SignalsTabController::setSEPSignals(const std::deque<SEPSignalData>& signals) {
     sep_signals_ = signals;
 }
@@ -268,43 +273,25 @@ void SignalsTabController::renderMainChart() {
         return;
     }
 
-    updatePriceRange();
-
-    if (auto_detect_trends_) {
-        detectTrendLines();
+    std::vector<double> xs(candle_data_.size());
+    std::vector<double> open(candle_data_.size());
+    std::vector<double> close(candle_data_.size());
+    std::vector<double> low(candle_data_.size());
+    std::vector<double> high(candle_data_.size());
+    for (size_t i = 0; i < candle_data_.size(); ++i) {
+        xs[i] = static_cast<double>(i);
+        open[i] = candle_data_[i].open;
+        close[i] = candle_data_[i].close;
+        low[i] = candle_data_[i].low;
+        high[i] = candle_data_[i].high;
     }
 
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    if (!draw_list)
-        return;
-
-    ImU32 bg_color = IM_COL32(15, 15, 25, 255);
-    draw_list->AddRectFilled(chart_pos_, 
-                            ImVec2(chart_pos_.x + chart_size_.x, chart_pos_.y + chart_size_.y), 
-                            bg_color);
-
-    ImU32 border_color = IM_COL32(80, 80, 100, 255);
-    draw_list->AddRect(chart_pos_, 
-                      ImVec2(chart_pos_.x + chart_size_.x, chart_pos_.y + chart_size_.y), 
-                      border_color);
-
-    if (show_grid_) {
-        renderChartGrid();
-    }
-
-    renderTechnicalIndicators();
-    renderCandlesticks();
-    if (show_trend_lines_) {
-        renderTrendLines();
-    }
-    renderSEPSignalOverlay();
-
-    if (show_volume_) {
-        renderVolumeChart();
-    }
-
-    if (show_crosshair_) {
-        renderCrosshair();
+    ImPlot::SetNextAxesToFit();
+    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300),
+                          ImPlotFlags_Crosshairs | ImPlotFlags_NoMenus)) {
+        ImPlot::PlotCandlestick("OHLC", xs.data(), open.data(), close.data(), low.data(), high.data(),
+                               static_cast<int>(xs.size()), 0.5f);
+        ImPlot::EndPlot();
     }
 }
 
@@ -519,68 +506,43 @@ void SignalsTabController::renderMetricsGraphs() {
     if (!metrics_monitor_) return;
 
     const auto& roll = metrics_monitor_->getRollingMetrics();
-    coherence_history_.push_back(roll.coherence_1h_avg);
-    stability_history_.push_back(roll.stability_1h_avg);
-    entropy_history_.push_back(roll.entropy_1h_avg);
+    coherence_history_1h_.push_back(roll.coherence_1h_avg);
+    stability_history_1h_.push_back(roll.stability_1h_avg);
+    entropy_history_1h_.push_back(roll.entropy_1h_avg);
     coherence_history_4h_.push_back(roll.coherence_4h_avg);
     stability_history_4h_.push_back(roll.stability_4h_avg);
     entropy_history_4h_.push_back(roll.entropy_4h_avg);
 
     const size_t MAX_POINTS = 240; // roughly 4 hours if updated each minute
-    if (coherence_history_.size() > MAX_POINTS) coherence_history_.pop_front();
-    if (stability_history_.size() > MAX_POINTS) stability_history_.pop_front();
-    if (entropy_history_.size() > MAX_POINTS) entropy_history_.pop_front();
+    if (coherence_history_1h_.size() > MAX_POINTS) coherence_history_1h_.pop_front();
+    if (stability_history_1h_.size() > MAX_POINTS) stability_history_1h_.pop_front();
+    if (entropy_history_1h_.size() > MAX_POINTS) entropy_history_1h_.pop_front();
     if (coherence_history_4h_.size() > MAX_POINTS) coherence_history_4h_.pop_front();
     if (stability_history_4h_.size() > MAX_POINTS) stability_history_4h_.pop_front();
     if (entropy_history_4h_.size() > MAX_POINTS) entropy_history_4h_.pop_front();
 
-    ImVec2 graph_size(200, 60);
-    ImGui::PlotLines("Coherence 1h", &coherence_history_[0], coherence_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
-    if (ImGui::IsItemHovered()) {
-        ImGuiIO& io = ImGui::GetIO();
-        if (io.MouseWheel != 0.0f) {
-            metrics_scale_ *= (io.MouseWheel > 0 ? 0.9f : 1.1f);
-            metrics_scale_ = std::clamp(metrics_scale_, 0.1f, 2.0f);
-        }
-        if (ImGui::IsMouseDragging(ImGuiMouseButton_Middle)) {
-            if (!metrics_panning_) {
-                metrics_pan_start_ = io.MousePos;
-                metrics_panning_ = true;
-            } else {
-                float delta = io.MouseDelta.y / graph_size.y * metrics_scale_;
-                metrics_offset_ += delta;
-            }
-        } else {
-            metrics_panning_ = false;
-        }
+    const auto toVec = [](const std::deque<float>& d) {
+        return std::vector<float>(d.begin(), d.end());
+    };
+
+    auto xs = std::vector<double>(coherence_history_1h_.size());
+    for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<double>(i);
+    auto coh1 = toVec(coherence_history_1h_);
+    auto coh4 = toVec(coherence_history_4h_);
+    auto stab1 = toVec(stability_history_1h_);
+    auto stab4 = toVec(stability_history_4h_);
+    auto ent1 = toVec(entropy_history_1h_);
+    auto ent4 = toVec(entropy_history_4h_);
+
+    if (ImPlot::BeginPlot("Rolling Metrics", ImVec2(-1,150), ImPlotFlags_NoLegend | ImPlotFlags_NoMenus)) {
+        ImPlot::PlotLine("Coherence 1h", xs.data(), coh1.data(), coh1.size());
+        ImPlot::PlotLine("Coherence 4h", xs.data(), coh4.data(), coh4.size());
+        ImPlot::PlotLine("Stability 1h", xs.data(), stab1.data(), stab1.size());
+        ImPlot::PlotLine("Stability 4h", xs.data(), stab4.data(), stab4.size());
+        ImPlot::PlotLine("Entropy 1h", xs.data(), ent1.data(), ent1.size());
+        ImPlot::PlotLine("Entropy 4h", xs.data(), ent4.data(), ent4.size());
+        ImPlot::EndPlot();
     }
-    auto rect_min = ImGui::GetItemRectMin();
-    auto rect_max = ImGui::GetItemRectMax();
-    ImDrawList* dl = ImGui::GetWindowDrawList();
-    if (!dl) return;
-    float y1 = rect_max.y - roll.coherence_1h_avg * (rect_max.y - rect_min.y);
-    float y4 = rect_max.y - roll.coherence_4h_avg * (rect_max.y - rect_min.y);
-    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
-    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
-
-    ImGui::PlotLines("Coherence 4h", &coherence_history_4h_[0], coherence_history_4h_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
-    ImGui::PlotLines("Stability 1h", &stability_history_[0], stability_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
-    ImGui::PlotLines("Stability 4h", &stability_history_4h_[0], stability_history_4h_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
-    rect_min = ImGui::GetItemRectMin();
-    rect_max = ImGui::GetItemRectMax();
-    y1 = rect_max.y - roll.stability_1h_avg * (rect_max.y - rect_min.y);
-    y4 = rect_max.y - roll.stability_4h_avg * (rect_max.y - rect_min.y);
-    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
-    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
-
-    ImGui::PlotLines("Entropy 1h", &entropy_history_[0], entropy_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
-    ImGui::PlotLines("Entropy 4h", &entropy_history_4h_[0], entropy_history_4h_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
-    rect_min = ImGui::GetItemRectMin();
-    rect_max = ImGui::GetItemRectMax();
-    y1 = rect_max.y - roll.entropy_1h_avg * (rect_max.y - rect_min.y);
-    y4 = rect_max.y - roll.entropy_4h_avg * (rect_max.y - rect_min.y);
-    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
-    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
 }
 
 void SignalsTabController::renderTrendLines() {

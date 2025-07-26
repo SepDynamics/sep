@@ -33,6 +33,7 @@ public:
     void setWorkbenchEngine(WorkbenchEngine* engine);
 
     void setCandleData(const std::deque<CandleData>& data);
+    void setCandleData(const std::vector<CandleData>& data);
     const std::deque<CandleData>& getCandleData() const { return candle_data_; }
     void setSEPSignals(const std::deque<SEPSignalData>& signals);
 

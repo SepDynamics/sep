@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.16)
 
 add_library(sep_backtester STATIC
     backtester.cpp
-    data_loader.cpp
     data/data_loader.cpp
     data/json_data_parser.cpp
 )

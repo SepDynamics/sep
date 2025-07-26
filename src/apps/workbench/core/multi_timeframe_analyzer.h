@@ -4,6 +4,9 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "common/financial_data_types.h"
+
+using sep::common::CandleData;
 #include <chrono>
 #include <mutex>
 #include <deque>

@@ -8,6 +8,7 @@
 #include "quantum/pattern_metric_engine.h"
 #include "ui_layout_manager.h"
 #include "apps/workbench/backtester/data/data_loader.h"
+#include "apps/workbench/backtester/backtester.h"
 
 #include <iostream>
 #include <thread>
@@ -36,7 +37,7 @@ ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 
 ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
-    auto& cfg = sep::workbench::Config::getInstance().oanda();
+    auto& cfg = sep::config::ConfigManager::getInstance().oanda();
     std::string api_key = cfg.demo_api_key.empty() ? cfg.api_key : cfg.demo_api_key;
     std::string account_id = cfg.demo_account_id.empty() ? cfg.account_id : cfg.demo_account_id;
     if (api_key.empty() || account_id.empty()) {

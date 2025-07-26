@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the SEP Engine's data processing pipeline. As of July 2024, the entire pipeline is **non-functional due to critical compilation failures**. The primary architectural flaw identified is a dependency conflict where core engine components (`DataParser`, `PatternMetricEngine`) are forced to include GUI headers (`imgui.h`), making a successful build impossible.
+This document outlines the SEP Engine's data processing pipeline. As of July 2024, the entire pipeline is **non-functional due to critical compilation failures**. The primary architectural flaw identified is a dependency conflict where core engine components (`DataParser`, `OandaConnector`) are forced to include GUI headers (`imgui.h`), making a successful build impossible.
 
 **The immediate and only priority is to resolve these build-blocking issues by refactoring header dependencies.**
 
@@ -64,7 +64,7 @@ graph TB
     METRICS --> SIGTAB
     HIST --> SIGTAB
     THRESH --> SIGTAB
-    METRICS --> ENGTاب
+    METRICS --> ENGTAB
     THRESH --> SIGNALS
     SIGNALS --> RISK
     SIGNALS --> BACKTEST
@@ -75,54 +75,48 @@ graph TB
 ## Critical Component Compilation Status
 
 ### 1. **Data Parser (`data_parser.cpp`)**
--   **Function**: Converts OANDA JSON candles into `Pattern` structs.
--   **Status**: **BUILD FAILED**. This core component is blocked by a fatal dependency issue.
--   **Error Analysis**:
-    ```
-    # From build_log.txt:
-    # The include chain is: data_parser.cpp -> data_parser.h -> multi_timeframe_analyzer.h -> common_structs.h
-    # In /sep/src/apps/workbench/core/common_structs.h:
-    # fatal error: 'imgui.h' file not found
-    ```
--   **Conclusion**: A core engine component cannot be coupled with a GUI library. Core data types like `CandleData` must be moved out of `common_structs.h` into a neutral location.
-
-### 2. **Quantum Engine (`engine.cu`, `pattern_metric_engine.cpp`)**
--   **Function**: Performs CUDA-accelerated analysis of patterns to compute coherence, stability, and entropy.
--   **Status**: **BUILD FAILED**. The CUDA engine and the C++ metric engine are both blocked.
--   **Error Analysis (`engine.cu`)**:
-    ```
-    # From build_log.txt:
-    # The include chain is: engine.cu -> data_parser.h -> multi_timeframe_analyzer.h -> common_structs.h
-    # fatal error: 'imgui.h' file not found
-    ```
--   **Error Analysis (`pattern_metric_engine.cpp`)**:
-    ```
-    # From errors.txt:
-    /sep/src/quantum/pattern_metric_engine.cpp:431:9: error: use of undeclared identifier 's'
-    ```
--   **Conclusion**: The CUDA engine is blocked by the same GUI dependency as the parser. The C++ engine has a simple typo but is also fundamentally blocked by the header issue.
-
-### 3. **Service Connector (`service_connector.cpp`)**
--   **Function**: Manages communication between the workbench and the backend engine/APIs.
--   **Status**: **BUILD FAILED**. Blocked by incorrect namespace usage and missing definitions.
+-   **Function**: Converts raw data into engine-compatible formats.
+-   **Status**: **BUILD FAILED**.
 -   **Error Analysis**:
     ```
     # From errors.txt:
-    /sep/src/apps/workbench/core/service_connector.cpp:38:59: error: no member named 'oanda' in 'sep::config::ConfigManager'
-    /sep/src/apps/workbench/core/service_connector.cpp:68:17: error: unknown type name 'DataLoader'
+    error: field has incomplete type 'sep::workbench::CorrelationMetrics'
+    error: member access into incomplete type 'const sep::workbench::CorrelationMetrics'
     ```
--   **Conclusion**: Code needs to be updated to use the correct `ConfigManager` API and include necessary headers for components like `DataLoader`.
+-   **Conclusion**: A forward declaration of `CorrelationMetrics` is used, but the full definition is never included before its members are accessed. The header containing the struct definition must be included in `data_parser.cpp`.
 
-### 4. **OANDA Connector (`oanda_connector.cpp`)**
+### 2. **Multi-Timeframe Analyzer (`multi_timeframe_analyzer.cpp`)**
+-   **Function**: Resamples and analyzes market data across different timeframes.
+-   **Status**: **BUILD FAILED**.
+-   **Error Analysis**:
+    ```
+    # From errors.txt:
+    error: out-of-line definition of 'ingestMarketData' does not match any declaration...
+    error: no viable conversion from 'vector<sep::workbench::CandleData>' to 'const vector<sep::common::CandleData>'
+    error: member access into incomplete type 'const sep::workbench::CandleData'
+    ```
+-   **Conclusion**: A major refactoring has occurred, creating a mismatch between the class declaration and its implementation. There is a critical namespace conflict between `sep::workbench::CandleData` and `sep::common::CandleData`, and the `CandleData` struct is being used as an incomplete type, indicating a missing header include.
+
+### 3. **OANDA Connector (`oanda_connector.cpp`)**
 -   **Function**: Fetches market data and handles trade execution with the OANDA API.
--   **Status**: **BUILD FAILED**. Blocked by missing event system definitions.
+-   **Status**: **BUILD FAILED**.
 -   **Error Analysis**:
     ```
     # From errors.txt:
-    /sep/src/connectors/oanda_connector.cpp:562:28: error: no member named 'globalEventBus' in namespace 'sep::workbench'
-    /sep/src/connectors/oanda_connector.cpp:562:64: error: no member named 'OrderUpdateEvent' in namespace 'sep::workbench'
+    /sep/src/apps/workbench/core/ui_layout_manager.h:6:10: fatal error: 'imgui.h' file not found
     ```
--   **Conclusion**: The connector's attempt to publish events is failing because the event bus and event types are not defined in a shared context. A central event header is required.
+-   **Conclusion**: A backend data connector should **never** include a GUI library. This indicates a severe architectural flaw where headers are improperly chained. The dependency on `ui_layout_manager.h` must be removed.
+
+### 4. **Backtester (`backtester.cpp`, `data_loader_test.cpp`)**
+-   **Function**: Simulates trading strategies on historical data.
+-   **Status**: **BUILD FAILED**.
+-   **Error Analysis**:
+    ```
+    # From errors.txt:
+    error: unknown type name 'CandleData'; did you mean 'common::CandleData'?
+    error: no member named 'loadData' in '...DataLoader'; did you mean 'load_data'?
+    ```
+-   **Conclusion**: The backtester components have not been updated to reflect recent refactoring of data types (namespaces) and method names.
 
 ## Data Authenticity Policy (Post-Build-Fix)
 

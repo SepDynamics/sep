@@ -34,10 +34,10 @@ public:
     void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
     void setWorkbenchEngine(WorkbenchEngine* engine);
 
-    void setCandleData(const std::deque<CandleData>& data);
-    void setCandleData(const std::vector<CandleData>& data);
-    const std::deque<CandleData>& getCandleData() const { return candle_data_; }
-    void setSEPSignals(const std::deque<SEPSignalData>& signals);
+        void setCandleData(const std::deque<sep::common::CandleData>& data);
+        void setCandleData(const std::vector<sep::common::CandleData>& data);
+        const std::deque<sep::common::CandleData>& getCandleData() const { return candle_data_; }
+        void setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals);
 
 private:
     sep::connectors::OandaConnector* oanda_connector_ = nullptr;
@@ -45,8 +45,8 @@ private:
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     WorkbenchEngine* workbench_engine_ = nullptr;
     // Chart data
-    std::deque<CandleData> candle_data_;
-    std::deque<SEPSignalData> sep_signals_;
+        std::deque<sep::common::CandleData> candle_data_;
+        std::deque<sep::common::SEPSignalData> sep_signals_;
     std::unordered_map<std::string, TechnicalIndicator> indicators_;
     std::vector<TrendLine> trend_lines_;
     EnhancedHoverInfo hover_info_;
@@ -116,8 +116,8 @@ private:
     void updateHoverInfo();
     void calculateEnhancedHoverMetrics();
     void detectTrendLines();
-    ImU32 getSignalColor(SEPSignalData::SignalType signal_type);
-    ImU32 getCandleColor(const CandleData& candle, bool is_body = true);
+        ImU32 getSignalColor(sep::common::SEPSignalData::SignalType signal_type);
+        ImU32 getCandleColor(const sep::common::CandleData& candle, bool is_body = true);
 };
 
 } // namespace sep::workbench

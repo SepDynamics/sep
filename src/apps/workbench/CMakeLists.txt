@@ -16,14 +16,15 @@ add_library(sep_workbench_lib STATIC ${WB_SOURCES})
 
 # Public include directories for consumers  
 target_include_directories(sep_workbench_lib PUBLIC
+    ${imgui_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/engine
     ${CMAKE_SOURCE_DIR}/src/api
     ${CMAKE_SOURCE_DIR}/src/apps/workbench
+    ${CMAKE_SOURCE_DIR}/src/apps/workbench/backtester/data
     ${CMAKE_SOURCE_DIR}/src/apps/common
     ${CMAKE_SOURCE_DIR}/src/connectors
     ${CMAKE_SOURCE_DIR}/src/glad
-    ${imgui_SOURCE_DIR}
     ${implot_SOURCE_DIR}
     ${imgui_SOURCE_DIR}/backends
     ${CMAKE_SOURCE_DIR}/third_party/implot

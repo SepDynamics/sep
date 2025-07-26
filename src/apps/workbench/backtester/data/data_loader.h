@@ -1,21 +1,26 @@
 #pragma once
 
-#include "common/financial_data_types.h"
-
-#include <string>
 #include <vector>
 
-class DataLoader {
-public:
-    DataLoader();
-    ~DataLoader();
+#include "common/financial_data_types.h"
 
-    void loadData(const std::string& filepath);
-    void load_data(const std::string& filepath);
-    void load_48h_sample();
+namespace sep
+{
+    namespace workbench
+    {
+        namespace backtester
+        {
 
-    const std::vector<sep::workbench::CandleData>& getCandleData() const;
+            class DataLoader
+            {
+            public:
+                void load_data(const std::string& file_path);
+                const std::vector<common::CandleData>& get_data() const { return data_; }
 
-private:
-    std::vector<sep::workbench::CandleData> m_candleData;
-};
+            private:
+                std::vector<common::CandleData> data_;
+            };
+
+        }  // namespace backtester
+    }  // namespace workbench
+}  // namespace sep

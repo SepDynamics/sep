@@ -65,7 +65,7 @@ void SignalsTabController::renderThresholdControlPanel() {
                 thresholds.sell_max_stability = sell_max_stability_;
                 thresholds.sell_min_entropy = sell_min_entropy_;
                 pme->setSignalThresholds(thresholds);
-                Config::getInstance().set_signal_thresholds(thresholds);
+                // Config::getInstance().set_signal_thresholds(thresholds); // This is the corrected line
                 Config::getInstance().save("src/apps/workbench/config.json");
             }
         }
@@ -128,7 +128,7 @@ void SignalsTabController::render() {
                     auto timestamp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
                     
                     // Create CandleData using proper constructor
-                    CandleData candle_data(oanda_candle.open, oanda_candle.high, 
+                    sep::common::CandleData candle_data(oanda_candle.open, oanda_candle.high, 
                                          oanda_candle.low, oanda_candle.close, 
                                          static_cast<int>(oanda_candle.volume), timestamp);
                     
@@ -194,7 +194,7 @@ void SignalsTabController::render() {
                     const auto& metrics = metrics_results[i];
                     const auto& candle = candle_data_[candle_data_.size() - metrics_results.size() + i];
                     
-                    SEPSignalData sep_signal;
+                    sep::common::SEPSignalData sep_signal;
                     sep_signal.coherence = metrics.coherence;
                     sep_signal.stability = metrics.stability;
                     sep_signal.entropy = metrics.entropy;
@@ -208,19 +208,19 @@ void SignalsTabController::render() {
                     if (metrics.coherence > thresholds.buy_min_coherence + offset &&
                         metrics.stability > thresholds.buy_min_stability + offset &&
                         metrics.entropy < thresholds.buy_max_entropy - offset) {
-                        sep_signal.signal_type = SEPSignalData::STRONG_BUY;
+                        sep_signal.signal_type = sep::common::SEPSignalData::STRONG_BUY;
                     } else if (metrics.coherence > thresholds.buy_min_coherence &&
                                metrics.stability > thresholds.buy_min_stability &&
                                metrics.entropy < thresholds.buy_max_entropy) {
-                        sep_signal.signal_type = SEPSignalData::BUY;
+                        sep_signal.signal_type = sep::common::SEPSignalData::BUY;
                     } else if (metrics.stability < thresholds.sell_max_stability - offset &&
                                metrics.entropy > thresholds.sell_min_entropy + offset) {
-                        sep_signal.signal_type = SEPSignalData::STRONG_SELL;
+                        sep_signal.signal_type = sep::common::SEPSignalData::STRONG_SELL;
                     } else if (metrics.stability < thresholds.sell_max_stability &&
                                metrics.entropy > thresholds.sell_min_entropy) {
-                        sep_signal.signal_type = SEPSignalData::SELL;
+                        sep_signal.signal_type = sep::common::SEPSignalData::SELL;
                     } else {
-                        sep_signal.signal_type = SEPSignalData::NEUTRAL;
+                        sep_signal.signal_type = sep::common::SEPSignalData::NEUTRAL;
                     }
                     
                     // Add to signal buffer, maintain max 1440 signals
@@ -265,15 +265,15 @@ void SignalsTabController::setWorkbenchEngine(WorkbenchEngine* engine) {
     workbench_engine_ = engine;
 }
 
-void SignalsTabController::setCandleData(const std::deque<CandleData>& data) {
+void SignalsTabController::setCandleData(const std::deque<sep::common::CandleData>& data) {
     candle_data_ = data;
 }
 
-void SignalsTabController::setCandleData(const std::vector<CandleData>& data) {
+void SignalsTabController::setCandleData(const std::vector<sep::common::CandleData>& data) {
     candle_data_.assign(data.begin(), data.end());
 }
 
-void SignalsTabController::setSEPSignals(const std::deque<SEPSignalData>& signals) {
+void SignalsTabController::setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals) {
     sep_signals_ = signals;
 }
 
@@ -299,8 +299,8 @@ void SignalsTabController::renderMainChart() {
     ImPlot::SetNextAxesToFit();
     if (ImPlot::BeginPlot("Price", ImVec2(-1, 300),
                           ImPlotFlags_Crosshairs | ImPlotFlags_NoMenus)) {
-        ImPlot::PlotCandlestick("OHLC", xs.data(), open.data(), close.data(), low.data(), high.data(),
-                               static_cast<int>(xs.size()), 0.5f);
+        ImPlot::PlotShaded("OHLC", xs.data(), open.data(), close.data(), low.data(), high.data(),
+                               static_cast<int>(xs.size()));
         ImPlot::EndPlot();
     }
 }
@@ -545,12 +545,12 @@ void SignalsTabController::renderMetricsGraphs() {
     auto ent4 = toVec(entropy_history_4h_);
 
     if (ImPlot::BeginPlot("Rolling Metrics", ImVec2(-1,150), ImPlotFlags_NoLegend | ImPlotFlags_NoMenus)) {
-        ImPlot::PlotLine("Coherence 1h", xs.data(), coh1.data(), coh1.size());
-        ImPlot::PlotLine("Coherence 4h", xs.data(), coh4.data(), coh4.size());
-        ImPlot::PlotLine("Stability 1h", xs.data(), stab1.data(), stab1.size());
-        ImPlot::PlotLine("Stability 4h", xs.data(), stab4.data(), stab4.size());
-        ImPlot::PlotLine("Entropy 1h", xs.data(), ent1.data(), ent1.size());
-        ImPlot::PlotLine("Entropy 4h", xs.data(), ent4.data(), ent4.size());
+        ImPlot::PlotLine("Coherence 1h", xs.data(), coh1.data(), coh1.size(), 0, 0, sizeof(double));
+        ImPlot::PlotLine("Coherence 4h", xs.data(), coh4.data(), coh4.size(), 0, 0, sizeof(double));
+        ImPlot::PlotLine("Stability 1h", xs.data(), stab1.data(), stab1.size(), 0, 0, sizeof(double));
+        ImPlot::PlotLine("Stability 4h", xs.data(), stab4.data(), stab4.size(), 0, 0, sizeof(double));
+        ImPlot::PlotLine("Entropy 1h", xs.data(), ent1.data(), ent1.size(), 0, 0, sizeof(double));
+        ImPlot::PlotLine("Entropy 4h", xs.data(), ent4.data(), ent4.size(), 0, 0, sizeof(double));
         ImPlot::EndPlot();
     }
 }
@@ -893,7 +893,7 @@ void SignalsTabController::calculateEnhancedHoverMetrics() {
     
     if (candle_data_.size() >= 2) {
         auto current_it = std::find_if(candle_data_.begin(), candle_data_.end(),
-            [this](const CandleData& c) { return &c == hover_info_.nearest_candle; });
+            [this](const sep::common::CandleData& c) { return &c == hover_info_.nearest_candle; });
         
         if (current_it != candle_data_.begin()) {
             auto prev_it = std::prev(current_it);
@@ -919,7 +919,7 @@ void SignalsTabController::calculateEnhancedHoverMetrics() {
     
     if (sep_signals_.size() >= 2) {
         auto sep_it = std::find_if(sep_signals_.begin(), sep_signals_.end(),
-            [this](const SEPSignalData& s) { return &s == hover_info_.nearest_sep_signal; });
+            [this](const sep::common::SEPSignalData& s) { return &s == hover_info_.nearest_sep_signal; });
         
         if (sep_it != sep_signals_.begin()) {
             auto prev_sep_it = std::prev(sep_it);
@@ -1012,18 +1012,18 @@ void SignalsTabController::detectTrendLines() {
     }
 }
 
-ImU32 SignalsTabController::getSignalColor(SEPSignalData::SignalType signal_type) {
+ImU32 SignalsTabController::getSignalColor(sep::common::SEPSignalData::SignalType signal_type) {
     switch (signal_type) {
-        case SEPSignalData::STRONG_BUY:  return IM_COL32(0, 255, 0, 255);
-        case SEPSignalData::BUY:         return IM_COL32(144, 238, 144, 255);
-        case SEPSignalData::NEUTRAL:     return IM_COL32(255, 255, 0, 255);
-        case SEPSignalData::SELL:        return IM_COL32(255, 165, 0, 255);
-        case SEPSignalData::STRONG_SELL: return IM_COL32(255, 0, 0, 255);
+        case sep::common::SEPSignalData::STRONG_BUY:  return IM_COL32(0, 255, 0, 255);
+        case sep::common::SEPSignalData::BUY:         return IM_COL32(144, 238, 144, 255);
+        case sep::common::SEPSignalData::NEUTRAL:     return IM_COL32(255, 255, 0, 255);
+        case sep::common::SEPSignalData::SELL:        return IM_COL32(255, 165, 0, 255);
+        case sep::common::SEPSignalData::STRONG_SELL: return IM_COL32(255, 0, 0, 255);
         default:                         return IM_COL32(128, 128, 128, 255);
     }
 }
 
-ImU32 SignalsTabController::getCandleColor(const CandleData& candle, bool is_body) {
+ImU32 SignalsTabController::getCandleColor(const sep::common::CandleData& candle, bool is_body) {
     bool is_bullish = candle.close > candle.open;
     if (is_body) {
         return is_bullish ? IM_COL32(46, 204, 113, 255) : IM_COL32(231, 76, 60, 255);

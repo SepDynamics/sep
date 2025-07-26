@@ -13,16 +13,20 @@ This phase is entirely focused on fixing the build and establishing a stable fou
 -   **Priority**: **CRITICAL (BLOCKING)**
 -   **Estimated Time**: 3-5 days
 -   **Tasks**:
-    -   [ ] **Refactor Core Data Structs**: Move `CandleData`, `TickData`, `SEPSignalData`, and other core financial types from `apps/workbench/core/common_structs.h` to a new, GUI-independent header: `src/common/financial_data_types.h`.
-    -   [ ] **Decouple Engine from GUI**: Update all files that include `common_structs.h` for core types to use the new `financial_data_types.h` header instead. This will eliminate the `fatal error: 'imgui.h' file not found` in `engine.cu` and `data_parser.cpp`.
-    -   [ ] **Correct ConfigManager Namespace**: In `service_connector.cpp`, change `sep::workbench::ConfigManager` to the correct `sep::config::ConfigManager`.
-    -   [ ] **Fix Undeclared Identifiers**:
-        -   In `signals_tab_controller.h`, define or include headers for `TechnicalIndicator`, `TrendLine`, `EnhancedHoverInfo`, and `ChartZoom` in a GUI-specific context.
-        -   In `workbench_main.cpp` and `engine_tab_controller.h`, add necessary includes for `ServiceProxyEngine`, `backtester`, etc., and qualify with correct namespaces (e.g., `sep::core::ServiceProxyEngine`).
-    -   [ ] **Resolve `implot.h` Dependency**: Ensure `implot.h` is correctly integrated into the build system (e.g., via `third_party`) and included in `signals_tab_controller.cpp`.
-    -   [ ] **Fix Typo in PatternMetricEngine**: In `pattern_metric_engine.cpp`, correct the `undeclared identifier 's'` typo within the signal generation loop.
-    -   [ ] **Add Missing Standard Header**: Add `#include <cstdint>` to `emitterutils.cpp` to define `uint16_t` and `uint32_t`.
-    -   [ ] **Refactor Event System**: Create a central event header (e.g., `apps/workbench/core/events.h`) defining `OrderUpdateEvent` and `globalEventBus`, and include it in `oanda_connector.cpp` to resolve related errors.
+    -   [ ] **Decouple Core Logic from GUI**:
+        -   **Action**: Ensure `sep::workbench::CorrelationMetrics` has its full definition included in `data_parser.cpp` (likely by including `multi_timeframe_analyzer.h` or a dedicated types header) to fix `incomplete type` errors.
+        -   **Action**: Identify and remove the include chain that causes `oanda_connector.cpp` to include `imgui.h`. Backend components must not depend on GUI libraries.
+        -   **Action**: Move core data structures like `CandleData` to a common, GUI-independent header (`src/common/financial_data_types.h`) and resolve the `sep::workbench::CandleData` vs. `sep::common::CandleData` namespace conflicts in `multi_timeframe_analyzer.cpp` and `backtester.cpp`.
+    -   [ ] **Fix Refactoring Mismatches**:
+        -   **Action**: In `multi_timeframe_analyzer.cpp`, update the function signatures for `ingestMarketData`, `ingestHistoricalData`, `resampleCandles`, and `analyzeTimeframe` to match their declarations in the corresponding header file.
+        -   **Action**: In `data_loader_test.cpp`, update method calls from `loadData` and `getCandleData` to their current correct names (e.g., `load_data`, `get_data`).
+        -   **Action**: In `json_data_parser.cpp`, correct the namespace for `CandleData`. It seems `sep::workbench` namespace for data types has been deprecated in favor of `sep::common`.
+    -   [ ] **Resolve Missing Header Includes**:
+        -   **Action**: Fix the `'backtester/data_loader.h' file not found` errors in multiple workbench files. This is likely a CMake `target_include_directories` issue or an incorrect relative path.
+        -   **Action**: Ensure `imgui.h` is correctly included where it is actually needed (e.g., in `ui_layout_manager.h`) and that the `imgui` library is properly linked.
+    -   [ ] **Address Minor Compilation Errors**:
+        -   **Action**: Fix the typo (`undeclared identifier 's'`) in `pattern_metric_engine.cpp`.
+        -   **Action**: Add `#include <cstdint>` to `emitterutils.cpp` to resolve `uint16_t` and `uint32_t` undeclared identifier errors.
 
 ### 1.2: 48-Hour Sample Data Setup
 -   **Status**: **BLOCKED**
@@ -37,6 +41,7 @@ This phase is entirely focused on fixing the build and establishing a stable fou
 -   **Priority**: Critical (Post-Build-Fix)
 -   **Dependencies**: **Phase 1.1 Complete**
 -   **Tasks**:
+    -   [ ] Integrate `implot` as a third-party dependency.
     -   [ ] Render candlestick charts using `implot` in `SignalsTabController`.
     -   [ ] Add real-time plots for coherence, stability, and entropy.
     -   [ ] Implement zoom/pan functionality.
@@ -72,7 +77,6 @@ This phase is entirely focused on fixing the build and establishing a stable fou
 
 -   **Static Analysis Findings**: The static analysis report (`report.md`) found numerous `HIGH` and `MEDIUM` severity issues, primarily in third-party libraries like `imgui` and `yaml-cpp`.
 -   **Tasks**:
-    -   [ ] Address the `[CRITICAL]` `clang-diagnostic-error` in `emitterutils.cpp` (`uint16_t` undeclared). This is part of the main build fix.
-    -   [ ] Investigate and address `[HIGH]` severity issues in `imgui` source code (`null dereference`, `incorrect roundings`). These may require patching or updating the library.
-    -   [ ] Address `[MEDIUM]` `cert-err33-c` (ignored `sprintf` return value) and `security.FloatLoopCounter` warnings in `imgui_demo.cpp` to improve code quality. This is a lower priority than fixing the build.
-```
+    -   [ ] Investigate and address `[HIGH]` severity issues in `imgui` source code (`incorrect roundings`, `sizeof` on pointers). These may require patching or updating the library.
+    -   [ ] Address `[MEDIUM]` `cert-err33-c` (ignored `fprintf`/`sprintf` return value) warnings in `imgui` to improve code quality.
+    -   [ ] Review `[MEDIUM]` `bugprone-undefined-memory-manipulation` warnings (`memset` on non-TriviallyCopyable types) in `imgui` and replace with proper C++ initialization.

@@ -5,7 +5,11 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "imgui.h"
 #include "common/financial_data_types.h"
+
+
+
 
 
 namespace sep::workbench {
@@ -53,8 +57,8 @@ struct EnhancedHoverInfo {
     ImVec2 position;
     double price;
     std::chrono::system_clock::time_point time;
-    CandleData* nearest_candle = nullptr;
-    SEPSignalData* nearest_sep_signal = nullptr;
+        sep::common::CandleData* nearest_candle = nullptr;
+        sep::common::SEPSignalData* nearest_sep_signal = nullptr;
     
     // Enhanced derived metrics
     float price_momentum = 0.0f;      // Rate of price change

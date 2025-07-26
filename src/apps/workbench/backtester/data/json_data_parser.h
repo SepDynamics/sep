@@ -10,5 +10,5 @@ class JsonDataParser {
 public:
     JsonDataParser() = delete;
 
-    static std::vector<sep::workbench::CandleData> parse(const std::string& filepath);
+    static std::vector<sep::common::CandleData> parse(const std::string& filepath);
 };

@@ -127,5 +127,17 @@ std::string Manager::levelToString(Level level)
     }
 }
 
+void logPatternDetected(const std::string &pattern_id,
+                        std::chrono::system_clock::time_point timestamp)
+{
+    auto logger = spdlog::get("pattern_engine");
+    if (!logger) return;
+
+    std::time_t tt = std::chrono::system_clock::to_time_t(timestamp);
+    char buf[32];
+    std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", std::localtime(&tt));
+    logger->info("Pattern detected {} at {}", pattern_id, buf);
+}
+
 }  // namespace sep::logging
 

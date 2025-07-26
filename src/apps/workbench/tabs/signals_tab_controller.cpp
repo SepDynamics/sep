@@ -26,21 +26,18 @@ bool SignalsTabController::initialize() {
 
 void SignalsTabController::render() {
     ImGui::Columns(2, "SignalsColumns", true);
-    (void)ImGui::Begin("Signal Thresholds");
-    static float min_coherence = 0.7f;
-    static float min_stability = 0.6f;
-    static float max_entropy = 0.3f;
-    ImGui::SliderFloat("Min Coherence", &min_coherence, 0.0f, 1.0f);
-    ImGui::SliderFloat("Min Stability", &min_stability, 0.0f, 1.0f);
-    ImGui::SliderFloat("Max Entropy", &max_entropy, 0.0f, 1.0f);
+    ImGui::Begin("Signal Thresholds");
+    ImGui::SliderFloat("Min Coherence", &min_coherence_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Min Stability", &min_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Max Entropy", &max_entropy_, 0.0f, 1.0f);
     if (ImGui::Button("Apply")) {
         if (workbench_engine_) {
             auto* pme = workbench_engine_->getPatternMetricEngine();
             if (pme) {
                 sep::quantum::SignalThresholds thresholds;
-                thresholds.min_coherence = min_coherence;
-                thresholds.min_stability = min_stability;
-                thresholds.max_entropy = max_entropy;
+                thresholds.min_coherence = min_coherence_;
+                thresholds.min_stability = min_stability_;
+                thresholds.max_entropy = max_entropy_;
                 pme->setSignalThresholds(thresholds);
             }
         }

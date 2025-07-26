@@ -104,6 +104,12 @@ sep::compat::PatternData PatternMetricEngine::mutatePattern(const sep::compat::P
 void PatternMetricEngine::setSignalThresholds(const SignalThresholds& thresholds) {
     std::lock_guard<std::mutex> lock(engine_mutex_);
     signal_thresholds_ = thresholds;
+    if (auto logger = sep::logging::Manager::getInstance().getLogger("pattern_engine")) {
+        logger->info("Signal thresholds updated: coherence={} stability={} entropy={}",
+                     signal_thresholds_.min_coherence,
+                     signal_thresholds_.min_stability,
+                     signal_thresholds_.max_entropy);
+    }
 }
 
 const std::vector<Signal>& PatternMetricEngine::getSignals() const {
@@ -316,12 +322,14 @@ void PatternMetricEngine::generateSignals() {
             s.confidence = (1.0f - m.stability) * m.entropy;
             s.pattern_id = m.pattern_id;
             current_signals_.push_back(s);
+            sep::logging::logPatternDetected(s.pattern_id, std::chrono::system_clock::now());
         } else if (m.coherence > signal_thresholds_.min_coherence && m.stability > signal_thresholds_.min_stability) {
             Signal s;
             s.type = SignalType::BUY;
             s.confidence = m.coherence * m.stability;
             s.pattern_id = m.pattern_id;
             current_signals_.push_back(s);
+            sep::logging::logPatternDetected(s.pattern_id, std::chrono::system_clock::now());
         }
     }
 }

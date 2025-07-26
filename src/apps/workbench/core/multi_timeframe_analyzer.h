@@ -12,7 +12,7 @@
 #include "quantum/coherence_manager.h"
 #include "engine/metrics_collector.h"
 #include "connectors/oanda_connector.h"
-#include "apps/workbench/core/common_structs.h"
+#include "common/financial_data_types.h"
 
 namespace sep::workbench {
 

@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "core/common_structs.h"
+#include "common/financial_data_types.h"
 #include "imgui.h"
 #include "connectors/oanda_connector.h"
 #include "signal_generator/quantum_signal_generator.h"

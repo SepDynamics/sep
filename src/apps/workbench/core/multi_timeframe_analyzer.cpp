@@ -1,6 +1,6 @@
 #include "multi_timeframe_analyzer.h"
 #include "engine/data_parser.h"
-#include "common_structs.h"
+#include "common/financial_data_types.h"
 #include "connectors/market_data_converter.h"
 
 #include <algorithm>

@@ -889,14 +889,16 @@ core::ServiceProxyEngine* ServiceConnector::createHttpEngineProxy(int socket_fd)
 
     // Create a proxy engine that forwards commands to the remote service via HTTP
     http_proxy_engine_ = std::make_unique<core::ServiceProxyEngine>(config_.service_address, config_.service_port);
+    service_proxy_engine_ = http_proxy_engine_.get();
 
     config::CudaConfig cfg{};
-    if (!http_proxy_engine_->init(cfg) || !http_proxy_engine_->isConnected()) {
-        std::string err = "HTTP proxy engine connection failed: " + http_proxy_engine_->getLastError();
+    if (!service_proxy_engine_->init(cfg) || !service_proxy_engine_->isConnected()) {
+        std::string err = "HTTP proxy engine connection failed: " + service_proxy_engine_->getLastError();
         std::cerr << "[ServiceConnector] " << err << std::endl;
         health_metrics_.last_error = err;
         health_metrics_.is_responsive = false;
         service_proxy_engine_ = nullptr;
+        http_proxy_engine_.reset();
         return nullptr;
     }
 

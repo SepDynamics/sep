@@ -270,9 +270,14 @@ void EngineTabController::renderSEPMetricsPanel() {
 void EngineTabController::renderEngineControls() {
     ImGui::Text("Engine Controls:");
 
+    bool connected = service_proxy_engine_ && service_proxy_engine_->isConnected();
+    ImVec4 status_color = connected ? ImVec4(0.0f, 1.0f, 0.0f, 1.0f)
+                                    : ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+    ImGui::TextColored(status_color, "Service Status: %s",
+                       service_proxy_engine_ ? (connected ? "Connected" : "Disconnected")
+                                             : "Offline");
+
     if (service_proxy_engine_) {
-        bool connected = service_proxy_engine_->isConnected();
-        ImGui::Text("Service Status: %s", connected ? "Connected" : "Disconnected");
         ImGui::SameLine();
         if (ImGui::Checkbox("Use Remote Engine", &use_remote_engine_)) {
             if (use_remote_engine_ && connected) {
@@ -281,9 +286,11 @@ void EngineTabController::renderEngineControls() {
                 sep_engine_ = local_engine_;
             }
         }
-    } else {
-        ImGui::Text("Service Status: Offline");
     }
+
+    ImGui::Text("Current Engine: %s", (sep_engine_ == service_proxy_engine_ && connected)
+                                          ? "Remote"
+                                          : "Local");
 
     if (ImGui::Button("Reset Engine State")) {
         resetEngineState();

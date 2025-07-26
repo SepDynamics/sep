@@ -71,7 +71,7 @@ std::vector<quantum::Pattern> DataParser::parseBuffer(const uint8_t* data, size_
                         sep::common::CandleData candle;
                         
                         if (candle_json.contains("time") && candle_json["time"].is_string()) {
-                            candle.time = candle_json["time"].get<std::string>().c_str();
+                            candle.time = sep::common::parseTimestamp(candle_json["time"].get<std::string>());
                         }
                         
                         if (candle_json.contains("volume") && candle_json["volume"].is_number()) {
@@ -411,7 +411,7 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
                 bool valid = true;
 
                 if (candle_json.contains("time") && candle_json["time"].is_string()) {
-                    candle.time = candle_json["time"].get<std::string>();
+                    candle.time = sep::common::parseTimestamp(candle_json["time"].get<std::string>());
                 } else {
                     std::cerr << "[DataParser] Missing time at index " << index << "\n";
                     valid = false;
@@ -441,14 +441,14 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
                     valid = false;
 
                 if (!candles.empty()) {
-                    auto prev_ts = parseTimestamp(candles.back().time);
-                    auto cur_ts = parseTimestamp(candle.time);
+                    auto prev_ts = candles.back().time;
+                    auto cur_ts = candle.time;
                     if (cur_ts <= prev_ts) {
                         std::cerr << "[DataParser] Non-increasing timestamp at index " << index << "\n";
                         valid = false;
-                    } else if (cur_ts - prev_ts != 60000) {
-                        std::cerr << "[DataParser] Missing candle between " << candles.back().time
-                                  << " and " << candle.time << "\n";
+                    } else if (std::chrono::duration_cast<std::chrono::milliseconds>(cur_ts - prev_ts).count() != 60000) {
+                        std::cerr << "[DataParser] Missing candle between " << candles.size()-1
+                                  << " and current" << "\n";
                     }
                 }
 
@@ -468,7 +468,7 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
             
             // Parse time
             if (candle_json.contains("time") && candle_json["time"].is_string()) {
-                candle.time = candle_json["time"].get<std::string>().c_str();
+                candle.time = sep::common::parseTimestamp(candle_json["time"].get<std::string>());
             }
             
             // Parse volume
@@ -504,11 +504,10 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
             }
 
             if (!candles.empty()) {
-                auto prev_ts = parseTimestamp(candles.back().time);
-                auto cur_ts = parseTimestamp(candle.time);
-                if (cur_ts - prev_ts != 60000) {
-                    std::cerr << "[DataParser] Missing candle between " << candles.back().time
-                              << " and " << candle.time << "\n";
+                auto prev_ts = candles.back().time;
+                auto cur_ts = candle.time;
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(cur_ts - prev_ts).count() != 60000) {
+                    std::cerr << "[DataParser] Missing candle between previous and current\n";
                 }
             }
 
@@ -535,7 +534,7 @@ std::vector<quantum::Pattern> DataParser::candlesToPatterns(
         quantum::Pattern pattern;
 
         // Use timestamp as unique ID
-        pattern.id = std::to_string(parseTimestamp(candle.time));
+        pattern.id = std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(candle.time.time_since_epoch()).count());
 
         // Map OHLC to position vector (raw data, no normalization)
         pattern.position.x = candle.open;
@@ -547,9 +546,9 @@ std::vector<quantum::Pattern> DataParser::candlesToPatterns(
         pattern.data.push_back(static_cast<float>(candle.volume));
         
         // Set timestamp
-        pattern.timestamp = parseTimestamp(candle.time);
-        pattern.last_accessed = pattern.timestamp;
-        pattern.last_modified = pattern.timestamp;
+        pattern.timestamp = candle.time;
+        pattern.last_accessed = candle.time;
+        pattern.last_modified = candle.time;
         
         // Initialize quantum state with defaults - let the quantum algorithms determine these
         pattern.generation = 0;
@@ -617,8 +616,8 @@ bool DataParser::saveValidatedCandlesJSON(const std::vector<sep::common::CandleD
             return false;
         }
         if (i > 0) {
-            auto prev_ts = parseTimestamp(candles[i - 1].time);
-            auto cur_ts = parseTimestamp(c.time);
+            auto prev_ts = candles[i - 1].time;
+            auto cur_ts = c.time;
             if (cur_ts <= prev_ts) {
                 std::cerr << "[DataParser] Non-increasing timestamp at index " << i << "\n";
                 return false;
@@ -632,27 +631,8 @@ bool DataParser::saveValidatedCandlesJSON(const std::vector<sep::common::CandleD
 
 uint64_t DataParser::parseTimestamp(const std::string& timestamp) const
 {
-    // Parse ISO 8601 format with nanoseconds: "2021-04-07T00:00:00.000000000Z"
-    std::tm tm = {};
-    std::istringstream ss(timestamp.c_str());
-
-    // Parse up to seconds
-    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-    
-    if (!ss.fail()) {
-        // Skip the fractional seconds part
-        std::string fractional;
-        std::getline(ss, fractional, 'Z');
-
-        auto tp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-        return std::chrono::duration_cast<std::chrono::milliseconds>(
-            tp.time_since_epoch()).count();
-    }
-    
-    // If parsing fails, return current time
-    auto now = std::chrono::system_clock::now();
-    return std::chrono::duration_cast<std::chrono::milliseconds>(
-        now.time_since_epoch()).count();
+    auto tp = sep::common::parseTimestamp(timestamp);
+    return std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count();
 }
 
 bool DataParser::exportCorrelationCSV(const std::string& path,

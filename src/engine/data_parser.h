@@ -2,6 +2,7 @@
 
 #include "engine/standard_includes.h"
 #include <map>
+#include <deque>
 #include "apps/workbench/core/multi_timeframe_analyzer.h"
 
 namespace sep {
@@ -72,6 +73,8 @@ public:
                               const std::map<std::string, workbench::CorrelationMetrics>& data) const;
     bool exportCorrelationJSON(const std::string& path,
                                const std::map<std::string, workbench::CorrelationMetrics>& data) const;
+    bool exportCorrelationHistoryCSV(const std::string& path,
+                                     const std::map<std::string, std::deque<workbench::CorrelationMetrics>>& history) const;
 
 private:
     // Format detection

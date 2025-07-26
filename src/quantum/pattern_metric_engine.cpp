@@ -157,6 +157,7 @@ void PatternMetricEngine::addPattern(const sep::compat::PatternData& pattern) {
     if (current_patterns_.size() > max_history_size_) {
         current_patterns_.pop_front();
     }
+    sep::logging::logPatternDetected(pattern.id, std::chrono::system_clock::now());
     cache_dirty_ = true;
 }
 
@@ -412,33 +413,32 @@ void PatternMetricEngine::generateSignals() {
     current_signals_.clear();
     for (const auto& m : current_metrics_) {
         SignalType type = evaluateSignal(m);
-        if (type != SignalType::HOLD) {
-            Signal s;
-            s.type = type;
-            if (type == SignalType::BUY) {
-                s.confidence = m.coherence * m.stability;
-            } else {
-                s.confidence = (1.0f - m.stability) * m.entropy;
-            }
-            s.pattern_id = m.pattern_id;
-            current_signals_.push_back(s);
-            sep::logging::logSignalDetected(s.pattern_id, s.type, std::chrono::system_clock::now());
+        if (type == SignalType::HOLD) continue;
+
+        Signal s;
+        s.type = type;
+        if (type == SignalType::BUY) {
+            s.confidence = m.coherence * m.stability;
+        } else {
+            s.confidence = (1.0f - m.stability) * m.entropy;
         }
+        s.pattern_id = m.pattern_id;
+        current_signals_.push_back(s);
+        sep::logging::logSignalDetected(s.pattern_id, s.type, std::chrono::system_clock::now());
     }
 }
 
 // Evaluate signal based on threshold rules defined in docs/TODO.md
 SignalType PatternMetricEngine::evaluateSignal(const PatternMetrics& m) const {
-    // Example rule: stability < 0.3 && entropy > 0.7 triggers SELL
-    if (m.stability < signal_thresholds_.sell_max_stability &&
-        m.entropy > signal_thresholds_.sell_min_entropy) {
+    const auto& th = signal_thresholds_;
+
+    if (m.stability < th.sell_max_stability && m.entropy > th.sell_min_entropy) {
         return SignalType::SELL;
     }
 
-    // Example rule: coherence/stability high with low entropy triggers BUY
-    if (m.coherence > signal_thresholds_.buy_min_coherence &&
-        m.stability > signal_thresholds_.buy_min_stability &&
-        m.entropy < signal_thresholds_.buy_max_entropy) {
+    if (m.coherence > th.buy_min_coherence &&
+        m.stability > th.buy_min_stability &&
+        m.entropy < th.buy_max_entropy) {
         return SignalType::BUY;
     }
 
@@ -460,6 +460,7 @@ void PatternMetricEngine::processBuffer([[maybe_unused]] bool is_final_chunk) {
         // Add extracted patterns to our current pattern set with history limit
         for (const auto& pattern : extracted_patterns) {
             current_patterns_.push_back(pattern);
+            sep::logging::logPatternDetected(pattern.id, std::chrono::system_clock::now());
             if (current_patterns_.size() > max_history_size_) {
                 current_patterns_.pop_front();
             }

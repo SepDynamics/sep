@@ -37,14 +37,15 @@ bool SignalsTabController::initialize() {
 void SignalsTabController::renderThresholdPanel() {
     ImGui::Begin("Signal Thresholds");
     ImGui::Text("BUY thresholds");
-    ImGui::SliderFloat("Buy Coherence", &buy_min_coherence_, 0.0f, 1.0f);
-    ImGui::SliderFloat("Buy Stability", &buy_min_stability_, 0.0f, 1.0f);
-    ImGui::SliderFloat("Buy Max Entropy", &buy_max_entropy_, 0.0f, 1.0f);
+    bool changed = false;
+    changed |= ImGui::SliderFloat("Buy Coherence", &buy_min_coherence_, 0.0f, 1.0f);
+    changed |= ImGui::SliderFloat("Buy Stability", &buy_min_stability_, 0.0f, 1.0f);
+    changed |= ImGui::SliderFloat("Buy Max Entropy", &buy_max_entropy_, 0.0f, 1.0f);
     ImGui::Separator();
     ImGui::Text("SELL thresholds");
-    ImGui::SliderFloat("Sell Max Stability", &sell_max_stability_, 0.0f, 1.0f);
-    ImGui::SliderFloat("Sell Min Entropy", &sell_min_entropy_, 0.0f, 1.0f);
-    if (ImGui::Button("Apply")) {
+    changed |= ImGui::SliderFloat("Sell Max Stability", &sell_max_stability_, 0.0f, 1.0f);
+    changed |= ImGui::SliderFloat("Sell Min Entropy", &sell_min_entropy_, 0.0f, 1.0f);
+    if (changed || ImGui::Button("Apply")) {
         if (workbench_engine_) {
             auto* pme = workbench_engine_->getPatternMetricEngine();
             if (pme) {

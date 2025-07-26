@@ -144,6 +144,17 @@ const MetricsMonitor::RollingMetrics& MetricsMonitor::getRollingMetrics() const 
     return rolling_metrics_;
 }
 
+std::unordered_map<std::string, double> MetricsMonitor::getMetrics() const {
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
+    return metrics_;
+}
+
+void MetricsMonitor::set(const std::string& key, double value) {
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
+    metrics_[key] = value;
+    metrics_history_dirty_ = true;
+}
+
 const MetricsMonitor::ThresholdSignal& MetricsMonitor::getLatestSignal() const {
     return latest_signal_;
 }

@@ -22,6 +22,7 @@
 // Include ImGui headers
 #include "imgui.h"
 #include "imgui_internal.h"
+#include <implot.h>
 
 // Use correct paths for ImGui implementation files
 #include <chrono>
@@ -236,6 +237,7 @@ bool WorkbenchEngine::initializeImGui()
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     
@@ -270,6 +272,7 @@ void WorkbenchEngine::cleanupImGui()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
 }
 

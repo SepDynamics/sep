@@ -177,11 +177,27 @@ void PatternMetricEngine::setSignalThresholds(const SignalThresholds& thresholds
     std::lock_guard<std::mutex> lock(engine_mutex_);
     signal_thresholds_ = thresholds;
     if (auto logger = sep::logging::Manager::getInstance().getLogger("pattern_engine")) {
-        logger->info("Signal thresholds updated: coherence={} stability={} entropy={}",
-                     signal_thresholds_.min_coherence,
-                     signal_thresholds_.min_stability,
-                     signal_thresholds_.max_entropy);
+        logger->info(
+            "Signal thresholds updated: buy_coh={} buy_stab={} buy_entropy={} sell_stab={} sell_entropy={}",
+            signal_thresholds_.buy_min_coherence,
+            signal_thresholds_.buy_min_stability,
+            signal_thresholds_.buy_max_entropy,
+            signal_thresholds_.sell_max_stability,
+            signal_thresholds_.sell_min_entropy);
     }
+}
+
+void PatternMetricEngine::setBuyThresholds(float min_coherence, float min_stability, float max_entropy) {
+    std::lock_guard<std::mutex> lock(engine_mutex_);
+    signal_thresholds_.buy_min_coherence = min_coherence;
+    signal_thresholds_.buy_min_stability = min_stability;
+    signal_thresholds_.buy_max_entropy = max_entropy;
+}
+
+void PatternMetricEngine::setSellThresholds(float max_stability, float min_entropy) {
+    std::lock_guard<std::mutex> lock(engine_mutex_);
+    signal_thresholds_.sell_max_stability = max_stability;
+    signal_thresholds_.sell_min_entropy = min_entropy;
 }
 
 const std::vector<Signal>& PatternMetricEngine::getSignals() const {
@@ -395,22 +411,33 @@ std::vector<sep::compat::PatternData> PatternMetricEngine::extractPatternsFromBy
 void PatternMetricEngine::generateSignals() {
     current_signals_.clear();
     for (const auto& m : current_metrics_) {
-        if (m.stability < signal_thresholds_.min_stability && m.entropy > signal_thresholds_.max_entropy) {
+        SignalType type = evaluateSignal(m);
+        if (type != SignalType::HOLD) {
             Signal s;
-            s.type = SignalType::SELL;
-            s.confidence = (1.0f - m.stability) * m.entropy;
+            s.type = type;
+            if (type == SignalType::BUY) {
+                s.confidence = m.coherence * m.stability;
+            } else {
+                s.confidence = (1.0f - m.stability) * m.entropy;
+            }
             s.pattern_id = m.pattern_id;
             current_signals_.push_back(s);
-            sep::logging::logPatternDetected(s.pattern_id, std::chrono::system_clock::now());
-        } else if (m.coherence > signal_thresholds_.min_coherence && m.stability > signal_thresholds_.min_stability) {
-            Signal s;
-            s.type = SignalType::BUY;
-            s.confidence = m.coherence * m.stability;
-            s.pattern_id = m.pattern_id;
-            current_signals_.push_back(s);
-            sep::logging::logPatternDetected(s.pattern_id, std::chrono::system_clock::now());
+            sep::logging::logSignalDetected(s.pattern_id, s.type, std::chrono::system_clock::now());
         }
     }
+}
+
+SignalType PatternMetricEngine::evaluateSignal(const PatternMetrics& m) const {
+    if (m.stability < signal_thresholds_.sell_max_stability &&
+        m.entropy > signal_thresholds_.sell_min_entropy) {
+        return SignalType::SELL;
+    }
+    if (m.coherence > signal_thresholds_.buy_min_coherence &&
+        m.stability > signal_thresholds_.buy_min_stability &&
+        m.entropy < signal_thresholds_.buy_max_entropy) {
+        return SignalType::BUY;
+    }
+    return SignalType::HOLD;
 }
 
 void PatternMetricEngine::processBuffer([[maybe_unused]] bool is_final_chunk) {

@@ -10,6 +10,16 @@
 #include <sstream>
 #include <limits>
 
+static void drawDashedHorizontal(ImDrawList* dl, float x1, float x2, float y,
+                                 ImU32 col, float dash = 4.0f, float gap = 4.0f) {
+    float x = x1;
+    while (x < x2) {
+        float x_end = std::min(x + dash, x2);
+        dl->AddLine(ImVec2(x, y), ImVec2(x_end, y), col);
+        x += dash + gap;
+    }
+}
+
 namespace sep::workbench {
 
 SignalsTabController::SignalsTabController()
@@ -27,17 +37,24 @@ bool SignalsTabController::initialize() {
 void SignalsTabController::render() {
     ImGui::Columns(2, "SignalsColumns", true);
     ImGui::Begin("Signal Thresholds");
-    ImGui::SliderFloat("Min Coherence", &min_coherence_, 0.0f, 1.0f);
-    ImGui::SliderFloat("Min Stability", &min_stability_, 0.0f, 1.0f);
-    ImGui::SliderFloat("Max Entropy", &max_entropy_, 0.0f, 1.0f);
+    ImGui::Text("BUY thresholds");
+    ImGui::SliderFloat("Buy Coherence", &buy_min_coherence_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Buy Stability", &buy_min_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Buy Max Entropy", &buy_max_entropy_, 0.0f, 1.0f);
+    ImGui::Separator();
+    ImGui::Text("SELL thresholds");
+    ImGui::SliderFloat("Sell Max Stability", &sell_max_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Sell Min Entropy", &sell_min_entropy_, 0.0f, 1.0f);
     if (ImGui::Button("Apply")) {
         if (workbench_engine_) {
             auto* pme = workbench_engine_->getPatternMetricEngine();
             if (pme) {
                 sep::quantum::SignalThresholds thresholds;
-                thresholds.min_coherence = min_coherence_;
-                thresholds.min_stability = min_stability_;
-                thresholds.max_entropy = max_entropy_;
+                thresholds.buy_min_coherence = buy_min_coherence_;
+                thresholds.buy_min_stability = buy_min_stability_;
+                thresholds.buy_max_entropy = buy_max_entropy_;
+                thresholds.sell_max_stability = sell_max_stability_;
+                thresholds.sell_min_entropy = sell_min_entropy_;
                 pme->setSignalThresholds(thresholds);
             }
         }
@@ -232,8 +249,8 @@ void SignalsTabController::setQuantumSignalGenerator(QuantumSignalGenerator* gen
     signal_generator_ = generator;
 }
 
-void SignalsTabController::setMetricsMonitor(MetricsMonitor* monitor) {
-    metrics_monitor_ = monitor;
+void SignalsTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor) {
+    metrics_monitor_ = std::move(monitor);
 }
 
 void SignalsTabController::setWorkbenchEngine(WorkbenchEngine* engine) {
@@ -512,24 +529,24 @@ void SignalsTabController::renderMetricsGraphs() {
     const auto& roll = metrics_monitor_->getRollingMetrics();
     float y1 = rect_max.y - roll.coherence_1h_avg * (rect_max.y - rect_min.y);
     float y4 = rect_max.y - roll.coherence_4h_avg * (rect_max.y - rect_min.y);
-    dl->AddLine(ImVec2(rect_min.x, y1), ImVec2(rect_max.x, y1), IM_COL32(255,0,0,128));
-    dl->AddLine(ImVec2(rect_min.x, y4), ImVec2(rect_max.x, y4), IM_COL32(0,255,0,128));
+    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
+    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
 
     ImGui::PlotLines("Stability", stability_history_.data(), stability_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
     rect_min = ImGui::GetItemRectMin();
     rect_max = ImGui::GetItemRectMax();
     y1 = rect_max.y - roll.stability_1h_avg * (rect_max.y - rect_min.y);
     y4 = rect_max.y - roll.stability_4h_avg * (rect_max.y - rect_min.y);
-    dl->AddLine(ImVec2(rect_min.x, y1), ImVec2(rect_max.x, y1), IM_COL32(255,0,0,128));
-    dl->AddLine(ImVec2(rect_min.x, y4), ImVec2(rect_max.x, y4), IM_COL32(0,255,0,128));
+    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
+    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
 
     ImGui::PlotLines("Entropy", entropy_history_.data(), entropy_history_.size(), 0, nullptr, 0.0f, 1.0f, graph_size);
     rect_min = ImGui::GetItemRectMin();
     rect_max = ImGui::GetItemRectMax();
     y1 = rect_max.y - roll.entropy_1h_avg * (rect_max.y - rect_min.y);
     y4 = rect_max.y - roll.entropy_4h_avg * (rect_max.y - rect_min.y);
-    dl->AddLine(ImVec2(rect_min.x, y1), ImVec2(rect_max.x, y1), IM_COL32(255,0,0,128));
-    dl->AddLine(ImVec2(rect_min.x, y4), ImVec2(rect_max.x, y4), IM_COL32(0,255,0,128));
+    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y1, IM_COL32(255,0,0,128));
+    drawDashedHorizontal(dl, rect_min.x, rect_max.x, y4, IM_COL32(0,255,0,128));
 }
 
 void SignalsTabController::renderTrendLines() {

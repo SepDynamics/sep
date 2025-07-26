@@ -176,6 +176,8 @@ namespace sep
         {
             std::string api_key;
             std::string account_id;
+            std::string demo_api_key;
+            std::string demo_account_id;
             bool sandbox;
         };
 

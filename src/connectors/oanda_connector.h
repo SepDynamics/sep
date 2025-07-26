@@ -111,6 +111,7 @@ public:
     const std::vector<OrderInfo>& pendingOrders() const { return pending_orders_; }
     const std::vector<OrderInfo>& filledOrders() const { return filled_orders_; }
     const std::vector<OrderInfo>& canceledOrders() const { return canceled_orders_; }
+    void setOrderCallback(std::function<void(const OrderInfo&)> cb) { order_callback_ = std::move(cb); }
 
 private:
     std::string api_key_;
@@ -165,7 +166,8 @@ private:
     std::vector<OrderInfo> pending_orders_;
     std::vector<OrderInfo> filled_orders_;
     std::vector<OrderInfo> canceled_orders_;
-}; 
+    std::function<void(const OrderInfo&)> order_callback_;
+};
 
 } // namespace connectors
 }  // namespace sep

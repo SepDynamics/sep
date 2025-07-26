@@ -139,6 +139,12 @@ void MultiTimeframeAnalyzer::updateAllTimeframes(const std::string& instrument) 
             // Analyze patterns
             latest_metrics_[tf] = analyzeTimeframe(tf, resampled_candles);
         }
+
+        // Store metrics history
+        metrics_history_[tf].push_back(latest_metrics_[tf]);
+        if (metrics_history_[tf].size() > max_metrics_history_) {
+            metrics_history_[tf].pop_front();
+        }
     }
 }
 
@@ -596,9 +602,8 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
     }
 
     const auto& candles = timeframe_data_.at(timeframe).candles;
-    const auto& metrics = latest_metrics_.at(timeframe);
 
-    if (candles.size() < 2 || metrics.detected_patterns.empty()) {
+    if (candles.size() < 2 || metrics_history_[timeframe].size() < 2) {
         return correlation_metrics;
     }
 
@@ -617,10 +622,10 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
     std::vector<double> stability_values;
     std::vector<double> entropy_values;
 
-    for (const auto& pattern : metrics.detected_patterns) {
-        coherence_values.push_back(pattern.coherence);
-        stability_values.push_back(pattern.stability);
-        entropy_values.push_back(pattern.entropy);
+    for (const auto& m : metrics_history_[timeframe]) {
+        coherence_values.push_back(m.dominant_coherence);
+        stability_values.push_back(m.stability_index);
+        entropy_values.push_back(m.entropy_level);
     }
 
     auto pearson = [](const std::vector<double>& a, const std::vector<double>& b) {
@@ -666,12 +671,17 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
         return pearson(rank_a, rank_b);
     };
 
-    // Ensure vectors are same length
+    // Ensure vectors are same length using the most recent data
     size_t n = std::min({coherence_values.size(), stability_values.size(), entropy_values.size(), price_moves.size()});
-    coherence_values.resize(n);
-    stability_values.resize(n);
-    entropy_values.resize(n);
-    price_moves.resize(n);
+    auto trim_to_last = [n](std::vector<double>& v) {
+        if (v.size() > n) {
+            v.erase(v.begin(), v.end() - static_cast<long>(n));
+        }
+    };
+    trim_to_last(coherence_values);
+    trim_to_last(stability_values);
+    trim_to_last(entropy_values);
+    trim_to_last(price_moves);
 
     correlation_metrics.coherence_pearson = pearson(coherence_values, price_moves);
     correlation_metrics.coherence_spearman = spearman(coherence_values, price_moves);

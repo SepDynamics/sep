@@ -12,6 +12,13 @@ BacktesterEngine::~BacktesterEngine() {
 }
 
 sep::workbench::backtester::BacktestResult BacktesterEngine::run(const std::string& dataset_path) {
+    sep::quantum::PatternMetricEngine engine;
+    return run(dataset_path, &engine);
+}
+
+sep::workbench::backtester::BacktestResult BacktesterEngine::run(
+    const std::string& dataset_path,
+    sep::quantum::PatternMetricEngine* engine) {
     sep::workbench::backtester::DataLoader loader;
     loader.loadData(dataset_path);
 
@@ -21,7 +28,10 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(const std::stri
         return result;
     }
 
-    sep::quantum::PatternMetricEngine engine;
+    if (!engine) {
+        return result;
+    }
+    sep::quantum::PatternMetricEngine& engine_ref = *engine;
     std::vector<uint8_t> byte_stream;
     byte_stream.reserve(candles.size() * sizeof(sep::workbench::CandleData));
     for (const auto& candle : candles) {
@@ -29,11 +39,11 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(const std::stri
         byte_stream.insert(byte_stream.end(), bytes, bytes + sizeof(sep::workbench::CandleData));
     }
 
-    engine.ingestData(byte_stream.data(), byte_stream.size());
-    engine.evolvePatterns();
-    engine.computeMetrics();
+    engine_ref.ingestData(byte_stream.data(), byte_stream.size());
+    engine_ref.evolvePatterns();
+    engine_ref.computeMetrics();
 
-    const auto& signals = engine.getSignals();
+    const auto& signals = engine_ref.getSignals();
     std::vector<float> prices;
     prices.reserve(candles.size());
     for (const auto& candle : candles) {

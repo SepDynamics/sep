@@ -22,9 +22,11 @@ namespace sep::quantum {
 
     struct SignalThresholds
     {
-        float min_coherence{0.7f};
-        float min_stability{0.6f};
-        float max_entropy{0.3f};
+        float buy_min_coherence{0.7f};
+        float buy_min_stability{0.6f};
+        float buy_max_entropy{0.3f};
+        float sell_max_stability{0.4f};
+        float sell_min_entropy{0.7f};
     };
 
     enum class SignalType
@@ -142,6 +144,12 @@ public:
     /// @brief Sets the thresholds for signal generation.
     void setSignalThresholds(const SignalThresholds& thresholds);
 
+    /// @brief Set BUY signal thresholds individually
+    void setBuyThresholds(float min_coherence, float min_stability, float max_entropy);
+
+    /// @brief Set SELL signal thresholds individually
+    void setSellThresholds(float max_stability, float min_entropy);
+
     /// @brief Returns the current thresholds for signal generation.
     SignalThresholds getSignalThresholds() const {
         return signal_thresholds_;
@@ -172,6 +180,7 @@ private:
     std::vector<compat::PatternData> extractPatternsFromBytes(const uint8_t* data, size_t size);
     void processBuffer(bool is_final_chunk = false);
     void generateSignals();
+    SignalType evaluateSignal(const PatternMetrics& metrics) const;
     
     // Quantum processing components
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_;

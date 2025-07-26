@@ -28,7 +28,7 @@ public:
 
     void setOandaConnector(sep::connectors::OandaConnector* connector);
     void setQuantumSignalGenerator(QuantumSignalGenerator* generator);
-    void setMetricsMonitor(MetricsMonitor* monitor);
+    void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
     void setWorkbenchEngine(WorkbenchEngine* engine);
 
     void setCandleData(const std::deque<CandleData>& data);
@@ -38,7 +38,7 @@ public:
 private:
     sep::connectors::OandaConnector* oanda_connector_ = nullptr;
     QuantumSignalGenerator* signal_generator_ = nullptr;
-    MetricsMonitor* metrics_monitor_ = nullptr;
+    std::shared_ptr<MetricsMonitor> metrics_monitor_;
     WorkbenchEngine* workbench_engine_ = nullptr;
     // Chart data
     std::deque<CandleData> candle_data_;
@@ -63,9 +63,11 @@ private:
     bool auto_detect_trends_ = true;
 
     // Threshold settings for signal generation
-    float min_coherence_ = 0.7f;
-    float min_stability_ = 0.6f;
-    float max_entropy_ = 0.3f;
+    float buy_min_coherence_ = 0.7f;
+    float buy_min_stability_ = 0.6f;
+    float buy_max_entropy_ = 0.3f;
+    float sell_max_stability_ = 0.4f;
+    float sell_min_entropy_ = 0.7f;
 
     // Chart dimensions and state
     ImVec2 chart_size_;

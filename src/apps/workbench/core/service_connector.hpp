@@ -127,6 +127,8 @@ private:
 
     SignalsTabController* signals_tab_{nullptr};
     std::deque<CandleData> initial_data_;
+
+    void loadInitialData(const std::string& path);
 };
 
 } // namespace sep::workbench

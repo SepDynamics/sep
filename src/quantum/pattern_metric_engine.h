@@ -165,6 +165,7 @@ private:
      */
     std::vector<compat::PatternData> extractPatternsFromBytes(const uint8_t* data, size_t size);
     void processBuffer(bool is_final_chunk = false);
+    void generateSignals();
     
     // Quantum processing components
     std::unique_ptr<QuantumProcessorQFH> qfh_processor_;

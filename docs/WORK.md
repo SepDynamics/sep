@@ -1,107 +1,109 @@
 ## SEP Engine Overview and Development Plan (July 2025)
 
 ### Project Overview
-The Self-Emergent Processor (SEP) Engine is a quantum-inspired pattern analysis system designed to process streaming data (e.g., financial market data from OANDA) and generate trading signals based on three core metrics: **coherence** (pattern consistency), **stability** (pattern persistence), and **entropy** (data unpredictability). The engine leverages CUDA-accelerated kernels for real-time processing and is integrated into a workbench dashboard for visualization and analysis. The current focus is on completing the testbed for engine metrics and preparing for demo trading, as outlined in the [TODO.md](TODO.md).
+The Self-Emergent Processor (SEP) Engine is a quantum-inspired trading platform that processes OANDA market data to generate trading signals based on **coherence**, **stability**, and **entropy**. Leveraging CUDA-accelerated kernels, the engine is integrated into a workbench dashboard with a 3-tab architecture (Signals, Engine, Backend) for visualization and trading operations. The focus is on completing the testbed, validating signals, and enabling demo trading, as detailed in [TODO.md](TODO.md).
 
-This document expands on the development roadmap, providing insights into the current state of each component, their integration status, and alignment with the architecture diagram in [data_flow_architecture.md](data_flow_architecture.md). The snapshot of the `/src` and `/examples` directories guides the assessment of implemented components.
+This document expands on the roadmap, providing insights into component statuses, integration progress, and alignment with the architecture in [DATA.md](DATA.md) and [GUI.md](GUI.md). The snapshot (`sep_snapshot_20250725_192602.txt`) and static analysis (`report.md`) guide the assessment.
 
 ### Architecture Alignment
-The architecture diagram in [data_flow_architecture.md](data_flow_architecture.md) accurately represents the intended data flow: **OANDA Market Data → Quantum Pattern Engine → Workbench Dashboard → Signal Analysis → Trading Decisions**. However, some components are only partially implemented or not properly routed. The [gui_layout_architecture.md](gui_layout_architecture.md) proposes a 3-tab structure (Signals, Engine, Backend) to organize the workbench, which is partially reflected in the snapshot (`src/apps/workbench/tabs/`).
+The data flow in [DATA.md](DATA.md) is accurate: **OANDA Market Data → Quantum Pattern Engine → Workbench Dashboard → Signal Analysis → Trading Decisions**. The GUI architecture in [GUI.md](GUI.md) organizes the workbench into three tabs, partially implemented in `src/apps/workbench/tabs/`. However, components like threshold detection and trading logic require proper routing to achieve demo trading readiness.
 
 ### Component Status and Roadmap
 
 #### 1. Market Data Ingestion Layer
 - **Components**:
-  - **OandaConnector** (`src/connectors/oanda_connector.cpp`): Fully implemented with authentication and rate limiting (50ms minimum). Successfully fetches real-time and historical OHLC candles.
-  - **DataParser** (`src/engine/data_parser.cpp`): Implemented, converts OANDA JSON to quantum patterns (`Pattern` struct in `src/quantum/types.h`). Needs data integrity checks.
-  - **StreamBuffer** (`src/engine/memory.cu`): Partially implemented, lacks proper chunked processing for streaming data.
-- **Status**: Functional but incomplete. Missing 48-hour sample data setup and robust streaming buffer.
+  - **OandaConnector** (`src/connectors/oanda_connector.cpp`): Fully implemented, fetches real-time and historical OHLC candles with 50ms rate limiting.
+  - **DataParser** (`src/engine/data_parser.cpp`): Converts OANDA JSON to `Pattern` structs (`src/quantum/types.h`). Needs integrity checks.
+  - **StreamBuffer** (`src/engine/memory.cu`): Partially implemented, lacks chunked streaming support.
+- **Status**: Functional but incomplete for 48-hour data setup.
 - **TODO Integration**:
-  - **48-Hour Sample Data Setup**: Fetch and store EUR/USD M1 data using OandaConnector and DataParser. Add integrity checks to ensure no missing candles or invalid prices.
-  - **StreamBuffer Enhancement**: Implement chunked processing to handle real-time streams efficiently.
-- **Completion**: (Phase 1.1 in TODO.md).
+  - **48-Hour Sample Data Setup**: Fetch and store EUR/USD M1 data with integrity checks (Phase 1.1).
+  - **StreamBuffer Enhancement**: Add chunked processing for live streams.
+- **Estimated Completion**: 3 days (Phase 1.1).
 
 #### 2. SEP Quantum Engine
 - **Components**:
-  - **PatternMetricEngine** (`src/quantum/pattern_metric_engine.cpp`): Core engine implemented, computes coherence, stability, and entropy. CUDA-accelerated via `pattern_kernels.cu`. Lacks threshold detection logic.
-  - **QBSA Processor** (`src/quantum/qbsa.cpp`): Implemented, performs quantum bit stream analysis.
-  - **QSH Processor** (`src/quantum/quantum_processor_qfh.cpp`): Implemented as QFH (Quantum Fourier Hierarchy) processor, enhances pattern analysis.
-  - **DAG Graph** (`src/engine/dag_graph.cpp`): Implemented, handles pattern correlations but not fully integrated with PatternMetricEngine.
-- **Status**: Core algorithms validated (POCs 1-6), but missing systematic threshold detection and correlation analysis.
+  - **PatternMetricEngine** (`src/quantum/pattern_metric_engine.cpp`): Computes metrics via CUDA (`src/engine/pattern_kernels.cu`). Lacks threshold detection.
+  - **QBSA Processor** (`src/quantum/qbsa.cpp`): Implements quantum bit stream analysis.
+  - **QFH Processor** (`src/quantum/quantum_processor_qfh.cpp`): Enhances pattern analysis with Quantum Fourier Hierarchy.
+  - **DAG Graph** (`src/engine/dag_graph.cpp`): Handles correlations, not fully integrated.
+- **Status**: Core algorithms validated (POCs 1-6), but missing signal generation logic.
 - **TODO Integration**:
-  - **Pattern Discovery Framework**: Add threshold detection to PatternMetricEngine (e.g., `stability < 0.3 && entropy > 0.7`). Integrate with DAG Graph for correlation analysis.
-  - **Correlation Analysis**: Implement price-metric correlation in MultiTimeframeAnalyzer and visualize in EngineTabController.
-  - **Performance Optimization**: Address super-linear scaling (POC 4) by optimizing PatternMetricEngine data structures.
-- **Completion**: (Phase 1.3, 1.4, Technical Debt in TODO.md).
+  - **Pattern Discovery Framework**: Add threshold detection (Phase 1.3).
+  - **Correlation Analysis**: Implement in MultiTimeframeAnalyzer (Phase 1.4).
+  - **Performance Optimization**: Address super-linear scaling (Technical Debt).
+- **Estimated Completion**: 8 days (Phase 1.3, 1.4, Technical Debt).
 
 #### 3. Real-time Processing
 - **Components**:
-  - **Pattern Evolution** (`src/quantum/pattern_evolution.cpp`): Implemented, handles mutation algorithms but not fully connected to PatternMetricEngine.
-  - **Metrics Computation** (`src/apps/workbench/core/metrics_monitor.cpp`): Implemented, computes real-time metrics but not integrated with dashboard.
-  - **Threshold Detection** (`src/apps/workbench/core/service_proxy_engine.cpp`): Not implemented, critical for signal generation.
-- **Status**: Partially routed. MetricsMonitor produces valid metrics, but threshold detection and dashboard integration are missing.
+  - **Pattern Evolution** (`src/quantum/pattern_evolution.cpp`): Implements mutation algorithms, partially connected to PatternMetricEngine.
+  - **Metrics Computation** (`src/apps/workbench/core/metrics_monitor.cpp`): Computes real-time metrics, not integrated with dashboard.
+  - **Threshold Detection** (`src/apps/workbench/core/service_proxy_engine.cpp`): Not implemented.
+- **Status**: MetricsMonitor produces valid outputs, but dashboard integration is incomplete.
 - **TODO Integration**:
-  - **Enhanced Metrics Display**: Connect MetricsMonitor to SignalsTabController for real-time ImGui plots with rolling averages.
-  - **Threshold Detection**: Implement in PatternMetricEngine and visualize in SignalsTabController.
-- **Completion**: (Phase 1.2, 1.3 in TODO.md).
+  - **Enhanced Metrics Display**: Connect to SignalsTabController (Phase 1.2).
+  - **Threshold Detection**: Implement in PatternMetricEngine (Phase 1.3).
+- **Estimated Completion**: 9 days (Phase 1.2, 1.3).
 
 #### 4. Visualization Layer
 - **Components**:
-  - **Workbench Dashboard** (`src/apps/workbench/workbench_core.cpp`): Implemented with ImGui, supports basic candlestick charts.
-  - **SignalsTabController** (`src/apps/workbench/tabs/signals_tab_controller.cpp`): Partially implemented, renders charts but lacks metrics and signal visualization.
-  - **EngineTabController** (`src/apps/workbench/tabs/engine_tab_controller.cpp`): Partially implemented, needs quantum metrics and diagnostics.
-  - **BackendTabController** (`src/apps/workbench/tabs/backend_tab_controller.cpp`): Partially implemented, lacks trading and backtesting UI.
-- **Status**: Dashboard framework exists, but tabs are incomplete. Signals tab needs metrics, Engine tab needs diagnostics, and Backend tab needs trading UI.
+  - **Workbench Dashboard** (`src/apps/workbench/workbench_core.cpp`): ImGui-based, renders basic candlestick charts.
+  - **SignalsTabController** (`src/apps/workbench/tabs/signals_tab_controller.cpp`): Renders charts, lacks metric and signal visualization.
+  - **EngineTabController** (`src/apps/workbench/tabs/engine_tab_controller.cpp`): Needs quantum diagnostics.
+  - **BackendTabController** (`src/apps/workbench/tabs/backend_tab_controller.cpp`): Lacks trading and backtesting UI.
+- **Status**: Dashboard framework exists, but tabs are incomplete per [GUI.md](GUI.md).
 - **TODO Integration**:
-  - **Enhanced Metrics Display**: Add metrics plots to SignalsTabController.
-  - **Correlation Analysis**: Visualize correlations in EngineTabController.
-  - **Backtesting Suite, Trading Terminal**: Implement UI panels in BackendTabController.
-- **Completion**: (Phase 1.2, 1.4, 2.1, 2.4, 2.5 in TODO.md).
+  - **Enhanced Metrics Display**: Add plots to SignalsTabController (Phase 1.2).
+  - **Correlation Analysis**: Visualize in EngineTabController (Phase 1.4).
+  - **Backtesting Suite, Trading Terminal**: Implement in BackendTabController (Phase 2.1, 2.4, 2.5).
+- **Estimated Completion**: 11 days (Phase 1.2, 1.4, 2.1, 2.4, 2.5).
 
 #### 5. Trading Decision Layer
 - **Components**:
-  - **Signal Generation** (`src/apps/workbench/core/service_proxy_engine.cpp`): Not implemented, requires threshold detection.
-  - **Risk Management** (`src/apps/workbench/core/trade_manager.cpp`): Not implemented, TradeManager exists but lacks risk logic.
-  - **Order Placement** (`src/connectors/oanda_connector.cpp`): Not implemented, OandaConnector supports data fetching but not trading API.
-  - **Backtesting** (`src/apps/workbench/backtester/backtester.cpp`): Partially implemented, lacks signal integration and UI.
-- **Status**: Largely unimplemented. Trading pipeline is conceptual, not operational.
+  - **Signal Generation** (`src/apps/workbench/core/service_proxy_engine.cpp`): Not implemented, awaits threshold detection.
+  - **Risk Management** (`src/apps/workbench/core/trade_manager.cpp`): TradeManager exists but lacks risk logic.
+  - **Order Placement** (`src/connectors/oanda_connector.cpp`): OandaConnector supports data fetching, not trading API.
+  - **Backtesting** (`src/apps/workbench/backtester/backtester.cpp`): Partially implemented per [backtesting_architecture.md](backtesting_architecture.md).
+- **Status**: Trading pipeline is conceptual, requires significant implementation.
 - **TODO Integration**:
-  - **Backtesting Framework**: Integrate signals into Backtester and add UI in BackendTabController.
-  - **Signal Validation System**: Implement in ServiceProxyEngine to measure prediction accuracy.
-  - **Risk Management Module**: Add position sizing and stop-loss to TradeManager.
-  - **Order Management System**: Extend OandaConnector for trading API and integrate with TradeManager.
-  - **Demo Account Integration**: Configure demo account and paper trading in TradeManager.
-- **Completion**: (Phase 2.1-2.5 in TODO.md).
+  - **Backtesting Framework**: Integrate signals and UI (Phase 2.1).
+  - **Signal Validation System**: Implement in ServiceProxyEngine (Phase 2.2).
+  - **Risk Management Module**: Add logic to TradeManager (Phase 2.3).
+  - **Order Management System**: Extend OandaConnector (Phase 2.4).
+  - **Demo Account Integration**: Configure paper trading (Phase 2.5).
+- **Estimated Completion**: 25 days (Phase 2.1-2.5).
 
 #### 6. Demo Trading & Optimization
 - **Components**:
-  - **Paper Trading** (`src/apps/workbench/core/trade_manager.cpp`): Not implemented, depends on demo account integration.
-  - **Performance Monitoring** (`src/apps/workbench/core/trade_manager.cpp`): Not implemented, needs trade analytics.
-  - **Strategy Optimization** (`src/apps/workbench/core/service_proxy_engine.cpp`): Not implemented, requires backtesting data.
-- **Status**: Not started, depends on Phase 2 completion.
+  - **Paper Trading** (`src/apps/workbench/core/trade_manager.cpp`): Not implemented.
+  - **Performance Monitoring** (`src/apps/workbench/core/trade_manager.cpp`): Not implemented.
+  - **Strategy Optimization** (`src/apps/workbench/core/service_proxy_engine.cpp`): Not implemented.
+- **Status**: Awaits Phase 2 completion.
 - **TODO Integration**:
-  - **Paper Trading**: Enable in TradeManager with live data.
-  - **Performance Monitoring**: Add analytics and alerts to BackendTabController.
-  - **Strategy Optimization**: Implement automated tuning in ServiceProxyEngine.
-- **Completion**: (Phase 3.1-3.3 in TODO.md).
+  - **Paper Trading**: Enable with live data (Phase 3.1).
+  - **Performance Monitoring**: Add analytics (Phase 3.2).
+  - **Strategy Optimization**: Implement tuning (Phase 3.3).
+- **Estimated Completion**: 16 days (Phase 3.1-3.3).
 
 ### Current Implementation Gaps
-- **Build Errors**: The snapshot and `report.md` highlight issues like ignored return values (`cert-err33-c`) and reserved identifiers (`clang-diagnostic-reserved-identifier`). These are minor but should be fixed to ensure robustness.
-  - **Fix Plan**: Prioritize `cert-err33-c` warnings in `imgui_impl_opengl3.cpp` and `imgui_demo.cpp` by casting to `void` where appropriate (effort).
-- **Incomplete Routing**: Components like PatternMetricEngine and MetricsMonitor produce valid outputs but aren't properly connected to the workbench tabs.
-- **Missing Features**: Threshold detection, signal validation, and trading infrastructure are critical gaps preventing demo trading.
+- **Build Errors** (`report.md`):
+  - Warnings: `cert-err33-c` (ignored return values), `security.FloatLoopCounter` in ImGui files.
+  - High-priority: Null pointer dereferences in `imgui.cpp`.
+  - **Fix Plan**: Cast returns to `void`, address dereferences (2 days).
+- **Incomplete Routing**: PatternMetricEngine and MetricsMonitor outputs not connected to dashboard.
+- **Missing Features**: Threshold detection, signal validation, and trading infrastructure.
 
 ### Recommendations
-1. **Focus on Testbed**: Complete the 48-hour data setup and metrics display this week to establish a reliable testing environment.
-2. **Systematic Integration**: Follow the TODO.md sequence to avoid premature optimization. Ensure each component is fully implemented before moving to the next.
-3. **Address Technical Debt**: Fix build warnings and optimize PatternMetricEngine scaling after testbed completion.
-4. **Validate Early**: Start signal validation as soon as pattern discovery is implemented to guide threshold tuning.
-5. **Leverage Existing Code**: Reuse `pattern_metric_example.cpp` for threshold testing and `multi_timeframe_analyzer.cpp` for correlation analysis.
+1. **Testbed Priority**: Complete 48-hour data setup and metrics display this week.
+2. **Sequential Integration**: Follow [TODO.md](TODO.md) to ensure components are fully implemented.
+3. **Build Stability**: Fix high-priority warnings after testbed completion.
+4. **Early Validation**: Start signal validation post-pattern discovery to refine thresholds.
+5. **Code Reuse**: Leverage `pattern_metric_example.cpp` for threshold testing and `multi_timeframe_analyzer.cpp` for correlations.
 
 ### Success Metrics
-- **Testbed**: 48-hour data processed, metrics at >10Hz, 3+ signal patterns, correlation >0.3.
-- **Demo Trading**: Sharpe ratio >1.0, <5% drawdown, 100 error-free demo trades, risk limits enforced.
-- **Timeline**: Testbed completion, demo trading readiness.
+- **Testbed**: 48-hour data processed, metrics at >10Hz, 3+ patterns, correlation >0.3.
+- **Demo Trading**: Sharpe ratio >1.0, <5% drawdown, 100 error-free trades, risk limits enforced.
+- **Timeline**: Testbed in 2-3 weeks, demo trading in 6-9 weeks.
 
 ### Conclusion
-The SEP Engine's core is production-ready, with validated quantum algorithms and market data integration. The primary challenge is routing data through the workbench and implementing trading infrastructure. By following the TODO.md roadmap, the project can achieve demo trading capability, transitioning from a conceptual engine to a profitable trading system. The architecture diagram is a reliable guide, and the snapshot confirms the presence of most necessary components—now it's about proper integration and validation.
+The SEP Engine's core is robust, with verified quantum algorithms and market data integration. The challenge lies in routing data through the workbench and building trading infrastructure. By adhering to the [TODO.md](TODO.md) roadmap, demo trading can be achieved in 9-12 weeks, transitioning the engine into a profitable trading system.

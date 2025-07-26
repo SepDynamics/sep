@@ -602,9 +602,9 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
         return correlation_metrics;
     }
 
-    std::vector<double> price_changes;
-    for (size_t i = 1; i < candles.size(); ++i) {
-        price_changes.push_back(candles[i].close - candles[i-1].close);
+    std::vector<double> prices;
+    for (const auto& candle : candles) {
+        prices.push_back(candle.close);
     }
 
     std::vector<double> coherence_values;
@@ -639,9 +639,9 @@ CorrelationMetrics MultiTimeframeAnalyzer::calculateCorrelationMetrics(const std
         return (denominator == 0) ? 0.0 : numerator / denominator;
     };
 
-    correlation_metrics.coherence_price_correlation = calculate_correlation(coherence_values, price_changes);
-    correlation_metrics.stability_price_correlation = calculate_correlation(stability_values, price_changes);
-    correlation_metrics.entropy_price_correlation = calculate_correlation(entropy_values, price_changes);
+    correlation_metrics.coherence_price_correlation = calculate_correlation(coherence_values, prices);
+    correlation_metrics.stability_price_correlation = calculate_correlation(stability_values, prices);
+    correlation_metrics.entropy_price_correlation = calculate_correlation(entropy_values, prices);
 
     return correlation_metrics;
 }

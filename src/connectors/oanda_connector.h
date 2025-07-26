@@ -25,8 +25,8 @@ struct MarketData {
     double volume;
     std::vector<double> bid_book;
     std::vector<double> ask_book;
-    
-    // Technical indicators (matching JS prototype)
+
+    // Technical indicators
     double atr;              // Average True Range
     int volatility_level;    // 1-4 volatility classification
     double spread;           // Bid-ask spread
@@ -40,6 +40,13 @@ struct OandaCandle {
     double low;
     double close;
     long volume;
+};
+
+struct DataValidationResult
+{
+    bool valid;
+    std::vector<std::string> errors;
+    std::vector<std::string> warnings;
 };
 
 class OandaConnector {
@@ -72,13 +79,12 @@ public:
     nlohmann::json placeOrder(const nlohmann::json& order_details);
     nlohmann::json getOpenPositions();
     nlohmann::json getOrders();
-    
-    // Technical analysis (matching JS prototype)
-    double calculateATR(const std::string& instrument, 
-                       const std::string& granularity = "H1", 
-                       int periods = 14);
+
+    // Technical analysis
+    double calculateATR(const std::string& instrument, const std::string& granularity = "H1",
+                        int periods = 14);
     MarketData getMarketData(const std::string& instrument);
-    int getVolatilityLevel(double atr);
+    int getVolatilityLevel(double current_atr, const std::string& instrument);
 
     // Sample Data
     void setupSampleData(const std::string& instrument, const std::string& granularity, const std::string& output_file);
@@ -106,14 +112,19 @@ private:
     
     static size_t WriteCallback(void* contents, size_t size, size_t nmemb, CurlResponse* response);
     static size_t StreamCallback(void* contents, size_t size, size_t nmemb, OandaConnector* connector);
-    
+
     CurlResponse makeRequest(const std::string& endpoint, const std::string& method = "GET", const std::string& data = "");
     void processStreamData(const std::string& data);
-    
-    // Data conversion
+
+    // Data conversion and validation
     MarketData parseMarketData(const nlohmann::json& price_data);
     OandaCandle parseCandle(const nlohmann::json& candle_data);
-    
+    int64_t parseTimestamp(const std::string& time_str);
+    DataValidationResult validateCandle(const OandaCandle& candle);
+    DataValidationResult validateCandleSequence(const std::vector<OandaCandle>& candles,
+                                                const std::string& granularity);
+    std::vector<double> calculateHistoricalATRs(const std::vector<OandaCandle>& candles);
+
     // Rate limiting
     void enforceRateLimit();
     std::chrono::steady_clock::time_point last_request_time_;
@@ -126,4 +137,4 @@ private:
 };
 
 } // namespace connectors
-} // namespace sep
+}  // namespace sep

@@ -1,10 +1,12 @@
 #include "oanda_connector.h"
-#include <iostream>
-#include <sstream>
+
 #include <chrono>
-#include <thread>
 #include <cstring>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <thread>
 
 namespace sep {
 namespace connectors {
@@ -45,10 +47,9 @@ bool OandaConnector::testConnection() {
     auto response = makeRequest("/v3/accounts/" + account_id_);
     
     if (response.response_code != 200) {
-        last_error_ = "Connection test failed: HTTP " + std::to_string(response.response_code);
-        std::cout << "[OandaConnector] WARNING: Authentication failed, but continuing for demo purposes" << std::endl;
-        // Return true for now to allow engine testing despite auth failure
-        return true;
+        last_error_ = "Connection test failed: HTTP " + std::to_string(response.response_code) +
+                      " - " + response.data;
+        return false;
     }
     
     try {
@@ -66,6 +67,7 @@ bool OandaConnector::testConnection() {
 }
 
 void OandaConnector::shutdown() {
+    stopPriceStream();
     if (curl_handle_) {
         curl_easy_cleanup(curl_handle_);
         curl_handle_ = nullptr;
@@ -95,17 +97,12 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
     if (!to.empty()) {
         endpoint += "&to=" + to;
     }
-    
-    std::cout << "[OandaConnector] Request URL: " << endpoint << std::endl;
-    
+
     auto response = makeRequest(endpoint);
-    
-    std::cout << "[OandaConnector] Response code: " << response.response_code << std::endl;
-    std::cout << "[OandaConnector] Response size: " << response.data.size() << " bytes" << std::endl;
-    
+
     if (response.response_code != 200) {
-        last_error_ = "Failed to get historical data: HTTP " + std::to_string(response.response_code);
-        std::cout << "[OandaConnector] Error response: " << response.data << std::endl;
+        last_error_ =
+            "Failed to get historical data: HTTP " + std::to_string(response.response_code);
         return candles;
     }
     
@@ -116,9 +113,7 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
             last_error_ = "No candles in response";
             return candles;
         }
-        
-        std::cout << "[OandaConnector] Received " << json_response["candles"].size() << " candles" << std::endl;
-        
+
         for (const auto& candle_json : json_response["candles"]) {
             candles.push_back(parseCandle(candle_json));
         }
@@ -143,7 +138,6 @@ bool OandaConnector::startPriceStream(const std::vector<std::string>& instrument
         return false;
     }
 
-    // Build instruments parameter
     std::string instruments_param;
     for (size_t i = 0; i < instruments.size(); ++i)
     {
@@ -242,15 +236,13 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
     curl_easy_setopt(curl_handle_, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl_handle_, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl_handle_, CURLOPT_WRITEDATA, &response);
-    
-    // Set headers
+
     struct curl_slist* headers = nullptr;
     std::string auth_header = "Authorization: Bearer " + api_key_;
     headers = curl_slist_append(headers, auth_header.c_str());
     headers = curl_slist_append(headers, "Content-Type: application/json");
     curl_easy_setopt(curl_handle_, CURLOPT_HTTPHEADER, headers);
-    
-    // Set method
+
     if (method == "POST") {
         curl_easy_setopt(curl_handle_, CURLOPT_POST, 1L);
         if (!data.empty()) {
@@ -278,11 +270,9 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
     return response;
 }
 
-// Technical Analysis Implementation (matching JS prototype)
-double OandaConnector::calculateATR(const std::string& instrument, 
-                                   const std::string& granularity, 
-                                   int periods) {
-    // Get historical data for ATR calculation
+double OandaConnector::calculateATR(const std::string& instrument, const std::string& granularity,
+                                    int periods)
+{
     auto candles = getHistoricalData(instrument, granularity, "", "", periods + 1);
     
     if (candles.size() < periods) {
@@ -291,14 +281,12 @@ double OandaConnector::calculateATR(const std::string& instrument,
     }
     
     std::vector<double> true_ranges;
-    
-    // Calculate true ranges (skip first candle as we need previous close)
+
     for (size_t i = 1; i < candles.size(); i++) {
         double high = candles[i].high;
         double low = candles[i].low;
         double prev_close = candles[i-1].close;
-        
-        // True Range = max(high - low, |high - prev_close|, |low - prev_close|)
+
         double tr1 = high - low;
         double tr2 = std::abs(high - prev_close);
         double tr3 = std::abs(low - prev_close);
@@ -306,8 +294,7 @@ double OandaConnector::calculateATR(const std::string& instrument,
         
         true_ranges.push_back(true_range);
     }
-    
-    // Calculate average true range
+
     if (true_ranges.empty()) {
         return 0.0;
     }
@@ -316,53 +303,68 @@ double OandaConnector::calculateATR(const std::string& instrument,
     return atr;
 }
 
-int OandaConnector::getVolatilityLevel(double atr) {
-    // Volatility classification matching JS prototype
-    if (atr < 0.003) return 1;      // Low volatility
-    if (atr < 0.007) return 2;      // Medium-low volatility  
-    if (atr < 0.012) return 3;      // Medium-high volatility
-    return 4;                       // High volatility
+int OandaConnector::getVolatilityLevel(double current_atr, const std::string& instrument) {
+    // Fetch last 90 days of daily candles for a stable volatility baseline
+    auto candles = getHistoricalData(instrument, "D", "", "", 90);
+    if (candles.size() < 20) { // Need a reasonable number of candles
+        last_error_ = "Insufficient historical data for volatility calculation.";
+        return 1; // Default to low volatility
+    }
+
+    auto atrs = calculateHistoricalATRs(candles);
+    if (atrs.empty()) {
+        last_error_ = "Could not calculate historical ATRs.";
+        return 1; // Default to low volatility
+    }
+
+    std::sort(atrs.begin(), atrs.end());
+
+    double p25 = atrs[atrs.size() / 4];
+    double p75 = atrs[atrs.size() * 3 / 4];
+
+    if (current_atr < p25) return 1;      // Low volatility
+    if (current_atr < p75) return 2;      // Medium volatility
+    return 3;                           // High volatility
 }
 
 MarketData OandaConnector::getMarketData(const std::string& instrument) {
     MarketData market_data;
     market_data.instrument = instrument;
-    
-    try {
-        // Get current price data
-        auto candles = getHistoricalData(instrument, "M1", "", "", 10);
-        if (!candles.empty()) {
-            auto& latest = candles.back();
-            market_data.bid = latest.close - 0.0001;  // Approximate bid
-            market_data.ask = latest.close + 0.0001;  // Approximate ask
-            market_data.mid = latest.close;
-            market_data.spread = market_data.ask - market_data.bid;
-            market_data.volume = latest.volume;
-        }
-        
-        // Calculate ATR for volatility analysis
-        market_data.atr = calculateATR(instrument);
-        market_data.volatility_level = getVolatilityLevel(market_data.atr);
-        
-        // Set timestamp
-        auto now = std::chrono::system_clock::now();
-        market_data.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
-            now.time_since_epoch()).count();
-        
-        // Calculate daily change (simplified - would need daily candles for accurate calculation)
-        market_data.daily_change = 0.0;
-        
-    } catch (const std::exception& e) {
-        last_error_ = "Error getting market data: " + std::string(e.what());
+
+    std::string endpoint = "/v3/accounts/" + account_id_ + "/pricing?instruments=" + instrument;
+    auto response = makeRequest(endpoint);
+
+    if (response.response_code != 200)
+    {
+        last_error_ = "Failed to get market data: " + response.data;
+        return market_data;
     }
-    
+
+    try {
+        auto json_response = nlohmann::json::parse(response.data);
+        if (json_response.contains("prices") && !json_response["prices"].empty())
+        {
+            market_data = parseMarketData(json_response["prices"][0]);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        last_error_ = "Error parsing market data: " + std::string(e.what());
+        return market_data;
+    }
+
+    market_data.atr = calculateATR(instrument);
+    market_data.volatility_level = getVolatilityLevel(market_data.atr, instrument);
+    market_data.spread = market_data.ask - market_data.bid;
+
     return market_data;
 }
 
 void OandaConnector::processStreamData(const std::string& data) {
     stream_buffer_ += data;
     size_t newline_pos;
-    while ((newline_pos = stream_buffer_.find('\n')) != std::string::npos) {
+    while ((newline_pos = stream_buffer_.find('\n')) != std::string::npos)
+    {
         std::string line = stream_buffer_.substr(0, newline_pos);
         stream_buffer_.erase(0, newline_pos + 1);
 
@@ -396,16 +398,7 @@ MarketData OandaConnector::parseMarketData(const nlohmann::json& price_data) {
     }
 
     if (price_data.contains("time")) {
-        std::string time_str = price_data["time"];
-        try {
-            size_t dot_pos = time_str.find('.');
-            if (dot_pos != std::string::npos) {
-                time_str = time_str.substr(0, dot_pos);
-            }
-            market_data.timestamp = std::stoull(time_str);
-        } catch (const std::exception& e) {
-            market_data.timestamp = 0;
-        }
+        market_data.timestamp = parseTimestamp(price_data["time"]);
     }
     
     if (price_data.contains("bids") && !price_data["bids"].empty()) {
@@ -431,8 +424,7 @@ OandaCandle OandaConnector::parseCandle(const nlohmann::json& candle_data) {
     if (candle_data.contains("volume")) {
         candle.volume = candle_data["volume"];
     }
-    
-    // Parse mid prices
+
     if (candle_data.contains("mid")) {
         const auto& mid = candle_data["mid"];
         if (mid.contains("o")) candle.open = std::stod(mid["o"].get<std::string>());
@@ -444,15 +436,16 @@ OandaCandle OandaConnector::parseCandle(const nlohmann::json& candle_data) {
     return candle;
 }
 
-void OandaConnector::enforceRateLimit() {
-    // OANDA allows 100 requests per second - enforce 50ms minimum between requests
+void OandaConnector::enforceRateLimit()
+{
     auto now = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_request_time_);
-    
-    if (elapsed.count() < 50) {
+
+    if (elapsed.count() < 50)
+    {  // OANDA allows 100 req/sec, 10ms, but being conservative
         std::this_thread::sleep_for(std::chrono::milliseconds(50 - elapsed.count()));
     }
-    
+
     last_request_time_ = std::chrono::steady_clock::now();
 }
 
@@ -468,30 +461,25 @@ void OandaConnector::streamPriceData(const std::string& instruments)
         return;
     }
 
-    // Set up headers
     struct curl_slist* headers = nullptr;
     headers = curl_slist_append(headers, ("Authorization: Bearer " + api_key_).c_str());
     headers = curl_slist_append(headers, "Accept-Datetime-Format: UNIX");
 
-    // Configure CURL for streaming
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OandaConnector::StreamCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
 
-    // Keep connection alive
     curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
     curl_easy_setopt(curl, CURLOPT_TCP_KEEPIDLE, 120L);
     curl_easy_setopt(curl, CURLOPT_TCP_KEEPINTVL, 60L);
 
-    // Perform the streaming request
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK && streaming_active_)
     {
         std::cerr << "Streaming error: " << curl_easy_strerror(res) << std::endl;
     }
 
-    // Cleanup
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
 }
@@ -541,11 +529,23 @@ nlohmann::json OandaConnector::getOrders() {
 }
 
 void OandaConnector::setupSampleData(const std::string& instrument, const std::string& granularity, const std::string& output_file) {
-    // 48 hours * 60 minutes/hour = 2880 M1 candles
-    auto candles = getHistoricalData(instrument, granularity, "", "", 2880);
+    auto candles =
+        getHistoricalData(instrument, granularity, "", "", 48 * 60);  // 48 hours of M1 data
 
     if (candles.empty()) {
         last_error_ = "Failed to fetch any data for sample setup.";
+        std::cerr << "[OandaConnector] Error: " << last_error_ << std::endl;
+        return;
+    }
+
+    auto validation = validateCandleSequence(candles, granularity);
+    if (!validation.valid)
+    {
+        last_error_ = "Fetched data failed validation.";
+        for (const auto& err : validation.errors)
+            last_error_ +=
+                "\
+ - " + err;
         std::cerr << "[OandaConnector] Error: " << last_error_ << std::endl;
         return;
     }
@@ -575,5 +575,106 @@ void OandaConnector::setupSampleData(const std::string& instrument, const std::s
     std::cout << "[OandaConnector] Successfully wrote " << candles.size() << " candles to " << output_file << std::endl;
 }
 
+// --- Data Validation Implementations ---
+
+int64_t OandaConnector::parseTimestamp(const std::string& time_str)
+{
+    std::tm tm = {};
+    std::stringstream ss(time_str);
+    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+    auto time_point = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+    return std::chrono::duration_cast<std::chrono::seconds>(time_point.time_since_epoch()).count();
+}
+
+DataValidationResult OandaConnector::validateCandle(const OandaCandle& candle)
+{
+    DataValidationResult result{true};
+    if (candle.high < candle.low || candle.high < candle.open || candle.high < candle.close)
+    {
+        result.valid = false;
+        result.errors.push_back("High price is not the highest price.");
+    }
+    if (candle.low > candle.high || candle.low > candle.open || candle.low > candle.close)
+    {
+        result.valid = false;
+        result.errors.push_back("Low price is not the lowest price.");
+    }
+    if (candle.volume < 0)
+    {
+        result.valid = false;
+        result.errors.push_back("Volume cannot be negative.");
+    }
+    return result;
+}
+
+DataValidationResult OandaConnector::validateCandleSequence(const std::vector<OandaCandle>& candles,
+                                                            const std::string& granularity)
+{
+    DataValidationResult result{true};
+    if (candles.size() < 2) return result;  // Not enough data to check sequence
+
+    for (size_t i = 0; i < candles.size(); ++i)
+    {
+        auto single_validation = validateCandle(candles[i]);
+        if (!single_validation.valid)
+        {
+            result.valid = false;
+            for (const auto& err : single_validation.errors)
+            {
+                result.errors.push_back("Candle at " + candles[i].time + ": " + err);
+            }
+        }
+    }
+
+    // Check for timestamp continuity
+    // This is a simplified check. A robust implementation would parse the granularity string.
+    int64_t expected_diff = 60;  // Default to M1
+    if (granularity == "H1")
+        expected_diff = 3600;
+    else if (granularity == "D")
+        expected_diff = 86400;
+
+    for (size_t i = 1; i < candles.size(); ++i)
+    {
+        int64_t t1 = parseTimestamp(candles[i - 1].time);
+        int64_t t2 = parseTimestamp(candles[i].time);
+        if ((t2 - t1) != expected_diff)
+        {
+            result.warnings.push_back("Timestamp gap detected between " + candles[i - 1].time +
+                                      " and " + candles[i].time);
+        }
+    }
+
+    return result;
+}
+
+std::vector<double> OandaConnector::calculateHistoricalATRs(const std::vector<OandaCandle>& candles)
+{
+    std::vector<double> atrs;
+    if (candles.size() < 15) return atrs;
+
+    std::vector<double> true_ranges;
+    for (size_t i = 1; i < candles.size(); ++i)
+    {
+        double tr = std::max({candles[i].high - candles[i].low,
+                              std::abs(candles[i].high - candles[i - 1].close),
+                              std::abs(candles[i].low - candles[i - 1].close)});
+        true_ranges.push_back(tr);
+    }
+
+    if (true_ranges.size() < 14) return atrs;
+
+    double first_atr = std::accumulate(true_ranges.begin(), true_ranges.begin() + 14, 0.0) / 14.0;
+    atrs.push_back(first_atr);
+
+    for (size_t i = 14; i < true_ranges.size(); ++i)
+    {
+        double next_atr = (atrs.back() * 13 + true_ranges[i]) / 14.0;
+        atrs.push_back(next_atr);
+    }
+
+    return atrs;
+}
+
 } // namespace connectors
-} // namespace sep
+}  // namespace sep

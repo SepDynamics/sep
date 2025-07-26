@@ -41,6 +41,7 @@ private:
     void renderSEPMetricsPanel();
     void renderEngineControls();
     void renderCorrelationPanel();
+    void renderConnectorMetricsPanel();
 
     // Data retrieval
     std::vector<sep::quantum::PatternMetrics> getCurrentPatternMetrics();

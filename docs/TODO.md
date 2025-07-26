@@ -1,186 +1,216 @@
+
+---
+
+### TODO.md
+
+```markdown
 # SEP Engine Development Roadmap
 
 ## Objective
-Transition the SEP Engine from a proof-of-concept with minimal build functionality to a robust, production-ready trading platform by systematically implementing and integrating core components. This roadmap prioritizes fixing build errors, completing partially implemented components, and ensuring proper routing of data through the verified pipeline.
+Transform the SEP Engine into a production-ready trading platform by integrating core components, addressing minimal build errors, and enabling demo trading. This roadmap prioritizes testbed completion, signal validation, and trading infrastructure development, ensuring proper data routing through the verified pipeline.
 
 ## Development Phases
-1. **Phase 1: Testbed Completion**
-   - Ensure a stable environment for testing with clean data and reliable metrics visualization.
-2. **Phase 2: Trading Preparation**
+1. **Phase 1: Testbed Completion** (2-3 weeks)
+   - Establish a stable testing environment with clean data and dashboard integration.
+2. **Phase 2: Trading Preparation** (4-6 weeks)
    - Validate signals, implement risk management, and prepare for demo trading.
-3. **Phase 3: Demo Trading & Optimization**
-   - Enable live demo trading and refine strategies based on performance.
+3. **Phase 3: Demo Trading & Optimization** (3-4 weeks)
+   - Launch paper trading and optimize strategies based on performance.
 
 ## Phase 1: Testbed Completion
 
 ### 1.1 48-Hour Sample Data Setup
-- **Status**: Not implemented (missing in snapshot).
+- **Status**: Not implemented.
 - **Tasks**:
-  - [ ] Create a script to fetch 48 hours of EUR/USD M1 data from OANDA API (`src/connectors/oanda_connector.cpp`).
-  - [ ] Store data in a local SQLite database or JSON files (`src/engine/data_parser.cpp`).
-  - [ ] Implement data integrity checks (e.g., missing candles, invalid prices).
-  - [ ] Create a data loader for workbench (`src/apps/workbench/core/service_connector.cpp`).
+  - [ ] Fetch 48 hours of EUR/USD M1 data via OandaConnector (`src/connectors/oanda_connector.cpp`).
+  - [ ] Store in JSON files with DataParser (`src/engine/data_parser.cpp`).
+  - [ ] Add integrity checks for missing candles or invalid prices.
+  - [ ] Create data loader for workbench (`src/apps/workbench/core/service_connector.cpp`).
 - **Priority**: High
+- **Estimated Time**: 3 days
 - **Dependencies**: OandaConnector, DataParser
 
 ### 1.2 Enhanced Metrics Display
-- **Status**: Partially implemented (`src/apps/workbench/core/metrics_monitor.cpp` exists but not fully integrated with dashboard).
+- **Status**: Partially implemented (`src/apps/workbench/core/metrics_monitor.cpp` not fully integrated).
 - **Tasks**:
   - [ ] Connect MetricsMonitor to SignalsTabController (`src/apps/workbench/tabs/signals_tab_controller.cpp`).
-  - [ ] Render coherence, stability, and entropy in real-time ImGui plots.
+  - [ ] Render coherence, stability, entropy in real-time ImGui plots.
   - [ ] Add 1-hour and 4-hour rolling averages for metrics.
-  - [ ] Implement threshold visualization (dashed lines for high/low thresholds).
+  - [ ] Visualize thresholds with dashed lines.
 - **Priority**: High
+- **Estimated Time**: 4 days
 - **Dependencies**: MetricsMonitor, SignalsTabController
 
 ### 1.3 Pattern Discovery Framework
-- **Status**: Not implemented (threshold detection logic missing).
+- **Status**: Not implemented (missing threshold logic).
 - **Tasks**:
-  - [ ] Implement configurable threshold detection in PatternMetricEngine (`src/quantum/pattern_metric_engine.cpp`).
-  - [ ] Test combinations (e.g., `stability < 0.3 && entropy > 0.7` for sell signals).
-  - [ ] Create a UI panel for adjusting thresholds in SignalsTabController.
-  - [ ] Log detected patterns to a file for analysis (`src/engine/logging.cpp`).
+  - [ ] Implement threshold detection in PatternMetricEngine (`src/quantum/pattern_metric_engine.cpp`).
+  - [ ] Test signal rules (e.g., `stability < 0.3 && entropy > 0.7`).
+  - [ ] Add UI panel for threshold adjustment in SignalsTabController.
+  - [ ] Log patterns to file (`src/engine/logging.cpp`).
 - **Priority**: High
+- **Estimated Time**: 5 days
 - **Dependencies**: PatternMetricEngine, SignalsTabController
 
 ### 1.4 Correlation Analysis
-- **Status**: Not implemented (no correlation logic in snapshot).
+- **Status**: Not implemented.
 - **Tasks**:
-  - [ ] Implement correlation calculator between metrics and price movements (`src/apps/workbench/core/multi_timeframe_analyzer.cpp`).
-  - [ ] Display correlation coefficients in EngineTabController (`src/apps/workbench/tabs/engine_tab_controller.cpp`).
-  - [ ] Export correlation data for offline analysis (`src/engine/data_parser.cpp`).
+  - [ ] Calculate metric-price correlations in MultiTimeframeAnalyzer (`src/apps/workbench/core/multi_timeframe_analyzer.cpp`).
+  - [ ] Display coefficients in EngineTabController (`src/apps/workbench/tabs/engine_tab_controller.cpp`).
+  - [ ] Export correlation data (`src/engine/data_parser.cpp`).
 - **Priority**: Medium
+- **Estimated Time**: 3 days
 - **Dependencies**: MultiTimeframeAnalyzer, EngineTabController
 
 ## Phase 2: Trading Preparation
 
 ### 2.1 Backtesting Framework
-- **Status**: Partially implemented (`src/apps/workbench/backtester/backtester.cpp` exists but lacks signal integration).
+- **Status**: Partially implemented (`src/apps/workbench/backtester/backtester.cpp` lacks signal integration).
 - **Tasks**:
-  - [ ] Integrate PatternMetricEngine signals into Backtester.
-  - [ ] Implement performance metrics (Sharpe ratio, max drawdown).
-  - [ ] Create a UI panel for backtesting in BackendTabController (`src/apps/workbench/tabs/backend_tab_controller.cpp`).
-  - [ ] Support 48-hour sample data as input.
+  - [ ] Integrate PatternMetricEngine signals into BacktesterEngine (`src/apps/workbench/backtester/core/backtester_engine.cpp`).
+  - [ ] Add metrics (Sharpe ratio, max drawdown) in PerformanceMetrics (`src/apps/workbench/backtester/core/performance_metrics.cpp`).
+  - [ ] Create UI panel in BackendTabController (`src/apps/workbench/tabs/backend_tab_controller.cpp`).
+  - [ ] Support 48-hour data input.
 - **Priority**: High
-- **Dependencies**: Backtester, PatternMetricEngine, BackendTabController
+- **Estimated Time**: 7 days
+- **Dependencies**: BacktesterEngine, PatternMetricEngine, BackendTabController
 
 ### 2.2 Signal Validation System
-- **Status**: Not implemented (no validation logic in snapshot).
+- **Status**: Not implemented.
 - **Tasks**:
-  - [ ] Create a signal validator to measure prediction accuracy (`src/apps/workbench/core/service_proxy_engine.cpp`).
-  - [ ] Compare predicted signals against actual price movements.
-  - [ ] Generate validation reports (e.g., accuracy, false positive rate).
-  - [ ] Integrate validation results into BackendTabController UI.
+  - [ ] Build validator in ServiceProxyEngine (`src/apps/workbench/core/service_proxy_engine.cpp`).
+  - [ ] Compare signals against price movements.
+  - [ ] Generate reports (accuracy, false positives).
+  - [ ] Display results in BackendTabController.
 - **Priority**: High
+- **Estimated Time**: 5 days
 - **Dependencies**: ServiceProxyEngine, BackendTabController
 
 ### 2.3 Risk Management Module
-- **Status**: Not implemented (missing in snapshot).
+- **Status**: Not implemented.
 - **Tasks**:
-  - [ ] Implement position sizing based on account balance and risk percentage (`src/apps/workbench/core/trade_manager.cpp`).
+  - [ ] Implement position sizing in TradeManager (`src/apps/workbench/core/trade_manager.cpp`).
   - [ ] Add stop-loss and take-profit logic.
-  - [ ] Enforce maximum exposure limits (e.g., 2% per trade).
-  - [ ] Create a UI panel for risk parameters in BackendTabController.
+  - [ ] Enforce 2% max exposure per trade.
+  - [ ] Create UI panel in BackendTabController.
 - **Priority**: High
+- **Estimated Time**: 6 days
 - **Dependencies**: TradeManager, BackendTabController
 
 ### 2.4 Order Management System
-- **Status**: Not implemented (TradeManager exists but lacks order placement logic).
+- **Status**: Not implemented (TradeManager lacks order logic).
 - **Tasks**:
-  - [ ] Implement OANDA Trading API integration for order placement (`src/connectors/oanda_connector.cpp`).
+  - [ ] Integrate OANDA Trading API in OandaConnector (`src/connectors/oanda_connector.cpp`).
   - [ ] Track order states (pending, filled, canceled).
-  - [ ] Handle order errors and retries.
-  - [ ] Display order status in BackendTabController UI.
+  - [ ] Handle errors and retries.
+  - [ ] Display order status in BackendTabController.
 - **Priority**: High
+- **Estimated Time**: 7 days
 - **Dependencies**: OandaConnector, TradeManager, BackendTabController
 
 ### 2.5 Demo Account Integration
-- **Status**: Not implemented (no demo account setup in snapshot).
+- **Status**: Not implemented.
 - **Tasks**:
-  - [ ] Configure OANDA demo account credentials in configuration (`src/apps/workbench/config.cpp`).
-  - [ ] Implement paper trading mode in TradeManager.
+  - [ ] Configure OANDA demo credentials (`src/apps/workbench/config.cpp`).
+  - [ ] Enable paper trading in TradeManager.
   - [ ] Test order placement in demo environment.
-  - [ ] Display demo account balance and P&L in BackendTabController.
+  - [ ] Show demo balance and P&L in BackendTabController.
 - **Priority**: High
+- **Estimated Time**: 5 days
 - **Dependencies**: OandaConnector, TradeManager, BackendTabController
 
 ## Phase 3: Demo Trading & Optimization
 
 ### 3.1 Paper Trading
-- **Status**: Not implemented (requires demo account integration).
+- **Status**: Not implemented.
 - **Tasks**:
-  - [ ] Enable continuous paper trading with live OANDA data.
-  - [ ] Log all trades to a database or file (`src/engine/logging.cpp`).
-  - [ ] Monitor trade performance in real-time.
+  - [ ] Enable continuous paper trading with live data.
+  - [ ] Log trades to file (`src/engine/logging.cpp`).
+  - [ ] Monitor performance in real-time.
   - [ ] Display trade history in BackendTabController.
 - **Priority**: High
+- **Estimated Time**: 5 days
 - **Dependencies**: TradeManager, BackendTabController
 
 ### 3.2 Performance Monitoring
-- **Status**: Not implemented (no trade analytics in snapshot).
+- **Status**: Not implemented.
 - **Tasks**:
-  - [ ] Implement trade performance analytics (win/loss ratio, ROI).
-  - [ ] Create alerts for performance anomalies (e.g., large drawdowns).
-  - [ ] Display performance metrics in BackendTabController UI.
-  - [ ] Export trade logs for external analysis.
+  - [ ] Add analytics (win/loss ratio, ROI) in TradeManager.
+  - [ ] Create alerts for anomalies (e.g., large drawdowns).
+  - [ ] Display metrics in BackendTabController.
+  - [ ] Export trade logs.
 - **Priority**: Medium
+- **Estimated Time**: 4 days
 - **Dependencies**: TradeManager, BackendTabController
 
 ### 3.3 Strategy Optimization
-- **Status**: Not implemented (no optimization logic in snapshot).
+- **Status**: Not implemented.
 - **Tasks**:
-  - [ ] Implement automated threshold optimization using backtest results.
-  - [ ] Test machine learning models for metric-price relationships (`src/apps/workbench/core/service_proxy_engine.cpp`).
-  - [ ] Create a UI panel for strategy tuning in EngineTabController.
-  - [ ] Validate optimized strategies in paper trading.
+  - [ ] Automate threshold optimization using backtest results.
+  - [ ] Test ML models for metric-price relationships in ServiceProxyEngine.
+  - [ ] Add UI panel for tuning in EngineTabController.
+  - [ ] Validate strategies in paper trading.
 - **Priority**: Medium
+- **Estimated Time**: 7 days
 - **Dependencies**: ServiceProxyEngine, EngineTabController, Backtester
 
 ## Technical Debt & Optimizations
 
-### Performance Scaling
-- **Issue**: Super-linear scaling on large files (POC 4).
+### Build Error Fixes
+- **Issue**: Static analysis warnings (`cert-err33-c`, `security.FloatLoopCounter` in ImGui files).
 - **Tasks**:
-  - [ ] Optimize PatternMetricEngine data structures (`src/quantum/pattern_metric_engine.cpp`).
+  - [ ] Cast ignored return values to `void` in `imgui_impl_opengl3.cpp`, `signals_tab_controller.cpp`.
+  - [ ] Address null pointer dereferences in `imgui.cpp`.
+- **Priority**: Medium
+- **Estimated Time**: 2 days
+- **Dependencies**: None
+
+### Performance Scaling
+- **Issue**: Super-linear scaling in PatternMetricEngine (POC 4).
+- **Tasks**:
+  - [ ] Optimize data structures (`src/quantum/pattern_metric_engine.cpp`).
   - [ ] Implement sliding window for pattern history.
 - **Priority**: Medium
+- **Estimated Time**: 5 days
 - **Dependencies**: PatternMetricEngine
 
 ### Event-Driven Architecture
-- **Issue**: Tight coupling between components.
+- **Issue**: Tight component coupling.
 - **Tasks**:
-  - [ ] Implement EventBus for component communication (`src/apps/workbench/core/ui_layout_manager.cpp`).
-  - [ ] Refactor component interactions to use events.
+  - [ ] Implement EventBus in UILayoutManager (`src/apps/workbench/core/ui_layout_manager.cpp`).
+  - [ ] Refactor interactions to use events.
 - **Priority**: Medium
+- **Estimated Time**: 6 days
 - **Dependencies**: UILayoutManager
 
 ### API Rate Limiting
-- **Issue**: OANDA API rate limits could disrupt live trading.
+- **Issue**: Potential OANDA API disruptions.
 - **Tasks**:
-  - [ ] Implement request batching in OandaConnector.
-  - [ ] Add caching layer for market data (`src/connectors/market_data_converter.cpp`).
+  - [ ] Add request batching in OandaConnector.
+  - [ ] Implement caching (`src/connectors/market_data_converter.cpp`).
 - **Priority**: Medium
+- **Estimated Time**: 4 days
 - **Dependencies**: OandaConnector
 
 ## Immediate Action Items (This Week)
 1. **48-Hour Sample Data Setup**:
-   - Write fetch script for EUR/USD M1 data.
-   - Store in JSON format with integrity checks.
+   - Fetch EUR/USD M1 data and store in JSON.
+   - Implement integrity checks.
 2. **Metrics Display Integration**:
    - Connect MetricsMonitor to SignalsTabController.
-   - Render basic ImGui plots for coherence/stability/entropy.
+   - Render ImGui plots for metrics.
 3. **Threshold Detection**:
-   - Add basic threshold logic to PatternMetricEngine.
-   - Test simple rules (e.g., `stability < 0.3 && entropy > 0.7`).
+   - Add threshold logic to PatternMetricEngine.
+   - Test basic signal rules.
 
 ## Success Metrics
 - **Testbed Completion**:
-  - 48 hours of clean data processed without errors.
+  - 48 hours of clean data processed.
   - Metrics updating at >10Hz in dashboard.
   - 3+ reliable signal patterns identified.
-  - Correlation coefficient >0.3 between signals and price.
+  - Correlation coefficient >0.3.
 - **Demo Trading Readiness**:
   - Backtested Sharpe ratio >1.0.
-  - <5% maximum drawdown in paper trading.
-  - 100 demo trades placed without errors.
+  - <5% max drawdown in paper trading.
+  - 100 demo trades without errors.
   - Risk limits enforced.

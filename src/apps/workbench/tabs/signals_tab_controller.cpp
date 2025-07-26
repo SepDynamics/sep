@@ -137,6 +137,11 @@ void SignalsTabController::render() {
                 // Ingest the OHLC data into the pattern engine
                 pme->ingestData(candle_bytes.data(), candle_bytes.size());
                 
+                // IMPORTANT: Also feed the same data to the MetricsMonitor for unified processing
+                if (metrics_monitor_) {
+                    metrics_monitor_->ingestData(candle_bytes.data(), candle_bytes.size());
+                }
+                
                 // Evolve patterns and compute metrics
                 pme->evolvePatterns();
                 const auto& metrics_results = pme->computeMetrics();
@@ -154,14 +159,42 @@ void SignalsTabController::render() {
                     sep_signal.trend_strength = (metrics.coherence * metrics.stability) - metrics.entropy;
                     sep_signal.timestamp = candle.timestamp;
                     
-                    // Determine signal type based on thresholds (Phase 1.3 Pattern Discovery)
-                    if (metrics.coherence > 0.8f && metrics.stability > 0.7f && metrics.entropy < 0.2f) {
+                    // Dynamic thresholds based on rolling averages (Phase 1.3 Pattern Discovery)
+                    float coherence_threshold_high = 0.8f;
+                    float coherence_threshold_low = 0.3f;
+                    float stability_threshold_high = 0.7f;
+                    float stability_threshold_low = 0.3f;
+                    float entropy_threshold_low = 0.2f;
+                    float entropy_threshold_high = 0.7f;
+                    
+                    // Adapt thresholds based on 24-hour rolling averages if MetricsMonitor is available
+                    if (metrics_monitor_) {
+                        const auto& rolling = metrics_monitor_->getRollingMetrics();
+                        // Set thresholds as 1.2x and 0.8x of 24-hour averages for adaptivity
+                        coherence_threshold_high = std::max(0.6f, rolling.coherence_24h_avg * 1.2f);
+                        coherence_threshold_low = std::min(0.4f, rolling.coherence_24h_avg * 0.8f);
+                        stability_threshold_high = std::max(0.6f, rolling.stability_24h_avg * 1.2f);
+                        stability_threshold_low = std::min(0.4f, rolling.stability_24h_avg * 0.8f);
+                        entropy_threshold_low = std::max(0.1f, rolling.entropy_24h_avg * 0.8f);
+                        entropy_threshold_high = std::min(0.8f, rolling.entropy_24h_avg * 1.2f);
+                    }
+                    
+                    // Determine signal type using adaptive thresholds
+                    if (metrics.coherence > coherence_threshold_high && 
+                        metrics.stability > stability_threshold_high && 
+                        metrics.entropy < entropy_threshold_low) {
                         sep_signal.signal_type = SEPSignalData::STRONG_BUY;
-                    } else if (metrics.coherence > 0.7f && metrics.stability > 0.6f && metrics.entropy < 0.3f) {
+                    } else if (metrics.coherence > coherence_threshold_high * 0.9f && 
+                               metrics.stability > stability_threshold_high * 0.85f && 
+                               metrics.entropy < entropy_threshold_low * 1.5f) {
                         sep_signal.signal_type = SEPSignalData::BUY;
-                    } else if (metrics.coherence < 0.2f && metrics.stability < 0.3f && metrics.entropy > 0.8f) {
+                    } else if (metrics.coherence < coherence_threshold_low && 
+                               metrics.stability < stability_threshold_low && 
+                               metrics.entropy > entropy_threshold_high) {
                         sep_signal.signal_type = SEPSignalData::STRONG_SELL;
-                    } else if (metrics.coherence < 0.3f && metrics.stability < 0.4f && metrics.entropy > 0.7f) {
+                    } else if (metrics.coherence < coherence_threshold_low * 1.2f && 
+                               metrics.stability < stability_threshold_low * 1.2f && 
+                               metrics.entropy > entropy_threshold_high * 0.9f) {
                         sep_signal.signal_type = SEPSignalData::SELL;
                     } else {
                         sep_signal.signal_type = SEPSignalData::NEUTRAL;

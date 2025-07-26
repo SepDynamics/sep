@@ -147,6 +147,16 @@ const MetricsMonitor::ThresholdSignal& MetricsMonitor::getLatestSignal() const {
     return latest_signal_;
 }
 
+sep::connectors::MarketData MetricsMonitor::getLatestMarketData() const {
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
+    return latest_market_data_;
+}
+
+void MetricsMonitor::setLatestMarketData(const sep::connectors::MarketData& data) {
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
+    latest_market_data_ = data;
+}
+
 void MetricsMonitor::setMinPatternLength(size_t min_length) {
     min_pattern_length_ = min_length;
 }
@@ -391,9 +401,14 @@ MetricsMonitor::SimpleSignals MetricsMonitor::getSimpleThresholdSignals() const 
     signals.entropy = system_metrics_.avg_entropy;
     signals.coherence = system_metrics_.avg_coherence;
     
-    // Implement the exact logic from TODO.md
-    signals.sellSignal = (signals.stability < 0.3f && signals.entropy > 0.7f);
-    signals.buySignal = (signals.stability > 0.7f && signals.entropy < 0.3f);
+    // Dynamic signal generation based on adaptive thresholds
+    float stability_sell_threshold = std::max(0.2f, rolling_metrics_.stability_24h_avg * 0.7f);
+    float entropy_sell_threshold = std::min(0.8f, rolling_metrics_.entropy_24h_avg * 1.3f);
+    float stability_buy_threshold = std::min(0.8f, rolling_metrics_.stability_24h_avg * 1.2f);
+    float entropy_buy_threshold = std::max(0.2f, rolling_metrics_.entropy_24h_avg * 0.8f);
+    
+    signals.sellSignal = (signals.stability < stability_sell_threshold && signals.entropy > entropy_sell_threshold);
+    signals.buySignal = (signals.stability > stability_buy_threshold && signals.entropy < entropy_buy_threshold);
     
     return signals;
 }
@@ -420,25 +435,30 @@ void MetricsMonitor::detectThresholdSignals() {
     std::string reasons;
     float confidence_score = 0.0f;
 
+    // Dynamic threshold calculations based on historical context
+    float stability_threshold = std::max(0.2f, stability_24h * 0.7f);
+    float entropy_threshold = std::min(0.8f, entropy_24h * 1.3f);
+    float coherence_threshold = coherence_24h * 0.8f;
+
     // Signal condition 1: Low stability indicates market uncertainty (potential sell)
-    if (current_stability < 0.3f && current_stability < stability_24h * 0.7f) {
+    if (current_stability < stability_threshold) {
         signal.low_stability = true;
         confidence_score += 25.0f;
-        reasons += "Low market stability (" + std::to_string(current_stability) + "); ";
+        reasons += "Low market stability (" + std::to_string(current_stability) + " < " + std::to_string(stability_threshold) + "); ";
     }
 
     // Signal condition 2: High entropy indicates chaos/volatility (potential sell)
-    if (current_entropy > 0.7f && current_entropy > entropy_24h * 1.3f) {
+    if (current_entropy > entropy_threshold) {
         signal.high_entropy = true;
         confidence_score += 25.0f;
-        reasons += "High market entropy (" + std::to_string(current_entropy) + "); ";
+        reasons += "High market entropy (" + std::to_string(current_entropy) + " > " + std::to_string(entropy_threshold) + "); ";
     }
 
     // Signal condition 3: Coherence drop indicates pattern breakdown (sell)
-    if (current_coherence < coherence_24h * 0.8f && rolling_metrics_.coherence_trend < -10.0f) {
+    if (current_coherence < coherence_threshold && rolling_metrics_.coherence_trend < -10.0f) {
         signal.coherence_drop = true;
         confidence_score += 30.0f;
-        reasons += "Coherence drop with negative trend; ";
+        reasons += "Coherence drop (" + std::to_string(current_coherence) + " < " + std::to_string(coherence_threshold) + ") with negative trend; ";
     }
 
     // Signal condition 4: Rapid change detection (buy opportunity after sell-off)
@@ -472,14 +492,22 @@ void MetricsMonitor::detectThresholdSignals() {
         reasons += "Stabilization after volatility; ";
     }
 
-    // Cumulative Signal Scoring
-    signal.cumulative_score = (current_coherence * 0.5f) + (current_stability * 0.3f) - (current_entropy * 0.2f);
+    // Dynamic Cumulative Signal Scoring based on relative performance
+    float coherence_weight = 0.4f + (current_coherence > coherence_24h ? 0.2f : -0.1f);
+    float stability_weight = 0.3f + (current_stability > stability_24h ? 0.1f : -0.1f);
+    float entropy_weight = 0.3f + (current_entropy < entropy_24h ? 0.1f : -0.2f);
+    
+    signal.cumulative_score = (current_coherence * coherence_weight) + 
+                             (current_stability * stability_weight) - 
+                             (current_entropy * entropy_weight);
 
-    // Trade Confidence Index
-    float confidence_from_metrics = (signal.low_stability * 0.2f) +
-                                    (signal.high_entropy * 0.2f) +
-                                    (signal.coherence_drop * 0.3f) +
-                                    (signal.entropy_spike * 0.3f);
+    // Dynamic Trade Confidence Index based on signal strength and historical context
+    float stability_confidence = signal.low_stability ? (stability_24h - current_stability) / stability_24h * 0.25f : 0.0f;
+    float entropy_confidence = signal.high_entropy ? (current_entropy - entropy_24h) / entropy_24h * 0.25f : 0.0f;
+    float coherence_confidence = signal.coherence_drop ? (coherence_24h - current_coherence) / coherence_24h * 0.3f : 0.0f;
+    float spike_confidence = signal.entropy_spike ? 0.2f : 0.0f;
+    
+    float confidence_from_metrics = stability_confidence + entropy_confidence + coherence_confidence + spike_confidence;
     
     signal.trade_confidence = std::min(1.0f, confidence_from_metrics + (signal.cumulative_score * 0.1f));
 

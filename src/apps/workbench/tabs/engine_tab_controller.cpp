@@ -16,12 +16,17 @@ bool EngineTabController::initialize() {
 }
 
 void EngineTabController::render() {
-    ImGui::Columns(2, "EngineColumns", true);
-    renderSEPMetricsPanel();
-    renderEngineControls();
-    renderCorrelationPanel();
+    if (ImGui::BeginTabItem("SEP Engine")) {
+        ImGui::Columns(2);
+        renderSEPMetricsPanel();
+        ImGui::NextColumn();
+        renderConnectorMetricsPanel();
+        ImGui::Columns(1);
 
-    ImGui::Columns(1);
+        renderEngineControls();
+        renderCorrelationPanel();
+        ImGui::EndTabItem();
+    }
 }
 
 void EngineTabController::shutdown() {}
@@ -162,6 +167,27 @@ void EngineTabController::resetEngineState() {
     } catch (const std::exception& e) {
         std::cerr << "[EngineTabController] Error resetting engine state: " << e.what() << std::endl;
     }
+}
+
+void EngineTabController::renderConnectorMetricsPanel() {
+    ImGui::BeginChild("Connector Metrics", ImVec2(0, 250), true);
+    ImGui::Text("Connector & Market Metrics");
+    ImGui::Separator();
+
+    if (metrics_monitor_) {
+        auto market_data = metrics_monitor_->getLatestMarketData();
+        ImGui::Text("Instrument: %s", market_data.instrument.c_str());
+        ImGui::Text("Timestamp: %llu", market_data.timestamp);
+        ImGui::Text("Bid: %.5f", market_data.bid);
+        ImGui::Text("Ask: %.5f", market_data.ask);
+        ImGui::Text("Spread: %.5f", market_data.spread);
+        ImGui::Text("ATR (H1): %.5f", market_data.atr);
+        ImGui::Text("Volatility Level: %d", market_data.volatility_level);
+    } else {
+        ImGui::Text("Metrics monitor not available.");
+    }
+
+    ImGui::EndChild();
 }
 
 void EngineTabController::renderCorrelationPanel() {

@@ -7,6 +7,7 @@
 #include <mutex>
 #include <chrono>
 #include <unordered_map>
+#include "connectors/oanda_connector.h"
 
 namespace sep::workbench {
 
@@ -104,6 +105,8 @@ public:
     const SystemMetrics& getSystemMetrics() const;
     const RollingMetrics& getRollingMetrics() const;
     const ThresholdSignal& getLatestSignal() const;
+    sep::connectors::MarketData getLatestMarketData() const;
+    void setLatestMarketData(const sep::connectors::MarketData& data);
     
     // Added for debugging and testing
     std::unordered_map<std::string, double> getMetrics() {
@@ -148,6 +151,7 @@ private:
     SystemMetrics system_metrics_;
     RollingMetrics rolling_metrics_;
     ThresholdSignal latest_signal_;
+    sep::connectors::MarketData latest_market_data_;
     
     // Historical data for rolling calculations
     struct MetricsSnapshot {

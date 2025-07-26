@@ -130,6 +130,7 @@ target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
 # Trigger rebuild again
 add_subdirectory(src)
 add_subdirectory(examples)
+add_subdirectory(tests)
 
 # Custom command to generate documentation
 add_custom_target(generate_docs

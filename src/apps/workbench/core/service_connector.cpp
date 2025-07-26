@@ -4,6 +4,7 @@
 #include "engine.h"
 #include "service_proxy_engine.h"
 #include "config.h"
+#include "ui_layout_manager.h"
 
 #include <iostream>
 #include <thread>
@@ -93,7 +94,8 @@ bool ServiceConnector::connect() {
         // Start health monitoring
         startHealthMonitoring();
         
-        // Notify callback
+        // Notify via EventBus
+        globalEventBus().publish(ConnectionStateEvent{ConnectionState::CONNECTED});
         if (connection_callback_) {
             connection_callback_(ConnectionState::CONNECTED);
         }
@@ -151,7 +153,8 @@ void ServiceConnector::disconnect() {
     service_engine_ = nullptr;
     connection_state_ = ConnectionState::DISCONNECTED;
     
-    // Notify callback
+    // Notify via EventBus
+    globalEventBus().publish(ConnectionStateEvent{ConnectionState::DISCONNECTED});
     if (connection_callback_) {
         connection_callback_(ConnectionState::DISCONNECTED);
     }
@@ -220,7 +223,8 @@ void ServiceConnector::monitoringLoop() {
                             connection_state_ = ConnectionState::DISCONNECTED;
                         }
                         
-                        // Notify callback of state change
+                        // Notify via EventBus
+                        globalEventBus().publish(ConnectionStateEvent{connection_state_});
                         if (connection_callback_) {
                             connection_callback_(connection_state_);
                         }

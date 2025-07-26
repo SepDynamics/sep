@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <typeindex>
 
 #include "imgui.h"
 
@@ -65,6 +67,50 @@ struct LayoutGroup {
     bool collapsed = false;
     std::vector<std::string> panel_ids;
 };
+
+// Simple event structures
+struct PanelVisibilityEvent {
+    std::string panel_id;
+    bool visible{false};
+};
+
+struct GroupCollapsedEvent {
+    std::string group_name;
+    bool collapsed{false};
+};
+
+struct ConnectionStateEvent {
+    ConnectionState state;
+};
+
+class EventBus {
+public:
+    template<typename EventType>
+    void subscribe(std::function<void(const EventType&)> handler) {
+        auto key = std::type_index(typeid(EventType));
+        handlers_[key].push_back([handler](const void* e) {
+            handler(*static_cast<const EventType*>(e));
+        });
+    }
+
+    template<typename EventType>
+    void publish(const EventType& event) {
+        auto key = std::type_index(typeid(EventType));
+        auto it = handlers_.find(key);
+        if (it != handlers_.end()) {
+            for (auto& cb : it->second) {
+                cb(&event);
+            }
+        }
+    }
+
+private:
+    std::unordered_map<std::type_index,
+                       std::vector<std::function<void(const void*)>>> handlers_;
+};
+
+// Global event bus accessor
+EventBus& globalEventBus();
 
 class UILayoutManager {
 public:

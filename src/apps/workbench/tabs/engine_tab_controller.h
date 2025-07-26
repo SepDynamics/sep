@@ -55,6 +55,7 @@ private:
     // Export path buffer
     char correlation_export_path_[512] = "correlation.csv";
     char metrics_export_path_[512] = "metrics.json";
+    std::string correlation_export_status_{};
 
     // Strategy optimization
     std::unique_ptr<backtester::Backtester> backtester_;

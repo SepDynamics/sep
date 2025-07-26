@@ -24,7 +24,7 @@ namespace sep
                  */
                 std::string load_48h_sample();
 
-                void load_data(const std::string& file_path);
+                std::vector<common::CandleData> load_data(const std::string& file_path);
                 const std::vector<common::CandleData>& get_data() const { return data_; }
 
             private:

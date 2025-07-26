@@ -51,6 +51,13 @@ while [ ! -f "build/src/apps/workbench/sep_workbench" ]; do
     sleep 1
 done
 
+# Ensure sample data is available
+SAMPLE_FILE="eur_usd_m1_48h.json"
+if [ ! -f "$SAMPLE_FILE" ]; then
+    echo "Sample dataset not found. Downloading..."
+    ./build/src/apps/data_downloader
+fi
+
 # Run the sep_workbench with OANDA credentials
 echo "Starting SEP Workbench..."
 echo "Press Ctrl+C to exit"

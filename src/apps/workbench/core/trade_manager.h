@@ -7,6 +7,10 @@
 #include <vector>
 #include <mutex>
 #include <chrono>
+#include <thread>
+#include <atomic>
+#include <memory>
+#include "engine/logging.h"
 
 namespace sep {
 namespace workbench {
@@ -39,7 +43,7 @@ struct Position {
 class TradeManager {
 public:
     TradeManager(sep::connectors::OandaConnector* connector);
-    ~TradeManager() = default;
+    ~TradeManager();
 
     nlohmann::json placeOrder(const std::string& instrument,
                               double units,
@@ -63,17 +67,32 @@ public:
 
     void setPaperTrading(bool paper_trading);
 
+    // Continuous paper trading controls
+    void startPaperTrading(const std::string& instrument);
+    void stopPaperTrading();
+
+    // Performance metrics
+    double getWinLossRatio() const;
+    double getROI() const;
+
 private:
     void updatePositions(const Order& order);
 
     sep::connectors::OandaConnector* oanda_connector_;
     std::vector<Order> orders_;
     std::vector<Position> positions_;
+    std::shared_ptr<spdlog::logger> logger_;
+    std::thread paper_thread_;
+    std::atomic<bool> paper_thread_active_{false};
+    std::string paper_instrument_;
     std::mutex mutex_;
     double account_balance_ = 100000.0;
+    double starting_balance_ = 100000.0;
     double realized_pnl_ = 0.0;
     double risk_percentage_ = 0.02;
     double max_exposure_pct_ = 0.02;
+    int win_count_ = 0;
+    int loss_count_ = 0;
     bool paper_trading_ = false;
 };
 

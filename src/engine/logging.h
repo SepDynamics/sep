@@ -62,6 +62,15 @@ class Manager {
 void logPatternDetected(const std::string &pattern_id,
                         std::chrono::system_clock::time_point timestamp);
 
+// Log executed trade details to the trade_manager logger
+void logTrade(const std::string &instrument,
+              double units,
+              double price,
+              double pnl);
+
+// Log anomaly events such as abnormal ROI drawdown
+void logAnomaly(const std::string &message);
+
 // Global functions
 inline void initializeLogging() { Manager::initialize(); }
 inline Level levelFromString(const std::string &level)

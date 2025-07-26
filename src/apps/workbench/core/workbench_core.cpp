@@ -102,7 +102,7 @@ bool WorkbenchEngine::initialize()
             metrics_.service_connected = (e.state == ConnectionState::CONNECTED);
         });
         signal_generator_ = ::std::make_unique<QuantumSignalGenerator>();
-        metrics_monitor_ = ::std::make_unique<MetricsMonitor>();
+        metrics_monitor_ = ::std::make_shared<MetricsMonitor>();
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
         
         // Initialize renderer and metrics dashboard
@@ -121,10 +121,11 @@ bool WorkbenchEngine::initialize()
         // Set up data flow
         signals_tab_->setOandaConnector(service_connector_->getOandaConnector());
         signals_tab_->setQuantumSignalGenerator(signal_generator_.get());
-        signals_tab_->setMetricsMonitor(metrics_monitor_.get());
+        signals_tab_->setMetricsMonitor(metrics_monitor_);
         signals_tab_->setWorkbenchEngine(this);
         service_connector_->setSignalsTab(signals_tab_.get());
         engine_tab_->setSEPEngine(active_engine_);
+        engine_tab_->setMetricsMonitor(metrics_monitor_);
         engine_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         backend_tab_->setServiceConnector(service_connector_.get());
         backend_tab_->setTradeManager(service_connector_->getTradeManager());
@@ -694,46 +695,53 @@ void WorkbenchEngine::renderTabs()
 void WorkbenchEngine::updateData()
 {
     // Real implementation of data fetching pipeline (DATA.md integration)
+    std::deque<CandleData> candle_data;
+    bool fetched = false;
     if (service_connector_ && service_connector_->getOandaConnector()) {
         auto oanda_connector = service_connector_->getOandaConnector();
         try {
-            // Fetch 48-hour sample data (TODO.md Phase 1.1)
             auto now = std::chrono::system_clock::now();
-            auto hours_48_ago = now - std::chrono::hours(48);
-            
+            auto start = now - std::chrono::hours(48);
+
             auto now_t = std::chrono::system_clock::to_time_t(now);
-            auto hours_48_ago_t = std::chrono::system_clock::to_time_t(hours_48_ago);
-            
-            std::string from_time = std::to_string(hours_48_ago_t);
-            std::string to_time = std::to_string(now_t);
-            
-            // Fetch historical EUR/USD M1 data
-            auto historical_candles = oanda_connector->getHistoricalData("EUR_USD", "M1", from_time, to_time, 2880);
-            
-            std::deque<CandleData> candle_data;
-            for (const auto& oanda_candle : historical_candles) {
-                // Parse OANDA timestamp (RFC 3339 format: "2021-04-07T00:00:00.000000000Z")
+            auto start_t = std::chrono::system_clock::to_time_t(start);
+
+            auto historical_candles = oanda_connector->getHistoricalData(
+                "EUR_USD", "M1", std::to_string(start_t), std::to_string(now_t), 2880);
+
+            for (const auto& oc : historical_candles) {
                 std::tm tm = {};
-                std::istringstream ss(oanda_candle.time);
+                std::istringstream ss(oc.time);
                 ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-                auto timestamp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-                
-                CandleData candle(oanda_candle.open, oanda_candle.high, 
-                                oanda_candle.low, oanda_candle.close, 
-                                static_cast<int>(oanda_candle.volume), timestamp);
-                candle_data.push_back(candle);
+                auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+                candle_data.emplace_back(oc.open, oc.high, oc.low, oc.close,
+                                        static_cast<int>(oc.volume), ts);
             }
-            
-            // Update signals tab with fetched data
-            if (signals_tab_) {
+
+            fetched = !candle_data.empty();
+            if (fetched && signals_tab_) {
                 signals_tab_->setCandleData(candle_data);
             }
-            
-            std::cout << "[WorkbenchEngine] Fetched " << candle_data.size() 
-                      << " candles from OANDA" << std::endl;
-                      
+
+            if (fetched) {
+                std::cout << "[WorkbenchEngine] Fetched " << candle_data.size()
+                          << " candles from OANDA" << std::endl;
+            }
+
         } catch (const std::exception& e) {
             std::cerr << "[WorkbenchEngine] OANDA data fetch error: " << e.what() << std::endl;
+        }
+    }
+
+    if (!fetched && service_connector_) {
+        candle_data = std::deque<CandleData>(service_connector_->getInitialData().begin(),
+                                             service_connector_->getInitialData().end());
+        if (signals_tab_ && !candle_data.empty()) {
+            signals_tab_->setCandleData(candle_data);
+        }
+        if (!candle_data.empty()) {
+            std::cout << "[WorkbenchEngine] Loaded " << candle_data.size()
+                      << " candles from local cache" << std::endl;
         }
     }
 

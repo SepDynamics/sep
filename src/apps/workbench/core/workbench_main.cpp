@@ -2,6 +2,7 @@
 #include "workbench_core.hpp"
 #include "engine/logging.h"
 #include "apps/workbench/core/service_proxy_engine.h"
+#include "apps/workbench/core/service_connector.hpp"
 #include "apps/workbench/backtester/backtester.h"
 #include "apps/workbench/backtester/data/data_loader.h"
 
@@ -47,6 +48,14 @@ int main(int argc, char* argv[]) {
         setenv("OANDA_ACCOUNT_ID", account_id.c_str(), 1);
         std::cout << "[Main] OANDA Account ID set: " << account_id << std::endl;
     }
+
+    // Verify SEP engine availability before launching
+    sep::workbench::ServiceConnector connection_test;
+    if (!connection_test.connect()) {
+        std::cerr << "[Main] Failed to connect to SEP engine. Exiting." << std::endl;
+        return 1;
+    }
+    connection_test.disconnect();
     
     std::cout << "=====================================\n";
     std::cout << "   SEP OANDA Trading Engine v1.0     \n";

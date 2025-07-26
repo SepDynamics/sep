@@ -69,6 +69,55 @@ struct TradeHistory {
         : instrument(inst), side(s), size(sz), entry_price(entry), exit_price(exit),
           pl((s == PendingOrder::BUY ? (exit - entry) : (entry - exit)) * sz),
           entry_time(et), exit_time(ext) {}
+}; 
+
+struct AlertCondition {
+    enum Type { PRICE_ABOVE, PRICE_BELOW, SEP_SIGNAL, INDICATOR_CROSS };
+    enum Status { ACTIVE, TRIGGERED, DISABLED };
+
+    std::string id;
+    Type type;
+    Status status = ACTIVE;
+    std::string instrument;
+    double price_level = 0.0;
+    std::string message;
+    bool sound_alert = true;
+    bool popup_alert = true;
+    std::chrono::system_clock::time_point created_time;
+    std::chrono::system_clock::time_point triggered_time;
+
+    AlertCondition(Type t, const std::string& inst, const std::string& msg)
+        : type(t), instrument(inst), message(msg),
+          created_time(std::chrono::system_clock::now()) {}
+};
+
+struct SEPSignalData {
+    float coherence;
+    float stability;
+    float entropy;
+    float alpha_signal;
+    float trend_strength;
+    std::chrono::system_clock::time_point timestamp;
+
+    // Real market data from OANDA
+    float atr;            // Average True Range
+    int volatility_level; // Volatility level (1-4)
+    float bid;            // Current bid price
+    float ask;            // Current ask price
+    float spread;         // Bid-ask spread
+
+    enum SignalType {
+        STRONG_BUY,
+        BUY,
+        NEUTRAL,
+        SELL,
+        STRONG_SELL
+    } signal_type = NEUTRAL;
+
+    SEPSignalData()
+        : coherence(0), stability(0), entropy(0), alpha_signal(0),
+          trend_strength(0), atr(0), volatility_level(1), bid(0), ask(0),
+          spread(0) {}
 };
 
 struct CandleData {

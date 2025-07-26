@@ -13,31 +13,100 @@ using namespace glm;
 
 namespace sep::compat {
 void to_json(nlohmann::json& j, const PatternData& data) {
-    // FIXME: PatternData struct mismatch - current struct is array-based, not
-    // vec4+coherence/stability
-    // Real PatternData serialization based on actual struct
-    std::vector<float> attributes_vec(data.attributes, data.attributes + data.size);
-    j = nlohmann::json{
-        {"id", std::string(data.id)},
-        {"generation", data.generation},
-        {"attributes", attributes_vec},
-        {"size", data.size},
-        {"position", {data.position.x, data.position.y, data.position.z, data.position.w}},
-        {"velocity", {data.velocity.x, data.velocity.y, data.velocity.z, data.velocity.w}},
-        {"coherence", data.coherence},
-        {"relationship_count", data.relationship_count}
+    j = nlohmann::json::object();
+    j["id"] = std::string(data.id);
+    j["generation"] = data.generation;
+
+    j["attributes"] = nlohmann::json::array();
+    for (int i = 0; i < data.size; ++i) {
+        j["attributes"].push_back(data.attributes[i]);
+    }
+    j["size"] = data.size;
+
+    j["position"] = {data.position.x, data.position.y, data.position.z, data.position.w};
+    j["velocity"] = {data.velocity.x, data.velocity.y, data.velocity.z, data.velocity.w};
+    j["coherence"] = data.coherence;
+
+    j["relationships"] = nlohmann::json::array();
+    for (int i = 0; i < data.relationship_count; ++i) {
+        const auto& rel = data.relationships[i];
+        j["relationships"].push_back({
+            {"targetId", std::string(rel.target_id)},
+            {"strength", rel.strength},
+            {"type", rel.type}
+        });
+    }
+    j["relationship_count"] = data.relationship_count;
+
+    j["quantum_state"] = {
+        {"coherence", data.quantum_state.coherence},
+        {"phase", data.quantum_state.phase},
+        {"amplitude", data.quantum_state.amplitude},
+        {"entanglement", data.quantum_state.entanglement},
+        {"stability", data.quantum_state.stability},
+        {"entropy", data.quantum_state.entropy},
+        {"mutation_rate", data.quantum_state.mutation_rate}
     };
 }
 
 void from_json(const nlohmann::json& j, PatternData& data) {
-    // FIXME: PatternData struct mismatch - current struct is array-based, not
-    // vec4+coherence/stability
-    auto attrs = j.at("attributes").get<std::vector<float>>();
-    // Fill the attributes array with the first few values
-    for (int i = 0; i < std::min(static_cast<int>(attrs.size()), PatternData::MAX_ATTRIBUTES); ++i)
-    {
-        data.attributes[i] = attrs[i];
-        data.size = i + 1;
+    std::string id = j.value("id", "");
+    std::strncpy(data.id, id.c_str(), PatternData::MAX_ID_LENGTH - 1);
+    data.id[PatternData::MAX_ID_LENGTH - 1] = '\0';
+
+    data.generation = j.value("generation", 0);
+
+    data.size = 0;
+    if (j.contains("attributes")) {
+        const auto& attrs = j.at("attributes");
+        for (size_t i = 0; i < attrs.size() && i < PatternData::MAX_ATTRIBUTES; ++i) {
+            data.attributes[i] = attrs[i].get<float>();
+            data.size = static_cast<int>(i) + 1;
+        }
+    }
+
+    if (j.contains("position")) {
+        auto pos = j.at("position");
+        if (pos.size() >= 4) {
+            data.position = glm::vec4(pos[0].get<float>(), pos[1].get<float>(),
+                                      pos[2].get<float>(), pos[3].get<float>());
+        }
+    }
+
+    if (j.contains("velocity")) {
+        auto vel = j.at("velocity");
+        if (vel.size() >= 4) {
+            data.velocity = glm::vec4(vel[0].get<float>(), vel[1].get<float>(),
+                                      vel[2].get<float>(), vel[3].get<float>());
+        }
+    }
+
+    data.coherence = j.value("coherence", 0.0f);
+
+    data.relationship_count = 0;
+    if (j.contains("relationships")) {
+        const auto& rels = j.at("relationships");
+        for (size_t i = 0; i < rels.size() && i < PatternData::MAX_RELATIONSHIPS; ++i) {
+            const auto& rj = rels[i];
+            auto& rel = data.relationships[i];
+            std::string tid = rj.value("targetId", "");
+            std::strncpy(rel.target_id, tid.c_str(), PatternRelationship::MAX_ID_LENGTH - 1);
+            rel.target_id[PatternRelationship::MAX_ID_LENGTH - 1] = '\0';
+            rel.strength = rj.value("strength", 0.0f);
+            rel.type = rj.value("type", std::string("default"));
+            ++data.relationship_count;
+        }
+    }
+
+    if (j.contains("quantum_state")) {
+        const auto& qs = j.at("quantum_state");
+        data.quantum_state.coherence = qs.value("coherence", 0.0f);
+        data.quantum_state.phase = qs.value("phase", 0.0f);
+        data.quantum_state.amplitude = qs.value("amplitude", 1.0f);
+        data.quantum_state.entanglement = qs.value("entanglement", 0.0f);
+        data.quantum_state.stability = qs.value("stability", 0.0f);
+        data.quantum_state.entropy = qs.value("entropy", 0.0f);
+        data.quantum_state.mutation_rate = qs.value("mutation_rate", 0.0f);
     }
 }
 }

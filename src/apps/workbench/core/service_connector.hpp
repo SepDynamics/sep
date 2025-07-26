@@ -11,7 +11,7 @@
 #include "service_proxy_engine.h"
 #include "trade_manager.h"
 #include "tabs/signals_tab_controller.h"
-#include "core/common_structs.h"
+#include "common/financial_data_types.h"
 
 namespace sep {
 namespace core {

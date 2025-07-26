@@ -2,6 +2,7 @@
 
 // Include engine headers - they should be found via CMake include paths
 #include "engine.h"
+#include "engine/manager.h"
 #include "service_proxy_engine.h"
 #include "config.h"
 #include "ui_layout_manager.h"
@@ -33,7 +34,7 @@ ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 
 ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
-    auto& cfg = workbench::Config::getInstance().oanda();
+    auto& cfg = sep::config::ConfigManager::getInstance().oanda();
     std::string api_key = cfg.demo_api_key.empty() ? cfg.api_key : cfg.demo_api_key;
     std::string account_id = cfg.demo_account_id.empty() ? cfg.account_id : cfg.demo_account_id;
     if (api_key.empty() || account_id.empty()) {

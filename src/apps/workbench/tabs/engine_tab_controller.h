@@ -5,14 +5,14 @@
 #include <string>
 #include <vector>
 
-#include "core/common_structs.h"
+#include "common/financial_data_types.h"
 #include "core/metrics_monitor.h"
 #include "engine/engine.h"
 #include "quantum/coherence_manager.h"
 #include "quantum/pattern_metric_engine.h"
-#include "core/service_proxy_engine.h"
-#include "../backtester/backtester.h"
-#include "../backtester/data/data_loader.h"
+#include "apps/workbench/core/service_proxy_engine.h"
+#include "apps/workbench/backtester/backtester.h"
+#include "apps/workbench/backtester/data/data_loader.h"
 
 namespace sep::workbench {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "apps/workbench/core/common_structs.h"
+#include "common/financial_data_types.h"
 
 #include <string>
 #include <vector>

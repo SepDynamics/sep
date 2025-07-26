@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "core/common_structs.h"
+#include "common/financial_data_types.h"
 
 namespace sep {
 namespace workbench {

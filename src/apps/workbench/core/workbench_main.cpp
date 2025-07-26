@@ -1,6 +1,9 @@
 #include "std_includes.h"
 #include "workbench_core.hpp"
 #include "engine/logging.h"
+#include "apps/workbench/core/service_proxy_engine.h"
+#include "apps/workbench/backtester/backtester.h"
+#include "apps/workbench/backtester/data/data_loader.h"
 
 // Global workbench instance for signal handling
 static sep::workbench::WorkbenchEngine* g_workbench = nullptr;

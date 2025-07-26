@@ -611,4 +611,28 @@ bool DataParser::exportCorrelationJSON(const std::string& path,
     return true;
 }
 
+bool DataParser::exportCorrelationHistoryCSV(const std::string& path,
+                                             const std::map<std::string, std::deque<workbench::CorrelationMetrics>>& history) const {
+    std::ofstream file(path);
+    if (!file.is_open()) {
+        return false;
+    }
+
+    file << "timeframe,index,coh_pearson,coh_spearman,stab_pearson,stab_spearman,entropy_pearson,entropy_spearman\n";
+    for (const auto& [tf, metrics_queue] : history) {
+        size_t idx = 0;
+        for (const auto& m : metrics_queue) {
+            file << tf << ',' << idx++ << ','
+                 << m.coherence_pearson << ','
+                 << m.coherence_spearman << ','
+                 << m.stability_pearson << ','
+                 << m.stability_spearman << ','
+                 << m.entropy_pearson << ','
+                 << m.entropy_spearman << "\n";
+        }
+    }
+
+    return true;
+}
+
 } // namespace sep

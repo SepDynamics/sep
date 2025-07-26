@@ -36,4 +36,12 @@ function(add_sep_library target_name)
             target_include_directories(${target_name} PUBLIC ${CUDAToolkit_INCLUDE_DIRS})
         endif()
     endif()
+
+    # Ensure GLM configuration is injected for every target so that
+    # GLM_ENABLE_EXPERIMENTAL and other settings in glm_config.h are honored.
+    if(MSVC)
+        target_compile_options(${target_name} PUBLIC /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+    else()
+        target_compile_options(${target_name} PUBLIC -include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+    endif()
 endfunction()

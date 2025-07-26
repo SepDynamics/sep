@@ -7,20 +7,8 @@
 #include <sstream>
 #include <limits>
 
-// TODO: Add implot to third_party for full plotting support
-// For now, create placeholder functions
-namespace ImPlot {
-    static bool BeginPlot(const char* title, ImVec2 size = ImVec2(-1,0)) { 
-        ImGui::Text("Plot: %s", title);
-        return true; 
-    }
-    static void EndPlot() {}
-    static void SetupAxes(const char*, const char*) {}
-    static void SetupAxisTicks(int, const float*, int, const char**) {}
-    static void SetupAxisLimits(int, float, float) {}
-    static void PlotBars(const char*, const float*, const float*, int, float) {}
-    static void PlotLine(const char*, const float*, const float*, int) {}
-}
+#include <implot.h>
+
 enum { ImAxis_X1 = 0, ImAxis_Y1 = 1 };
 
 namespace sep::workbench {

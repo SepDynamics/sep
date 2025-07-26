@@ -4,7 +4,7 @@
 
 #include "backtester/backtester.h"
 #include "imgui.h"
-// #include <implot.h> // TODO: Fix ImPlot integration
+#include <implot.h>
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
@@ -42,11 +42,10 @@ bool MetricsDashboard::initialize() {
         return false;
     }
     
-    // Initialize ImPlot if not already done
-    // TODO: Fix ImPlot integration
-    // if (!ImPlot::GetCurrentContext()) {
-    //     ImPlot::CreateContext();
-    // }
+    // Initialize ImPlot context if needed
+    if (!ImPlot::GetCurrentContext()) {
+        ImPlot::CreateContext();
+    }
     
     // Start memory monitoring if auto-enabled
     if (auto_monitor_memory_) {
@@ -300,17 +299,19 @@ void MetricsDashboard::renderMetricsGraphs() {
         entropy_history_.erase(entropy_history_.begin());
     }
     
-    // TODO: Replace with ImPlot when available
     ImGui::Text("Real-time Metrics Graph");
     ImGui::Separator();
-    
+
     if (!coherence_history_.empty()) {
-        ImGui::PlotLines("Coherence", coherence_history_.data(), coherence_history_.size(),
-                        0, nullptr, 0.0f, 1.0f, ImVec2(0, 80));
-        ImGui::PlotLines("Stability", stability_history_.data(), stability_history_.size(),
-                        0, nullptr, 0.0f, 1.0f, ImVec2(0, 80));
-        ImGui::PlotLines("Entropy", entropy_history_.data(), entropy_history_.size(),
-                        0, nullptr, 0.0f, 1.0f, ImVec2(0, 80));
+        if (ImPlot::BeginPlot("Metrics", ImVec2(-1, 100), ImPlotFlags_NoLegend)) {
+            ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_NoTickLabels);
+            ImPlot::SetupAxisLimits(ImAxis_X1, 0, coherence_history_.size(), ImGuiCond_Always);
+            ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0f, 1.0f, ImGuiCond_Always);
+            ImPlot::PlotLine("Coherence", coherence_history_.data(), coherence_history_.size());
+            ImPlot::PlotLine("Stability", stability_history_.data(), stability_history_.size());
+            ImPlot::PlotLine("Entropy", entropy_history_.data(), entropy_history_.size());
+            ImPlot::EndPlot();
+        }
     }
 }
 
@@ -471,17 +472,23 @@ void MetricsDashboard::renderMemoryMonitor() {
             }
         }
         
-        // TODO: Replace with ImPlot when available
         ImGui::Text("Memory Usage Over Time");
-        ImGui::PlotLines("RSS Memory (MB)", memory_history_.data(), memory_history_.size(),
-                        0, nullptr, 0.0f, mem_stats.peak_rss / (1024.0f * 1024.0f) * 1.2f,
-                        ImVec2(0, 150));
-        
+        if (ImPlot::BeginPlot("Memory", ImVec2(-1, 150), ImPlotFlags_NoLegend)) {
+            ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_NoTickLabels);
+            ImPlot::SetupAxisLimits(ImAxis_X1, 0, memory_history_.size(), ImGuiCond_Always);
+            ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0f, mem_stats.peak_rss / (1024.0f * 1024.0f) * 1.2f, ImGuiCond_Always);
+            ImPlot::PlotLine("RSS Memory (MB)", memory_history_.data(), memory_history_.size());
+            ImPlot::EndPlot();
+        }
+
         if (!memory_growth_history_.empty()) {
             ImGui::Text("Memory Growth Rate");
-            ImGui::PlotLines("Growth Rate (MB/s)", memory_growth_history_.data(),
-                           memory_growth_history_.size(), 0, nullptr, FLT_MIN, FLT_MAX,
-                           ImVec2(0, 100));
+            if (ImPlot::BeginPlot("Growth", ImVec2(-1, 100), ImPlotFlags_NoLegend)) {
+                ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_NoTickLabels);
+                ImPlot::SetupAxisLimits(ImAxis_X1, 0, memory_growth_history_.size(), ImGuiCond_Always);
+                ImPlot::PlotLine("Growth Rate (MB/s)", memory_growth_history_.data(), memory_growth_history_.size());
+                ImPlot::EndPlot();
+            }
         }
     }
     

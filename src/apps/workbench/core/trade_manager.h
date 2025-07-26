@@ -47,6 +47,11 @@ public:
                               double stop_loss_pips,
                               double take_profit_pips);
 
+    void setAccountBalance(double balance) { account_balance_ = balance; }
+    double getAccountBalance() const { return account_balance_; }
+    void setRiskPercentage(double pct) { risk_percentage_ = pct; }
+    double getRiskPercentage() const { return risk_percentage_; }
+
     void updateOrderStatus(const std::string& order_id, OrderState state);
     const std::vector<Order>& getOrders() const;
     const std::vector<Position>& getPositions() const;

@@ -758,6 +758,11 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
     return true;
 }
 
+bool OandaConnector::saveEURUSDM1_48h(const std::string& output_file)
+{
+    return fetchHistoricalData("EUR_USD", output_file);
+}
+
 // --- Data Validation Implementations ---
 
 int64_t OandaConnector::parseTimestamp(const std::string& time_str)

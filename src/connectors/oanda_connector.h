@@ -101,6 +101,7 @@ public:
     // Sample Data
     void setupSampleData(const std::string& instrument, const std::string& granularity, const std::string& output_file);
     bool fetchHistoricalData(const std::string& instrument, const std::string& output_file);
+    bool saveEURUSDM1_48h(const std::string& output_file = "eur_usd_m1_48h.json");
 
     // Error handling
     std::string getLastError() const { return last_error_; }

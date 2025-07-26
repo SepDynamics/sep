@@ -11,6 +11,7 @@ public:
     ~DataLoader();
 
     void loadData(const std::string& filepath);
+    void load_48h_sample();
 
     const std::vector<sep::workbench::CandleData>& getCandleData() const;
 

@@ -20,7 +20,11 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     const std::string& dataset_path,
     sep::quantum::PatternMetricEngine* engine) {
     sep::workbench::backtester::DataLoader loader;
-    loader.loadData(dataset_path);
+    if (dataset_path == "EURUSD_48H") {
+        loader.load_48h_sample();
+    } else {
+        loader.loadData(dataset_path);
+    }
 
     const auto& candles = loader.getCandleData();
     sep::workbench::backtester::BacktestResult result{};

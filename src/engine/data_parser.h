@@ -55,6 +55,9 @@ public:
     // Convert raw candle data to SEP patterns
     std::vector<sep::quantum::Pattern> candlesToPatterns(const std::vector<CandleData>& candles);
 
+    // Utility: write candle data to OANDA-style JSON
+    void writeQuantJSON(const std::vector<CandleData>& candles, const std::string& path) const;
+
     // Convert patterns to PinStates for engine compatibility
     std::vector<sep::PinState> toPinStates(const std::vector<sep::quantum::Pattern>& patterns);
 

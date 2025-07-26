@@ -9,6 +9,8 @@
 
 #include "connectors/oanda_connector.h"
 #include "service_proxy_engine.h"
+#include "tabs/signals_tab_controller.h"
+#include "core/common_structs.h"
 
 namespace sep {
 namespace core {
@@ -79,6 +81,9 @@ public:
     void setConfig(const ConnectionConfig& config) { config_ = config; }
     const ConnectionConfig& getConfig() const { return config_; }
 
+    void setSignalsTab(SignalsTabController* tab);
+    const std::deque<CandleData>& getInitialData() const { return initial_data_; }
+
 private:
     // Internal state
     std::atomic<ConnectionState> connection_state_{ConnectionState::DISCONNECTED};
@@ -116,6 +121,9 @@ private:
     // Engine instances
     std::unique_ptr<sep::core::Engine> local_engine_;
     std::unique_ptr<sep::core::ServiceProxyEngine> http_proxy_engine_;
+
+    SignalsTabController* signals_tab_{nullptr};
+    std::deque<CandleData> initial_data_;
 };
 
 } // namespace sep::workbench

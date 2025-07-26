@@ -8,6 +8,7 @@
 #include <iostream>
 #include <thread>
 #include <cstring>
+#include "engine/data_parser.h"
 
 // Platform-specific includes
 #ifdef _WIN32
@@ -39,6 +40,18 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
         std::cout << "[ServiceConnector] API Key length: " << strlen(api_key) << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
+        if (oanda_connector_->initialize()) {
+            oanda_connector_->fetchHistoricalData("EUR_USD", "eur_usd_m1_48h.json");
+            sep::DataParser parser;
+            auto candles = parser.parseQuantJSON("eur_usd_m1_48h.json");
+            for (const auto& c : candles) {
+                std::tm tm = {};
+                std::istringstream ss(c.time);
+                ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+                auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+                initial_data_.emplace_back(c.open, c.high, c.low, c.close, (int)c.volume, ts);
+            }
+        }
     } else {
         std::cout << "[ServiceConnector] ERROR: OANDA credentials not found in environment" << std::endl;
         std::cout << "[ServiceConnector] API Key: " << (api_key ? "FOUND" : "NOT FOUND") << std::endl;
@@ -163,6 +176,15 @@ bool ServiceConnector::reconnect() {
     disconnect();
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     return connect();
+}
+
+void ServiceConnector::setSignalsTab(SignalsTabController* tab)
+{
+    signals_tab_ = tab;
+    if (signals_tab_ && !initial_data_.empty())
+    {
+        signals_tab_->setCandleData(initial_data_);
+    }
 }
 
 ServiceHealth ServiceConnector::getServiceHealth() const {

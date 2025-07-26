@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include "engine/data_parser.h"
 
 namespace sep {
 namespace connectors {
@@ -573,6 +574,35 @@ void OandaConnector::setupSampleData(const std::string& instrument, const std::s
     out_stream.close();
 
     std::cout << "[OandaConnector] Successfully wrote " << candles.size() << " candles to " << output_file << std::endl;
+}
+
+bool OandaConnector::fetchHistoricalData(const std::string& instrument, const std::string& output_file)
+{
+    auto now = std::chrono::system_clock::now();
+    auto start = now - std::chrono::hours(48);
+    auto now_t = std::chrono::system_clock::to_time_t(now);
+    auto start_t = std::chrono::system_clock::to_time_t(start);
+
+    auto candles = getHistoricalData(instrument, "M1", std::to_string(start_t), std::to_string(now_t), 48 * 60);
+    if (candles.empty()) return false;
+
+    std::vector<sep::CandleData> out;
+    out.reserve(candles.size());
+    for (const auto& c : candles)
+    {
+        sep::CandleData cd;
+        cd.time = c.time;
+        cd.open = static_cast<float>(c.open);
+        cd.high = static_cast<float>(c.high);
+        cd.low = static_cast<float>(c.low);
+        cd.close = static_cast<float>(c.close);
+        cd.volume = c.volume;
+        out.push_back(cd);
+    }
+
+    sep::DataParser parser;
+    parser.writeQuantJSON(out, output_file);
+    return true;
 }
 
 // --- Data Validation Implementations ---

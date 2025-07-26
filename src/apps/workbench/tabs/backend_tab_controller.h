@@ -9,7 +9,7 @@
 #include "../core/trade_manager.h"
 #include "../core/ui_layout_manager.h"
 #include "connectors/oanda_connector.h"
-#include "../backtester/data_loader.h"
+#include "../backtester/data/data_loader.h"
 #include "quantum/pattern_metric_engine.h"
 #include "../core/service_proxy_engine.h"
 

@@ -9,7 +9,9 @@
 
 namespace sep::workbench {
 
-EngineTabController::EngineTabController() {}
+EngineTabController::EngineTabController()
+    : backtester_(std::make_unique<backtester::Backtester>()),
+      data_loader_(std::make_unique<backtester::DataLoader>()) {}
 
 EngineTabController::~EngineTabController() { shutdown(); }
 bool EngineTabController::initialize() {
@@ -27,6 +29,7 @@ void EngineTabController::render() {
 
         renderEngineControls();
         renderCorrelationPanel();
+        renderStrategyOptimization();
         ImGui::EndTabItem();
     }
 }
@@ -245,6 +248,34 @@ void EngineTabController::renderCorrelationPanel() {
         parser.exportCorrelationCSV(correlation_export_path_, data);
     }
 
+    ImGui::End();
+}
+
+void EngineTabController::renderStrategyOptimization()
+{
+    ImGui::Begin("Strategy Optimization");
+    ImGui::InputText("Dataset", dataset_path_, sizeof(dataset_path_));
+    if (ImGui::Button("Run Backtest")) {
+        if (pattern_engine_ && dataset_path_[0] != '\0') {
+            data_loader_->load_data(dataset_path_);
+            backtester_->run(pattern_engine_, data_loader_.get());
+            last_result_ = backtester_->getResult();
+            opt_coherence_ = 0.5f + last_result_.win_rate * 0.5f;
+        }
+    }
+    ImGui::Text("Win Rate: %.2f", last_result_.win_rate);
+    ImGui::SliderFloat("Coherence", &opt_coherence_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Stability", &opt_stability_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Entropy", &opt_entropy_, 0.0f, 1.0f);
+    if (ImGui::Button("Apply Thresholds")) {
+        if (pattern_engine_) {
+            sep::quantum::SignalThresholds th;
+            th.min_coherence = opt_coherence_;
+            th.min_stability = opt_stability_;
+            th.max_entropy = opt_entropy_;
+            pattern_engine_->setSignalThresholds(th);
+        }
+    }
     ImGui::End();
 }
 

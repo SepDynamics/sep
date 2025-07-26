@@ -554,6 +554,9 @@ void WorkbenchEngine::attemptServiceConnection()
     ConnectionState state = ConnectionState::DISCONNECTED;
     if (service_connector_) {
         metrics_.service_connected = service_connector_->connect();
+        if (engine_tab_) {
+            engine_tab_->setServiceProxyEngine(service_connector_->getServiceProxyEngine());
+        }
 
         if (metrics_.service_connected) {
             std::cout << "[WorkbenchEngine] Successfully connected to SEP service" << std::endl;

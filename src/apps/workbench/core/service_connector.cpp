@@ -209,6 +209,7 @@ void ServiceConnector::disconnect() {
     }
     
     service_engine_ = nullptr;
+    service_proxy_engine_ = nullptr;
     connection_state_ = sep::workbench::ConnectionState::DISCONNECTED;
     
     // Notify via EventBus
@@ -856,7 +857,9 @@ core::Engine* ServiceConnector::createLocalEngine()
         std::cout << "[ServiceConnector] Local SEP engine initialized successfully" << std::endl;
         health_metrics_.is_responsive = true;
         health_metrics_.version_info = "SEP Local Engine v1.0";
-        
+
+        service_proxy_engine_ = nullptr;
+
         return local_engine_.get();
         
     } catch (const std::exception& e) {
@@ -865,11 +868,11 @@ core::Engine* ServiceConnector::createLocalEngine()
     }
 }
 
-core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
+core::ServiceProxyEngine* ServiceConnector::createHttpEngineProxy(int socket_fd)
 {
     try {
         std::cout << "[ServiceConnector] Creating HTTP proxy engine for remote service..." << std::endl;
-        
+
     // Create a proxy engine that forwards commands to the remote service via HTTP
     http_proxy_engine_ = std::make_unique<core::ServiceProxyEngine>(config_.service_address, config_.service_port);
 
@@ -879,22 +882,23 @@ core::Engine* ServiceConnector::createHttpEngineProxy(int socket_fd)
         std::cerr << "[ServiceConnector] " << err << std::endl;
         health_metrics_.last_error = err;
         health_metrics_.is_responsive = false;
-        // Fallback to local engine
-        return createLocalEngine();
+        service_proxy_engine_ = nullptr;
+        return nullptr;
     }
 
     health_metrics_.last_error.clear();
-        
+
         std::cout << "[ServiceConnector] HTTP proxy engine created successfully" << std::endl;
         health_metrics_.is_responsive = true;
         health_metrics_.version_info = "SEP Remote Service Proxy v1.0";
-        
-        return http_proxy_engine_.get();
-        
+
+        service_proxy_engine_ = http_proxy_engine_.get();
+        return service_proxy_engine_;
+
     } catch (const std::exception& e) {
         std::cerr << "[ServiceConnector] Exception creating HTTP proxy engine: " << e.what() << std::endl;
-        // Fallback to local engine
-        return createLocalEngine();
+        service_proxy_engine_ = nullptr;
+        return nullptr;
     }
 }
 

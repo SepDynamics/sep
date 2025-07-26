@@ -37,10 +37,12 @@ public:
 private:
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     sep::core::Engine* sep_engine_ = nullptr;
+    sep::core::Engine* local_engine_ = nullptr;
     sep::quantum::PatternMetricEngine* pattern_engine_ = nullptr;
     sep::quantum::CoherenceManager* coherence_manager_ = nullptr;
     MultiTimeframeAnalyzer* multi_timeframe_analyzer_ = nullptr;
     sep::core::ServiceProxyEngine* service_proxy_engine_ = nullptr;
+    bool use_remote_engine_ = false;
 
     // Rendering functions
     void renderSEPMetricsPanel();

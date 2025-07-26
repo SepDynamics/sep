@@ -139,5 +139,26 @@ void logPatternDetected(const std::string &pattern_id,
     logger->info("Pattern detected {} at {}", pattern_id, buf);
 }
 
+void logTrade(const std::string &instrument,
+              double units,
+              double price,
+              double pnl)
+{
+    auto logger = spdlog::get("trade_manager");
+    if (!logger) return;
+    logger->info("Trade {} {:.0f} @ {:.5f} pnl {:.5f}",
+                 instrument,
+                 units,
+                 price,
+                 pnl);
+}
+
+void logAnomaly(const std::string &message)
+{
+    auto logger = spdlog::get("trade_manager");
+    if (!logger) return;
+    logger->warn("Anomaly detected: {}", message);
+}
+
 }  // namespace sep::logging
 

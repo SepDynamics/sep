@@ -4,8 +4,8 @@
 #include <nlohmann/json.hpp>
 #include <iostream>
 
-std::vector<sep::workbench::CandleData> JsonDataParser::parse(const std::string& filepath) {
-    std::vector<sep::workbench::CandleData> candles;
+std::vector<sep::common::CandleData> JsonDataParser::parse(const std::string& filepath) {
+    std::vector<sep::common::CandleData> candles;
     std::ifstream file(filepath);
     if (!file.is_open()) {
         std::cerr << "Failed to open file: " << filepath << std::endl;

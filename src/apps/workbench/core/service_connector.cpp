@@ -8,6 +8,7 @@
 #include "quantum/pattern_metric_engine.h"
 #include "ui_layout_manager.h"
 #include "apps/workbench/backtester/data/data_loader.h"
+#include <filesystem>
 #include "apps/workbench/backtester/backtester.h"
 
 #include <iostream>
@@ -62,25 +63,36 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
         std::cout << "[ServiceConnector] API Key length: " << api_key.length() << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
-        const std::string dataset = "eur_usd_m1_48h.json";
+        const std::string dataset = "Testing/OANDA/sample_48h.json";
+        bool dataset_exists = std::filesystem::exists(dataset);
+        const char* skip_env = std::getenv("SEP_SKIP_FETCH");
+        bool skip_fetch = skip_env && dataset_exists;
+
         if (oanda_connector_->initialize()) {
-            if (oanda_connector_->saveEURUSDM1_48h(dataset)) {
+            if (!skip_fetch) {
+                std::filesystem::create_directories("Testing/OANDA");
+                if (oanda_connector_->saveEURUSDM1_48h(dataset)) {
+                    dataset_exists = true;
+                }
+            }
+
+            if (dataset_exists) {
                 loadInitialData(dataset);
             } else {
                 backtester::DataLoader loader;
-                loader.load_48h_sample();
-                loadInitialData(dataset);
+                const std::string loaded = loader.load_48h_sample();
+                loadInitialData(loaded);
             }
         } else {
             backtester::DataLoader loader;
-            loader.load_48h_sample();
-            loadInitialData(dataset);
+            const std::string loaded = loader.load_48h_sample();
+            loadInitialData(loaded);
         }
     } else {
         std::cout << "[ServiceConnector] ERROR: OANDA credentials not provided" << std::endl;
         backtester::DataLoader loader;
-        loader.load_48h_sample();
-        loadInitialData("eur_usd_m1_48h.json");
+        const std::string loaded = loader.load_48h_sample();
+        loadInitialData(loaded);
     }
 
     std::cout << "[ServiceConnector] Initialized with config: "

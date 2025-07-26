@@ -14,6 +14,16 @@ namespace sep
             class DataLoader
             {
             public:
+                /**
+                 * @brief Load the default 48h EUR/USD sample if available.
+                 *
+                 * This checks for Testing/OANDA/sample_48h.json and falls back
+                 * to eur_usd_m1_48h.json when the file is missing.
+                 *
+                 * @return The path of the dataset that was loaded.
+                 */
+                std::string load_48h_sample();
+
                 void load_data(const std::string& file_path);
                 const std::vector<common::CandleData>& get_data() const { return data_; }
 

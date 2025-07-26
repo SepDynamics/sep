@@ -21,3 +21,11 @@ target_include_directories(sep_backtester PUBLIC
 target_link_libraries(sep_backtester PUBLIC
     sep_workbench_lib
 )
+
+if(MSVC)
+    target_compile_options(sep_backtester PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+    target_compile_options(data_loader_test PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+else()
+    target_compile_options(sep_backtester PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+    target_compile_options(data_loader_test PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+endif()

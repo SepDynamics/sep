@@ -65,6 +65,12 @@ target_compile_definitions(sep_audio
         SEP_HAS_AUDIO=1
 )
 
+if(MSVC)
+    target_compile_options(sep_audio PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+else()
+    target_compile_options(sep_audio PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+endif()
+
 # Propagate to parent scope for main executable linking
 set(PIPEWIRE_LIBRARIES ${PIPEWIRE_LIBRARIES} PARENT_SCOPE)
 set(FFTW_LIBRARIES ${FFTW_LIBRARIES} PARENT_SCOPE)

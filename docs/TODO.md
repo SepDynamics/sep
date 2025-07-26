@@ -49,14 +49,14 @@ This phase runs in parallel with feature development and focuses on improving co
 -   **Priority**: High
 -   **Tasks**:
     -   [ ] **`emitterutils.cpp`**: Address `CRITICAL` `undeclared identifier` errors by including `<cstdint>`.
-    -   [ ] **`glm` Experimental Extensions**: Address `CRITICAL` errors by adding `#define GLM_ENABLE_EXPERIMENTAL` to the CMake configuration before including GLM headers. This will fix issues in `component_wise.hpp`, `norm.hpp`, and `quaternion.hpp`.
+    -   [x] **`glm` Experimental Extensions**: `glm_config.h` is now force-included for all targets so `GLM_ENABLE_EXPERIMENTAL` is always defined.
     -   [ ] **PipeWire Null Dereference**: Investigate the `HIGH` severity null pointer dereference in `/usr/include/spa-0.2/spa/pod/parser.h`. This is likely an external library issue but should be understood.
 
 ### 2.2: High-Priority Code Quality Improvements
 -   **Status**: **NOT STARTED**
 -   **Priority**: Medium
 -   **Tasks**:
-    -   [ ] **`imgui` / `implot` Issues**: The majority of `HIGH` severity issues (`bugprone-incorrect-roundings`, `bugprone-sizeof-expression`, `core.NullDereference`) are within third-party libraries. Latest upstream versions are ImGui `1.92.2` and ImPlot `0.17` (checked 2025‑07). For now the project remains on `1.89.9` and `0.16`; warnings from these libraries are suppressed in the static analysis report.
+    -   [x] **`imgui` / `implot` Issues**: Updated vendor versions to ImGui `1.92.1` and ImPlot `0.17`. Remaining warnings from these libraries are documented but accepted.
     -   [ ] **`sep` Source Code**:
         -   Address `clang-diagnostic-double-promotion` warnings across the codebase (e.g., in `data_parser.cpp`, `oanda_connector.cpp`, `sep_demo_app.cpp`) to ensure floating-point precision is handled correctly.
         -   Fix `deadcode.DeadStores` and `unused-parameter` warnings to improve code clarity and remove unnecessary variables.

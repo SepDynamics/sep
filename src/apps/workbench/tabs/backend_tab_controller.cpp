@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "imgui.h"
+#include "implot.h"
 
 namespace sep::workbench {
 
@@ -23,6 +24,9 @@ bool BackendTabController::initialize() {
         } else {
             *it = e.info;
         }
+    });
+    globalEventBus().subscribe<BacktestResultEvent>([this](const BacktestResultEvent& e) {
+        onBacktestResult(e);
     });
     return true;
 }
@@ -205,50 +209,19 @@ void BackendTabController::renderBacktesterPanel() {
 void BackendTabController::renderBacktestingSuite() {
     ImGui::Begin("BacktestingSuite");
     ImGui::PushID("BacktestingSuite");
-    ImGui::InputText("Dataset", backtest_file_buffer_, sizeof(backtest_file_buffer_));
-    if (ImGui::Button("Run Backtest")) {
-        data_loader_->load_data(backtest_file_buffer_);
-        backtester_->run(pattern_engine_.get(), data_loader_.get());
-        equity_curve_.clear();
-        const auto& trades = backtester_->getResult().trades;
-        float equity = 0.0f;
-        equity_curve_.push_back(equity);
-        for (const auto& t : trades) {
-            float diff = (t.type == quantum::SignalType::BUY)
-                             ? t.exit_price - t.entry_price
-                             : t.entry_price - t.exit_price;
-            equity += diff;
-            equity_curve_.push_back(equity);
-        }
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Run 48h Sample")) {
-        strncpy(backtest_file_buffer_, "eur_usd_m1_48h.json", sizeof(backtest_file_buffer_) - 1);
-        backtest_file_buffer_[sizeof(backtest_file_buffer_) - 1] = '\0';
-        data_loader_->load_data(backtest_file_buffer_);
-        backtester_->run(pattern_engine_.get(), data_loader_.get());
-        equity_curve_.clear();
-        const auto& trades = backtester_->getResult().trades;
-        float equity = 0.0f;
-        equity_curve_.push_back(equity);
-        for (const auto& t : trades) {
-            float diff = (t.type == sep::quantum::SignalType::BUY)
-                             ? t.exit_price - t.entry_price
-                             : t.entry_price - t.exit_price;
-            equity += diff;
-            equity_curve_.push_back(equity);
-        }
-    }
 
-    const auto& result = backtester_->getResult();
-    ImGui::Text("Total Trades: %d", result.total_trades);
-    ImGui::Text("Win Rate: %.2f", result.win_rate);
-    ImGui::Text("Total PnL: %.2f", result.total_pnl);
-    ImGui::Text("Sharpe Ratio: %.2f", result.sharpe_ratio);
-    ImGui::Text("Max Drawdown: %.2f", result.max_drawdown);
+    ImGui::Text("Total Trades: %d", last_result_.total_trades);
+    ImGui::Text("Win Rate: %.2f", last_result_.win_rate);
+    ImGui::Text("Total PnL: %.2f", last_result_.total_pnl);
+    ImGui::Text("Sharpe Ratio: %.2f", last_result_.sharpe_ratio);
+    ImGui::Text("Max Drawdown: %.2f", last_result_.max_drawdown);
     if (!equity_curve_.empty()) {
-        ImGui::PlotLines("Equity Curve", (const float*)equity_curve_.data(),
-                         static_cast<int>(equity_curve_.size()));
+        if (ImPlot::BeginPlot("Equity Curve", ImVec2(-1,150))) {
+            std::vector<double> xs(equity_curve_.size());
+            for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<double>(i);
+            ImPlot::PlotLine("Equity", xs.data(), equity_curve_.data(), static_cast<int>(equity_curve_.size()));
+            ImPlot::EndPlot();
+        }
     }
 
     ImGui::PopID();
@@ -283,6 +256,20 @@ void BackendTabController::updateTradeHistory() {
     std::string line;
     while (std::getline(file, line)) {
         trade_history_.push_back(line);
+    }
+}
+
+void BackendTabController::onBacktestResult(const BacktestResultEvent& e) {
+    last_result_ = e.result;
+    equity_curve_.clear();
+    float equity = 0.0f;
+    equity_curve_.push_back(equity);
+    for (const auto& t : last_result_.trades) {
+        float diff = (t.type == sep::quantum::SignalType::BUY)
+                         ? t.exit_price - t.entry_price
+                         : t.entry_price - t.exit_price;
+        equity += diff;
+        equity_curve_.push_back(equity);
     }
 }
 

@@ -7,6 +7,7 @@
 #include "config.h"
 #include "quantum/pattern_metric_engine.h"
 #include "ui_layout_manager.h"
+#include "apps/workbench/backtester/data/data_loader.h"
 
 #include <iostream>
 #include <thread>
@@ -35,7 +36,7 @@ ServiceConnector::ServiceConnector() : ServiceConnector(ConnectionConfig{}) {}
 
 ServiceConnector::ServiceConnector(const ConnectionConfig& config)
     : config_(config) {
-    auto& cfg = sep::config::ConfigManager::getInstance().oanda();
+    auto& cfg = sep::workbench::Config::getInstance().oanda();
     std::string api_key = cfg.demo_api_key.empty() ? cfg.api_key : cfg.demo_api_key;
     std::string account_id = cfg.demo_account_id.empty() ? cfg.account_id : cfg.demo_account_id;
     if (api_key.empty() || account_id.empty()) {
@@ -65,18 +66,18 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
             if (oanda_connector_->saveEURUSDM1_48h(dataset)) {
                 loadInitialData(dataset);
             } else {
-                DataLoader loader;
+                backtester::DataLoader loader;
                 loader.load_48h_sample();
                 loadInitialData(dataset);
             }
         } else {
-            DataLoader loader;
+            backtester::DataLoader loader;
             loader.load_48h_sample();
             loadInitialData(dataset);
         }
     } else {
         std::cout << "[ServiceConnector] ERROR: OANDA credentials not provided" << std::endl;
-        DataLoader loader;
+        backtester::DataLoader loader;
         loader.load_48h_sample();
         loadInitialData("eur_usd_m1_48h.json");
     }

@@ -62,6 +62,11 @@ private:
     bool show_trend_lines_ = true;
     bool auto_detect_trends_ = true;
 
+    // Threshold settings for signal generation
+    float min_coherence_ = 0.7f;
+    float min_stability_ = 0.6f;
+    float max_entropy_ = 0.3f;
+
     // Chart dimensions and state
     ImVec2 chart_size_;
     ImVec2 chart_pos_;

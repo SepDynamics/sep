@@ -7,6 +7,9 @@
 #include <iostream>
 #include <numeric>
 #include <sstream>
+#include <iomanip>
+#include <chrono>
+#include <ctime>
 
 // Temporary logging macros until we fix the logging system
 #define SEP_LOG_ERROR(msg) std::cerr << "[ERROR] " << msg << std::endl
@@ -227,7 +230,18 @@ TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
             oanda_candle.low = candle.low;
             oanda_candle.close = candle.close;
             oanda_candle.volume = candle.volume;
-            oanda_candle.time = ""; // TODO: Convert timestamp properly
+            {
+                // Convert timestamp to ISO-8601 string expected by
+                // MarketDataConverter (e.g. "2021-04-07T00:00:00.000000000Z")
+                std::time_t tt = std::chrono::system_clock::to_time_t(candle.timestamp);
+                std::tm tm = *std::gmtime(&tt);
+                std::ostringstream ts_stream;
+                ts_stream << std::put_time(&tm, "%Y-%m-%dT%H:%M:%S");
+                auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                    candle.timestamp.time_since_epoch()).count() % 1000000000LL;
+                ts_stream << '.' << std::setw(9) << std::setfill('0') << ns << 'Z';
+                oanda_candle.time = ts_stream.str();
+            }
             oanda_candles.push_back(oanda_candle);
         }
         auto byte_stream = sep::connectors::MarketDataConverter::candlesToByteStream(oanda_candles);

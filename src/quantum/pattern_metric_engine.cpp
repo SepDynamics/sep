@@ -422,7 +422,9 @@ void PatternMetricEngine::generateSignals() {
             }
             s.pattern_id = m.pattern_id;
             current_signals_.push_back(s);
-            sep::logging::logSignalDetected(s.pattern_id, s.type, std::chrono::system_clock::now());
+            auto now = std::chrono::system_clock::now();
+            sep::logging::logPatternDetected(s.pattern_id, now);
+            sep::logging::logSignalDetected(s.pattern_id, s.type, now);
         }
     }
 }

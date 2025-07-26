@@ -34,8 +34,8 @@ bool SignalsTabController::initialize() {
     return true;
 }
 
-void SignalsTabController::renderThresholdPanel() {
-    ImGui::Begin("Signal Thresholds");
+void SignalsTabController::renderThresholdControlPanel() {
+    ImGui::Begin("Signal Controls");
     ImGui::Text("BUY thresholds");
     ImGui::SliderFloat("Buy Coherence", &buy_min_coherence_, 0.0f, 1.0f);
     ImGui::SliderFloat("Buy Stability", &buy_min_stability_, 0.0f, 1.0f);
@@ -63,7 +63,7 @@ void SignalsTabController::renderThresholdPanel() {
 
 void SignalsTabController::render() {
     ImGui::Columns(2, "SignalsColumns", true);
-    renderThresholdPanel();
+    renderThresholdControlPanel();
     ImGui::NextColumn();
 
     if (metrics_monitor_) {

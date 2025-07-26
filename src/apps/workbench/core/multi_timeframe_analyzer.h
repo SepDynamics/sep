@@ -64,6 +64,7 @@ struct CorrelationMetrics {
     double stability_spearman = 0.0;
     double entropy_pearson = 0.0;
     double entropy_spearman = 0.0;
+    int sample_count = 0;
 };
 
 struct MultiTimeframeSignal {

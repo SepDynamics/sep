@@ -65,6 +65,10 @@ public:
     // Utility: write candle data to OANDA-style JSON
     void writeQuantJSON(const std::vector<CandleData>& candles, const std::string& path) const;
 
+    // Save candle data with validation checks (time ordering, field ranges)
+    bool saveValidatedCandlesJSON(const std::vector<CandleData>& candles,
+                                  const std::string& path) const;
+
     // Convert patterns to PinStates for engine compatibility
         std::vector<PinState> toPinStates(const std::vector<quantum::Pattern>& patterns);
 

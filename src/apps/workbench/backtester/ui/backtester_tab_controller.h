@@ -13,5 +13,5 @@ public:
 private:
     std::unique_ptr<BacktesterEngine> engine_;
     sep::workbench::backtester::BacktestResult result_{};
-    char dataset_path_[512] = "eur_usd_m1_48h.json";
+    char dataset_path_[512] = "Testing/OANDA/eurusd_48h.json";
 };

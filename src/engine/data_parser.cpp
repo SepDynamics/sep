@@ -544,6 +544,36 @@ void DataParser::writeQuantJSON(const std::vector<CandleData>& candles, const st
     }
 }
 
+bool DataParser::saveValidatedCandlesJSON(const std::vector<CandleData>& candles,
+                                          const std::string& path) const
+{
+    if (candles.empty()) {
+        return false;
+    }
+
+    // Basic integrity checks and chronological ordering
+    for (size_t i = 0; i < candles.size(); ++i) {
+        const auto& c = candles[i];
+        if (!std::isfinite(c.open) || !std::isfinite(c.high) || !std::isfinite(c.low) ||
+            !std::isfinite(c.close) || c.high < c.low || c.volume < 0 ||
+            c.open > c.high || c.open < c.low || c.close > c.high || c.close < c.low) {
+            std::cerr << "[DataParser] Invalid candle at index " << i << "\n";
+            return false;
+        }
+        if (i > 0) {
+            auto prev_ts = parseTimestamp(candles[i - 1].time);
+            auto cur_ts = parseTimestamp(c.time);
+            if (cur_ts <= prev_ts) {
+                std::cerr << "[DataParser] Non-increasing timestamp at index " << i << "\n";
+                return false;
+            }
+        }
+    }
+
+    writeQuantJSON(candles, path);
+    return true;
+}
+
 uint64_t DataParser::parseTimestamp(const std::string& timestamp) const
 {
     // Parse ISO 8601 format with nanoseconds: "2021-04-07T00:00:00.000000000Z"

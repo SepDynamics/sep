@@ -754,7 +754,7 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
     }
 
     DataParser parser;
-    parser.writeQuantJSON(out, output_file);
+    parser.saveValidatedCandlesJSON(out, output_file);
     return true;
 }
 

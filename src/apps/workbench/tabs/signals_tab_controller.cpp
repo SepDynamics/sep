@@ -57,6 +57,7 @@ bool SignalsTabController::initialize() {
     plot_flags_ = ImPlotFlags_NoMenus | ImPlotFlags_NoLegend;
 
     if (metrics_monitor_) {
+        metrics_monitor_->initialize();
         metrics_monitor_->startProcessing();
     }
     return true;
@@ -268,6 +269,7 @@ void SignalsTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> mon
     stability_history_4h_.clear();
     entropy_history_4h_.clear();
     if (metrics_monitor_) {
+        metrics_monitor_->initialize();
         metrics_monitor_->startProcessing();
     }
 }
@@ -352,9 +354,15 @@ void SignalsTabController::renderCandlesticks() {
     static std::vector<double> low;
     static std::vector<double> high;
 
-    static constexpr size_t MAX_VISIBLE = 240;
-    size_t start_idx = candle_data_.size() > MAX_VISIBLE ? candle_data_.size() - MAX_VISIBLE : 0;
-    const size_t count = candle_data_.size() - start_idx;
+    ImPlotRect limits = ImPlot::GetPlotLimits();
+    size_t start_idx = 0;
+    size_t end_idx = candle_data_.size();
+    if (limits.X.Size > 0) {
+        start_idx = static_cast<size_t>(std::max(0.0, std::floor(limits.X.Min)));
+        end_idx = static_cast<size_t>(std::min(static_cast<double>(candle_data_.size()), std::ceil(limits.X.Max)));
+    }
+    if (start_idx >= end_idx) return;
+    const size_t count = end_idx - start_idx;
 
     xs.resize(count);
     open.resize(count);
@@ -364,7 +372,7 @@ void SignalsTabController::renderCandlesticks() {
 
     for (size_t i = 0; i < count; ++i) {
         const auto& c = candle_data_[start_idx + i];
-        xs[i] = static_cast<double>(i);
+        xs[i] = static_cast<double>(start_idx + i);
         open[i] = c.open;
         close[i] = c.close;
         low[i] = c.low;

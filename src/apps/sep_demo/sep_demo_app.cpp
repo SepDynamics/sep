@@ -365,19 +365,19 @@ void PatternGeneratorPanel::generateWavePattern() {
         pattern.id = "wave_" + std::to_string(i) + "_" + std::to_string(gen());
         pattern.position = glm::vec4(
             t * wave_length - wave_length / 2.0f,
-            std::sinf(angle * 3.0f) * wave_amplitude,
-            std::cosf(angle * 2.0f) * wave_amplitude,
+            sinf(angle * 3.0f) * wave_amplitude,
+            cosf(angle * 2.0f) * wave_amplitude,
             1.0f
         );
         pattern.velocity = glm::vec4(0.0f);
         pattern.coherence = coherence_dist(gen);
         pattern.amplitude =
-            std::complex<float>(std::cosf(angle), std::sinf(angle));
+            std::complex<float>(cosf(angle), sinf(angle));
         pattern.generation = 0;
         
         pattern.quantum_state.coherence = pattern.coherence;
         pattern.quantum_state.stability = stability_dist(gen);
-        pattern.quantum_state.energy = 1.0f + std::sinf(angle);
+        pattern.quantum_state.energy = 1.0f + sinf(angle);
         pattern.quantum_state.phase = angle;
         
         patterns.push_back(pattern);

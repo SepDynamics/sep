@@ -55,7 +55,7 @@ bool SignalsTabController::initialize() {
     map.Select = ImGuiMouseButton_Left;
     map.Menu = ImGuiMouseButton_Right;
     map.ZoomMod = ImGuiMod_Ctrl;
-    map.Query = ImGuiMouseButton_Left;
+
     plot_flags_ = ImPlotFlags_NoMenus | ImPlotFlags_NoLegend;
 
     if (metrics_monitor_) {
@@ -332,7 +332,7 @@ void SignalsTabController::renderCandlesticks() {
     ImPlotRect limits = ImPlot::GetPlotLimits();
     size_t start_idx = 0;
     size_t end_idx = candle_data_.size();
-    if (limits.X.Size > 0) {
+    if (limits.X.Size() > 0) {
         start_idx = static_cast<size_t>(std::max(0.0, std::floor(limits.X.Min)));
         end_idx = static_cast<size_t>(std::min(static_cast<double>(candle_data_.size()), std::ceil(limits.X.Max)));
     }
@@ -379,7 +379,7 @@ void SignalsTabController::renderTechnicalIndicators() {
     double local_min = price_min_;
     double local_max = price_max_;
     ImPlotRect limits = ImPlot::GetPlotLimits();
-    if (limits.X.Size > 0) {
+    if (limits.X.Size() > 0) {
         size_t start_idx = static_cast<size_t>(std::max(0.0, std::floor(limits.X.Min)));
         size_t end_idx = static_cast<size_t>(std::min((double)candle_data_.size(), std::ceil(limits.X.Max)));
         if (start_idx < end_idx) {
@@ -394,8 +394,8 @@ void SignalsTabController::renderTechnicalIndicators() {
                 size_t idx_start = ind.values.size() > MAX_VISIBLE ? ind.values.size() - MAX_VISIBLE : 0;
                 for (size_t j = idx_start; j < ind.values.size(); ++j) {
                     if (ind.values[j] <= 0) continue;
-                    local_min = std::min(local_min, ind.values[j]);
-                    local_max = std::max(local_max, ind.values[j]);
+                    local_min = std::min(local_min, static_cast<double>(ind.values[j]));
+                    local_max = std::max(local_max, static_cast<double>(ind.values[j]));
                 }
             }
         }
@@ -590,15 +590,21 @@ void SignalsTabController::renderMetricsGraphs() {
         std::iota(xs.begin(), xs.end(), 0.0);
 
         ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.9f, 0.0f, 1.0f));
-        ImPlot::PlotLine("C1", xs.data(), coherence_history_1h_.data(), (int)coherence_history_1h_.size());
+        std::vector<float> c1_data(coherence_history_1h_.begin(), coherence_history_1h_.end());
+        if (!c1_data.empty()) {
+            ImPlot::PlotLine("C1", c1_data.data(), (int)c1_data.size());
+        }
 
         if (!coherence_history_4h_.empty()) {
             ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.7f, 0.0f, 1.0f));
-            ImPlot::PlotLine("C4", xs.data(), coherence_history_4h_.data(), (int)coherence_history_4h_.size());
+            std::vector<float> c4_data(coherence_history_4h_.begin(), coherence_history_4h_.end());
+            if (!c4_data.empty()) {
+                ImPlot::PlotLine("C4", c4_data.data(), (int)c4_data.size());
+            }
         }
 
         ImPlot::DragLineX(200, &cross_idx, ImVec4(0.7f,0.7f,0.7f,1.0f));
-        ImPlot::DragRect(201, &zoom_rect.X.Min, &zoom_rect.Y.Min, &zoom_rect.X.Max, &zoom_rect.Y.Max);
+        ImPlot::DragRect(201, &zoom_rect.X.Min, &zoom_rect.Y.Min, &zoom_rect.X.Max, &zoom_rect.Y.Max, ImVec4(1,1,0,1));
         ImPlot::EndPlot();
     }
 
@@ -727,7 +733,7 @@ void SignalsTabController::renderCrosshair() {
     if (!show_crosshair_)
         return;
 
-    if (ImPlot::IsPlotHovered() && !ImPlot::IsAnyItemActive()) {
+    if (ImPlot::IsPlotHovered() && !ImGui::IsAnyItemActive()) {
         ImPlotPoint mp = ImPlot::GetPlotMousePos();
         crosshair_index_ = mp.x;
         crosshair_price_ = mp.y;

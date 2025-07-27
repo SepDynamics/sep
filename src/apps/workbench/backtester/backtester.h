@@ -37,7 +37,7 @@ public:
     void run(const std::vector<sep::quantum::Signal>& signals,
              const std::vector<sep::common::CandleData>& data);
     const BacktestResult& getResult() const;
-    const std::vector<float>& getEquityCurve() const { return result_.equity_curve; }
+    const std::vector<float>& getEquityCurve() const;
 
 private:
     BacktestResult result_;

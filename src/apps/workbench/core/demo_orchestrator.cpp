@@ -7,6 +7,7 @@
 
 #include "demos/demo_base.hpp"
 #include "demos/demo_manager.hpp"
+#include "engine/engine.h"
 #include "imgui.h"
 
 namespace sep::workbench {

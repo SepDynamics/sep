@@ -27,7 +27,7 @@ float AudioCoherenceEngine::calculateCoherence(const float* pSamples, uint32_t c
     {
         rms_sum += pSamples[i] * pSamples[i];
     }
-    float rms = std::sqrtf(rms_sum / static_cast<float>(count));
+    float rms = sqrtf(rms_sum / static_cast<float>(count));
 
     // Calculate spectral coherence using autocorrelation
     float    autocorr_sum = 0.0f;

@@ -55,13 +55,29 @@ int main(int argc, char* argv[]) {
         setenv("SEP_SKIP_FETCH", "1", 1);
     }
 
-    // Verify SEP engine availability before launching
-    sep::workbench::ServiceConnector connection_test;
-    if (!connection_test.connect()) {
-        std::cerr << "[Main] Failed to connect to SEP engine. Exiting." << std::endl;
-        return 1;
+    // Check for offline mode flag
+    bool offline_mode = false;
+    for (int i = 1; i < argc; i++) {
+        if (std::string(argv[i]) == "--offline") {
+            offline_mode = true;
+            break;
+        }
     }
-    connection_test.disconnect();
+
+    if (!offline_mode) {
+        // Verify SEP engine availability before launching
+        sep::workbench::ServiceConnector connection_test;
+        if (!connection_test.connect()) {
+            std::cerr << "[Main] Failed to connect to SEP engine. Trying offline mode..." << std::endl;
+            offline_mode = true;
+        } else {
+            connection_test.disconnect();
+        }
+    }
+
+    if (offline_mode) {
+        std::cout << "[Main] Running in offline mode - no service connection required" << std::endl;
+    }
     
     std::cout << "=====================================\n";
     std::cout << "   SEP OANDA Trading Engine v1.0     \n";

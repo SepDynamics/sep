@@ -618,7 +618,7 @@ void PipeWireCapture::streamProcess(void* data)
         float current_phase = phase.load(std::memory_order_relaxed);
         for (uint32_t i = 0; i < n_samples; i++) {
             float angle = 2.0f * glm::pi<float>() * frequency * current_phase;
-            samples[i] = amplitude * std::sinf(angle);
+            samples[i] = amplitude * sinf(angle);
             current_phase += 1.0f / self->config_.rate;
         }
         phase.store(current_phase, std::memory_order_relaxed);
@@ -629,7 +629,7 @@ void PipeWireCapture::streamProcess(void* data)
     float rms_sum = 0.0f;
     for (uint32_t i = 0; i < n_samples; i++) {
         float sample = samples[i];
-        float abs_sample = std::fabsf(sample);
+        float abs_sample = fabsf(sample);
         peak = std::max(peak, abs_sample);
         rms_sum += sample * sample;
     }
@@ -640,7 +640,7 @@ void PipeWireCapture::streamProcess(void* data)
         if (self->running_) {  // Check again under lock
             self->metrics_.total_samples += n_samples;
             self->metrics_.peak_level = peak;
-            self->metrics_.rms_level = std::sqrtf(rms_sum / static_cast<float>(n_samples));
+            self->metrics_.rms_level = sqrtf(rms_sum / static_cast<float>(n_samples));
             self->metrics_.latency_ms = static_cast<float>(n_samples) / self->config_.rate * 1000.0f;
             
             // Check for audio clipping

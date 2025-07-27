@@ -53,7 +53,14 @@ bool MultiTimeframeAnalyzer::initialize() {
         metrics_collector_ = std::make_unique<core::MetricsCollector>();
         
         // Initialize pattern engines for each timeframe
-        const auto& thresholds = Config::getInstance().signal_thresholds();
+        const auto& config_thresholds = ::sep::workbench::Config::getInstance().signal_thresholds();
+        quantum::SignalThresholds thresholds;
+        thresholds.buy_min_coherence = config_thresholds.buy_min_coherence;
+        thresholds.buy_min_stability = config_thresholds.buy_min_stability;
+        thresholds.buy_max_entropy = config_thresholds.buy_max_entropy;
+        thresholds.sell_max_stability = config_thresholds.sell_max_stability;
+        thresholds.sell_min_entropy = config_thresholds.sell_min_entropy;
+        
         for (const auto& tf : config_.timeframes) {
             auto engine = std::make_unique<quantum::PatternMetricEngine>();
             engine->setSignalThresholds(thresholds);
@@ -524,10 +531,17 @@ std::map<std::string, TimeframeMetrics> MultiTimeframeAnalyzer::getLatestMetrics
 void MultiTimeframeAnalyzer::updateConfig(const Config& new_config) {
     std::lock_guard<std::mutex> lock(analysis_mutex_);
     config_ = new_config;
-    const auto& th = Config::getInstance().signal_thresholds();
+    const auto& config_thresholds = ::sep::workbench::Config::getInstance().signal_thresholds();
+    quantum::SignalThresholds thresholds;
+    thresholds.buy_min_coherence = config_thresholds.buy_min_coherence;
+    thresholds.buy_min_stability = config_thresholds.buy_min_stability;
+    thresholds.buy_max_entropy = config_thresholds.buy_max_entropy;
+    thresholds.sell_max_stability = config_thresholds.sell_max_stability;
+    thresholds.sell_min_entropy = config_thresholds.sell_min_entropy;
+    
     for (auto& [tf, engine] : pattern_engines_) {
         if (engine) {
-            engine->setSignalThresholds(th);
+            engine->setSignalThresholds(thresholds);
         }
     }
     SEP_LOG_INFO("MultiTimeframeAnalyzer configuration updated");

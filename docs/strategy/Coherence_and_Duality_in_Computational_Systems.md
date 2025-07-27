@@ -91,11 +91,11 @@ struct CandleData {
 };
 
 // oanda_connector.cpp (isolated state)
-#include "oanda_connector.h"
+#include "connectors/oanda_connector.h"
 CandleData fetchCandle() { ... }
 
 // signals_tab_controller.cpp (isolated state)
-#include "oanda_connector.h"
+#include "connectors/oanda_connector.h"
 void renderChart(const CandleData& candle) { ... }
 ```
 Here, `oanda_connector.h` is the register enabling coherence between `oanda_connector.cpp` and `signals_tab_controller.cpp`.

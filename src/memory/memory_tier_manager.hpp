@@ -10,6 +10,7 @@
 // Project includes
 #include "engine/common.h"
 #include "engine/dag_graph.h"
+#include "engine/pattern_types.h"
 #include "engine/standard_includes.h"
 #include "engine/types.h"
 #include "memory/memory_tier.hpp"
@@ -32,9 +33,6 @@
 #include <glm/vec3.hpp>
 
 namespace sep {
-namespace compat {
-struct PatternData;
-}
 namespace core {
 class SystemHooks;
 }

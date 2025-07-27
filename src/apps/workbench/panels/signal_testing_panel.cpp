@@ -96,7 +96,7 @@ void SignalTestingPanel::renderHistory() {
     static std::vector<float> signal_values;
     static std::vector<float> confidence_values;
     static std::vector<const char*> signal_labels;
-    static int history_size = 50;
+    static size_t history_size = 50;
     
     // Get current signal from real market data processing
     auto signal = signal_generator_->getCurrentSignal();
@@ -138,8 +138,8 @@ void SignalTestingPanel::renderHistory() {
         ImGui::Text("Recent Signals (newest first):");
         
         // Show last 10 signals with colors
-        int start_idx = std::max(0, static_cast<int>(signal_values.size()) - 10);
-        for (int i = signal_values.size() - 1; i >= start_idx; --i) {
+        size_t start_idx = signal_values.size() > 10 ? signal_values.size() - 10 : 0;
+        for (size_t i = signal_values.size(); i-- > start_idx;) {
             ImVec4 color;
             const char* symbol;
             
@@ -162,10 +162,10 @@ void SignalTestingPanel::renderHistory() {
         ImGui::Separator();
         ImGui::Text("Signal Strength Chart (last 20):");
         
-        int chart_start = std::max(0, static_cast<int>(signal_values.size()) - 20);
+        size_t chart_start = signal_values.size() > 20 ? signal_values.size() - 20 : 0;
         std::string chart_line = "";
-        
-        for (int i = chart_start; i < signal_values.size(); ++i) {
+
+        for (size_t i = chart_start; i < signal_values.size(); ++i) {
             if (signal_values[i] > 0.5f) {
                 chart_line += "▲"; // BUY
             } else if (signal_values[i] < -0.5f) {
@@ -180,7 +180,7 @@ void SignalTestingPanel::renderHistory() {
         // Confidence trend
         ImGui::Text("Confidence Trend:");
         std::string confidence_chart = "";
-        for (int i = chart_start; i < confidence_values.size(); ++i) {
+        for (size_t i = chart_start; i < confidence_values.size(); ++i) {
             if (confidence_values[i] > 0.8f) {
                 confidence_chart += "█"; // High confidence
             } else if (confidence_values[i] > 0.6f) {

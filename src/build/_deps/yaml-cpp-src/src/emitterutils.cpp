@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <cstdint>
+#include <cstdint>  // required for REPLACEMENT_CHARACTER constant
 #include <iomanip>
 #include <sstream>
 

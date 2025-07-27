@@ -217,10 +217,13 @@ std::vector<sep::common::CandleData> MultiTimeframeAnalyzer::resampleCandles(
 }
 
 TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
-    const std::string& timeframe, 
+    const std::string& timeframe,
     const std::vector<sep::common::CandleData>& candles) {
-    
+
     TimeframeMetrics metrics(timeframe);
+    if (!candles.empty()) {
+        metrics.timestamp = candles.back().timestamp;
+    }
     
     if (candles.empty() || !pattern_engines_.count(timeframe)) {
         return metrics;

@@ -169,6 +169,11 @@ const MetricsMonitor::ThresholdSignal& MetricsMonitor::getLatestSignal() const {
     return latest_signal_;
 }
 
+void MetricsMonitor::ingestSignals(const std::vector<sep::quantum::Signal>& signals) {
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
+    latest_signals_ = signals;
+}
+
 sep::connectors::MarketData MetricsMonitor::getLatestMarketData() const {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
     return latest_market_data_;

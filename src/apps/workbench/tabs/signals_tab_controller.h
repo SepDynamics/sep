@@ -55,7 +55,7 @@ private:
     // Chart interaction
     ChartZoom chart_zoom_;
     ImVec2 crosshair_pos_;
-    bool show_crosshair_ = true;
+    bool show_crosshair_ = true; // toggled with Space key
     bool is_panning_ = false;
     ImVec2 pan_start_pos_;
 

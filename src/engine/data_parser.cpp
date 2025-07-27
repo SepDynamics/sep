@@ -346,7 +346,7 @@ DataFormat DataParser::detectFormat(const uint8_t* data, size_t size) const {
     double entropy = 0.0;
     for (int count : counts) {
         if (count > 0) {
-            double p = static_cast<double>(count) / size;
+            double p = static_cast<double>(count) / static_cast<double>(size);
             entropy -= p * std::log2(p);
         }
     }

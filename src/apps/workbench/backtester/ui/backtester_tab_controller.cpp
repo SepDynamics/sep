@@ -80,7 +80,18 @@ void BacktesterTabController::render() {
     ImGui::Text("Sharpe Ratio: %.2f", result_.sharpe_ratio);
     ImGui::Text("Max Drawdown: %.2f", result_.max_drawdown);
 
-    if (!result_.trades.empty()) {
+    if (!result_.equity_curve.empty()) {
+        std::vector<double> xs(result_.equity_curve.size());
+        std::vector<double> curve(result_.equity_curve.size());
+        for (size_t i = 0; i < result_.equity_curve.size(); ++i) {
+            xs[i] = static_cast<double>(i);
+            curve[i] = static_cast<double>(result_.equity_curve[i]);
+        }
+        if (ImPlot::BeginPlot("Profit Curve", ImVec2(-1,150))) {
+            ImPlot::PlotLine("PnL", xs.data(), curve.data(), static_cast<int>(curve.size()));
+            ImPlot::EndPlot();
+        }
+    } else if (!result_.trades.empty()) {
         std::vector<double> xs(result_.trades.size());
         std::vector<double> curve(result_.trades.size());
         double cumulative = 0.0;
@@ -93,7 +104,6 @@ void BacktesterTabController::render() {
             xs[i] = static_cast<double>(i);
             curve[i] = cumulative;
         }
-
         if (ImPlot::BeginPlot("Profit Curve", ImVec2(-1,150))) {
             ImPlot::PlotLine("PnL", xs.data(), curve.data(), static_cast<int>(curve.size()));
             ImPlot::EndPlot();

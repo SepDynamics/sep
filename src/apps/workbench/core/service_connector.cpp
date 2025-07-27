@@ -61,13 +61,6 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         trade_manager_ = std::make_unique<workbench::TradeManager>(oanda_connector_.get());
         trade_manager_->setRiskPercentage(0.02);
         trade_manager_->setPaperTrading(cfg.oanda().paper_trading);
-        if (mtf_analyzer_) {
-            oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
-                if (mtf_analyzer_) {
-                    mtf_analyzer_->ingestMarketData("EUR_USD", c);
-                }
-            });
-        }
         std::cout << "[ServiceConnector] OANDA connector configured for PRACTICE server" << std::endl;
         std::cout << "[ServiceConnector] API Key length: " << api_key.length() << std::endl;
         std::cout << "[ServiceConnector] Account ID: " << account_id << std::endl;
@@ -77,6 +70,16 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
         bool skip_fetch = skip_env && dataset_exists;
 
         if (oanda_connector_->initialize()) {
+            oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
+                if (mtf_analyzer_) {
+                    mtf_analyzer_->ingestMarketData("EUR_USD", c);
+                }
+                if (signals_tab_) {
+                    std::deque<common::CandleData> tmp{c};
+                    signals_tab_->setCandleData(tmp);
+                }
+            });
+
             if (!skip_fetch) {
                 std::filesystem::create_directories("Testing/OANDA");
                 if (oanda_connector_->saveEURUSDM1_48h(dataset)) {

@@ -109,6 +109,7 @@ bool WorkbenchEngine::initialize()
         signal_generator_->setMemoryManager(&::sep::memory::MemoryTierManager::getInstance());
         metrics_monitor_ = ::std::make_shared<MetricsMonitor>();
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
+        multi_timeframe_analyzer_->setMetricsMonitor(metrics_monitor_.get());
         multi_timeframe_analyzer_->setMetricsCallback([this](const std::map<std::string, workbench::TimeframeMetrics>& m) {
             if (!metrics_monitor_) return;
             auto rolling = metrics_monitor_->getRollingMetrics();

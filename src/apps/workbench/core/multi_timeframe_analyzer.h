@@ -20,6 +20,8 @@
 
 namespace sep::workbench {
 
+class MetricsMonitor;
+
 
 
 struct TimeframeData {
@@ -119,6 +121,7 @@ private:
     Config config_;
     std::mutex analysis_mutex_;
     MetricsCallback metrics_callback_;
+    MetricsMonitor* metrics_monitor_{nullptr};
     
     // SEP Engine components - one per timeframe for parallel processing
     std::map<std::string, std::unique_ptr<sep::quantum::PatternMetricEngine>> pattern_engines_;
@@ -174,6 +177,7 @@ public:
                             const std::vector<sep::common::CandleData>& historical_candles);
 
     void setMetricsCallback(MetricsCallback cb);
+    void setMetricsMonitor(MetricsMonitor* monitor) { metrics_monitor_ = monitor; }
     
     // Analysis methods
     MultiTimeframeSignal generateSignal(const std::string& instrument);

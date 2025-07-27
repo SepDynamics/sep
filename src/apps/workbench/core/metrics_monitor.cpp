@@ -90,6 +90,16 @@ void MetricsMonitor::ingestData(const uint8_t* data, size_t size) {
     }
 }
 
+void MetricsMonitor::ingestCandle(const sep::common::CandleData& candle) {
+    float ohlc[4] = {
+        static_cast<float>(candle.open),
+        static_cast<float>(candle.high),
+        static_cast<float>(candle.low),
+        static_cast<float>(candle.close)};
+    const uint8_t* bytes = reinterpret_cast<const uint8_t*>(ohlc);
+    ingestData(bytes, sizeof(ohlc));
+}
+
 void MetricsMonitor::ingestFile(const std::string& filepath) {
     if (!engine_)
     {

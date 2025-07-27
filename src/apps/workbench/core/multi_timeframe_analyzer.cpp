@@ -2,6 +2,7 @@
 #include "engine/data_parser.h"
 #include "common/financial_data_types.h"
 #include "connectors/market_data_converter.h"
+#include "metrics_monitor.h"
 
 #include <algorithm>
 #include <cmath>
@@ -83,11 +84,15 @@ void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument, con
     if (timeframe_data_.count("1m")) {
         auto& tf_data = timeframe_data_["1m"];
         tf_data.candles.push_back(candle);
-        
+
         // Maintain rolling window
         if (tf_data.candles.size() > tf_data.max_candles) {
             tf_data.candles.pop_front();
         }
+    }
+
+    if (metrics_monitor_) {
+        metrics_monitor_->ingestCandle(candle);
     }
     
     // Update higher timeframes by resampling from 1m data

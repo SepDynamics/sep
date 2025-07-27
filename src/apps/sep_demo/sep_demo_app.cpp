@@ -169,7 +169,8 @@ void PatternProcessingPanel::renderProcessingMetrics() {
     // Simple text-based history display instead of plot
     if (ImGui::CollapsingHeader("Metrics History")) {
         ImGui::Text("Recent Coherence Values:");
-        size_t start = coherence_history_.size() > 10 ? coherence_history_.size() - 10 : 0;
+        size_t start = coherence_history_.size() > 10u ?
+            coherence_history_.size() - 10u : 0u;
         for (size_t i = start; i < coherence_history_.size(); ++i) {
             ImGui::Text("  [%zu]: %.3f", i, coherence_history_[i]);
         }

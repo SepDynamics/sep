@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <map>
+#include <mutex>
 
 #include "common/financial_data_types.h"
 #include "imgui.h"
@@ -13,6 +15,7 @@
 #include "signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/config.hpp"
 #include "apps/workbench/core/common_structs.h"
+#include "apps/workbench/core/multi_timeframe_analyzer.h"
 
 namespace sep::workbench {
 
@@ -34,6 +37,7 @@ public:
     void setQuantumSignalGenerator(QuantumSignalGenerator* generator);
     void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
     void setWorkbenchEngine(WorkbenchEngine* engine);
+    void setLatestMetrics(const std::map<std::string, TimeframeMetrics>& metrics);
 
         void setCandleData(const std::deque<sep::common::CandleData>& data);
         void setCandleData(const std::vector<sep::common::CandleData>& data);
@@ -51,6 +55,9 @@ private:
     std::unordered_map<std::string, TechnicalIndicator> indicators_;
     std::vector<TrendLine> trend_lines_;
     EnhancedHoverInfo hover_info_;
+    std::map<std::string, TimeframeMetrics> latest_tf_metrics_;
+    std::mutex metrics_mutex_;
+    bool metrics_updated_{false};
 
     // Chart interaction
     ChartZoom chart_zoom_;

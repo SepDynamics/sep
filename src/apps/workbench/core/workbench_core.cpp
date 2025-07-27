@@ -127,6 +127,7 @@ bool WorkbenchEngine::initialize()
             metrics_monitor_->setRollingMetrics(rolling);
             if (signals_tab_) {
                 signals_tab_->setMetricsMonitor(metrics_monitor_);
+                signals_tab_->setLatestMetrics(m);
             }
             if (engine_tab_) {
                 engine_tab_->setMetricsMonitor(metrics_monitor_);

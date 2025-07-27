@@ -245,6 +245,7 @@ void ServiceConnector::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyze
             if (mtf_analyzer_)
             {
                 mtf_analyzer_->ingestMarketData("EUR_USD", c);
+                mtf_analyzer_->updateAllTimeframes("EUR_USD");
             }
         });
     }

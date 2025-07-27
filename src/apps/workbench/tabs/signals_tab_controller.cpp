@@ -3,6 +3,7 @@
 #include "quantum/pattern_metric_engine.h"
 #include "apps/workbench/config.hpp"
 #include "core/metrics_monitor.h"
+#include "apps/workbench/core/multi_timeframe_analyzer.h"
 
 #include <implot.h>
 #include "imgui_internal.h"
@@ -264,6 +265,12 @@ void SignalsTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> mon
 
 void SignalsTabController::setWorkbenchEngine(WorkbenchEngine* engine) {
     workbench_engine_ = engine;
+}
+
+void SignalsTabController::setLatestMetrics(const std::map<std::string, TimeframeMetrics>& metrics) {
+    std::lock_guard<std::mutex> lock(metrics_mutex_);
+    latest_tf_metrics_ = metrics;
+    metrics_updated_ = true;
 }
 
 void SignalsTabController::setCandleData(const std::deque<sep::common::CandleData>& data) {
@@ -908,10 +915,12 @@ void SignalsTabController::calculateEnhancedHoverMetrics() {
         }
     }
     
-    hover_info_.mtf_coherence["1m"] = hover_info_.nearest_sep_signal->coherence;
-    hover_info_.mtf_coherence["5m"] = hover_info_.nearest_sep_signal->coherence;
-    hover_info_.mtf_coherence["15m"] = hover_info_.nearest_sep_signal->coherence;
-    hover_info_.mtf_coherence["1h"] = hover_info_.nearest_sep_signal->coherence;
+    {
+        std::lock_guard<std::mutex> lock(metrics_mutex_);
+        for (const auto& [tf, m] : latest_tf_metrics_) {
+            hover_info_.mtf_coherence[tf] = m.dominant_coherence;
+        }
+    }
     
     float coherence = hover_info_.nearest_sep_signal->coherence;
     float stability = hover_info_.nearest_sep_signal->stability;

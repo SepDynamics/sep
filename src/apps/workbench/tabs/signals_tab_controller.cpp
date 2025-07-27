@@ -359,8 +359,10 @@ void SignalsTabController::renderCandlesticks() {
         high[i] = c.high;
     }
 
-    ImPlot::SetNextAxisLimits(ImAxis_Y1, local_min - range * 0.05, local_max + range * 0.05, ImPlotCond_Always);
-    ImPlot::PlotCandlestick("OHLC", xs.data(), open.data(), close.data(), low.data(), high.data(), static_cast<int>(count));
+    ImPlot::SetNextAxisLimits(ImAxis_Y1, local_min - range * 0.05,
+                              local_max + range * 0.05, ImPlotCond_Always);
+    ImPlot::PlotCandles("OHLC", xs.data(), open.data(), close.data(),
+                        low.data(), high.data(), static_cast<int>(count));
 }
 
 void SignalsTabController::renderTechnicalIndicators() {

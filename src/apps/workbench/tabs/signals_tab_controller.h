@@ -87,6 +87,8 @@ private:
     double price_min_, price_max_;
     float volume_max_;
     ImPlotFlags plot_flags_ = ImPlotFlags_None;
+    bool candle_data_updated_ = false;
+    bool sep_signals_updated_ = false;
 
     // Rendering functions
     void renderMainChart();

@@ -4,7 +4,6 @@
 #include <sstream>
 
 #include "emitterutils.h"
-#include <cstdint>
 #include "exp.h"
 #include "indentation.h"
 #include "regex_yaml.h"

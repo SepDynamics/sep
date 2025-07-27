@@ -194,11 +194,9 @@ void BackendTabController::renderBacktesterPanel() {
         dataset_loaded_ = !data_loader_->get_data().empty();
     }
     if (ImGui::Button("Run Backtest")) {
-        if (!dataset_loaded_) {
-            data_loader_->load_data(backtest_file_buffer_);
-        }
-        backtester_->run(pattern_engine_.get(), data_loader_->get_data());
+        backtester_->run(pattern_engine_.get(), backtest_file_buffer_);
         equity_curve_ = backtester_->getEquityCurve();
+        dataset_loaded_ = true;
         if (monitor_) {
             const auto& candles = data_loader_->get_data();
             std::vector<uint8_t> bytes;

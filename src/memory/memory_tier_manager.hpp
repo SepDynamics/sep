@@ -11,6 +11,7 @@
 #include "engine/common.h"
 #include "engine/dag_graph.h"
 #include "engine/pattern_types.h"
+#include "engine/system_hooks.h"
 #include "engine/standard_includes.h"
 #include "engine/types.h"
 #include "memory/memory_tier.hpp"
@@ -33,9 +34,6 @@
 #include <glm/vec3.hpp>
 
 namespace sep {
-namespace core {
-class SystemHooks;
-}
 
 namespace memory {
 

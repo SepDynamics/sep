@@ -8,13 +8,7 @@
 
 #pragma once
 
-// Forward declarations - use class instead of struct to match crow's definitions
-namespace crow {
-    template <typename... Middlewares>
-    class Crow;
-    class request;
-    class response;
-}
+#include "crow.h"
 
 #include <memory>
 #include <string>

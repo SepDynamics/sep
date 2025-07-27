@@ -88,7 +88,7 @@ public:
 
     // Technical analysis
     double calculateATR(const std::string& instrument, const std::string& granularity = "H1",
-                        int periods = 14);
+                        size_t periods = 14);
     MarketData getMarketData(const std::string& instrument);
     int getVolatilityLevel(double current_atr, const std::string& instrument);
 

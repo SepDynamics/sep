@@ -286,7 +286,12 @@ void SignalsTabController::setLatestMetrics(const std::map<std::string, Timefram
 
 void SignalsTabController::setCandleData(const std::deque<sep::common::CandleData>& data) {
     candle_data_ = data;
+    volume_max_ = 0.0f;
+    for (const auto& c : candle_data_) {
+        volume_max_ = std::max(volume_max_, static_cast<float>(c.volume));
+    }
     updatePriceRange();
+    candle_data_updated_ = true;
     if (auto_detect_trends_) {
         detectTrendLines();
     }
@@ -294,7 +299,12 @@ void SignalsTabController::setCandleData(const std::deque<sep::common::CandleDat
 
 void SignalsTabController::setCandleData(const std::vector<sep::common::CandleData>& data) {
     candle_data_.assign(data.begin(), data.end());
+    volume_max_ = 0.0f;
+    for (const auto& c : candle_data_) {
+        volume_max_ = std::max(volume_max_, static_cast<float>(c.volume));
+    }
     updatePriceRange();
+    candle_data_updated_ = true;
     if (auto_detect_trends_) {
         detectTrendLines();
     }
@@ -305,6 +315,7 @@ void SignalsTabController::setSEPSignals(const std::deque<sep::common::SEPSignal
     if (sep_signals_.size() > 1440) {
         sep_signals_.erase(sep_signals_.begin(), sep_signals_.end() - 1440);
     }
+    sep_signals_updated_ = true;
 }
 
 void SignalsTabController::renderMainChart() {
@@ -317,8 +328,10 @@ void SignalsTabController::renderMainChart() {
         detectTrendLines();
     }
 
-    ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, ImPlotCond_Once);
-    ImPlot::SetNextAxisLimits(ImAxis_X1, 0, static_cast<double>(candle_data_.size()), ImPlotCond_Once);
+    ImPlotCond cond = candle_data_updated_ ? ImPlotCond_Always : ImPlotCond_Once;
+    ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, cond);
+    ImPlot::SetNextAxisLimits(ImAxis_X1, 0, static_cast<double>(candle_data_.size()), cond);
+    candle_data_updated_ = false;
     ImPlotFlags flags = plot_flags_;
     if (show_crosshair_) {
         flags |= ImPlotFlags_Crosshairs;

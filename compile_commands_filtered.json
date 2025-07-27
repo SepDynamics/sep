@@ -1,0 +1,552 @@
+[
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang-15 -I/usr/local/cuda/include -I/sep/src/glad -O3 -DNDEBUG -o src/glad/CMakeFiles/glad.dir/glad.c.o -c /sep/src/glad/glad.c",
+    "file": "/sep/src/glad/glad.c"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -I/usr/local/cuda/include -I/sep/src/common -I/sep/src -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/common/CMakeFiles/sep_common.dir/financial_data_types.cpp.o -c /sep/src/common/financial_data_types.cpp",
+    "file": "/sep/src/common/financial_data_types.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/allocation_metrics.cpp.o -c /sep/src/engine/allocation_metrics.cpp",
+    "file": "/sep/src/engine/allocation_metrics.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/compression.cpp.o -c /sep/src/engine/compression.cpp",
+    "file": "/sep/src/engine/compression.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/dag_graph.cpp.o -c /sep/src/engine/dag_graph.cpp",
+    "file": "/sep/src/engine/dag_graph.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/dag_graph_quant.cpp.o -c /sep/src/engine/dag_graph_quant.cpp",
+    "file": "/sep/src/engine/dag_graph_quant.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/data_parser.cpp.o -c /sep/src/engine/data_parser.cpp",
+    "file": "/sep/src/engine/data_parser.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/error_handler.cpp.o -c /sep/src/engine/error_handler.cpp",
+    "file": "/sep/src/engine/error_handler.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/file_system_watcher.cpp.o -c /sep/src/engine/file_system_watcher.cpp",
+    "file": "/sep/src/engine/file_system_watcher.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/logging.cpp.o -c /sep/src/engine/logging.cpp",
+    "file": "/sep/src/engine/logging.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/manager.cpp.o -c /sep/src/engine/manager.cpp",
+    "file": "/sep/src/engine/manager.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/metrics_collector.cpp.o -c /sep/src/engine/metrics_collector.cpp",
+    "file": "/sep/src/engine/metrics_collector.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/prometheus_exporter.cpp.o -c /sep/src/engine/prometheus_exporter.cpp",
+    "file": "/sep/src/engine/prometheus_exporter.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/socket_listener.cpp.o -c /sep/src/engine/socket_listener.cpp",
+    "file": "/sep/src/engine/socket_listener.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/engine/CMakeFiles/sep_engine.dir/tracing.cpp.o -c /sep/src/engine/tracing.cpp",
+    "file": "/sep/src/engine/tracing.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/engine.cu -o src/engine/CMakeFiles/sep_engine.dir/engine.cu.o",
+    "file": "/sep/src/engine/engine.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/cuda_impl.cu -o src/engine/CMakeFiles/sep_engine.dir/cuda_impl.cu.o",
+    "file": "/sep/src/engine/cuda_impl.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/raii.cu -o src/engine/CMakeFiles/sep_engine.dir/raii.cu.o",
+    "file": "/sep/src/engine/raii.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/stream.cu -o src/engine/CMakeFiles/sep_engine.dir/stream.cu.o",
+    "file": "/sep/src/engine/stream.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/pattern_kernels.cu -o src/engine/CMakeFiles/sep_engine.dir/pattern_kernels.cu.o",
+    "file": "/sep/src/engine/pattern_kernels.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/cuda_api.cu -o src/engine/CMakeFiles/sep_engine.dir/cuda_api.cu.o",
+    "file": "/sep/src/engine/cuda_api.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/event.cu -o src/engine/CMakeFiles/sep_engine.dir/event.cu.o",
+    "file": "/sep/src/engine/event.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/utils.cu -o src/engine/CMakeFiles/sep_engine.dir/utils.cu.o",
+    "file": "/sep/src/engine/utils.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/kernels.cu -o src/engine/CMakeFiles/sep_engine.dir/kernels.cu.o",
+    "file": "/sep/src/engine/kernels.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/core.cu -o src/engine/CMakeFiles/sep_engine.dir/core.cu.o",
+    "file": "/sep/src/engine/core.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/quantum_kernels.cu -o src/engine/CMakeFiles/sep_engine.dir/quantum_kernels.cu.o",
+    "file": "/sep/src/engine/quantum_kernels.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/engine -I/sep/src -I/sep/src/common -I/sep/src/connectors -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/engine/memory.cu -o src/engine/CMakeFiles/sep_engine.dir/memory.cu.o",
+    "file": "/sep/src/engine/memory.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -I/sep/src/memory -I/sep/src -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager_serialization.cpp.o -c /sep/src/memory/memory_tier_manager_serialization.cpp",
+    "file": "/sep/src/memory/memory_tier_manager_serialization.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -I/sep/src/memory -I/sep/src -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/memory/CMakeFiles/sep_memory.dir/memory_tier.cpp.o -c /sep/src/memory/memory_tier.cpp",
+    "file": "/sep/src/memory/memory_tier.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -I/sep/src/memory -I/sep/src -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/memory/CMakeFiles/sep_memory.dir/memory_tier_manager.cpp.o -c /sep/src/memory/memory_tier_manager.cpp",
+    "file": "/sep/src/memory/memory_tier_manager.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -I/sep/src/memory -I/sep/src -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/memory/CMakeFiles/sep_memory.dir/quantum_coherence_manager.cpp.o -c /sep/src/memory/quantum_coherence_manager.cpp",
+    "file": "/sep/src/memory/quantum_coherence_manager.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -I/sep/src/memory -I/sep/src -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/memory/CMakeFiles/sep_memory.dir/redis_manager.cpp.o -c /sep/src/memory/redis_manager.cpp",
+    "file": "/sep/src/memory/redis_manager.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution_bridge.cpp.o -c /sep/src/quantum/pattern_evolution_bridge.cpp",
+    "file": "/sep/src/quantum/pattern_evolution_bridge.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/qbsa.cpp.o -c /sep/src/quantum/qbsa.cpp",
+    "file": "/sep/src/quantum/qbsa.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/qbsa_qfh.cpp.o -c /sep/src/quantum/qbsa_qfh.cpp",
+    "file": "/sep/src/quantum/qbsa_qfh.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh.cpp.o -c /sep/src/quantum/quantum_processor_qfh.cpp",
+    "file": "/sep/src/quantum/quantum_processor_qfh.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/types_serialization.cpp.o -c /sep/src/quantum/types_serialization.cpp",
+    "file": "/sep/src/quantum/types_serialization.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/pattern_evolution.cpp.o -c /sep/src/quantum/pattern_evolution.cpp",
+    "file": "/sep/src/quantum/pattern_evolution.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/quantum_manifold_optimizer.cpp.o -c /sep/src/quantum/quantum_manifold_optimizer.cpp",
+    "file": "/sep/src/quantum/quantum_manifold_optimizer.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/manifold_config.cpp.o -c /sep/src/quantum/manifold_config.cpp",
+    "file": "/sep/src/quantum/manifold_config.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor_interface.cpp.o -c /sep/src/quantum/pattern_processor_interface.cpp",
+    "file": "/sep/src/quantum/pattern_processor_interface.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/coherence_manager.cpp.o -c /sep/src/quantum/coherence_manager.cpp",
+    "file": "/sep/src/quantum/coherence_manager.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/evolution.cpp.o -c /sep/src/quantum/evolution.cpp",
+    "file": "/sep/src/quantum/evolution.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/pattern_metric_engine.cpp.o -c /sep/src/quantum/pattern_metric_engine.cpp",
+    "file": "/sep/src/quantum/pattern_metric_engine.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/pattern_processor.cpp.o -c /sep/src/quantum/pattern_processor.cpp",
+    "file": "/sep/src/quantum/pattern_processor.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/processor.cpp.o -c /sep/src/quantum/processor.cpp",
+    "file": "/sep/src/quantum/processor.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/qfh.cpp.o -c /sep/src/quantum/qfh.cpp",
+    "file": "/sep/src/quantum/qfh.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_qfh_common.cpp.o -c /sep/src/quantum/quantum_processor_qfh_common.cpp",
+    "file": "/sep/src/quantum/quantum_processor_qfh_common.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor.cpp.o -c /sep/src/quantum/quantum_processor.cpp",
+    "file": "/sep/src/quantum/quantum_processor.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/quantum/qbsa_cuda.cu -o src/quantum/CMakeFiles/sep_quantum.dir/qbsa_cuda.cu.o",
+    "file": "/sep/src/quantum/qbsa_cuda.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -ccbin=/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/quantum -I/sep/src -I/sep/src/memory -I/sep/src/engine -I/sep/src/common -I/sep/src/connectors -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem=/usr/local/cuda/include  --allow-unsupported-compiler --extended-lambda --display-error-number -O3 -DNDEBUG --generate-code=arch=compute_75,code=[compute_75,sm_75] -Xcompiler=-fPIC -include /sep/src/engine/glm_config.h -std=c++17 -x cu -dc /sep/src/quantum/quantum_processor_cuda.cu -o src/quantum/CMakeFiles/sep_quantum.dir/quantum_processor_cuda.cu.o",
+    "file": "/sep/src/quantum/quantum_processor_cuda.cu"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/connectors -I/sep/src -I/sep/src/common -I/sep/src/engine -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/connectors/CMakeFiles/sep_connectors.dir/oanda_connector.cpp.o -c /sep/src/connectors/oanda_connector.cpp",
+    "file": "/sep/src/connectors/oanda_connector.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/connectors -I/sep/src -I/sep/src/common -I/sep/src/engine -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/connectors/CMakeFiles/sep_connectors.dir/market_data_converter.cpp.o -c /sep/src/connectors/market_data_converter.cpp",
+    "file": "/sep/src/connectors/market_data_converter.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DSEP_AUDIO_EXPORTS -DSEP_HAS_AUDIO=1 -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 -I/sep/src/engine -I/sep/include -I/sep/src -I/sep/extern -I/sep/extern/cycles/src -I/sep/extern/blender/lib/linux_x64/osl/include -I/sep/extern/eigen -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/audio/CMakeFiles/sep_audio.dir/config.cpp.o -c /sep/src/audio/config.cpp",
+    "file": "/sep/src/audio/config.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DSEP_AUDIO_EXPORTS -DSEP_HAS_AUDIO=1 -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 -I/sep/src/engine -I/sep/include -I/sep/src -I/sep/extern -I/sep/extern/cycles/src -I/sep/extern/blender/lib/linux_x64/osl/include -I/sep/extern/eigen -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/audio/CMakeFiles/sep_audio.dir/pipeline.cpp.o -c /sep/src/audio/pipeline.cpp",
+    "file": "/sep/src/audio/pipeline.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DSEP_AUDIO_EXPORTS -DSEP_HAS_AUDIO=1 -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 -I/sep/src/engine -I/sep/include -I/sep/src -I/sep/extern -I/sep/extern/cycles/src -I/sep/extern/blender/lib/linux_x64/osl/include -I/sep/extern/eigen -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/audio/CMakeFiles/sep_audio.dir/pipewire_capture.cpp.o -c /sep/src/audio/pipewire_capture.cpp",
+    "file": "/sep/src/audio/pipewire_capture.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DSEP_AUDIO_EXPORTS -DSEP_HAS_AUDIO=1 -I/usr/include/pipewire-0.3 -I/usr/include/spa-0.2 -I/sep/src/engine -I/sep/include -I/sep/src -I/sep/extern -I/sep/extern/cycles/src -I/sep/extern/blender/lib/linux_x64/osl/include -I/sep/extern/eigen -I/sep/src/common -I/sep/src/connectors -isystem /usr/local/cuda/include -O3 -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/audio/CMakeFiles/sep_audio.dir/factory.cpp.o -c /sep/src/audio/factory.cpp",
+    "file": "/sep/src/audio/factory.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -I/sep/src/connectors -I/sep/src -I/sep/src/common -I/sep/src/engine -isystem /usr/local/cuda/include -O3 -DNDEBUG -std=gnu++17 -o src/apps/CMakeFiles/data_downloader.dir/data_downloader.cpp.o -c /sep/src/apps/data_downloader.cpp",
+    "file": "/sep/src/apps/data_downloader.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src -I/sep/src/apps/common -I/sep/build/_deps/imgui-src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -std=gnu++17 -o src/apps/sep_demo/CMakeFiles/sep_demo.dir/main.cpp.o -c /sep/src/apps/sep_demo/main.cpp",
+    "file": "/sep/src/apps/sep_demo/main.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src -I/sep/src/apps/common -I/sep/build/_deps/imgui-src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -std=gnu++17 -o src/apps/sep_demo/CMakeFiles/sep_demo.dir/sep_demo_app.cpp.o -c /sep/src/apps/sep_demo/sep_demo_app.cpp",
+    "file": "/sep/src/apps/sep_demo/sep_demo_app.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/config.cpp.o -c /sep/src/apps/workbench/config.cpp",
+    "file": "/sep/src/apps/workbench/config.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/demo_orchestrator.cpp.o -c /sep/src/apps/workbench/core/demo_orchestrator.cpp",
+    "file": "/sep/src/apps/workbench/core/demo_orchestrator.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/file_dialog.cpp.o -c /sep/src/apps/workbench/core/file_dialog.cpp",
+    "file": "/sep/src/apps/workbench/core/file_dialog.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/forex_pattern_generator.cpp.o -c /sep/src/apps/workbench/core/forex_pattern_generator.cpp",
+    "file": "/sep/src/apps/workbench/core/forex_pattern_generator.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/landing_page.cpp.o -c /sep/src/apps/workbench/core/landing_page.cpp",
+    "file": "/sep/src/apps/workbench/core/landing_page.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/memory_monitor.cpp.o -c /sep/src/apps/workbench/core/memory_monitor.cpp",
+    "file": "/sep/src/apps/workbench/core/memory_monitor.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/metrics_monitor.cpp.o -c /sep/src/apps/workbench/core/metrics_monitor.cpp",
+    "file": "/sep/src/apps/workbench/core/metrics_monitor.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/multi_timeframe_analyzer.cpp.o -c /sep/src/apps/workbench/core/multi_timeframe_analyzer.cpp",
+    "file": "/sep/src/apps/workbench/core/multi_timeframe_analyzer.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/service_connector.cpp.o -c /sep/src/apps/workbench/core/service_connector.cpp",
+    "file": "/sep/src/apps/workbench/core/service_connector.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/service_proxy_engine.cpp.o -c /sep/src/apps/workbench/core/service_proxy_engine.cpp",
+    "file": "/sep/src/apps/workbench/core/service_proxy_engine.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/trade_manager.cpp.o -c /sep/src/apps/workbench/core/trade_manager.cpp",
+    "file": "/sep/src/apps/workbench/core/trade_manager.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/ui_layout_manager.cpp.o -c /sep/src/apps/workbench/core/ui_layout_manager.cpp",
+    "file": "/sep/src/apps/workbench/core/ui_layout_manager.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/unified_dashboard.cpp.o -c /sep/src/apps/workbench/core/unified_dashboard.cpp",
+    "file": "/sep/src/apps/workbench/core/unified_dashboard.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/workbench_core.cpp.o -c /sep/src/apps/workbench/core/workbench_core.cpp",
+    "file": "/sep/src/apps/workbench/core/workbench_core.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/core/workbench_main.cpp.o -c /sep/src/apps/workbench/core/workbench_main.cpp",
+    "file": "/sep/src/apps/workbench/core/workbench_main.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/annealing_demo.cpp.o -c /sep/src/apps/workbench/demos/annealing_demo.cpp",
+    "file": "/sep/src/apps/workbench/demos/annealing_demo.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/annealing_sim.cpp.o -c /sep/src/apps/workbench/demos/annealing_sim.cpp",
+    "file": "/sep/src/apps/workbench/demos/annealing_sim.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/audio_visualizer.cpp.o -c /sep/src/apps/workbench/demos/audio_visualizer.cpp",
+    "file": "/sep/src/apps/workbench/demos/audio_visualizer.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_demo.cpp.o -c /sep/src/apps/workbench/demos/cosmo_demo.cpp",
+    "file": "/sep/src/apps/workbench/demos/cosmo_demo.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/cosmo_sim.cpp.o -c /sep/src/apps/workbench/demos/cosmo_sim.cpp",
+    "file": "/sep/src/apps/workbench/demos/cosmo_sim.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/demo_manager.cpp.o -c /sep/src/apps/workbench/demos/demo_manager.cpp",
+    "file": "/sep/src/apps/workbench/demos/demo_manager.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/digital_physics_demo.cpp.o -c /sep/src/apps/workbench/demos/digital_physics_demo.cpp",
+    "file": "/sep/src/apps/workbench/demos/digital_physics_demo.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_discovery_demo.cpp.o -c /sep/src/apps/workbench/demos/drug_discovery_demo.cpp",
+    "file": "/sep/src/apps/workbench/demos/drug_discovery_demo.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/drug_optimizer.cpp.o -c /sep/src/apps/workbench/demos/drug_optimizer.cpp",
+    "file": "/sep/src/apps/workbench/demos/drug_optimizer.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/flocking_demo.cpp.o -c /sep/src/apps/workbench/demos/flocking_demo.cpp",
+    "file": "/sep/src/apps/workbench/demos/flocking_demo.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/genesis_pattern.cpp.o -c /sep/src/apps/workbench/demos/genesis_pattern.cpp",
+    "file": "/sep/src/apps/workbench/demos/genesis_pattern.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/memory_garden.cpp.o -c /sep/src/apps/workbench/demos/memory_garden.cpp",
+    "file": "/sep/src/apps/workbench/demos/memory_garden.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/neural_demo.cpp.o -c /sep/src/apps/workbench/demos/neural_demo.cpp",
+    "file": "/sep/src/apps/workbench/demos/neural_demo.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/neuro_sim.cpp.o -c /sep/src/apps/workbench/demos/neuro_sim.cpp",
+    "file": "/sep/src/apps/workbench/demos/neuro_sim.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/demos/register_demos.cpp.o -c /sep/src/apps/workbench/demos/register_demos.cpp",
+    "file": "/sep/src/apps/workbench/demos/register_demos.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/panels/signal_testing_panel.cpp.o -c /sep/src/apps/workbench/panels/signal_testing_panel.cpp",
+    "file": "/sep/src/apps/workbench/panels/signal_testing_panel.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/renderer.cpp.o -c /sep/src/apps/workbench/renderer.cpp",
+    "file": "/sep/src/apps/workbench/renderer.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/signal_generator/quantum_signal_generator.cpp.o -c /sep/src/apps/workbench/signal_generator/quantum_signal_generator.cpp",
+    "file": "/sep/src/apps/workbench/signal_generator/quantum_signal_generator.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/simple_renderer.cpp.o -c /sep/src/apps/workbench/simple_renderer.cpp",
+    "file": "/sep/src/apps/workbench/simple_renderer.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/tabs/backend_tab_controller.cpp.o -c /sep/src/apps/workbench/tabs/backend_tab_controller.cpp",
+    "file": "/sep/src/apps/workbench/tabs/backend_tab_controller.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/tabs/engine_tab_controller.cpp.o -c /sep/src/apps/workbench/tabs/engine_tab_controller.cpp",
+    "file": "/sep/src/apps/workbench/tabs/engine_tab_controller.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench_lib.dir/tabs/signals_tab_controller.cpp.o -c /sep/src/apps/workbench/tabs/signals_tab_controller.cpp",
+    "file": "/sep/src/apps/workbench/tabs/signals_tab_controller.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSEP_HAS_AUDIO=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -I/sep/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/CMakeFiles/sep_workbench.dir/core/workbench_main.cpp.o -c /sep/src/apps/workbench/core/workbench_main.cpp",
+    "file": "/sep/src/apps/workbench/core/workbench_main.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/apps/workbench/backtester -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/backtester/CMakeFiles/sep_backtester.dir/backtester.cpp.o -c /sep/src/apps/workbench/backtester/backtester.cpp",
+    "file": "/sep/src/apps/workbench/backtester/backtester.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/apps/workbench/backtester -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/backtester/CMakeFiles/sep_backtester.dir/data/data_loader.cpp.o -c /sep/src/apps/workbench/backtester/data/data_loader.cpp",
+    "file": "/sep/src/apps/workbench/backtester/data/data_loader.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/apps/workbench/backtester -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/backtester/CMakeFiles/sep_backtester.dir/data/json_data_parser.cpp.o -c /sep/src/apps/workbench/backtester/data/json_data_parser.cpp",
+    "file": "/sep/src/apps/workbench/backtester/data/json_data_parser.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/apps/workbench/backtester -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/backtester/CMakeFiles/sep_backtester.dir/core/backtester_engine.cpp.o -c /sep/src/apps/workbench/backtester/core/backtester_engine.cpp",
+    "file": "/sep/src/apps/workbench/backtester/core/backtester_engine.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/apps/workbench/backtester -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/backtester/CMakeFiles/sep_backtester.dir/core/performance_metrics.cpp.o -c /sep/src/apps/workbench/backtester/core/performance_metrics.cpp",
+    "file": "/sep/src/apps/workbench/backtester/core/performance_metrics.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/apps/workbench/backtester -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/backtester/CMakeFiles/sep_backtester.dir/strategies/sep_signal_strategy.cpp.o -c /sep/src/apps/workbench/backtester/strategies/sep_signal_strategy.cpp",
+    "file": "/sep/src/apps/workbench/backtester/strategies/sep_signal_strategy.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/apps/workbench/backtester -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/backtester/CMakeFiles/sep_backtester.dir/ui/backtester_tab_controller.cpp.o -c /sep/src/apps/workbench/backtester/ui/backtester_tab_controller.cpp",
+    "file": "/sep/src/apps/workbench/backtester/ui/backtester_tab_controller.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_HEADER_ONLY=1 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src/apps/workbench/backtester -I/sep/build/_deps/imgui-src -I/sep/src -I/sep/src/engine -I/sep/src/api -I/sep/src/apps/workbench -I/sep/src/apps/workbench/backtester/data/core -I/sep/src/apps/workbench/backtester/data -I/sep/src/apps/common -I/sep/src/connectors -I/sep/src/glad -I/sep/build/_deps/implot-src -I/sep/build/_deps/imgui-src/backends -I/sep/third_party/implot -I/sep/src/common -I/sep/src/quantum -I/sep/src/memory -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -include /sep/src/engine/glm_config.h -std=gnu++17 -o src/apps/workbench/backtester/CMakeFiles/data_loader_test.dir/data/data_loader_test.cpp.o -c /sep/src/apps/workbench/backtester/data/data_loader_test.cpp",
+    "file": "/sep/src/apps/workbench/backtester/data/data_loader_test.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src -I/sep/src/engine -I/sep/src/quantum -I/sep/src/memory -I/sep/src/connectors -I/sep/src/common -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -std=gnu++17 -o examples/CMakeFiles/pattern_metric_example.dir/pattern_metric_example.cpp.o -c /sep/examples/pattern_metric_example.cpp",
+    "file": "/sep/examples/pattern_metric_example.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -DFMT_LOCALE -DFMT_SHARED -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1 -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -I/sep/src -I/sep/src/engine -I/sep/src/quantum -I/sep/src/memory -I/sep/src/connectors -I/sep/src/common -I/sep/third_party/fmt/include -I/sep/build/_deps/tbb-src/src/tbb/../../include -I/sep/build/_deps/spdlog-src/include -isystem /usr/local/cuda/include -O3 -DNDEBUG -std=gnu++17 -o examples/CMakeFiles/pme_testbed.dir/pme_testbed.cpp.o -c /sep/examples/pme_testbed.cpp",
+    "file": "/sep/examples/pme_testbed.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -I/usr/local/cuda/include -I/sep/tests/../src -O3 -DNDEBUG -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o tests/CMakeFiles/pattern_metrics_test.dir/pattern_metrics_test.cpp.o -c /sep/tests/pattern_metrics_test.cpp",
+    "file": "/sep/tests/pattern_metrics_test.cpp"
+  },
+  {
+    "directory": "/sep/build",
+    "command": "/usr/bin/clang++-15 -I/usr/local/cuda/include -I/sep/tests/../src -O3 -DNDEBUG -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o tests/CMakeFiles/pattern_metrics_test.dir/signal_validator_test.cpp.o -c /sep/tests/signal_validator_test.cpp",
+    "file": "/sep/tests/signal_validator_test.cpp"
+  }
+]

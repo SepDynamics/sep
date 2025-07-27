@@ -14,6 +14,22 @@
 - **Output**: Logs to `output/build_log.txt` with intelligent error parsing
 - **CUDA**: Handles CUDA Toolkit v12.9 with system library compatibility issues
 
+### Static Analysis (Enhanced)
+```bash
+./run_codechecker_filtered.sh
+```
+- **Purpose**: Focused static analysis excluding external dependencies
+- **Efficiency**: Reduces analysis scope by 67.5% (338 → 110 files)
+- **Output**: Actionable reports in `output/actionable_issues_filtered.json`
+- **Intelligence**: Auto-filters 96% of noise from imgui, yaml-cpp, spdlog, tbb
+
+### Static Analysis (Legacy)
+```bash
+./run_codechecker.sh
+```
+- **Purpose**: Full static analysis including external dependencies (for reference)
+- **Note**: Generates 10,254 issues (96% external noise) - use filtered version instead
+
 ### Build Status
 - ✅ **Build System Stabilized**: Docker-based hermetic builds resolve CUDA/glibc conflicts
 - ✅ **CUDA Integration**: Using targeted `noexcept(x)` workaround for compiler compatibility

@@ -1,0 +1,31 @@
+# CodeChecker skip file
+# This file tells CodeChecker to ignore certain paths during analysis
+# Syntax: each line is a file path pattern (glob patterns supported)
+
+# External dependencies - these generate 96% of the noise (9,864 issues)
+# Patterns match absolute paths in compile_commands.json
+*/build/_deps/*
+*/extern/*
+*/third_party/*
+
+# Alternative patterns for build directory structure
+*/_deps/*
+*/imgui-src/*
+*/implot-src/* 
+*/yaml-cpp-src/*
+*/spdlog-src/*
+*/tbb-src/*
+*/glfw-src/*
+
+# Build artifacts and generated files
+*/CMakeFiles/*
+*/cmake-build-*/*
+*compile_commands.json
+
+# Temporary and cache files
+*.tmp
+*.log
+*/.vscode/*
+*/.idea/*
+*/.cache/*
+*/.codechecker/*

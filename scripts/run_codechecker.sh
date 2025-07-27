@@ -34,6 +34,7 @@ docker run --rm \
             CodeChecker analyze compile_commands.json \
                 --output /home/codecheck/.codechecker/reports \
                 --analyzers clang-tidy \
+                --skip /sep/.codechecker_skip \
                 --enable sensitive \
                 --enable extreme
 

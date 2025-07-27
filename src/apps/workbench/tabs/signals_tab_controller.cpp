@@ -307,7 +307,6 @@ void SignalsTabController::setSEPSignals(const std::deque<sep::common::SEPSignal
 
 void SignalsTabController::renderMainChart() {
     if (candle_data_.empty()) {
-        ImGui::Text("No data available.");
         return;
     }
 
@@ -372,9 +371,7 @@ void SignalsTabController::renderCandlesticks() {
         high[i] = c.high;
     }
 
-    ImPlot::PushPlotClipRect();
-    ImPlot::PlotCandles("Price", xs.data(), open.data(), close.data(), low.data(), high.data(), static_cast<int>(count));
-    ImPlot::PopPlotClipRect();
+    ImPlot::PlotCandlestick("OHLC", xs.data(), open.data(), close.data(), low.data(), high.data(), static_cast<int>(count));
 }
 
 void SignalsTabController::renderTechnicalIndicators() {
@@ -864,8 +861,15 @@ void SignalsTabController::handleMouseInput() {
         crosshair_pos_ = ImGui::GetMousePos();
         hover_info_.position = crosshair_pos_;
         updateHoverInfo();
+
+        if (ImGui::IsMouseDragging(ImPlot::GetInputMap().Pan)) {
+            is_panning_ = true;
+        } else {
+            is_panning_ = false;
+        }
     } else {
         hover_info_.active = false;
+        is_panning_ = false;
     }
 }
 

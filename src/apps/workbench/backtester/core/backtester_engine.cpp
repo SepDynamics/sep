@@ -121,3 +121,18 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
     SEPSignalStrategy default_strategy;
     return run(dataset_path, engine, &default_strategy);
 }
+
+sep::workbench::backtester::BacktestResult BacktesterEngine::run(
+    const std::vector<sep::quantum::Signal>& signals,
+    const std::string& dataset_path) {
+    sep::workbench::backtester::DataLoader loader;
+    if (dataset_path == "EURUSD_48H") {
+        loader.load_48h_sample();
+    } else {
+        loader.load_data(dataset_path);
+    }
+
+    sep::workbench::backtester::Backtester backtester;
+    backtester.run(signals, loader.get_data());
+    return backtester.getResult();
+}

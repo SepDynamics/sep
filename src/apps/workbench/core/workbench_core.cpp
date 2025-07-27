@@ -174,6 +174,13 @@ bool WorkbenchEngine::initialize()
         config::CudaConfig config;
         offline_engine_->init(config);
         active_engine_ = offline_engine_.get();
+
+        if (backtester_tab_) {
+            backtester_tab_->setPatternMetricEngine(getPatternMetricEngine());
+            if (service_connector_) {
+                backtester_tab_->setOandaConnector(service_connector_->getOandaConnector());
+            }
+        }
         
         // Skip service check - use offline engine as primary engine
         ::std::cout << "[WorkbenchEngine] Using offline engine as primary engine - no service needed" << ::std::endl;

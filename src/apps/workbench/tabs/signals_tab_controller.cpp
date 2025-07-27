@@ -261,6 +261,15 @@ void SignalsTabController::setQuantumSignalGenerator(QuantumSignalGenerator* gen
 
 void SignalsTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor) {
     metrics_monitor_ = std::move(monitor);
+    coherence_history_1h_.clear();
+    stability_history_1h_.clear();
+    entropy_history_1h_.clear();
+    coherence_history_4h_.clear();
+    stability_history_4h_.clear();
+    entropy_history_4h_.clear();
+    if (metrics_monitor_) {
+        metrics_monitor_->startProcessing();
+    }
 }
 
 void SignalsTabController::setWorkbenchEngine(WorkbenchEngine* engine) {
@@ -835,6 +844,10 @@ void SignalsTabController::setupChartArea() {
 }
 
 void SignalsTabController::handleMouseInput() {
+    if (ImGui::IsKeyPressed(ImGuiKey_Space)) {
+        show_crosshair_ = !show_crosshair_;
+    }
+
     if (ImPlot::IsPlotHovered()) {
         hover_info_.active = true;
         crosshair_pos_ = ImGui::GetMousePos();

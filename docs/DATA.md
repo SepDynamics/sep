@@ -88,11 +88,17 @@ sent through the global event bus so the UI plots refresh automatically.
 
 ### 2. **OANDA Connector (`oanda_connector.cpp`)**
 -   **Function**: Fetches live and historical market data and handles trade execution via the OANDA API.
--   **Status**: **Operational.** The critical dependency on `imgui.h` has been removed, and all namespace/include issues are fixed. The connector can now be used reliably by backend components.
+-   **Status**: **Partially Operational.** The connector can fetch data, but there is a known issue with the API request for historical data.
 
 ### 3. **PatternMetricEngine (`pattern_metric_engine.cpp`)**
 -   **Function**: The core analysis engine that applies quantum-inspired algorithms (QFH, QBSA) to detect patterns and compute metrics like Coherence, Stability, and Entropy.
--   **Status**: **Operational.** The engine compiles and is ready for integration with the live data feed and GUI visualization layers.
+-   **Status**: **Partially Operational.** The engine compiles and runs, but it is currently only generating "BUY" signals. This needs to be investigated.
+
+## Known Issues
+
+-   **OANDA API Error:** The application is currently sending a `count` parameter along with `to` and `from` parameters in the OANDA API request, which is causing an error. This needs to be fixed to enable reliable data fetching.
+-   **Application Freezing:** The application currently freezes during the initial data pull from OANDA. This is likely because the data is being fetched synchronously on the main thread.
+-   **"Buy-Only" Signals:** The `PatternMetricEngine` is currently only generating "BUY" signals. This is highly suspicious and needs to be investigated.
 
 ## Data Authenticity Policy
 

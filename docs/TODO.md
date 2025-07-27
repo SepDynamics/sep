@@ -1,61 +1,58 @@
-# SEP Engine Development Roadmap
+# SEP Workbench TODO
 
-## Current Objective: Implement Core Features and Address Technical Debt
+## Phase 1: Data Pipeline Stabilization
 
-The project has successfully resolved all post-refactoring compilation errors and now has a stable, buildable foundation. The primary objective is to implement the core features of the trading workbench and address high-priority technical debt identified by static analysis.
+**Objective:** Fix critical bugs and stabilize the data pipeline to enable real-time data processing and signal generation.
 
-## Phase 1: Feature Implementation & Stabilization
+-   **Task 1.1: Fix OANDA API Request**
+    -   **Description:** The application is currently sending a `count` parameter along with `to` and `from` parameters in the OANDA API request, which is causing an error. This needs to be fixed to enable reliable data fetching.
+    -   **File:** `src/apps/workbench/core/workbench_core.cpp`
+    -   **Status:** Not Started
 
-This phase focuses on bringing the core functionalities of the workbench to life and improving code quality.
+-   **Task 1.2: Implement Asynchronous Data Fetching**
+    -   **Description:** The application currently freezes during the initial data pull from OANDA. This is likely because the data is being fetched synchronously on the main thread. This needs to be moved to a separate thread to keep the UI responsive.
+    -   **Files:** `src/apps/workbench/core/workbench_core.cpp`, `src/connectors/oanda_connector.cpp`
+    -   **Status:** Not Started
 
-### 1.1: Critical Build Error Resolution
--   **Status**: **DONE**
--   **Summary**: The architectural decoupling of the backend from the GUI is complete. All resulting compilation errors related to type mismatches, API changes, and namespace issues have been resolved. The project now compiles successfully.
+-   **Task 1.3: Investigate "Buy-Only" Signals**
+    -   **Description:** The `PatternMetricEngine` is currently only generating "BUY" signals. This is highly suspicious and needs to be investigated. The signal generation logic in `workbench_core.cpp` and the `PatternMetricEngine` itself need to be analyzed.
+    -   **Files:** `src/apps/workbench/core/workbench_core.cpp`, `src/engine/pattern_metric_engine.cpp`
+    -   **Status:** Not Started
 
-### 1.2: Implement Chart Rendering (In Progress)
--   **Status**: **IN PROGRESS**
--   **Priority**: **CRITICAL (BLOCKING)**
--   **Tasks**:
-    -   [ ] Render candlestick charts in `SignalsTabController` using `implot`.
-    -   [ ] Add real-time plots below the main chart for Coherence, Stability, and Entropy metrics.
-    -   [ ] Implement interactive features like zoom, pan, and crosshair for chart analysis.
+## Phase 2: Data Pipeline Testing and Refinement
 
-### 1.3: Integrate Live Data Feed
--   **Status**: **BLOCKED**
--   **Priority**: High
--   **Dependencies**: **Phase 1.2 Complete**
--   **Tasks**:
-    -   [ ] Connect the `OandaConnector`'s live price stream to the `MultiTimeframeAnalyzer`.
-    -   [ ] Ensure the `SignalsTabController` chart updates in real-time with new data.
-    -   [ ] Feed live data into the `PatternMetricEngine` to generate real-time signals.
+**Objective:** Create a robust testing framework for the data pipeline and refine the signal generation logic.
 
-### 1.4: Backtesting Framework Implementation
--   **Status**: **BLOCKED**
--   **Priority**: High
--   **Dependencies**: **Phase 1.3 Complete**
--   **Tasks**:
-    -   [ ] Fully integrate the `PatternMetricEngine` signals into the `Backtester` logic.
-    -   [ ] Implement the UI for loading data, running backtests, and viewing results in the `BackendTabController`.
-    -   [ ] Display performance metrics (P&L, Win Rate, Sharpe Ratio) and an equity curve chart.
+-   **Task 2.1: Create a Testbed for the `PatternMetricEngine`**
+    -   **Description:** Create a new executable that can be used to test the `PatternMetricEngine` in isolation. This will allow for controlled experiments with different datasets and configurations.
+    -   **Files:** `examples/CMakeLists.txt`, new files in `examples/`
+    -   **Status:** Not Started
 
-## Phase 2: Technical Debt and Static Analysis Cleanup
+-   **Task 2.2: Implement Incremental Data Processing**
+    -   **Description:** The application should be able to process data in incremental chunks, rather than all at once. This is crucial for real-time data processing.
+    -   **Files:** `src/apps/workbench/core/workbench_core.cpp`, `src/connectors/oanda_connector.cpp`
+    -   **Status:** Not Started
 
-This phase runs in parallel with feature development and focuses on improving code quality based on the `report.md` findings.
+-   **Task 2.3: Refine Signal Generation Logic**
+    -   **Description:** Based on the findings from the `PatternMetricEngine` testbed, refine the signal generation logic to produce more accurate and reliable signals.
+    -   **Files:** `src/apps/workbench/core/workbench_core.cpp`, `src/engine/pattern_metric_engine.cpp`
+    -   **Status:** Not Started
 
-### 2.1: Critical Static Analysis Fixes
--   **Status**: **IN PROGRESS**
--   **Priority**: High
--   **Tasks**:
-    -   [x] **`emitterutils.cpp`**: Address `CRITICAL` `undeclared identifier` errors by including `<cstdint>`.
-    -   [x] **`glm` Experimental Extensions**: `glm_config.h` is now force-included for all targets so `GLM_ENABLE_EXPERIMENTAL` is always defined.
-    -   [x] **PipeWire Null Dereference**: Investigated upstream issue. Added defensive check in `PipeWireCapture::streamProcess` for null `spa_buffer` chunk.
+## Phase 3: Advanced Feature Implementation
 
-### 2.2: High-Priority Code Quality Improvements
--   **Status**: **NOT STARTED**
--   **Priority**: Medium
--   **Tasks**:
-    -   [x] **`imgui` / `implot` Issues**: Updated vendor versions to ImGui `1.92.1` and ImPlot `0.17`. Remaining warnings from these libraries are documented but accepted.
-    -   [ ] **`sep` Source Code**:
-        -   Address `clang-diagnostic-double-promotion` warnings across the codebase (e.g., in `data_parser.cpp`, `oanda_connector.cpp`, `sep_demo_app.cpp`) to ensure floating-point precision is handled correctly.
-        -   Fix `deadcode.DeadStores` and `unused-parameter` warnings to improve code clarity and remove unnecessary variables.
-        -   Review and fix potential sign-comparison issues (`clang-diagnostic-sign-compare`) in `oanda_connector.cpp`.
+**Objective:** Implement the advanced features described in the patent documents.
+
+-   **Task 3.1: Implement QBSA**
+    -   **Description:** Implement the Quantum Bit State Analysis (QBSA) algorithm for pattern correction and collapse detection.
+    -   **Files:** `src/quantum/qbsa.h`, `src/quantum/qbsa.cpp`
+    -   **Status:** Not Started
+
+-   **Task 3.2: Implement Quantum Manifold Optimizer**
+    -   **Description:** Implement the Quantum Manifold Optimizer for pattern enhancement.
+    -   **Files:** `src/quantum/quantum_manifold_optimizer.h`, `src/quantum/quantum_manifold_optimizer.cpp`
+    -   **Status:** Not Started
+
+-   **Task 3.3: Implement Pattern Evolution System**
+    -   **Description:** Implement the Pattern Evolution System for adaptive pattern optimization.
+    -   **Files:** `src/quantum/pattern_evolution.h`, `src/quantum/pattern_evolution.cpp`
+    -   **Status:** Not Started

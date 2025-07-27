@@ -10,46 +10,49 @@
 - Explain your OBSERVATIONS clearly, then provide REASONING to identify the exact issue. Add console logs when needed to gather more information.
 
 
-Quantum Pattern Processing Architecture
+## Core Business Architecture
 
-1. Core Pattern Analysis Engine (src/quantum/pattern_processor.cpp)
-- Implements quantum-inspired pattern analysis using coherence/stability metrics
-- Processes financial market data through quantum state transitions
-- Maps volatility and price movements to quantum properties
-- Generates trading signals based on quantum state analysis
+The system implements a quantum-inspired pattern analysis engine for financial markets with three key components:
 
-2. Memory Tier Management (src/memory/memory_tier_manager.cpp)
-- Three-tier memory architecture (STM/MTM/LTM) with quantum coherence thresholds:
-  * Long-term Memory (LTM): 0.9 coherence, 100+ generations
-  * Medium-term Memory (MTM): 0.7 coherence, 50+ generations
-  * Short-term Memory (STM): Base storage with pattern evolution tracking
+1. Quantum Pattern Processing (`src/quantum/*`)
+- Three-state quantum system tracking NULL_STATE, FLIP, and RUPTURE transitions
+- Pattern coherence calculation using quantum mechanics principles
+- Evolution tracking through quantum manifolds with stability metrics
 
-3. Quantum State Processing (src/quantum/quantum_processor_qfh.cpp)
-- Quantum Field Harmonics (QFH) processing for pattern stability
-- Pattern mutation system adapting to success rates
-- Coherence calculations incorporating:
-  * Historical stability (30%)
-  * Current coherence (40%)
-  * Generation factors (20%)
-  * Access patterns (10%)
+2. Financial Analysis (`src/connectors/`, `forex/*`)
+- Market data processing with custom technical indicators
+- Real-time volatility classification (4 levels)
+- Signal generation using logistic chaos mathematics
+- Dynamic risk adjustment based on market conditions
 
-4. Market Data Analysis (src/api/sep_engine.cpp)
-- DAG-based market correlation analysis
-- Position vector generation from OHLC data
-- Quantum pattern matching for market predictions
-- Alpha generation through quantum state optimization
+3. Memory Management (`src/memory/*`)
+- Three-tier memory architecture (STM, MTM, LTM)
+- Quantum coherence-based promotion system
+- Pattern relationship tracking with strength metrics
+- Automatic defragmentation at 30% threshold
 
-5. Pattern Evolution System (src/quantum/pattern_evolution.cpp)
-- Quantum-inspired evolutionary algorithms
-- Pattern crossover with state preservation
-- Mutation operations considering quantum properties
-- Fitness calculation using coherence/stability metrics
+## Key Integration Points
 
-Integration Points:
-- Pattern processor feeds quantum states to memory tier manager
-- Market data triggers quantum state analysis
-- Evolution system optimizes patterns across memory tiers
-- Coherence scores drive pattern promotion/demotion
+1. Pattern Evolution Pipeline
+- Quantum state detection in market patterns
+- Coherence calculation between related patterns
+- Stability metrics based on quantum transitions
+- Generation tracking for pattern maturity
+
+2. Trading Signal Generation 
+- Resonance threshold validation (>= 0.55)
+- Volatility-based pattern matching
+- Risk-reward calculation using ATR multipliers
+- Pattern performance feedback loop
+
+3. Memory Optimization
+- Pattern promotion based on coherence thresholds:
+  * STM -> MTM: 0.7 coherence requirement
+  * MTM -> LTM: 0.9 coherence requirement
+- Relationship strength tracking between patterns
+- Quantum state persistence management
+
+The system uniquely combines quantum computing concepts with financial market analysis, using sophisticated pattern recognition and multi-tier memory management to generate trading signals.
 
 $END$
 

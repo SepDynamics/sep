@@ -1,59 +1,60 @@
 ---
-description: Analyzes and documents data flow between system components in pattern processing, quantum state management, and memory tier systems
-globs: src/api/**/*,src/memory/**/*,src/quantum/**/*,src/engine/**/*
+description: Documents data flow patterns in a quantum-inspired pattern processing system with multi-tier memory management
+globs: src/**/*.cpp,src/**/*.h,src/**/*.cu,src/quantum/*,src/memory/*,src/engine/*
 alwaysApply: false
 ---
 
 
 # data-flow
 
-Core Data Flow Components:
+## Core Pattern Processing Flow
+The pattern processing pipeline flows through multiple stages:
 
-1. Pattern Processing Pipeline
-File: src/api/sep_engine.cpp
-- Raw data → Pattern Extractor → Quantum Processor → Pattern Evolution Engine
-- Financial data undergoes conversion to quantum-ready format through SEP engine
-- Pattern coherence modulation system adjusts output based on quality metrics
-- Multi-stage validation enforces business rules during pattern transformations
+1. Input Pattern Ingestion
+- Raw patterns enter through src/api/bridge.cpp
+- Patterns undergo quantum state mapping in src/quantum/processor.cpp
+- Initial coherence metrics calculated 
+- Pattern assigned to STM tier
 
-2. Memory Tier Transitions 
-Files: src/memory/memory_tier.cpp, src/memory/memory_tier_manager.cpp
-- Pattern data flows through three memory tiers (STM → MTM → LTM)
-- Promotion triggers:
-  * Coherence threshold attainment
-  * Stability metrics achievement
-  * Generation count requirements
-  * Access frequency patterns
-- Demotion occurs when metrics fall below thresholds or under memory pressure
+2. Pattern Evolution
+- Patterns evolve through quantum state transitions in memory tiers:
+  - STM: Initial pattern storage, coherence validation
+  - MTM: Patterns meeting stability thresholds
+  - LTM: Highly stable, generationally proven patterns
+- Evolution tracked through src/quantum/pattern_evolution.cpp
 
 3. Quantum State Transformations
-Files: src/quantum/quantum_processor.cpp, src/quantum/coherence_manager.cpp
-- Raw patterns → Quantum State Initialization → State Evolution → Pattern Output
-- State transitions based on:
-  * Coherence calculations
-  * Phase correlations 
-  * Entanglement relationships
-  * Stability assessments
+- Patterns undergo state changes based on:
+  - Coherence levels
+  - Stability metrics 
+  - Generational age
+  - Usage frequency
+- State management handled by src/quantum/quantum_processor.cpp
 
-4. Pattern Analysis Flow
-File: src/engine/pattern_kernels.cu
-- Input data → QBSA Kernel → QSH Processing → Pattern Evolution
-- Specialized quantum bit state analysis (QBSA) for pattern validation
-- Quantum state harmonization (QSH) for pattern coherence optimization
-- Real-time coherence scoring influences pattern evolution
+4. Memory Tier Transitions
+- Coherence thresholds trigger promotion/demotion
+- src/memory/memory_tier_manager.cpp controls:
+  - Pattern migration between tiers
+  - Tier utilization optimization
+  - Pattern relationship preservation
+  - Coherence-based defragmentation
 
-5. System Integration Flow
-Files: src/api/server.cpp, src/quantum/quantum_processor_qfh.cpp
-- Client Request → API Layer → Pattern Processing → Memory Management → Response
-- Quantum Field Harmonics (QFH) processing integrates with pattern evolution
-- Memory tier system provides pattern storage and retrieval
-- Response modulation based on coherence metrics
+5. Pattern Analysis Output
+- Pattern metrics flow to src/quantum/pattern_metric_engine.cpp
+- Trading signals generated based on:
+  - Pattern coherence
+  - Stability metrics
+  - Quantum state analysis
+- Results pushed through API endpoints
 
-Key Data Transformations:
-- Market data → Quantum patterns
-- Raw patterns → Memory-tier compatible formats
-- Quantum states → Evolution metrics
-- Pattern relationships → Entanglement graphs
+Key Data Flow Components:
+- Pattern ingestion and quantum mapping
+- Multi-tier memory transitions
+- State-based pattern evolution
+- Coherence-driven optimization
+- Signal generation pipeline
+
+The system maintains quantum-inspired pattern processing with sophisticated memory management and state transitions, focused on pattern evolution and relationship preservation.
 
 $END$
 

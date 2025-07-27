@@ -801,27 +801,26 @@ void WorkbenchEngine::updateData()
             auto now_t = std::chrono::system_clock::to_time_t(now);
             auto start_t = std::chrono::system_clock::to_time_t(start);
 
-            auto historical_candles = oanda_connector->getHistoricalData(
-                "EUR_USD", "M1", std::to_string(start_t), std::to_string(now_t), 2880);
+            oanda_connector->getHistoricalData(
+                "EUR_USD", "M1", std::to_string(start_t), std::to_string(now_t),
+                std::function<void(const std::vector<connectors::OandaCandle>&)>(
+                    [this](const std::vector<connectors::OandaCandle>& historical_candles) {
+                        std::deque<common::CandleData> candle_data;
+                        for (const auto& oc : historical_candles) {
+                            std::tm tm = {};
+                            std::istringstream ss(oc.time);
+                            ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+                            auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+                            candle_data.emplace_back(oc.open, oc.high, oc.low, oc.close,
+                                                    static_cast<int>(oc.volume), ts);
+                        }
 
-            for (const auto& oc : historical_candles) {
-                std::tm tm = {};
-                std::istringstream ss(oc.time);
-                ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-                auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-                candle_data.emplace_back(oc.open, oc.high, oc.low, oc.close,
-                                        static_cast<int>(oc.volume), ts);
-            }
-
-            fetched = !candle_data.empty();
-            if (fetched && signals_tab_) {
-                signals_tab_->setCandleData(candle_data);
-            }
-
-            if (fetched) {
-                std::cout << "[WorkbenchEngine] Fetched " << candle_data.size()
-                          << " candles from OANDA" << std::endl;
-            }
+                        if (!candle_data.empty() && signals_tab_) {
+                            signals_tab_->setCandleData(candle_data);
+                            std::cout << "[WorkbenchEngine] Fetched " << candle_data.size()
+                                      << " candles from OANDA" << std::endl;
+                        }
+                    }));
 
         } catch (const std::exception& e) {
             std::cerr << "[WorkbenchEngine] OANDA data fetch error: " << e.what() << std::endl;

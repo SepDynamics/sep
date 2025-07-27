@@ -78,100 +78,59 @@ void OandaConnector::shutdown() {
     curl_global_cleanup();
 }
 
-std::vector<OandaCandle> OandaConnector::getHistoricalData(
+void OandaConnector::getHistoricalData(
     const std::string& instrument,
     const std::string& granularity,
     const std::string& from,
     const std::string& to,
-    int count) {
+    std::function<void(const std::vector<OandaCandle>&)> callback) {
     
-    std::vector<OandaCandle> candles;
+    std::thread([=]() {
+        std::vector<OandaCandle> candles;
 
-    std::string use_from = from;
-    std::string use_to = to;
+        std::string use_from = from;
+        std::string use_to = to;
 
-    // Convenience: if requesting exactly 48 hours of M1 data without explicit
-    // range, compute timestamps automatically.
-    if (granularity == "M1" && count == 48 * 60 && from.empty() && to.empty())
-    {
-        auto now = std::chrono::system_clock::now();
-        auto start = now - std::chrono::hours(48);
-        use_from = std::to_string(std::chrono::system_clock::to_time_t(start));
-        use_to = std::to_string(std::chrono::system_clock::to_time_t(now));
-    }
+        std::string endpoint = "/v3/instruments/" + instrument + "/candles";
+        endpoint += "?granularity=" + granularity;
 
-    std::string endpoint = "/v3/instruments/" + instrument + "/candles";
-    endpoint += "?granularity=" + granularity;
+        if (!use_from.empty())
+        {
+            endpoint += "&from=" + use_from;
+        }
+        if (!use_to.empty())
+        {
+            endpoint += "&to=" + use_to;
+        }
 
-    if (count > 0)
-    {
-        endpoint += "&count=" + std::to_string(count);
-    }
+        auto response = makeRequest(endpoint);
 
-    if (!use_from.empty())
-    {
-        endpoint += "&from=" + use_from;
-    }
-    if (!use_to.empty())
-    {
-        endpoint += "&to=" + use_to;
-    }
-
-    auto response = makeRequest(endpoint);
-
-    if (response.response_code != 200) {
-        last_error_ =
-            "Failed to get historical data: HTTP " + std::to_string(response.response_code);
-        return candles;
-    }
-    
-    try {
-        auto json_response = nlohmann::json::parse(response.data);
+        if (response.response_code != 200) {
+            last_error_ =
+                "Failed to get historical data: HTTP " + std::to_string(response.response_code);
+            callback(candles);
+            return;
+        }
         
-        if (!json_response.contains("candles")) {
-            last_error_ = "No candles in response";
-            return candles;
-        }
-
-        for (const auto& candle_json : json_response["candles"]) {
-            candles.push_back(parseCandle(candle_json));
-        }
-
-        // Perform integrity validation for 48h M1 datasets
-        constexpr size_t expected_candles = 48u * 60u;
-        if (granularity == "M1" && count == static_cast<int>(expected_candles)) {
-            auto validation = validateCandleSequence(candles, granularity);
-            if (!validation.valid || candles.size() != expected_candles) {
-                last_error_ = "Missing or invalid candles detected";
-                for (const auto& err : validation.errors) {
-                    last_error_ += " - " + err;
-                }
-                if (candles.size() != expected_candles) {
-                    last_error_ += " - expected 2880 got " + std::to_string(candles.size());
-                }
-            } else if (instrument == "EUR_USD") {
-                std::vector<sep::common::CandleData> out;
-                out.reserve(candles.size());
-                for (const auto& c : candles) {
-                    sep::common::CandleData cd;
-                    cd.timestamp = sep::common::parseTimestamp(c.time);
-                    cd.open = c.open;
-                    cd.high = c.high;
-                    cd.low = c.low;
-                    cd.close = c.close;
-                    cd.volume = c.volume;
-                    out.push_back(cd);
-                }
-                DataParser parser;
-                parser.saveValidatedCandlesJSON(out, "eur_usd_m1_48h.json");
+        try {
+            auto json_response = nlohmann::json::parse(response.data);
+            
+            if (!json_response.contains("candles")) {
+                last_error_ = "No candles in response";
+                callback(candles);
+                return;
             }
+
+            for (const auto& candle_json : json_response["candles"]) {
+                candles.push_back(parseCandle(candle_json));
+            }
+            
+        } catch (const std::exception& e) {
+            last_error_ = "Error parsing historical data: " + std::string(e.what());
         }
         
-    } catch (const std::exception& e) {
-        last_error_ = "Error parsing historical data: " + std::string(e.what());
-    }
-    
-    return candles;
+        callback(candles);
+    }).detach();
 }
 
 bool OandaConnector::startPriceStream(const std::vector<std::string>& instruments) {
@@ -350,8 +309,11 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
 double OandaConnector::calculateATR(const std::string& instrument, const std::string& granularity,
                                     size_t periods)
 {
-    auto candles = getHistoricalData(instrument, granularity, "", "",
-                                     static_cast<int>(periods + 1));
+    std::vector<OandaCandle> candles;
+    getHistoricalData(instrument, granularity, "", "",
+                                     [&](const std::vector<OandaCandle>& fetched_candles) {
+                                         candles = fetched_candles;
+                                     });
 
     if (candles.size() < periods) {
         last_error_ = "Insufficient candle data for ATR calculation";
@@ -383,7 +345,11 @@ double OandaConnector::calculateATR(const std::string& instrument, const std::st
 
 int OandaConnector::getVolatilityLevel(double current_atr, const std::string& instrument) {
     // Fetch last 90 days of daily candles for a stable volatility baseline
-    auto candles = getHistoricalData(instrument, "D", "", "", 90);
+    std::vector<OandaCandle> candles;
+    getHistoricalData(instrument, "D", "", "",
+                                     [&](const std::vector<OandaCandle>& fetched_candles) {
+                                         candles = fetched_candles;
+                                     });
     if (candles.size() < 20u) { // Need a reasonable number of candles
         last_error_ = "Insufficient historical data for volatility calculation.";
         return 1; // Default to low volatility
@@ -740,8 +706,11 @@ void OandaConnector::refreshOrders() {
 }
 
 void OandaConnector::setupSampleData(const std::string& instrument, const std::string& granularity, const std::string& output_file) {
-    auto candles =
-        getHistoricalData(instrument, granularity, "", "", 48 * 60);  // 48 hours of M1 data
+    std::vector<OandaCandle> candles;
+        getHistoricalData(instrument, granularity, "", "",
+                                     [&](const std::vector<OandaCandle>& fetched_candles) {
+                                         candles = fetched_candles;
+                                     });
 
     if (candles.empty()) {
         last_error_ = "Failed to fetch any data for sample setup.";
@@ -793,7 +762,11 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
     auto now_t = std::chrono::system_clock::to_time_t(now);
     auto start_t = std::chrono::system_clock::to_time_t(start);
 
-    auto candles = getHistoricalData(instrument, "M1", std::to_string(start_t), std::to_string(now_t), 48 * 60);
+    std::vector<OandaCandle> candles;
+    getHistoricalData(instrument, "M1", std::to_string(start_t), std::to_string(now_t),
+                                     [&](const std::vector<OandaCandle>& fetched_candles) {
+                                         candles = fetched_candles;
+                                     });
     if (candles.empty()) return false;
 
     auto validation = validateCandleSequence(candles, "M1");

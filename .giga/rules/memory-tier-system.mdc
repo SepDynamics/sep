@@ -1,56 +1,79 @@
 ---
-description: Documents memory tier management system for tracking pattern evolution through STM/MTM/LTM stages based on coherence/stability metrics
-globs: src/memory/**/*,src/quantum/**/coherence*,src/quantum/**/qbsa*
+description: Specifications for the memory tier management system including pattern storage, coherence tracking, and tier transitions
+globs: src/memory/**/*,src/quantum/**/*,src/engine/**/*,src/api/**/*
 alwaysApply: false
 ---
 
 
 # memory-tier-system
 
-Core Memory Tier Architecture:
+## Core Memory Architecture
 
-1. Three-Tier Memory Management
-- Short-Term Memory (STM): Initial pattern storage with 0.2 coherence threshold
-- Medium-Term Memory (MTM): Intermediate patterns with 0.5 coherence threshold
-- Long-Term Memory (LTM): Stable patterns with 0.8+ coherence threshold
+Three-tier memory hierarchy with distinct characteristics and transition rules:
 
-2. Pattern Migration Logic:
-- Promotion criteria weights:
-  * Base coherence (40%)
-  * Pattern stability (30%) 
-  * Access frequency (20%)
-  * Entanglement density (10%)
-- Automatic demotion of lowest 20% coherence patterns under memory pressure
-- Hysteresis prevention for pattern oscillation between tiers
+1. STM (Short-term Memory)
+- Default tier for new patterns
+- Retains data for 1 hour
+- Promotion requires coherence > 0.7 and generation > 5
 
-3. Quantum Coherence Processing:
-File: src/quantum/coherence_manager.cpp
-- Calculates pattern coherence through quantum state metrics
-- Tracks entanglement between patterns using spatial proximity and phase correlation
-- Implements quantum decay rate (0.02f) for pattern coherence
-- Maintains quantum phase relationships between entangled patterns
+2. MTM (Medium-term Memory) 
+- Intermediate storage for evolved patterns
+- 7 day retention period
+- Promotion requires coherence > 0.9 and stability > 0.8
 
-4. Pattern Storage Rules:
-- Minimum coherence threshold (0.1f) required for pattern persistence
-- Automatic cleanup of zero-coherence patterns
-- Generation count requirements per tier:
-  * STM: No minimum
-  * MTM: 5+ generations
-  * LTM: 100+ generations
+3. LTM (Long-term Memory)
+- Permanent storage for stable patterns
+- Compressed storage with quantum state preservation
+- Demotion triggered by coherence < 0.3
 
-5. Memory Pressure Management:
-- Triggers optimization when pressure exceeds 0.8 threshold
-- Implements tier-specific defragmentation
-- Pattern demotion based on combined scoring metrics
-- Memory block consolidation for efficiency
+## Pattern Evolution System
 
-Key Files:
-- src/memory/memory_tier_manager.cpp: Core tier management implementation
-- src/memory/quantum_coherence_manager.cpp: Quantum coherence tracking
-- src/quantum/qbsa_qfh.cpp: Quantum bit state analysis for pattern stability
+Quantum-inspired pattern management with:
 
-Business Impact Score: 95
-Justification: Core memory management system directly impacts pattern evolution and stability tracking, critical for system operation
+1. Coherence Calculation
+```cpp
+coherence = (baseCoherence * 0.4) + 
+           (stability * 0.3) + 
+           (generationBonus * 0.2) +
+           (accessFrequency * 0.1)
+```
+
+2. Pattern Properties
+- Stability metrics from quantum state analysis
+- Generation tracking for evolutionary progress
+- Access frequency monitoring
+- Quantum state coherence measurements
+
+3. Tier Migration Rules
+- Promotion triggered by exceeding tier thresholds
+- Demotion based on coherence decay
+- Hysteresis prevention through minimum dwell time
+- Migration tracking with quantum state preservation
+
+## Memory Management Logic
+
+1. Block Allocation
+- Dynamic sizing based on pattern complexity
+- Fragmentation monitoring (30% threshold)
+- Automatic defragmentation
+- Quantum state-aware block placement
+
+2. Pattern Storage
+- Relationship preservation during tier transitions
+- Quantum entanglement tracking between patterns
+- Coherence-based storage optimization
+- Pattern lineage preservation
+
+3. Pattern Loading
+- Priority-based retrieval system
+- Quantum state reconstruction
+- Cache coherence maintenance
+- Relationship graph preservation
+
+Key files:
+- src/memory/memory_tier_manager.cpp
+- src/memory/quantum_coherence_manager.cpp
+- src/quantum/pattern_processor.cpp
 
 $END$
 

@@ -339,15 +339,6 @@ void SignalsTabController::renderCandlesticks() {
     if (start_idx >= end_idx) return;
     const size_t count = end_idx - start_idx;
 
-    double local_min = candle_data_[start_idx].low;
-    double local_max = candle_data_[start_idx].high;
-    for (size_t i = start_idx + 1; i < end_idx; ++i) {
-        local_min = std::min(local_min, candle_data_[i].low);
-        local_max = std::max(local_max, candle_data_[i].high);
-    }
-    double range = local_max - local_min;
-    if (range <= 0) range = 1.0;
-
     xs.resize(count);
     open.resize(count);
     close.resize(count);
@@ -363,8 +354,6 @@ void SignalsTabController::renderCandlesticks() {
         high[i] = c.high;
     }
 
-    ImPlot::SetNextAxisLimits(ImAxis_Y1, local_min - range * 0.05,
-                              local_max + range * 0.05, ImPlotCond_Always);
     ImPlot::PlotCandles("OHLC", xs.data(), open.data(), close.data(),
                         low.data(), high.data(), static_cast<int>(count));
 }

@@ -1,68 +1,19 @@
-# SEP Engine Workbench GUI Architecture
+# Visual Component Pipeline
 
-## Current Status: Build Successful, Ready for UI Implementation
+The main entry point for the application is in `src/apps/workbench/core/workbench_main.cpp`, which creates a `WorkbenchEngine` object and calls its `run` method.
 
-The SEP Workbench GUI is now **compiling successfully**. The major architectural refactoring to decouple backend components from GUI headers is complete, and the resulting compilation errors have been resolved. The foundation is now stable and ready for the implementation of the planned user interface.
+The `WorkbenchEngine` class is the core of the application. Its `run` method contains the main application loop. Inside the loop, the `renderFrame` method is called to render the UI.
 
-The primary focus is now on building out the user-facing components, starting with the critical data visualization charts in the **Signals Tab**.
+The `renderFrame` method in `src/apps/workbench/core/workbench_core.cpp` orchestrates the rendering of the entire UI. It calls two key methods:
 
-## 3-Tab Architecture
+1.  `layout_manager_->render()`: This is responsible for the overall layout of the UI. The implementation is in `src/apps/workbench/core/ui_layout_manager.cpp`.
+2.  `renderTabs()`: This method, also in `workbench_core.cpp`, is responsible for rendering the main tab bar and the content of each tab.
 
-The GUI is organized into three distinct tabs, each managed by its own controller to ensure a clean separation of concerns.
+The `renderTabs` method creates a tab bar with the following tabs:
 
-### Tab 1: **SIGNALS** - Trading & Market Analysis
--   **Purpose**: Provide a clean, interactive interface for signal visualization and market analysis.
--   **Layout**: A large area for an interactive candlestick chart with SEP signal overlays, alongside smaller plots for Coherence, Stability, and Entropy.
+*   **Signals**: Controlled by `SignalsTabController` (`src/apps/workbench/tabs/signals_tab_controller.cpp`). This tab is responsible for displaying the main price chart, technical indicators, and SEP signals.
+*   **Engine**: Controlled by `EngineTabController` (`src/apps/workbench/tabs/engine_tab_controller.cpp`). This tab likely displays information about the SEP engine's status and performance.
+*   **Backend**: Controlled by `BackendTabController` (`src/apps/workbench/tabs/backend_tab_controller.cpp`). This tab provides tools for data source selection, backtesting, and paper trading. It contains the "Signal Validation" window that was causing the `PopID` error.
+*   **Backtester**: Controlled by `BacktesterTabController` (`src/apps/workbench/backtester/ui/backtester_tab_controller.cpp`). This tab is dedicated to backtesting strategies.
 
-### Tab 2: **ENGINE** - SEP Engine Diagnostics
--   **Purpose**: Offer a deep dive into the quantum engine's performance and internal state.
--   **Layout**: Time series plots for core metrics, pattern frequency histograms, and a correlation matrix to visualize relationships between different data streams.
-
-### Tab 3: **BACKEND** - Trading Operations & Backtesting
--   **Purpose**: Manage data sources, trade execution, and backtesting.
--   **Layout**: A trading terminal for order placement, a backtesting suite with performance charts, and a system monitor for API and data source status.
-
-## Signals Tab Usage
-
-The **Signals** tab displays candlestick data with SEP signal overlays. Use the
-middle mouse button to pan and the mouse wheel to zoom. Holding **Ctrl** zooms
-the price axis independently. Press **Space** to toggle the crosshair which
-shows price and time labels. Metric graphs for **Coherence**, **Stability** and
-**Entropy** render below the main chart. Calling `setCandleData()` or
-`setSEPSignals()` automatically refreshes the plots.
-
-## Development Plan
-
-### Phase 1: Critical Build Fixes & Foundation
-This phase focused on creating a stable, compilable application.
-
-#### 1.1: Decouple Core Logic from GUI
--   **Status**: **DONE**. Shared data structures (`CandleData`, `SEPSignalData`, etc.) were moved to `src/common/financial_data_types.h`. Backend components no longer depend on GUI headers.
-
-#### 1.2: Fix Post-Refactoring Errors
--   **Status**: **DONE**. All build errors related to timestamp handling, namespace issues, outdated struct members, and incorrect API calls have been resolved.
-
-### Phase 2: Tab-Specific Implementation (Current Focus)
-This phase involves building out the UI and logic for each of the three main tabs.
-
--   **Action (In Progress)**: Implement the `SignalsTabController` with interactive candlestick charts and metric plots using `implot`.
--   **Action (Next)**: Implement the `EngineTabController` with diagnostic panels for engine metrics.
--   **Action (Next)**: Implement the `BackendTabController` with UI for trading and backtesting.
-
-## Implementation Priority
-
-1.  **Chart Rendering**: The highest priority is to implement robust, interactive candlestick charts in the `SignalsTabController` to visualize market data.
-2.  **Data Flow Integration**: Connect the `OandaConnector` and `PatternMetricEngine` to the GUI tabs to display live data and SEP signals.
-3.  **Backend & Engine Tabs**: Build out the UI for the remaining tabs, focusing on backtesting and engine diagnostics.
-4.  **Static Analysis Cleanup**: Address the high-priority technical debt identified in `report.md` to improve code quality.
-
-## Success Metrics
--   **Compilation**: The project builds successfully with zero errors.
--   **Chart Rendering**: Candlestick charts are visible and update at a fluid frame rate (>30Hz).
--   **Interactivity**: Users can zoom, pan, and inspect data points on the charts.
--   **Tab Separation**: UI components are logically separated into their respective controllers with clear responsibilities.
--   **Maintainability**: The core engine can be modified and built independently of the GUI.
-
-## Demo Engine Integration
-
-`DemoOrchestrator` now forwards the active `PatternMetricEngine` to the current demo via `DemoManager`. Demos can query pattern metrics to influence simulations or visualizations. The reference is cleared when a demo is unloaded to avoid dangling pointers.
+In addition to the main tabs, there are also panels, such as the `SignalTestingPanel` (`src/apps/workbench/panels/signal_testing_panel.cpp`), which appears to be a self-contained component for testing signals.

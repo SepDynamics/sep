@@ -25,7 +25,27 @@ target_link_libraries(pattern_metric_example
 )
 
 # Set output directory
-set_target_properties(pattern_metric_example 
+set_target_properties(pattern_metric_example
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
+)
+
+# PME Testbed
+add_executable(pme_testbed
+    pme_testbed.cpp
+)
+
+target_link_libraries(pme_testbed
+    sep_engine
+    sep_quantum
+    sep_memory
+    sep_connectors
+    fmt::fmt
+    ${CMAKE_THREAD_LIBS_INIT}
+    nlohmann_json::nlohmann_json
+)
+
+set_target_properties(pme_testbed
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
 )

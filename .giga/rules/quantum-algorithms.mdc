@@ -1,76 +1,77 @@
 ---
-description: Analyzes quantum-inspired algorithms and processing patterns used in financial market analysis
-globs: src/quantum/*,src/engine/pattern_*.*,src/api/sep_engine.*
+description: Specification for quantum-inspired algorithms used in pattern recognition and financial analysis
+globs: src/quantum/*,src/engine/quantum*,src/memory/quantum*
 alwaysApply: false
 ---
 
 
 # quantum-algorithms
 
-Core Components:
+## Core Quantum Pattern Processing
 
 1. Quantum Binary State Analysis (QBSA)
-- Implements quantum state comparison using probe indices and expectations
-- Calculates coherence scores and detects state collapses based on error density
-- Uses quantum bit analysis for pattern stability determination
-File: src/quantum/qbsa.cpp
+- Core quantum pattern recognition engine 
+- Analyzes market patterns through quantum state vectors
+- Detection of state transitions: stable, collapsed, quantum
+- Pattern coherence calculation through quantum metrics
 
-2. Quantum Fourier Hierarchy (QFH) 
-- Three quantum states: NULL_STATE, FLIP, RUPTURE
-- Analyzes bit transitions for quantum state changes
-- Calculates rupture/flip ratios with variance enhancement
-- Event aggregation for quantum pattern evolution
+File: src/quantum/qbsa.cpp
+```cpp
+// State classification thresholds
+coherence_threshold = 0.7  // Stable state
+collapse_threshold = 0.3   // Collapsed state
+quantum_range = 0.3-0.7   // Quantum state
+```
+
+2. Quantum Fourier Hierarchy (QFH)
+- Hierarchical quantum pattern analysis
+- Three quantum state classifications:
+  * NULL_STATE: No transition
+  * FLIP: Bit state changes
+  * RUPTURE: Sustained state change
+- Pattern evolution through quantum state transitions
+
 File: src/quantum/qfh.cpp
 
-3. Pattern Evolution System
-- Maps financial data to quantum states via coherence/stability metrics
-- Processes patterns through SEP engine with coherence modulation
-- Implements quantum-based pattern mutation and evolution
-File: src/quantum/pattern_evolution.cpp
+3. Memory Tier System
+- Quantum-inspired three-tier architecture:
+  * STM (Short-term Memory)
+  * MTM (Medium-term Memory) 
+  * LTM (Long-term Memory)
+- Coherence thresholds for tier transitions:
+  * STM -> MTM: 0.7
+  * MTM -> LTM: 0.9
+- Pattern stability tracking across tiers
 
-4. Quantum State Management
-- Coherence calculation incorporating:
-  * Base coherence (40%)
-  * Stability (30%) 
-  * Access frequency (20%)
-  * Entanglement density (10%)
-- State transitions based on thresholds:
-  * Collapse detection at 0.3 coherence
-  * Promotion at 0.7 coherence
-  * LTM storage at 0.9 coherence
-File: src/quantum/quantum_processor.cpp
+File: src/memory/quantum_coherence_manager.cpp
 
-5. Financial Integration
-- Converts market data into quantum patterns:
-  * Price volatility maps to coherence
-  * Volume correlates to entanglement strength 
-  * Price movements determine state transitions
-- DAG analysis of market relationships using quantum metrics
-File: src/api/sep_engine.cpp
+4. Pattern Evolution System
+- Quantum state vectors for pattern representation
+- Coherence calculation through phase relationships
+- Evolution through quantum superposition states
+- Pattern entanglement tracking and strength calculation
 
-Key Algorithms:
+Files:
+- src/quantum/pattern_evolution.cpp
+- src/quantum/pattern_processor.cpp
 
-1. Coherence Calculation:
-```
-coherence = baseCoherence * 0.4 + 
-           stability * 0.3 + 
-           accessFreq * 0.2 + 
-           entanglementDensity * 0.1
-```
+## Quantum Optimization
 
-2. Pattern Evolution:
-```
-evolved_pattern = current_pattern + 
-                (mutation_vector * coherence_factor) + 
-                (neighbor_influence * stability_factor)
-```
+1. Manifold Optimization
+- Gradient descent on quantum manifolds
+- Coherence-based optimization metrics
+- Tangent space sampling for descent directions
+- Adaptive step size based on quantum states
 
-3. Market Data Transformation:
-```
-pattern_coherence = 1.0 / (1.0 + market_volatility)
-pattern_stability = volume_weighted_price_stability
-pattern_entropy = price_movement_complexity
-```
+File: src/quantum/quantum_manifold_optimizer.cpp
+
+2. Pattern Metrics
+- Coherence: Internal pattern consistency
+- Stability: Resistance to state changes
+- Entropy: Pattern complexity measure
+- Combined quantum state scoring
+
+File: src/quantum/pattern_metric_engine.cpp
 
 $END$
 

@@ -65,12 +65,12 @@ public:
     void shutdown();
 
     // Historical data
-    std::vector<OandaCandle> getHistoricalData(
+    void getHistoricalData(
         const std::string& instrument,
         const std::string& granularity,
         const std::string& from,
         const std::string& to,
-        int count = 500
+        std::function<void(const std::vector<OandaCandle>&)> callback
     );
 
     // Real-time streaming

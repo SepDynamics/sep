@@ -1,61 +1,61 @@
 ---
-description: Documents core pattern data structures and their relationships, focusing on quantum processing and coherence metrics
-globs: src/quantum/**,src/memory/**,src/api/sep_engine.*
+description: Defines quantum-inspired pattern data structures, coherence metrics, and stability tracking for market analysis
+globs: src/quantum/*,src/memory/*,src/engine/*,src/api/*,scripts/*
 alwaysApply: false
 ---
 
 
 # pattern-data-model
 
-Pattern Data Structure Core Components:
+Pattern Data Structure:
+```cpp
+struct Pattern {
+  float coherence;      // Pattern internal consistency
+  float stability;      // Resistance to mutation
+  float entropy;        // Measure of randomness
+  uint32_t generation;  // Evolution count
+  Vector4 position;     // Market position vector
+  float amplitude;      // Pattern strength
+  float phase;         // Market cycle position
+}
+```
 
-1. Quantum Pattern States
-- Three fundamental states: SUPERPOSITION, COHERENT, COLLAPSED
-- State transitions governed by coherence thresholds and stability metrics
-- Pattern evolution tracked through quantum state generations
-- Coherence calculation combines base coherence (40%), stability (30%), access frequency (20%), entanglement (10%)
+Coherence Metrics:
+1. Primary Stability Calculation
+```cpp
+stability = 0.9f * current_stability + 0.1f * coherence;
+coherence *= (1.0f - decay_factor * COHERENCE_DECAY_RATE);
+```
 
-2. Memory Tier Classification
-Location: src/memory/memory_tier_manager.hpp
-- Three-tier memory hierarchy:
-  * Long-term Memory (LTM): 0.8+ coherence, 100+ generations
-  * Medium-term Memory (MTM): 0.5+ coherence, 50+ generations
-  * Short-term Memory (STM): 0.2+ coherence minimum
-- Migration rules based on coherence scores and stability metrics
-- Pattern relationship tracking across tiers
+2. Pattern Evolution Rules
+- Promotion Thresholds:
+  * STM -> MTM: coherence > 0.7, generation > 5
+  * MTM -> LTM: coherence > 0.9, stability > 0.85
+- Demotion triggers when coherence drops below 0.3
+- Minimum coherence floor of 0.1 maintained
 
-3. Quantum Coherence Model
-Location: src/quantum/coherence_manager.cpp
-- Coherence decay rate: 0.02f per cycle
-- Entanglement threshold: 0.6f for pattern relationships
-- Minimum coherence for persistence: 0.1f
-- Anomaly detection using 3-sigma rule for coherence variations
+3. Relationship Tracking
+- Entanglement strength between patterns:
+  * Spatial proximity (70% weight)
+  * Phase correlation (30% weight)
+- Maximum 8 relationships per pattern
+- Bidirectional relationship maintenance
 
-4. Pattern Evolution Pipeline
-Location: src/quantum/pattern_evolution.cpp
-- Quantum state blending with phase correlation
-- Mutation operations preserving quantum properties
-- Fitness calculation incorporating:
-  * Coherence levels
-  * Stability metrics
-  * Entropy measurements
-  * Pattern diversity
+4. Memory Tier Classification:
+```cpp
+enum MemoryTier {
+  STM,  // Short-term memory
+  MTM,  // Medium-term memory
+  LTM   // Long-term memory
+};
+```
 
-5. Pattern Relationships
-Location: src/quantum/relationship.h
-- Strength calculations between pattern pairs
-- Phase correlation analysis
-- Coupling strength propagation
-- Entanglement graph maintenance
+Key Files:
+- src/quantum/pattern.h
+- src/memory/memory_tier.hpp
+- src/quantum/quantum_processor.cpp
 
-6. Pattern Metrics Processing
-Location: src/quantum/pattern_metric_engine.cpp
-- Real-time coherence tracking
-- Stability assessment through quantum state vectors
-- Entropy calculation using Shannon's method
-- Generation-based pattern evolution tracking
-
-The pattern data model implements a quantum-inspired approach to pattern management, emphasizing coherence relationships and stability across memory tiers while maintaining quantum state properties throughout the processing pipeline.
+The pattern data model implements quantum-inspired metrics for financial market analysis, with emphasis on pattern stability, coherence tracking, and multi-tier memory management.
 
 $END$
 

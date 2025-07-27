@@ -254,7 +254,6 @@ void BackendTabController::renderBacktesterPanel() {
 
     ImGui::Text("Accuracy: %.2f", validation_result_.predictive_accuracy);
     ImGui::Text("False Positive Rate: %.2f", validation_result_.false_positive_rate);
-    ImGui::PopID();
     ImGui::End();
 }
 
@@ -264,6 +263,13 @@ void BackendTabController::renderBacktestingSuite() {
 
     ImGui::Begin("Backtest Results");
     ImGui::PushID("BacktestResults");
+
+    if (ImGui::Button("Clear History")) {
+        pnl_history_.clear();
+        win_rate_history_.clear();
+        sharpe_history_.clear();
+        equity_curve_.clear();
+    }
 
     ImGui::Text("Total Trades: %d", last_result_.total_trades);
     ImGui::Text("Win Rate: %.2f", last_result_.win_rate);

@@ -100,18 +100,22 @@ inline float calculateEntropy(const std::vector<float>& values) {
 }
 
 inline float calculateStability(const std::vector<float>& values, float coherence) {
-    if (values.empty()) return 0.0f;
+    if (values.size() < 2) return 0.0f;
+
     float mean = 0.0f;
     for (float v : values) mean += v;
     mean /= static_cast<float>(values.size());
+
     float variance = 0.0f;
     for (float v : values) {
         float diff = v - mean;
         variance += diff * diff;
     }
     variance /= static_cast<float>(values.size());
-    float stability = 1.0f / (1.0f + variance);
-    stability *= (0.8f + 0.2f * coherence);
+
+    // Stability is inversely proportional to variance, enhanced by coherence.
+    float stability = (1.0f / (1.0f + variance)) * (0.5f + coherence * 0.5f);
+
     return std::clamp(stability, 0.0f, 1.0f);
 }
 

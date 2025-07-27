@@ -75,6 +75,13 @@ void SignalsTabController::renderThresholdControlPanel() {
     ImGui::Text("SELL thresholds");
     changed |= ImGui::SliderFloat("Sell Max Stability", &sell_max_stability_, 0.0f, 1.0f);
     changed |= ImGui::SliderFloat("Sell Min Entropy", &sell_min_entropy_, 0.0f, 1.0f);
+    ImGui::Separator();
+    ImGui::Checkbox("Show Crosshair", &show_crosshair_);
+    ImGui::SameLine();
+    if (ImGui::Button("Reset Zoom")) {
+        chart_zoom_.is_zoomed = false;
+    }
+    ImGui::Checkbox("Show Trend Lines", &show_trend_lines_);
     if (changed || ImGui::Button("Apply")) {
         if (workbench_engine_) {
             auto* pme = workbench_engine_->getPatternMetricEngine();
@@ -292,6 +299,8 @@ void SignalsTabController::setCandleData(const std::deque<sep::common::CandleDat
         volume_max_ = std::max(volume_max_, static_cast<float>(c.volume));
     }
     updatePriceRange();
+    chart_zoom_.index_start = 0;
+    chart_zoom_.index_end = candle_data_.size();
     candle_data_updated_ = true;
     if (auto_detect_trends_) {
         detectTrendLines();
@@ -305,6 +314,8 @@ void SignalsTabController::setCandleData(const std::vector<sep::common::CandleDa
         volume_max_ = std::max(volume_max_, static_cast<float>(c.volume));
     }
     updatePriceRange();
+    chart_zoom_.index_start = 0;
+    chart_zoom_.index_end = candle_data_.size();
     candle_data_updated_ = true;
     if (auto_detect_trends_) {
         detectTrendLines();
@@ -331,16 +342,9 @@ void SignalsTabController::renderMainChart() {
 
     ImPlotCond cond = candle_data_updated_ ? ImPlotCond_Always : ImPlotCond_Once;
     if (chart_zoom_.is_zoomed) {
-        double x_min = 0.0;
-        double x_max = static_cast<double>(candle_data_.size());
-        for (size_t i = 0; i < candle_data_.size(); ++i) {
-            if (candle_data_[i].timestamp >= chart_zoom_.time_start) { x_min = static_cast<double>(i); break; }
-        }
-        for (size_t i = candle_data_.size(); i-- > 0;) {
-            if (candle_data_[i].timestamp <= chart_zoom_.time_end) { x_max = static_cast<double>(i+1); break; }
-        }
         ImPlot::SetNextAxisLimits(ImAxis_Y1, chart_zoom_.price_min, chart_zoom_.price_max, ImPlotCond_Always);
-        ImPlot::SetNextAxisLimits(ImAxis_X1, x_min, x_max, ImPlotCond_Always);
+        ImPlot::SetNextAxisLimits(ImAxis_X1, static_cast<double>(chart_zoom_.index_start),
+                                   static_cast<double>(chart_zoom_.index_end), ImPlotCond_Always);
     } else {
         ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, cond);
         ImPlot::SetNextAxisLimits(ImAxis_X1, 0, static_cast<double>(candle_data_.size()), cond);
@@ -351,6 +355,38 @@ void SignalsTabController::renderMainChart() {
         flags |= ImPlotFlags_Crosshairs;
     }
     if (ImPlot::BeginPlot("Price", ImVec2(-1, 300), flags)) {
+        ImPlotPoint mouse_plot = ImPlot::GetPlotMousePos();
+        if (ImPlot::IsPlotHovered()) {
+            float wheel = ImGui::GetIO().MouseWheel;
+            if (wheel != 0.0f) {
+                double zoom = wheel > 0 ? 0.9 : 1.1;
+                double range_x = (double)chart_zoom_.index_end - (double)chart_zoom_.index_start;
+                double range_y = chart_zoom_.price_max - chart_zoom_.price_min;
+                chart_zoom_.index_start = static_cast<size_t>(std::clamp(mouse_plot.x - (mouse_plot.x - chart_zoom_.index_start) * zoom, 0.0, (double)candle_data_.size() - 1));
+                chart_zoom_.index_end = static_cast<size_t>(std::clamp(mouse_plot.x + (chart_zoom_.index_end - mouse_plot.x) * zoom, 1.0, (double)candle_data_.size()));
+                chart_zoom_.index_end = std::max(chart_zoom_.index_end, chart_zoom_.index_start + 1);
+                chart_zoom_.price_min = mouse_plot.y - (mouse_plot.y - chart_zoom_.price_min) * zoom;
+                chart_zoom_.price_max = mouse_plot.y + (chart_zoom_.price_max - mouse_plot.y) * zoom;
+                chart_zoom_.price_min = std::min(chart_zoom_.price_min, chart_zoom_.price_max - 0.00001);
+                chart_zoom_.time_start = candle_data_[chart_zoom_.index_start].timestamp;
+                chart_zoom_.time_end   = candle_data_[chart_zoom_.index_end - 1].timestamp;
+                chart_zoom_.is_zoomed = true;
+            }
+        }
+
+        ImPlotRect rect((double)chart_zoom_.index_start, chart_zoom_.price_min,
+                         (double)chart_zoom_.index_end, chart_zoom_.price_max);
+        if (ImPlot::DragRect(0, &rect.X.Min, &rect.Y.Min, &rect.X.Max, &rect.Y.Max, ImVec4(1,0,1,0.2f))) {
+            chart_zoom_.index_start = static_cast<size_t>(std::clamp(rect.X.Min, 0.0, (double)candle_data_.size() - 1));
+            chart_zoom_.index_end   = static_cast<size_t>(std::clamp(rect.X.Max, 1.0, (double)candle_data_.size()));
+            chart_zoom_.index_end = std::max(chart_zoom_.index_end, chart_zoom_.index_start + 1);
+            chart_zoom_.price_min = rect.Y.Min;
+            chart_zoom_.price_max = rect.Y.Max;
+            chart_zoom_.time_start = candle_data_[chart_zoom_.index_start].timestamp;
+            chart_zoom_.time_end   = candle_data_[chart_zoom_.index_end - 1].timestamp;
+            chart_zoom_.is_zoomed = true;
+        }
+
         renderTechnicalIndicators();
         renderCandlesticks();
         if (show_sep_overlay_) {
@@ -727,14 +763,15 @@ void SignalsTabController::renderCrosshair() {
 
     draw_list->AddLine(ImVec2(mouse_pos.x, plot_pos.y),
                        ImVec2(mouse_pos.x, plot_pos.y + plot_size.y),
-                       IM_COL32(128, 128, 128, 128), 1.0f);
+                       IM_COL32(180, 180, 180, 180), 1.0f);
     draw_list->AddLine(ImVec2(plot_pos.x, mouse_pos.y),
                        ImVec2(plot_pos.x + plot_size.x, mouse_pos.y),
-                       IM_COL32(128, 128, 128, 128), 1.0f);
+                       IM_COL32(180, 180, 180, 180), 1.0f);
 
-    ImPlotPoint plot = ImPlot::PixelsToPlot(mouse_pos);
+    double price = screenToPrice(mouse_pos.y);
+    auto time = screenToTime(mouse_pos.x);
     char price_text[32];
-    (void)snprintf(price_text, sizeof(price_text), "%.5f", plot.y);
+    (void)snprintf(price_text, sizeof(price_text), "%.5f", price);
 
     ImVec2 label_pos = ImVec2(plot_pos.x + plot_size.x + 5, mouse_pos.y - 10);
     draw_list->AddRectFilled(label_pos,
@@ -743,11 +780,8 @@ void SignalsTabController::renderCrosshair() {
     draw_list->AddText(ImVec2(label_pos.x + 5, label_pos.y + 3),
                        IM_COL32(255, 255, 255, 255), price_text);
 
-    size_t idx = static_cast<size_t>(plot.x + 0.5);
-    idx = std::clamp(idx, size_t(0), candle_data_.empty() ? 0 : candle_data_.size() - 1);
-    auto t = candle_data_.empty() ? std::chrono::system_clock::now() : candle_data_[idx].timestamp;
-    std::time_t tt = std::chrono::system_clock::to_time_t(t);
     char time_buf[16];
+    std::time_t tt = std::chrono::system_clock::to_time_t(time);
     std::strftime(time_buf, sizeof(time_buf), "%H:%M", std::localtime(&tt));
     ImVec2 time_pos = ImVec2(mouse_pos.x - 30, plot_pos.y + plot_size.y + 5);
     draw_list->AddRectFilled(ImVec2(time_pos.x - 2, time_pos.y - 2),
@@ -913,7 +947,23 @@ void SignalsTabController::handleMouseInput() {
         updateHoverInfo();
 
         if (ImGui::IsMouseDragging(ImPlot::GetInputMap().Pan)) {
-            is_panning_ = true;
+            if (!is_panning_) {
+                pan_start_pos_ = ImGui::GetMousePos();
+                is_panning_ = true;
+            } else {
+                ImPlotPoint p0 = ImPlot::PixelsToPlot(pan_start_pos_);
+                ImPlotPoint p1 = ImPlot::PixelsToPlot(ImGui::GetMousePos());
+                double dx = p0.x - p1.x;
+                chart_zoom_.index_start = static_cast<size_t>(std::clamp(chart_zoom_.index_start + dx, 0.0,
+                    std::max(0.0, (double)candle_data_.size() - 1)));
+                chart_zoom_.index_end = static_cast<size_t>(std::clamp(chart_zoom_.index_end + dx, 1.0,
+                    (double)candle_data_.size()));
+                chart_zoom_.index_end = std::max(chart_zoom_.index_end, chart_zoom_.index_start + 1);
+                chart_zoom_.time_start = candle_data_[chart_zoom_.index_start].timestamp;
+                chart_zoom_.time_end = candle_data_[chart_zoom_.index_end - 1].timestamp;
+                pan_start_pos_ = ImGui::GetMousePos();
+                chart_zoom_.is_zoomed = true;
+            }
         } else {
             is_panning_ = false;
         }
@@ -936,8 +986,10 @@ void SignalsTabController::handleMouseInput() {
             size_t idx_start = static_cast<size_t>(std::clamp(std::min(p1.x, p2.x), 0.0, (double)candle_data_.size() - 1));
             size_t idx_end   = static_cast<size_t>(std::clamp(std::max(p1.x, p2.x), 0.0, (double)candle_data_.size() - 1));
 
-            chart_zoom_.time_start = candle_data_[idx_start].timestamp;
-            chart_zoom_.time_end   = candle_data_[idx_end].timestamp;
+            chart_zoom_.index_start = idx_start;
+            chart_zoom_.index_end = std::max(idx_end, idx_start + 1);
+            chart_zoom_.time_start = candle_data_[chart_zoom_.index_start].timestamp;
+            chart_zoom_.time_end   = candle_data_[chart_zoom_.index_end - 1].timestamp;
             chart_zoom_.is_zoomed = true;
         }
 

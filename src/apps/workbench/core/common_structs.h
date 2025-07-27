@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <deque>
+#include <cstddef>
 #include <map>
 #include <memory>
 #include <string>
@@ -21,6 +22,8 @@ struct ChartZoom {
     bool is_zoomed = false;
     ImVec2 zoom_start, zoom_end;
     bool is_selecting = false;
+    size_t index_start = 0;
+    size_t index_end = 0;
 };
 
 

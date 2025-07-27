@@ -20,6 +20,7 @@ struct BacktestResult {
     float total_pnl;
     float sharpe_ratio;
     float max_drawdown;
+    std::vector<float> equity_curve;
     std::vector<Trade> trades;
 };
 

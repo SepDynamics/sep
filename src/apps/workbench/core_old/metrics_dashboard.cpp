@@ -3,6 +3,8 @@
 #include <filesystem>
 
 #include "backtester/backtester.h"
+#include "backtester/data/data_loader.h"
+#include "quantum/pattern_metric_engine.h"
 #include "imgui.h"
 #include <implot.h>
 #include <iostream>
@@ -378,10 +380,15 @@ void MetricsDashboard::renderBacktesterPanel()
     ImGui::Begin("Backtester", &show_backtester_panel_);
     if (ImGui::Button("Run Backtest"))
     {
-        // TODO: Get actual prices and signals
-        std::vector<float> prices = {1.0, 1.1, 1.2, 1.1, 1.0};
-        std::vector<MetricsMonitor::ThresholdSignal> signals;
-        backtester_->run(prices, signals);
+        backtester::DataLoader loader;
+        if (std::strlen(file_path_buffer_) > 0)
+            loader.load_data(file_path_buffer_);
+        else
+            loader.load_48h_sample();
+
+        sep::quantum::PatternMetricEngine engine;
+        engine.init(nullptr);
+        backtester_->run(&engine, &loader);
     }
 
     const auto& result = backtester_->getResult();

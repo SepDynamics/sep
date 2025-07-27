@@ -16,6 +16,8 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine, DataLoader* data
         return;
     }
 
+    result_ = {};
+
     const auto& candles = data_loader->get_data();
     if (candles.empty()) {
         return;
@@ -101,8 +103,11 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine, DataLoader* data
     float peak = 0.0f;
     float max_drawdown = 0.0f;
     float current_pnl = 0.0f;
+    result_.equity_curve.clear();
+    result_.equity_curve.push_back(current_pnl);
     for (float p : pnl) {
         current_pnl += p;
+        result_.equity_curve.push_back(current_pnl);
         if (current_pnl > peak) {
             peak = current_pnl;
         }

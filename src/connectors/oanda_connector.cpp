@@ -348,11 +348,11 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
 }
 
 double OandaConnector::calculateATR(const std::string& instrument, const std::string& granularity,
-                                    int periods)
+                                    size_t periods)
 {
     auto candles = getHistoricalData(instrument, granularity, "", "", periods + 1);
-    
-    if (candles.size() < static_cast<size_t>(periods)) {
+
+    if (candles.size() < periods) {
         last_error_ = "Insufficient candle data for ATR calculation";
         return 0.0;
     }
@@ -880,7 +880,7 @@ DataValidationResult OandaConnector::validateCandleSequence(const std::vector<Oa
 
     // Check for timestamp continuity
     // This is a simplified check. A robust implementation would parse the granularity string.
-    int64_t expected_diff = 60;  // Default to M1
+    int64_t expected_diff = 60LL;  // Default to M1
     if (granularity == "H1")
         expected_diff = 3600;
     else if (granularity == "D")

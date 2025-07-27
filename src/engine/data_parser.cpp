@@ -164,7 +164,7 @@ std::vector<quantum::Pattern> DataParser::parseCSV(const std::string& path)
     }
 
     std::string line;
-    int line_num = 0;
+    size_t line_num = 0;
 
     while (std::getline(file, line))
     {

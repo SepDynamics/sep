@@ -258,7 +258,7 @@ void SystemMetricsPanel::updateMetrics() {
     
     // Update processing rate (simplified)
     static size_t last_pattern_count = 0;
-    float time_delta = elapsed / 1000.0f;
+    float time_delta = static_cast<float>(elapsed) / 1000.0f;
     float processed = static_cast<float>(patterns.size() - last_pattern_count);
     metrics_.processing_rate = processed / time_delta;
     last_pattern_count = patterns.size();
@@ -397,7 +397,7 @@ void PatternGeneratorPanel::generateClusterPattern() {
     std::vector<quantum::Pattern> patterns;
     patterns.reserve(pattern_count_);
 
-    int clusters = 3;
+    size_t clusters = 3;
     std::vector<glm::vec3> cluster_centers = {
         glm::vec3(-5.0f, 0.0f, 0.0f),
         glm::vec3(5.0f, 0.0f, 0.0f),
@@ -405,7 +405,7 @@ void PatternGeneratorPanel::generateClusterPattern() {
     };
 
     for (int i = 0; i < pattern_count_; ++i) {
-        int cluster_idx = i % clusters;
+        size_t cluster_idx = static_cast<size_t>(i) % clusters;
         glm::vec3 center = cluster_centers[cluster_idx];
 
         quantum::Pattern pattern;

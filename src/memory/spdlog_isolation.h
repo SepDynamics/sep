@@ -45,9 +45,18 @@ public:
 
 // Include our isolation headers
 #include "engine/standard_includes.h"
+#if !SEP_CUDA_AVAILABLE
+// Host builds can include standard library headers directly
+#    include <atomic>
+#    include <memory>
+#    include <ratio>
+#else
+// CUDA device builds lack full standard library support; use forward declarations
+#endif
 
-// Forward declarations for standard library components used by spdlog
+// Forward declarations or aliases for standard library components used by spdlog
 namespace sep::shim {
+#if SEP_CUDA_AVAILABLE
 // Ratio template for chrono
 template<intmax_t Num, intmax_t Denom = 1>
 struct ratio
@@ -59,7 +68,7 @@ struct ratio
 template<typename T>
 class atomic;
 
-template<typename T>
+template<class T, class Deleter = std::default_delete<T>>
 class unique_ptr;
 
 template<typename T>
@@ -67,11 +76,6 @@ class shared_ptr;
 
 template<typename T>
 class weak_ptr;
-
-template<typename T, typename Deleter = void>
-class unique_ptr;
-
-
 
 template<typename T>
 class function;
@@ -81,35 +85,7 @@ class pair;
 
 class thread;
 
-
-// Chrono namespace for time-related functionality
-namespace chrono {
-class duration_base
-{};
-
-template<typename Rep, typename Period = ratio<1>>
-class duration : public duration_base
-{
-public:
-    duration() {}
-    explicit duration(const Rep&) {}
-    
-    template<typename Rep2>
-    duration(const Rep2&)
-    {}
-
-    template<typename Rep2, typename Period2>
-    duration(const duration<Rep2, Period2>&)
-    {}
-};
-
-typedef duration<int64_t, ratio<1>>             seconds;
-typedef duration<int64_t, ratio<1, 1000>>       milliseconds;
-typedef duration<int64_t, ratio<1, 1000000>>    microseconds;
-typedef duration<int64_t, ratio<1, 1000000000>> nanoseconds;
-}  // namespace chrono
-
-template<typename T>
+template<typename Mutex>
 class unique_lock;
 
 enum class memory_order
@@ -140,6 +116,53 @@ unique_ptr<T> make_unique(Args&&...)
 {
     return unique_ptr<T>();
 }
+#else
+using std::ratio;
+using std::atomic;
+using std::unique_ptr;
+using std::shared_ptr;
+using std::weak_ptr;
+using std::function;
+using std::pair;
+using std::thread;
+using std::unique_lock;
+using std::memory_order;
+using std::memory_order_relaxed;
+using std::memory_order_consume;
+using std::memory_order_acquire;
+using std::memory_order_release;
+using std::memory_order_acq_rel;
+using std::memory_order_seq_cst;
+using std::make_shared;
+using std::make_unique;
+#endif
+
+// Chrono namespace for time-related functionality
+namespace chrono {
+class duration_base
+{};
+
+template<typename Rep, typename Period = ratio<1>>
+class duration : public duration_base
+{
+public:
+    duration() {}
+    explicit duration(const Rep&) {}
+    
+    template<typename Rep2>
+    duration(const Rep2&)
+    {}
+
+    template<typename Rep2, typename Period2>
+    duration(const duration<Rep2, Period2>&)
+    {}
+};
+
+typedef duration<int64_t, ratio<1>>             seconds;
+typedef duration<int64_t, ratio<1, 1000>>       milliseconds;
+typedef duration<int64_t, ratio<1, 1000000>>    microseconds;
+typedef duration<int64_t, ratio<1, 1000000000>> nanoseconds;
+}  // namespace chrono
 }  // namespace sep::shim
 
 // Forward declarations for fmt library

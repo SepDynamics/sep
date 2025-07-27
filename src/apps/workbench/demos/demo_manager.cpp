@@ -17,6 +17,13 @@ namespace workbench {
         renderer_ = renderer;
     }
 
+    void DemoManager::setPatternMetricEngine(sep::quantum::PatternMetricEngine* engine)
+    {
+        pattern_engine_ = engine;
+        if (current_demo_)
+            current_demo_->setPatternMetricEngine(engine);
+    }
+
 void DemoManager::registerDemo(const std::string& name, std::function<std::unique_ptr<Demo>()> factory) {
     demo_factories_[name] = std::move(factory);
 }
@@ -31,6 +38,8 @@ bool DemoManager::switchToDemo(const std::string& name) {
 
     current_demo_ = it->second();
     current_demo_->on_load(engine_, renderer_);
+    if (pattern_engine_)
+        current_demo_->setPatternMetricEngine(pattern_engine_);
     current_demo_name_ = name;
     return true;
 }

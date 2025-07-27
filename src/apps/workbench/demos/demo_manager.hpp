@@ -14,6 +14,9 @@ namespace sep
         class Engine;
     }
     class SimpleRenderer;
+    namespace quantum {
+        class PatternMetricEngine;
+    }
 
     namespace workbench
     {
@@ -26,6 +29,7 @@ namespace sep
             void registerDemo(const std::string& name,
                               std::function<std::unique_ptr<Demo>()> factory);
             bool switchToDemo(const std::string& name);
+            void setPatternMetricEngine(sep::quantum::PatternMetricEngine* engine);
             void on_update(float dt);
             void on_render();
             void on_ui_render();
@@ -40,6 +44,7 @@ namespace sep
 
             sep::core::Engine* engine_{nullptr};
             sep::SimpleRenderer* renderer_{nullptr};
+            sep::quantum::PatternMetricEngine* pattern_engine_{nullptr};
             std::map<std::string, std::function<std::unique_ptr<Demo>()>> demo_factories_;
             std::unique_ptr<Demo> current_demo_;
             std::string current_demo_name_;

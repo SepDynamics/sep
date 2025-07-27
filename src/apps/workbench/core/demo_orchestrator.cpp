@@ -70,6 +70,10 @@ bool DemoOrchestrator::loadDemo(const std::string& demo_id, sep::core::Engine* e
         if (!manager.switchToDemo(demo_id)) {
             throw std::runtime_error("Failed to create demo: " + demo_id);
         }
+
+        // Provide PatternMetricEngine to the active demo
+        pattern_engine_ = engine ? engine->getPatternMetricEngine() : nullptr;
+        manager.setPatternMetricEngine(pattern_engine_);
         
         // Store demo info
         current_demo_id_ = demo_id;
@@ -105,10 +109,12 @@ void DemoOrchestrator::unloadCurrentDemo() {
         // Use DemoManager to unload
         auto& manager = DemoManager::getInstance();
         manager.on_unload();
-        
+        manager.setPatternMetricEngine(nullptr);
+
         current_demo_id_.clear();
         engine_ = nullptr;
         renderer_ = nullptr;
+        pattern_engine_ = nullptr;
         
         setState(DemoState::UNLOADED);
         

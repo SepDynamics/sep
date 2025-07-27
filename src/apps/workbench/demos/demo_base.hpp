@@ -6,6 +6,9 @@ namespace sep {
         class Engine;
     }
     class SimpleRenderer;
+    namespace quantum {
+        class PatternMetricEngine;
+    }
 }
 
 namespace sep::workbench {
@@ -18,5 +21,6 @@ namespace sep::workbench {
         virtual void on_render() = 0;
         virtual void on_ui_render() = 0; // For ImGui controls
         virtual void on_key_press(int key) = 0;
+        virtual void setPatternMetricEngine(sep::quantum::PatternMetricEngine* engine) {}
     };
 }

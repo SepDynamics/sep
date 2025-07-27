@@ -98,6 +98,11 @@ private:
     void renderHoverInfo();
     void renderCrosshair();
     void renderChartGrid();
+    void renderMetricPlot(const char* label,
+                          const std::deque<float>& short_hist,
+                          const std::deque<float>& long_hist,
+                          const ImVec4& short_color,
+                          const ImVec4& long_color);
     void renderMetricsGraphs();
 
     std::deque<float> coherence_history_;

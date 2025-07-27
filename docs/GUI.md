@@ -22,6 +22,10 @@ The GUI is organized into three distinct tabs, each managed by its own controlle
 -   **Purpose**: Manage data sources, trade execution, and backtesting.
 -   **Layout**: A trading terminal for order placement, a backtesting suite with performance charts, and a system monitor for API and data source status.
 
+## Signals Tab Usage
+
+The **Signals** tab displays candlestick data with SEP signal overlays. Use the middle mouse button to pan and the mouse wheel to zoom. Holding **Ctrl** zooms the price axis independently. Press **Space** to toggle the crosshair which shows price and time labels. Below the chart, individual plots visualize Coherence, Stability and Entropy metrics using ImPlot.
+
 ## Development Plan
 
 ### Phase 1: Critical Build Fixes & Foundation

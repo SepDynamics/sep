@@ -54,7 +54,7 @@ bool SignalsTabController::initialize() {
     map.Select = ImGuiMouseButton_Left;
     map.Menu = ImGuiMouseButton_Right;
     map.ZoomMod = ImGuiMod_Ctrl;
-    plot_flags_ = ImPlotFlags_Crosshairs | ImPlotFlags_NoMenus | ImPlotFlags_NoLegend;
+    plot_flags_ = ImPlotFlags_NoMenus | ImPlotFlags_NoLegend;
 
     if (metrics_monitor_) {
         metrics_monitor_->startProcessing();
@@ -284,6 +284,7 @@ void SignalsTabController::setLatestMetrics(const std::map<std::string, Timefram
 
 void SignalsTabController::setCandleData(const std::deque<sep::common::CandleData>& data) {
     candle_data_ = data;
+    updatePriceRange();
     if (auto_detect_trends_) {
         detectTrendLines();
     }
@@ -291,6 +292,7 @@ void SignalsTabController::setCandleData(const std::deque<sep::common::CandleDat
 
 void SignalsTabController::setCandleData(const std::vector<sep::common::CandleData>& data) {
     candle_data_.assign(data.begin(), data.end());
+    updatePriceRange();
     if (auto_detect_trends_) {
         detectTrendLines();
     }
@@ -298,6 +300,9 @@ void SignalsTabController::setCandleData(const std::vector<sep::common::CandleDa
 
 void SignalsTabController::setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals) {
     sep_signals_ = signals;
+    if (sep_signals_.size() > 1440) {
+        sep_signals_.erase(sep_signals_.begin(), sep_signals_.end() - 1440);
+    }
 }
 
 void SignalsTabController::renderMainChart() {
@@ -313,7 +318,11 @@ void SignalsTabController::renderMainChart() {
 
     ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, ImPlotCond_Once);
     ImPlot::SetNextAxisLimits(ImAxis_X1, 0, static_cast<double>(candle_data_.size()), ImPlotCond_Once);
-    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300), plot_flags_)) {
+    ImPlotFlags flags = plot_flags_;
+    if (show_crosshair_) {
+        flags |= ImPlotFlags_Crosshairs;
+    }
+    if (ImPlot::BeginPlot("Price", ImVec2(-1, 300), flags)) {
         renderTechnicalIndicators();
         renderCandlesticks();
         if (show_sep_overlay_) {
@@ -553,34 +562,12 @@ void SignalsTabController::renderMetricsGraphs() {
     if (stability_history_4h_.size() > MAX_POINTS) stability_history_4h_.pop_front();
     if (entropy_history_4h_.size() > MAX_POINTS) entropy_history_4h_.pop_front();
 
-    const auto toVec = [](const std::deque<float>& d) {
-        return std::vector<float>(d.begin(), d.end());
-    };
-
-    auto xs = std::vector<float>(coherence_history_1h_.size());
-    for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
-    auto coh1 = toVec(coherence_history_1h_);
-    auto coh4 = toVec(coherence_history_4h_);
-    auto stab1 = toVec(stability_history_1h_);
-    auto stab4 = toVec(stability_history_4h_);
-    auto ent1 = toVec(entropy_history_1h_);
-    auto ent4 = toVec(entropy_history_4h_);
-
-    if (ImPlot::BeginPlot("Rolling Metrics", ImVec2(-1,150), ImPlotFlags_NoLegend | ImPlotFlags_NoMenus)) {
-        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.9f, 0.0f, 1.0f));
-        ImPlot::PlotLine("Coherence 1h", xs.data(), coh1.data(), static_cast<int>(coh1.size()));
-        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.7f, 0.0f, 1.0f));
-        ImPlot::PlotLine("Coherence 4h", xs.data(), coh4.data(), static_cast<int>(coh4.size()));
-        ImPlot::SetNextLineStyle(ImVec4(0.9f, 0.9f, 0.0f, 1.0f));
-        ImPlot::PlotLine("Stability 1h", xs.data(), stab1.data(), static_cast<int>(stab1.size()));
-        ImPlot::SetNextLineStyle(ImVec4(0.7f, 0.7f, 0.0f, 1.0f));
-        ImPlot::PlotLine("Stability 4h", xs.data(), stab4.data(), static_cast<int>(stab4.size()));
-        ImPlot::SetNextLineStyle(ImVec4(0.9f, 0.0f, 0.0f, 1.0f));
-        ImPlot::PlotLine("Entropy 1h", xs.data(), ent1.data(), static_cast<int>(ent1.size()));
-        ImPlot::SetNextLineStyle(ImVec4(0.7f, 0.0f, 0.0f, 1.0f));
-        ImPlot::PlotLine("Entropy 4h", xs.data(), ent4.data(), static_cast<int>(ent4.size()));
-        ImPlot::EndPlot();
-    }
+    renderMetricPlot("Coherence", coherence_history_1h_, coherence_history_4h_,
+                     ImVec4(0.0f, 0.9f, 0.0f, 1.0f), ImVec4(0.0f, 0.7f, 0.0f, 1.0f));
+    renderMetricPlot("Stability", stability_history_1h_, stability_history_4h_,
+                     ImVec4(0.9f, 0.9f, 0.0f, 1.0f), ImVec4(0.7f, 0.7f, 0.0f, 1.0f));
+    renderMetricPlot("Entropy", entropy_history_1h_, entropy_history_4h_,
+                     ImVec4(0.9f, 0.0f, 0.0f, 1.0f), ImVec4(0.7f, 0.0f, 0.0f, 1.0f));
 }
 
 void SignalsTabController::renderTrendLines() {
@@ -770,6 +757,30 @@ void SignalsTabController::renderChartGrid() {
         std::strftime(time_text, sizeof(time_text), "%H:%M", std::localtime(&tt));
         draw_list->AddText(ImVec2(p1.x - 20, ImPlot::GetPlotPos().y + ImPlot::GetPlotSize().y + 5),
                            IM_COL32(150,150,160,255), time_text);
+    }
+}
+
+void SignalsTabController::renderMetricPlot(const char* label,
+                                            const std::deque<float>& short_hist,
+                                            const std::deque<float>& long_hist,
+                                            const ImVec4& short_color,
+                                            const ImVec4& long_color) {
+    if (short_hist.empty()) return;
+
+    std::vector<float> xs(short_hist.size());
+    for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
+
+    std::vector<float> ys1(short_hist.begin(), short_hist.end());
+    std::vector<float> ys2(long_hist.begin(), long_hist.end());
+
+    if (ImPlot::BeginPlot(label, ImVec2(-1, 100), ImPlotFlags_NoLegend | ImPlotFlags_NoMenus)) {
+        ImPlot::SetNextLineStyle(short_color);
+        ImPlot::PlotLine("1h", xs.data(), ys1.data(), static_cast<int>(ys1.size()));
+        if (!ys2.empty()) {
+            ImPlot::SetNextLineStyle(long_color);
+            ImPlot::PlotLine("4h", xs.data(), ys2.data(), static_cast<int>(ys2.size()));
+        }
+        ImPlot::EndPlot();
     }
 }
 

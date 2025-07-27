@@ -568,7 +568,7 @@ void SEPDemoApp::renderMainMenu() {
         if (ImGui::BeginMenu("Tools")) {
             if (ImGui::MenuItem("Process Memory Blocks")) {
                 // Process memory blocks
-                sep::SEPResult result = memory_manager_->processMemoryBlocks(
+                (void)memory_manager_->processMemoryBlocks(
                     nullptr,  // input_data
                     nullptr,  // output_data
                     nullptr,  // config

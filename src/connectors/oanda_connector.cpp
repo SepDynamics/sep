@@ -138,14 +138,15 @@ std::vector<OandaCandle> OandaConnector::getHistoricalData(
         }
 
         // Perform integrity validation for 48h M1 datasets
-        if (granularity == "M1" && count == 48 * 60) {
+        constexpr size_t expected_candles = 48u * 60u;
+        if (granularity == "M1" && count == static_cast<int>(expected_candles)) {
             auto validation = validateCandleSequence(candles, granularity);
-            if (!validation.valid || candles.size() != static_cast<size_t>(48 * 60)) {
+            if (!validation.valid || candles.size() != expected_candles) {
                 last_error_ = "Missing or invalid candles detected";
                 for (const auto& err : validation.errors) {
                     last_error_ += " - " + err;
                 }
-                if (candles.size() != static_cast<size_t>(48 * 60)) {
+                if (candles.size() != expected_candles) {
                     last_error_ += " - expected 2880 got " + std::to_string(candles.size());
                 }
             } else if (instrument == "EUR_USD") {

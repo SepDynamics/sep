@@ -105,6 +105,76 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine,
     result_.max_drawdown = max_drawdown;
 }
 
+void Backtester::run(const std::vector<sep::quantum::Signal>& signals,
+                     const std::vector<sep::common::CandleData>& candles) {
+    result_ = {};
+    if (signals.empty() || candles.size() < 2) {
+        return;
+    }
+
+    std::vector<float> prices;
+    prices.reserve(candles.size());
+    for (const auto& c : candles) {
+        prices.push_back(static_cast<float>(c.close));
+    }
+
+    std::vector<float> pnl;
+    int wins = 0;
+    int losses = 0;
+    size_t count = std::min(signals.size(), prices.size() - 1);
+    for (size_t i = 0; i < count; ++i) {
+        if (signals[i].type == sep::quantum::SignalType::BUY) {
+            Trade t{sep::quantum::SignalType::BUY, prices[i], prices[i + 1], 1};
+            result_.trades.push_back(t);
+            pnl.push_back(t.exit_price - t.entry_price);
+            wins += t.exit_price > t.entry_price;
+            losses += t.exit_price <= t.entry_price;
+        } else if (signals[i].type == sep::quantum::SignalType::SELL) {
+            Trade t{sep::quantum::SignalType::SELL, prices[i], prices[i + 1], 1};
+            result_.trades.push_back(t);
+            pnl.push_back(t.entry_price - t.exit_price);
+            wins += t.entry_price > t.exit_price;
+            losses += t.entry_price <= t.exit_price;
+        }
+    }
+
+    result_.total_trades = static_cast<int>(pnl.size());
+    if (result_.total_trades > 0) {
+        result_.win_rate = static_cast<float>(wins) / result_.total_trades;
+    }
+
+    result_.total_pnl = std::accumulate(pnl.begin(), pnl.end(), 0.0f);
+    if (pnl.size() > 1) {
+        float avg_pnl = result_.total_pnl / pnl.size();
+        float std_dev = 0.0f;
+        for (float p : pnl) {
+            std_dev += (p - avg_pnl) * (p - avg_pnl);
+        }
+        std_dev = std::sqrt(std_dev / pnl.size());
+        if (std_dev > 0) {
+            result_.sharpe_ratio = avg_pnl / std_dev;
+        }
+    }
+
+    float peak = 0.0f;
+    float max_drawdown = 0.0f;
+    float current = 0.0f;
+    result_.equity_curve.clear();
+    result_.equity_curve.push_back(current);
+    for (float p : pnl) {
+        current += p;
+        result_.equity_curve.push_back(current);
+        if (current > peak) {
+            peak = current;
+        }
+        float dd = peak - current;
+        if (dd > max_drawdown) {
+            max_drawdown = dd;
+        }
+    }
+    result_.max_drawdown = max_drawdown;
+}
+
 void Backtester::run(sep::quantum::PatternMetricEngine* engine,
                      DataLoader* data_loader) {
     if (!engine || !data_loader) {

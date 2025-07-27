@@ -1018,7 +1018,8 @@ void ServiceConnector::loadInitialData(const std::string& path)
         {
             backtester::DataLoader loader;
             loader.load_data(path);
-            backtester_->run(&engine, &loader);
+            const auto& signals = engine.getSignals();
+            backtester_->run(signals, loader.get_data());
             globalEventBus().publish(BacktestResultEvent{backtester_->getResult()});
         }
     }

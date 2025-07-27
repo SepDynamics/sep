@@ -78,6 +78,7 @@ private:
     std::vector<float> pnl_history_;
     std::vector<float> win_rate_history_;
     std::vector<float> sharpe_history_;
+    bool dataset_loaded_{false};
 };
 
 } // namespace sep::workbench

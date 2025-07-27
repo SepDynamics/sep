@@ -50,11 +50,17 @@ The project now compiles successfully. Use the provided scripts to build and run
 
 ### Running Backtests
 
-The **Backend Operations** tab now provides controls to load a dataset and
-trigger the internal backtester. After selecting a historical data file, press
-`Run Backtest` to execute the strategy using the current `PatternMetricEngine`
-signals. Results, including P&L, win rate, Sharpe ratio and the equity curve,
-are displayed in dedicated ImPlot panels.
+The **Backend Operations** tab contains a mini workflow:
+
+1. **Load Dataset** – choose a historical JSON file and press `Load Dataset` to
+   populate the backtester.
+2. **Run Backtest** – executes `workbench::backtester::Backtester::run` using
+   the active `PatternMetricEngine` signals.
+3. **View Results** – P&L, win rate, Sharpe ratio and the equity curve are
+   plotted in the **Backtest Results** panel.
+
+`ServiceConnector` forwards these pattern signals automatically so the results
+update whenever new data is loaded.
 
 ## Key Files
 

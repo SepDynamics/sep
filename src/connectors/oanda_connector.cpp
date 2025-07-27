@@ -350,7 +350,8 @@ OandaConnector::CurlResponse OandaConnector::makeRequest(const std::string& endp
 double OandaConnector::calculateATR(const std::string& instrument, const std::string& granularity,
                                     size_t periods)
 {
-    auto candles = getHistoricalData(instrument, granularity, "", "", periods + 1);
+    auto candles = getHistoricalData(instrument, granularity, "", "",
+                                     static_cast<int>(periods + 1));
 
     if (candles.size() < periods) {
         last_error_ = "Insufficient candle data for ATR calculation";

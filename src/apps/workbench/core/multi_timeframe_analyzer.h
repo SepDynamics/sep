@@ -185,6 +185,9 @@ public:
     
     // Real-time updates
     void updateAllTimeframes(const std::string& instrument);
+
+    // Access stored candles for a given timeframe (e.g. "1m")
+    const std::deque<sep::common::CandleData>& getCandles(const std::string& timeframe) const;
     
     // Configuration and tuning
     void updateConfig(const Config& new_config);

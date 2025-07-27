@@ -44,6 +44,7 @@ sep::workbench::backtester::BacktestResult BacktesterEngine::run(
         return result;
     }
     sep::quantum::PatternMetricEngine& engine_ref = *engine;
+    engine_ref.clear();
     std::vector<uint8_t> byte_stream;
     byte_stream.reserve(candles.size() * sizeof(sep::common::CandleData));
     for (const auto& candle : candles) {

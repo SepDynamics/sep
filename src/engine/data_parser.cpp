@@ -402,7 +402,7 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
         file >> j;
         
         if (j.is_array()) {
-            int index = 0;
+            size_t index = 0;
             for (const auto& candle_json : j) {
                 sep::common::CandleData candle;
 
@@ -422,19 +422,19 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
                 }
 
                 if (candle_json.contains("open") && candle_json["open"].is_number())
-                    candle.open = candle_json["open"].get<float>();
+                    candle.open = candle_json["open"].get<double>();
                 else
                     valid = false;
                 if (candle_json.contains("high") && candle_json["high"].is_number())
-                    candle.high = candle_json["high"].get<float>();
+                    candle.high = candle_json["high"].get<double>();
                 else
                     valid = false;
                 if (candle_json.contains("low") && candle_json["low"].is_number())
-                    candle.low = candle_json["low"].get<float>();
+                    candle.low = candle_json["low"].get<double>();
                 else
                     valid = false;
                 if (candle_json.contains("close") && candle_json["close"].is_number())
-                    candle.close = candle_json["close"].get<float>();
+                    candle.close = candle_json["close"].get<double>();
                 else
                     valid = false;
 
@@ -460,7 +460,7 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
                 return candles;
             }
 
-            int index = 0;
+            size_t index = 0;
             for (const auto& candle_json : j["candles"]) {
             sep::common::CandleData candle;
             

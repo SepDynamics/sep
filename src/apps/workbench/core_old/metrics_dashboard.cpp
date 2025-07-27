@@ -7,6 +7,7 @@
 #include "quantum/pattern_metric_engine.h"
 #include "imgui.h"
 #include <implot.h>
+#include <vector>
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
@@ -378,8 +379,7 @@ void MetricsDashboard::handleStopProcessing() {
 void MetricsDashboard::renderBacktesterPanel()
 {
     ImGui::Begin("Backtester", &show_backtester_panel_);
-    if (ImGui::Button("Run Backtest"))
-    {
+    if (ImGui::Button("Run Backtest")) {
         backtester::DataLoader loader;
         if (std::strlen(file_path_buffer_) > 0)
             loader.load_data(file_path_buffer_);
@@ -388,7 +388,8 @@ void MetricsDashboard::renderBacktesterPanel()
 
         sep::quantum::PatternMetricEngine engine;
         engine.init(nullptr);
-        backtester_->run(&engine, &loader);
+        backtester_->run(&engine, loader.get_data());
+        equity_curve_ = backtester_->getEquityCurve();
     }
 
     const auto& result = backtester_->getResult();
@@ -397,6 +398,14 @@ void MetricsDashboard::renderBacktesterPanel()
     ImGui::Text("Total PnL: %.2f", result.total_pnl);
     ImGui::Text("Sharpe Ratio: %.2f", result.sharpe_ratio);
     ImGui::Text("Max Drawdown: %.2f", result.max_drawdown);
+    if (!equity_curve_.empty()) {
+        if (ImPlot::BeginPlot("Equity Curve", ImVec2(-1,120))) {
+            std::vector<float> xs(equity_curve_.size());
+            for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
+            ImPlot::PlotLine("Equity", xs.data(), equity_curve_.data(), static_cast<int>(xs.size()));
+            ImPlot::EndPlot();
+        }
+    }
 
     ImGui::End();
 }

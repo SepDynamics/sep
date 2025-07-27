@@ -33,6 +33,7 @@ public:
     void run(sep::quantum::PatternMetricEngine* engine,
              const std::vector<sep::common::CandleData>& data);
     const BacktestResult& getResult() const;
+    const std::vector<float>& getEquityCurve() const { return result_.equity_curve; }
 
 private:
     BacktestResult result_;

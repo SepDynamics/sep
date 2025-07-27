@@ -156,6 +156,7 @@ private:
     // Memory monitoring
     std::vector<float> memory_history_;
     std::vector<float> memory_growth_history_;
+    std::vector<float> equity_curve_;
     bool auto_monitor_memory_{true};
     
     // OANDA integration

@@ -29,7 +29,8 @@ static void drawDashedHorizontal(ImDrawList* dl, float x1, float x2, float y,
 namespace sep::workbench {
 
 SignalsTabController::SignalsTabController()
-    : price_min_(0), price_max_(0), volume_max_(0) {}
+    : price_min_(0), price_max_(0), volume_max_(0),
+      crosshair_index_(0.0), crosshair_price_(0.0) {}
 
 SignalsTabController::~SignalsTabController() {
     shutdown();
@@ -196,12 +197,10 @@ void SignalsTabController::setCandleData(const std::deque<sep::common::CandleDat
         volume_max_ = std::max(volume_max_, static_cast<float>(c.volume));
     }
     updatePriceRange();
+    detectTrendLines();
     chart_zoom_.index_start = 0;
     chart_zoom_.index_end = candle_data_.size();
     candle_data_updated_ = true;
-    if (auto_detect_trends_) {
-        detectTrendLines();
-    }
 }
 
 void SignalsTabController::setCandleData(const std::vector<sep::common::CandleData>& data) {
@@ -211,12 +210,10 @@ void SignalsTabController::setCandleData(const std::vector<sep::common::CandleDa
         volume_max_ = std::max(volume_max_, static_cast<float>(c.volume));
     }
     updatePriceRange();
+    detectTrendLines();
     chart_zoom_.index_start = 0;
     chart_zoom_.index_end = candle_data_.size();
     candle_data_updated_ = true;
-    if (auto_detect_trends_) {
-        detectTrendLines();
-    }
 }
 
 void SignalsTabController::setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals) {
@@ -324,6 +321,15 @@ void SignalsTabController::renderCandlesticks() {
     if (start_idx >= end_idx) return;
     const size_t count = end_idx - start_idx;
 
+    double local_min = candle_data_[start_idx].low;
+    double local_max = candle_data_[start_idx].high;
+    for (size_t i = start_idx + 1; i < end_idx; ++i) {
+        local_min = std::min(local_min, candle_data_[i].low);
+        local_max = std::max(local_max, candle_data_[i].high);
+    }
+    double range = local_max - local_min;
+    if (range <= 0) range = 1.0;
+
     xs.resize(count);
     open.resize(count);
     close.resize(count);
@@ -349,6 +355,22 @@ void SignalsTabController::renderTechnicalIndicators() {
     static constexpr size_t MAX_VISIBLE = 240;
     static constexpr size_t INDICATOR_PERIODS[] = {9, 21, 50, 200};
 
+    double local_min = price_min_;
+    double local_max = price_max_;
+    ImPlotRect limits = ImPlot::GetPlotLimits();
+    if (limits.X.Size > 0) {
+        size_t start_idx = static_cast<size_t>(std::max(0.0, std::floor(limits.X.Min)));
+        size_t end_idx = static_cast<size_t>(std::min((double)candle_data_.size(), std::ceil(limits.X.Max)));
+        if (start_idx < end_idx) {
+            local_min = candle_data_[start_idx].low;
+            local_max = candle_data_[start_idx].high;
+            for (size_t i = start_idx + 1; i < end_idx; ++i) {
+                local_min = std::min(local_min, candle_data_[i].low);
+                local_max = std::max(local_max, candle_data_[i].high);
+            }
+        }
+    }
+
     // Render EMAs
     for (const auto& period : INDICATOR_PERIODS) {
         std::string ema_key = "EMA_" + std::to_string(period);
@@ -370,10 +392,10 @@ void SignalsTabController::renderTechnicalIndicators() {
             float x1 = chart_pos_.x + ((i - start_idx) + 0.5f) * candle_width;
             float x2 = chart_pos_.x + ((i + 1 - start_idx) + 0.5f) * candle_width;
             
-            float y1 = chart_pos_.y + chart_size_.y - 
-                       ((indicator.values[i] - price_min_) / (price_max_ - price_min_)) * chart_size_.y;
-            float y2 = chart_pos_.y + chart_size_.y - 
-                       ((indicator.values[i+1] - price_min_) / (price_max_ - price_min_)) * chart_size_.y;
+            float y1 = chart_pos_.y + chart_size_.y -
+                       ((indicator.values[i] - local_min) / (local_max - local_min)) * chart_size_.y;
+            float y2 = chart_pos_.y + chart_size_.y -
+                       ((indicator.values[i+1] - local_min) / (local_max - local_min)) * chart_size_.y;
             
             draw_list->AddLine(ImVec2(x1, y1), ImVec2(x2, y2), 
                               indicator.color, indicator.line_thickness);
@@ -400,8 +422,8 @@ void SignalsTabController::renderTechnicalIndicators() {
         for (size_t i = start_idx; i < bb_upper.values.size(); i++) {
             if (bb_upper.values[i] <= 0) continue;
             float x = chart_pos_.x + ((i - start_idx) + 0.5f) * candle_width;
-            float y = chart_pos_.y + chart_size_.y - 
-                     ((bb_upper.values[i] - price_min_) / (price_max_ - price_min_)) * chart_size_.y;
+            float y = chart_pos_.y + chart_size_.y -
+                     ((bb_upper.values[i] - local_min) / (local_max - local_min)) * chart_size_.y;
             points.push_back(ImVec2(x, y));
         }
         
@@ -409,8 +431,8 @@ void SignalsTabController::renderTechnicalIndicators() {
         for (int i = bb_lower.values.size() - 1; i >= (int)start_idx; i--) {
             if (bb_lower.values[i] <= 0) continue;
             float x = chart_pos_.x + ((i - start_idx) + 0.5f) * candle_width;
-            float y = chart_pos_.y + chart_size_.y - 
-                     ((bb_lower.values[i] - price_min_) / (price_max_ - price_min_)) * chart_size_.y;
+            float y = chart_pos_.y + chart_size_.y -
+                     ((bb_lower.values[i] - local_min) / (local_max - local_min)) * chart_size_.y;
             points.push_back(ImVec2(x, y));
         }
         
@@ -651,21 +673,26 @@ void SignalsTabController::renderHoverInfo() {
 }
 
 void SignalsTabController::renderCrosshair() {
-    if (!show_crosshair_ || !ImPlot::IsPlotHovered()) return;
+    if (!show_crosshair_)
+        return;
+
+    if (ImPlot::IsPlotHovered() && !ImPlot::IsAnyItemActive()) {
+        ImPlotPoint mp = ImPlot::GetPlotMousePos();
+        crosshair_index_ = mp.x;
+        crosshair_price_ = mp.y;
+    }
+
+    ImPlot::DragLineX(100, &crosshair_index_, ImVec4(0.7f,0.7f,0.7f,1.0f));
+    ImPlot::DragLineY(101, &crosshair_price_, ImVec4(0.7f,0.7f,0.7f,1.0f));
 
     ImDrawList* draw_list = ImPlot::GetPlotDrawList();
     ImVec2 plot_pos = ImPlot::GetPlotPos();
     ImVec2 plot_size = ImPlot::GetPlotSize();
+    crosshair_pos_ = ImPlot::PlotToPixels(crosshair_index_, crosshair_price_);
+
     ImVec2 mouse_pos = crosshair_pos_;
 
-    draw_list->AddLine(ImVec2(mouse_pos.x, plot_pos.y),
-                       ImVec2(mouse_pos.x, plot_pos.y + plot_size.y),
-                       IM_COL32(180, 180, 180, 180), 1.0f);
-    draw_list->AddLine(ImVec2(plot_pos.x, mouse_pos.y),
-                       ImVec2(plot_pos.x + plot_size.x, mouse_pos.y),
-                       IM_COL32(180, 180, 180, 180), 1.0f);
-
-    double price = screenToPrice(mouse_pos.y);
+    double price = crosshair_price_;
     auto time = screenToTime(mouse_pos.x);
     char price_text[32];
     (void)snprintf(price_text, sizeof(price_text), "%.5f", price);
@@ -839,7 +866,10 @@ void SignalsTabController::handleMouseInput() {
 
     if (ImPlot::IsPlotHovered()) {
         hover_info_.active = true;
-        crosshair_pos_ = ImGui::GetMousePos();
+        ImPlotPoint mp = ImPlot::GetPlotMousePos();
+        crosshair_index_ = mp.x;
+        crosshair_price_ = mp.y;
+        crosshair_pos_ = ImPlot::PlotToPixels(mp);
         hover_info_.position = crosshair_pos_;
         updateHoverInfo();
 

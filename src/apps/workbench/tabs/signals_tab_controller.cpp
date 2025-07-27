@@ -54,6 +54,7 @@ bool SignalsTabController::initialize() {
     map.Select = ImGuiMouseButton_Left;
     map.Menu = ImGuiMouseButton_Right;
     map.ZoomMod = ImGuiMod_Ctrl;
+    map.Query = ImGuiMouseButton_Left;
     plot_flags_ = ImPlotFlags_NoMenus | ImPlotFlags_NoLegend;
 
     if (metrics_monitor_) {
@@ -329,8 +330,21 @@ void SignalsTabController::renderMainChart() {
     }
 
     ImPlotCond cond = candle_data_updated_ ? ImPlotCond_Always : ImPlotCond_Once;
-    ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, cond);
-    ImPlot::SetNextAxisLimits(ImAxis_X1, 0, static_cast<double>(candle_data_.size()), cond);
+    if (chart_zoom_.is_zoomed) {
+        double x_min = 0.0;
+        double x_max = static_cast<double>(candle_data_.size());
+        for (size_t i = 0; i < candle_data_.size(); ++i) {
+            if (candle_data_[i].timestamp >= chart_zoom_.time_start) { x_min = static_cast<double>(i); break; }
+        }
+        for (size_t i = candle_data_.size(); i-- > 0;) {
+            if (candle_data_[i].timestamp <= chart_zoom_.time_end) { x_max = static_cast<double>(i+1); break; }
+        }
+        ImPlot::SetNextAxisLimits(ImAxis_Y1, chart_zoom_.price_min, chart_zoom_.price_max, ImPlotCond_Always);
+        ImPlot::SetNextAxisLimits(ImAxis_X1, x_min, x_max, ImPlotCond_Always);
+    } else {
+        ImPlot::SetNextAxisLimits(ImAxis_Y1, price_min_, price_max_, cond);
+        ImPlot::SetNextAxisLimits(ImAxis_X1, 0, static_cast<double>(candle_data_.size()), cond);
+    }
     candle_data_updated_ = false;
     ImPlotFlags flags = plot_flags_;
     if (show_crosshair_) {
@@ -740,6 +754,10 @@ void SignalsTabController::renderCrosshair() {
                              ImVec2(time_pos.x + 34, time_pos.y + 16),
                              IM_COL32(40,40,40,200));
     draw_list->AddText(time_pos, IM_COL32(255,255,255,255), time_buf);
+
+    if (chart_zoom_.is_selecting) {
+        draw_list->AddRect(chart_zoom_.zoom_start, ImGui::GetMousePos(), IM_COL32(200,200,200,100));
+    }
 }
 
 void SignalsTabController::renderChartGrid() {
@@ -888,9 +906,37 @@ void SignalsTabController::handleMouseInput() {
         } else {
             is_panning_ = false;
         }
+
+        if (ImGui::IsMouseClicked(ImPlot::GetInputMap().Select)) {
+            chart_zoom_.zoom_start = ImGui::GetMousePos();
+            chart_zoom_.is_selecting = true;
+        }
+
+        if (chart_zoom_.is_selecting && ImGui::IsMouseReleased(ImPlot::GetInputMap().Select)) {
+            chart_zoom_.zoom_end = ImGui::GetMousePos();
+            chart_zoom_.is_selecting = false;
+
+            ImPlotPoint p1 = ImPlot::PixelsToPlot(chart_zoom_.zoom_start);
+            ImPlotPoint p2 = ImPlot::PixelsToPlot(chart_zoom_.zoom_end);
+
+            chart_zoom_.price_min = std::min(p1.y, p2.y);
+            chart_zoom_.price_max = std::max(p1.y, p2.y);
+
+            size_t idx_start = static_cast<size_t>(std::clamp(std::min(p1.x, p2.x), 0.0, (double)candle_data_.size() - 1));
+            size_t idx_end   = static_cast<size_t>(std::clamp(std::max(p1.x, p2.x), 0.0, (double)candle_data_.size() - 1));
+
+            chart_zoom_.time_start = candle_data_[idx_start].timestamp;
+            chart_zoom_.time_end   = candle_data_[idx_end].timestamp;
+            chart_zoom_.is_zoomed = true;
+        }
+
+        if (ImGui::IsMouseDoubleClicked(ImPlot::GetInputMap().Fit)) {
+            chart_zoom_.is_zoomed = false;
+        }
     } else {
         hover_info_.active = false;
         is_panning_ = false;
+        chart_zoom_.is_selecting = false;
     }
 }
 

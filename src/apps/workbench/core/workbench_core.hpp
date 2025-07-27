@@ -19,6 +19,7 @@ namespace sep {
     {
         class Engine;
     }
+    namespace connectors { class OandaConnector; }
 }  // namespace sep
 
 namespace sep::workbench {
@@ -159,6 +160,9 @@ private:
     void handleDemoSelection();
     void handleDemoRunning();
     void handleErrorRecovery();
+
+    // Connector integration
+    void setupOandaCallbacks(sep::connectors::OandaConnector* oanda_ptr);
 
     // Cross-thread metric delivery
     std::map<std::string, TimeframeMetrics> pending_metrics_;

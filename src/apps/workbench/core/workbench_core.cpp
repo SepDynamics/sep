@@ -190,31 +190,7 @@ bool WorkbenchEngine::initialize()
         if (service_connector_ && service_connector_->getOandaConnector()) {
             auto oanda_ptr = service_connector_->getOandaConnector();
             std::cout << "[WorkbenchEngine] OANDA connector available: " << (oanda_ptr ? "Yes" : "No") << std::endl;
-            oanda_ptr->setPriceCallback([this](const connectors::MarketData& md) {
-                if (metrics_monitor_) {
-                    metrics_monitor_->setLatestMarketData(md);
-                }
-
-                if (active_engine_) {
-                    auto* pme = active_engine_->getPatternMetricEngine();
-                    if (pme) {
-                        float price = static_cast<float>(md.mid);
-                        pme->ingestData(reinterpret_cast<const uint8_t*>(&price), sizeof(price));
-                        pme->evolvePatterns();
-                        pme->computeMetrics();
-                    }
-                }
-            });
-
-            oanda_ptr->setCandleCallback([this](const common::CandleData& c) {
-                if (signals_tab_) {
-                    signals_tab_->addCandle(c);
-                }
-                if (multi_timeframe_analyzer_) {
-                    multi_timeframe_analyzer_->ingestMarketData("EUR_USD", c);
-                }
-            });
-
+            setupOandaCallbacks(oanda_ptr);
             oanda_ptr->startPriceStream({"EUR_USD"});
         }
 
@@ -933,6 +909,37 @@ void WorkbenchEngine::updateData()
             std::cerr << "[WorkbenchEngine] SEP signal processing error: " << e.what() << std::endl;
         }
     }
+}
+
+void WorkbenchEngine::setupOandaCallbacks(connectors::OandaConnector* oanda_ptr)
+{
+    if (!oanda_ptr)
+        return;
+
+    oanda_ptr->setPriceCallback([this](const connectors::MarketData& md) {
+        if (metrics_monitor_) {
+            metrics_monitor_->setLatestMarketData(md);
+        }
+
+        if (active_engine_) {
+            auto* pme = active_engine_->getPatternMetricEngine();
+            if (pme) {
+                float price = static_cast<float>(md.mid);
+                pme->ingestData(reinterpret_cast<const uint8_t*>(&price), sizeof(price));
+                pme->evolvePatterns();
+                pme->computeMetrics();
+            }
+        }
+    });
+
+    oanda_ptr->setCandleCallback([this](const common::CandleData& c) {
+        if (signals_tab_) {
+            signals_tab_->addCandle(c);
+        }
+        if (multi_timeframe_analyzer_) {
+            multi_timeframe_analyzer_->ingestMarketData("EUR_USD", c);
+        }
+    });
 }
 
 } // namespace sep::workbench

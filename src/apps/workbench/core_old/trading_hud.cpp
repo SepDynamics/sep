@@ -1,4 +1,5 @@
 #include "trading_hud.h"
+#include "engine/engine.h"
 #include <algorithm>
 #include <numeric>
 #include <cmath>

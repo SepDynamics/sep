@@ -1,4 +1,5 @@
 #include "unified_dashboard.h"
+#include "engine/engine.h"
 
 #include <fstream>
 #include <iomanip>

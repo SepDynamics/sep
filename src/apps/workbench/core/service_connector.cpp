@@ -1,7 +1,7 @@
 #include "service_connector.hpp"
 
 // Include engine headers - they should be found via CMake include paths
-#include "engine.h"
+#include "engine/engine.h"
 #include "engine/manager.h"
 #include "service_proxy_engine.h"
 #include "config.h"

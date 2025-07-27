@@ -7,13 +7,17 @@
 
 #include "imgui.h"
 #include "implot.h"
+#include "apps/workbench/core/multi_timeframe_analyzer.h"
 
 namespace sep::workbench {
 
-BackendTabController::BackendTabController()
-    : backtester_(std::make_unique<backtester::Backtester>()),
+BackendTabController::BackendTabController(std::shared_ptr<MetricsMonitor> monitor,
+                                           MultiTimeframeAnalyzer* analyzer)
+    : monitor_(std::move(monitor)),
+      backtester_(std::make_unique<backtester::Backtester>()),
       data_loader_(std::make_unique<backtester::DataLoader>()),
-      pattern_engine_(std::make_unique<quantum::PatternMetricEngine>()) {}
+      pattern_engine_(std::make_unique<quantum::PatternMetricEngine>()),
+      mtf_analyzer_(analyzer) {}
 
 BackendTabController::~BackendTabController() { shutdown(); }
 bool BackendTabController::initialize() {
@@ -192,6 +196,11 @@ void BackendTabController::renderBacktesterPanel() {
     if (ImGui::Button("Load Dataset")) {
         data_loader_->load_data(backtest_file_buffer_);
         dataset_loaded_ = !data_loader_->get_data().empty();
+        if (dataset_loaded_) {
+            strncpy(file_path_buffer_, backtest_file_buffer_, sizeof(file_path_buffer_) - 1);
+            file_path_buffer_[sizeof(file_path_buffer_) - 1] = '\0';
+            handleDataLoad();
+        }
     }
     if (ImGui::Button("Run Backtest")) {
         backtester_->run(pattern_engine_.get(), backtest_file_buffer_);
@@ -246,6 +255,9 @@ void BackendTabController::renderBacktesterPanel() {
 }
 
 void BackendTabController::renderBacktestingSuite() {
+    if (!dataset_loaded_ || (monitor_ && monitor_->isProcessing()))
+        return;
+
     ImGui::Begin("Backtest Results");
     ImGui::PushID("BacktestResults");
 
@@ -296,8 +308,56 @@ void BackendTabController::renderBacktestingSuite() {
 }
 
 void BackendTabController::handleDataLoad() {
-    if (monitor_ && strlen(file_path_buffer_) > 0) {
-        monitor_->ingestFile(file_path_buffer_);
+    if (!monitor_ || strlen(file_path_buffer_) == 0)
+        return;
+
+    data_loader_->load_data(file_path_buffer_);
+    const auto& candles = data_loader_->get_data();
+    if (candles.empty())
+        return;
+
+    std::vector<uint8_t> bytes;
+    bytes.reserve(candles.size() * sizeof(common::CandleData));
+    for (const auto& c : candles) {
+        const uint8_t* b = reinterpret_cast<const uint8_t*>(&c);
+        bytes.insert(bytes.end(), b, b + sizeof(common::CandleData));
+    }
+
+    monitor_->startProcessing();
+    monitor_->ingestData(bytes.data(), bytes.size());
+    monitor_->stopProcessing();
+
+    pattern_engine_->ingestData(bytes.data(), bytes.size());
+    pattern_engine_->evolvePatterns();
+    const auto& metrics = pattern_engine_->computeMetrics();
+    monitor_->ingestSignals(pattern_engine_->getSignals());
+
+    sep_signals_.clear();
+    for (size_t i = 0; i < std::min(metrics.size(), candles.size()); ++i) {
+        const auto& m = metrics[i];
+        const auto& candle = candles[candles.size() - metrics.size() + i];
+        common::SEPSignalData sig;
+        sig.timestamp = candle.timestamp;
+        sig.coherence = m.coherence;
+        sig.stability = m.stability;
+        sig.entropy = m.entropy;
+        sig.alpha_signal = (m.coherence + m.stability - m.entropy) / 2.0f;
+        sig.trend_strength = (m.coherence * m.stability) - m.entropy;
+        if (m.coherence > 0.8f && m.stability > 0.7f && m.entropy < 0.2f)
+            sig.signal_type = common::MultiTimeframeSignal::STRONG_BUY;
+        else if (m.coherence > 0.7f && m.stability > 0.6f && m.entropy < 0.3f)
+            sig.signal_type = common::MultiTimeframeSignal::BUY;
+        else if (m.coherence < 0.2f && m.stability < 0.3f && m.entropy > 0.8f)
+            sig.signal_type = common::MultiTimeframeSignal::STRONG_SELL;
+        else if (m.coherence < 0.3f && m.stability < 0.4f && m.entropy > 0.7f)
+            sig.signal_type = common::MultiTimeframeSignal::SELL;
+        else
+            sig.signal_type = common::MultiTimeframeSignal::NEUTRAL;
+        sep_signals_.push_back(sig);
+    }
+
+    if (mtf_analyzer_) {
+        mtf_analyzer_->ingestHistoricalData("EUR_USD", candles);
     }
 }
 

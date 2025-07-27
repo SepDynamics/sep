@@ -17,9 +17,12 @@
 
 namespace sep::workbench {
 
+class MultiTimeframeAnalyzer;
+
 class BackendTabController {
 public:
-    BackendTabController();
+    BackendTabController(std::shared_ptr<MetricsMonitor> monitor = nullptr,
+                         MultiTimeframeAnalyzer* analyzer = nullptr);
     ~BackendTabController();
 
     bool initialize();
@@ -29,6 +32,9 @@ public:
     void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
     void setServiceConnector(ServiceConnector* connector);
     void setTradeManager(TradeManager* manager) { trade_manager_ = manager; }
+    void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer) {
+        mtf_analyzer_ = analyzer;
+    }
 
 private:
     ServiceConnector* service_connector_ = nullptr;
@@ -78,7 +84,10 @@ private:
     std::vector<float> pnl_history_;
     std::vector<float> win_rate_history_;
     std::vector<float> sharpe_history_;
+    std::deque<sep::common::SEPSignalData> sep_signals_;
     bool dataset_loaded_{false};
+
+    MultiTimeframeAnalyzer* mtf_analyzer_{nullptr};
 };
 
 } // namespace sep::workbench

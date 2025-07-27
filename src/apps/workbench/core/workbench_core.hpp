@@ -17,10 +17,6 @@ struct GLFWwindow;
 
 // External classes from sep namespace (not in sep::workbench)
 namespace sep {
-    namespace core
-    {
-        class Engine;
-    }
     namespace connectors { class OandaConnector; }
 }  // namespace sep
 

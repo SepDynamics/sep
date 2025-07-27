@@ -111,27 +111,27 @@ bool WorkbenchEngine::initialize()
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
         multi_timeframe_analyzer_->setMetricsMonitor(metrics_monitor_.get());
         multi_timeframe_analyzer_->setMetricsCallback([this](const std::map<std::string, workbench::TimeframeMetrics>& m) {
-            if (!metrics_monitor_) return;
-            auto rolling = metrics_monitor_->getRollingMetrics();
-            auto it1 = m.find("1h");
-            if (it1 != m.end()) {
-                rolling.coherence_1h_avg = it1->second.dominant_coherence;
-                rolling.stability_1h_avg = it1->second.stability_index;
-                rolling.entropy_1h_avg = it1->second.entropy_level;
+            if (metrics_monitor_) {
+                auto rolling = metrics_monitor_->getRollingMetrics();
+                auto it1 = m.find("1h");
+                if (it1 != m.end()) {
+                    rolling.coherence_1h_avg = it1->second.dominant_coherence;
+                    rolling.stability_1h_avg = it1->second.stability_index;
+                    rolling.entropy_1h_avg = it1->second.entropy_level;
+                }
+                auto it4 = m.find("4h");
+                if (it4 != m.end()) {
+                    rolling.coherence_4h_avg = it4->second.dominant_coherence;
+                    rolling.stability_4h_avg = it4->second.stability_index;
+                    rolling.entropy_4h_avg = it4->second.entropy_level;
+                }
+                metrics_monitor_->setRollingMetrics(rolling);
             }
-            auto it4 = m.find("4h");
-            if (it4 != m.end()) {
-                rolling.coherence_4h_avg = it4->second.dominant_coherence;
-                rolling.stability_4h_avg = it4->second.stability_index;
-                rolling.entropy_4h_avg = it4->second.entropy_level;
-            }
-            metrics_monitor_->setRollingMetrics(rolling);
-            if (signals_tab_) {
-                signals_tab_->setMetricsMonitor(metrics_monitor_);
-                signals_tab_->setLatestMetrics(m);
-            }
-            if (engine_tab_) {
-                engine_tab_->setMetricsMonitor(metrics_monitor_);
+
+            {
+                std::lock_guard<std::mutex> lock(pending_metrics_mutex_);
+                pending_metrics_ = m;
+                metrics_ready_ = true;
             }
         });
 
@@ -371,9 +371,26 @@ void WorkbenchEngine::updateFrame(float delta_time)
 {
     // Handle state-specific updates
     handleStateTransition();
-    
+
     // No demo updates needed for trading mode
     updateData();
+
+    {
+        std::lock_guard<std::mutex> lock(pending_metrics_mutex_);
+        if (metrics_ready_)
+        {
+            if (signals_tab_)
+            {
+                signals_tab_->setMetricsMonitor(metrics_monitor_);
+                signals_tab_->setLatestMetrics(pending_metrics_);
+            }
+            if (engine_tab_)
+            {
+                engine_tab_->setMetricsMonitor(metrics_monitor_);
+            }
+            metrics_ready_ = false;
+        }
+    }
 }
 
 void WorkbenchEngine::renderFrame()

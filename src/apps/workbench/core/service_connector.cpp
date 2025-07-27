@@ -275,10 +275,16 @@ void ServiceConnector::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyze
     if (oanda_connector_ && mtf_analyzer_)
     {
         oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
-            if (mtf_analyzer_)
+            if (!mtf_analyzer_)
+                return;
+
+            mtf_analyzer_->ingestMarketData("EUR_USD", c);
+            mtf_analyzer_->updateAllTimeframes("EUR_USD");
+
+            if (signals_tab_)
             {
-                mtf_analyzer_->ingestMarketData("EUR_USD", c);
-                mtf_analyzer_->updateAllTimeframes("EUR_USD");
+                auto metrics = mtf_analyzer_->getLatestMetrics("EUR_USD");
+                signals_tab_->setLatestMetrics(metrics);
             }
         });
     }

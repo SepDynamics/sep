@@ -77,9 +77,10 @@ void MultiTimeframeAnalyzer::shutdown() {
     SEP_LOG_INFO("MultiTimeframeAnalyzer shutdown complete");
 }
 
-void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument, const sep::common::CandleData& candle) {
+void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument,
+                                              const sep::common::CandleData& candle) {
     std::lock_guard<std::mutex> lock(analysis_mutex_);
-    
+
     // Add to 1-minute base timeframe first
     if (timeframe_data_.count("1m")) {
         auto& tf_data = timeframe_data_["1m"];
@@ -93,12 +94,6 @@ void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument, con
 
     if (metrics_monitor_) {
         metrics_monitor_->ingestCandle(candle);
-    }
-    
-    // Update higher timeframes by resampling from 1m data
-    updateAllTimeframes(instrument);
-    if (metrics_callback_) {
-        metrics_callback_(latest_metrics_);
     }
 }
 
@@ -168,6 +163,10 @@ void MultiTimeframeAnalyzer::updateAllTimeframes(const std::string& instrument) 
         if (correlation_history_[tf].size() > max_correlation_history_) {
             correlation_history_[tf].pop_front();
         }
+    }
+
+    if (metrics_callback_) {
+        metrics_callback_(latest_metrics_);
     }
 }
 

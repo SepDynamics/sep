@@ -7,6 +7,8 @@
 #include "backtester/ui/backtester_tab_controller.h"
 #include "ui_layout_manager.h"
 #include "multi_timeframe_analyzer.h"
+#include <map>
+#include <mutex>
 
 // Forward declaration for GLFW
 struct GLFWwindow;
@@ -157,7 +159,12 @@ private:
     void handleDemoSelection();
     void handleDemoRunning();
     void handleErrorRecovery();
-    
+
+    // Cross-thread metric delivery
+    std::map<std::string, TimeframeMetrics> pending_metrics_;
+    std::mutex pending_metrics_mutex_;
+    bool metrics_ready_{false};
+
     // Singleton instance for static callbacks
     static WorkbenchEngine* instance_;
 };

@@ -895,6 +895,17 @@ void SignalsTabController::handleMouseInput() {
         show_crosshair_ = !show_crosshair_;
     }
 
+    ImGuiIO& io = ImGui::GetIO();
+    if (ImGui::IsKeyPressed(ImGuiKey_G)) {
+        show_grid_ = !show_grid_;
+    }
+    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_R)) {
+        chart_zoom_.is_zoomed = false;
+    }
+    if (io.KeyCtrl && ImGui::IsKeyPressed(ImGuiKey_Z)) {
+        chart_zoom_.is_zoomed = false;
+    }
+
     if (ImPlot::IsPlotHovered()) {
         hover_info_.active = true;
         crosshair_pos_ = ImGui::GetMousePos();

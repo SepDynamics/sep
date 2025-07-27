@@ -20,13 +20,7 @@
 #include <spdlog/spdlog.h>
 
 
-// Forward declarations for Crow request/response and application
-namespace crow {
-struct request;
-struct response;
-template <typename... Middlewares>
-class Crow;
-}  // namespace crow
+#include "crow.h"
 
 namespace sep::ollama {
 class OllamaClient;

@@ -147,6 +147,7 @@ target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
 # Add subdirectories
 set(FMT_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(third_party/fmt)
+add_subdirectory(extern/crow)
 # Trigger rebuild again
 add_subdirectory(src)
 add_subdirectory(examples)

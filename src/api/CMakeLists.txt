@@ -13,6 +13,7 @@ target_link_libraries(sep_api PRIVATE ${CURL_LIBRARIES})
 if(HIREDIS_FOUND)
     target_link_libraries(sep_api PRIVATE ${HIREDIS_LIBRARIES})
 endif()
+target_link_libraries(sep_api PUBLIC crow)
 
 if(MSVC)
     target_compile_options(sep_api PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")

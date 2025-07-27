@@ -71,12 +71,14 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
 
         if (oanda_connector_->initialize()) {
             oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
-                if (mtf_analyzer_) {
-                    mtf_analyzer_->ingestMarketData("EUR_USD", c);
-                }
+                if (!mtf_analyzer_) return;
+
+                mtf_analyzer_->ingestMarketData("EUR_USD", c);
+
                 if (signals_tab_) {
-                    std::deque<common::CandleData> tmp{c};
-                    signals_tab_->setCandleData(tmp);
+                    signals_tab_->setCandleData(mtf_analyzer_->getCandles("1m"));
+                    auto metrics = mtf_analyzer_->getLatestMetrics("EUR_USD");
+                    signals_tab_->setLatestMetrics(metrics);
                 }
             });
 
@@ -154,17 +156,17 @@ bool ServiceConnector::connect() {
         health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
 
         if (oanda_connector_) {
-            // Forward live candle data from the connector into the active analysis
-            // components. PatternMetricEngine::ingestData already protects its
-            // internal state with a mutex, so we simply push the OHLC bytes.
+            // Forward live candle data from the connector into the analysis components
             oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
-                if (mtf_analyzer_) {
-                    mtf_analyzer_->ingestMarketData("EUR_USD", c);
-                }
+                if (!mtf_analyzer_)
+                    return;
+
+                mtf_analyzer_->ingestMarketData("EUR_USD", c);
 
                 if (signals_tab_) {
-                    std::deque<common::CandleData> buf{c};
-                    signals_tab_->setCandleData(buf);
+                    signals_tab_->setCandleData(mtf_analyzer_->getCandles("1m"));
+                    auto metrics = mtf_analyzer_->getLatestMetrics("EUR_USD");
+                    signals_tab_->setLatestMetrics(metrics);
                 }
 
                 if (service_engine_) {
@@ -283,10 +285,10 @@ void ServiceConnector::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyze
                 return;
 
             mtf_analyzer_->ingestMarketData("EUR_USD", c);
-            mtf_analyzer_->updateAllTimeframes("EUR_USD");
 
             if (signals_tab_)
             {
+                signals_tab_->setCandleData(mtf_analyzer_->getCandles("1m"));
                 auto metrics = mtf_analyzer_->getLatestMetrics("EUR_USD");
                 signals_tab_->setLatestMetrics(metrics);
             }

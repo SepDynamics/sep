@@ -95,6 +95,9 @@ void MultiTimeframeAnalyzer::ingestMarketData(const std::string& instrument,
     if (metrics_monitor_) {
         metrics_monitor_->ingestCandle(candle);
     }
+
+    // Trigger analysis across configured timeframes
+    updateAllTimeframes(instrument);
 }
 
 void MultiTimeframeAnalyzer::ingestHistoricalData(const std::string& instrument, 
@@ -735,6 +738,15 @@ std::deque<CorrelationMetrics> MultiTimeframeAnalyzer::getCorrelationHistory(con
         return correlation_history_.at(timeframe);
     }
     return {};
+}
+
+const std::deque<common::CandleData>& MultiTimeframeAnalyzer::getCandles(const std::string& timeframe) const {
+    static const std::deque<common::CandleData> empty;
+    auto it = timeframe_data_.find(timeframe);
+    if (it != timeframe_data_.end()) {
+        return it->second.candles;
+    }
+    return empty;
 }
 
 // TimeframeUtils implementation

@@ -118,5 +118,9 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine,
 const BacktestResult& Backtester::getResult() const {
     return result_;
 }
+const std::vector<float>& Backtester::getEquityCurve() const {
+    return result_.equity_curve;
+}
+
 
 }

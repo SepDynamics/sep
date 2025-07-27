@@ -419,9 +419,11 @@ bool UnifiedDashboard::loadSampleData() {
         
         for (const auto& candle_json : candles_json) {
             sep::connectors::OandaCandle candle;
-            
+
             // Parse timestamp
-            candle.time = candle_json["time"];
+            std::string ts = candle_json["time"];
+            auto tp = sep::common::parseTimestamp(ts);
+            candle.time = std::to_string(sep::common::time_point_to_nanoseconds(tp));
             
             // Parse OHLC from mid prices
             const auto& mid = candle_json["mid"];

@@ -158,6 +158,10 @@ void TradingHUD::renderTopBar() {
             auto candles = oanda_connector_->getHistoricalData(selected_instrument_, "M1", "", "", 500);
             updateCandleData(candles);
             instrument_history_[selected_instrument_] = std::deque<CandleData>(candle_data_.begin(), candle_data_.end());
+            if (live_mode_) {
+                oanda_connector_->stopPriceStream();
+                oanda_connector_->startPriceStream({selected_instrument_});
+            }
         }
     }
     
@@ -672,16 +676,19 @@ void TradingHUD::renderTradingControls() {
     if (ImGui::Button("BUY", ImVec2(-1, 30))) {
         if (oanda_connector_) {
             auto md = oanda_connector_->getMarketData(selected_instrument_);
+            double risk_amount = account_info_.balance * 0.02; // 2% risk
+            double pip_value = 0.0001;
+            int order_units = static_cast<int>(std::floor(risk_amount / (stop_loss_pips * pip_value)));
             nlohmann::json order;
             order["order"]["instrument"] = selected_instrument_;
-            order["order"]["units"] = std::to_string(static_cast<int>(std::abs(position_size)));
+            order["order"]["units"] = std::to_string(order_units);
             order["order"]["type"] = "MARKET";
             order["order"]["timeInForce"] = "FOK";
             order["order"]["positionFill"] = "DEFAULT";
-            double sl_price = md.ask - stop_loss_pips * 0.0001;
+            double sl_price = md.ask - stop_loss_pips * pip_value;
             order["order"]["stopLossOnFill"]["price"] = std::to_string(sl_price);
             if (take_profit_pips > 0.0f) {
-                double tp_price = md.ask + take_profit_pips * 0.0001;
+                double tp_price = md.ask + take_profit_pips * pip_value;
                 order["order"]["takeProfitOnFill"]["price"] = std::to_string(tp_price);
             }
             oanda_connector_->placeOrder(order);
@@ -691,16 +698,19 @@ void TradingHUD::renderTradingControls() {
     if (ImGui::Button("SELL", ImVec2(-1, 30))) {
         if (oanda_connector_) {
             auto md = oanda_connector_->getMarketData(selected_instrument_);
+            double risk_amount = account_info_.balance * 0.02; // 2% risk
+            double pip_value = 0.0001;
+            int order_units = -static_cast<int>(std::floor(risk_amount / (stop_loss_pips * pip_value)));
             nlohmann::json order;
             order["order"]["instrument"] = selected_instrument_;
-            order["order"]["units"] = std::to_string(-static_cast<int>(std::abs(position_size)));
+            order["order"]["units"] = std::to_string(order_units);
             order["order"]["type"] = "MARKET";
             order["order"]["timeInForce"] = "FOK";
             order["order"]["positionFill"] = "DEFAULT";
-            double sl_price = md.bid + stop_loss_pips * 0.0001;
+            double sl_price = md.bid + stop_loss_pips * pip_value;
             order["order"]["stopLossOnFill"]["price"] = std::to_string(sl_price);
             if (take_profit_pips > 0.0f) {
-                double tp_price = md.bid - take_profit_pips * 0.0001;
+                double tp_price = md.bid - take_profit_pips * pip_value;
                 order["order"]["takeProfitOnFill"]["price"] = std::to_string(tp_price);
             }
             oanda_connector_->placeOrder(order);

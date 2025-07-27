@@ -48,6 +48,14 @@ The project now compiles successfully. Use the provided scripts to build and run
 ./run_workbench.sh
 ```
 
+### Running Backtests
+
+The **Backend Operations** tab now provides controls to load a dataset and
+trigger the internal backtester. After selecting a historical data file, press
+`Run Backtest` to execute the strategy using the current `PatternMetricEngine`
+signals. Results, including P&L, win rate, Sharpe ratio and the equity curve,
+are displayed in dedicated ImPlot panels.
+
 ## Key Files
 
 -   [`DATA.md`](DATA.md): Describes the now-operational data pipeline architecture.

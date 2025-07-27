@@ -19,11 +19,18 @@ docker run --gpus all --rm \
     sep-engine-builder bash -c '
     cd /sep/build
     
-    # Build only the pme_testbed target
+    # Build the pme_testbed target
     ninja pme_testbed
+    
+    # Run the test with sample data
+    ./examples/pme_testbed /sep/assets/test_data/eur_usd_m1_48h.json
 '
 
 # Fix ownership of generated files
 sudo chown -R $USER_ID:$GROUP_ID /sep/build
 
 echo "Build complete!"
+
+# Run the alpha analysis script
+echo "Running alpha analysis..."
+python3 /sep/scripts/alpha_analysis.py

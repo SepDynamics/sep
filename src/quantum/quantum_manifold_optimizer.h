@@ -131,7 +131,7 @@ private:
 namespace sep::quantum::manifold {
 
 // Forward declarations
-class HamiltonianEvolver;
+
 class CUDAQuantumKernel;
 class SemanticProcessor;
 class PerformanceAnalyzer;
@@ -153,29 +153,7 @@ struct ManifoldConfig {
     config::AnalyticsConfig analytics;
 };
 
-// 1. ADVANCED MEMORY TIER OPTIMIZATION
-class AdvancedMemoryTierOptimizer {
-public:
-  explicit AdvancedMemoryTierOptimizer(const ManifoldConfig &config);
 
-  // Adaptive coherence threshold optimization
-  void optimizeThresholds(const std::vector<QuantumPattern> &patterns);
-
-  // Predictive pattern migration using Hamiltonian evolution
-  void predictiveMigration(int pattern_id, double time_horizon_ms);
-
-  // Intelligent tier promotion decisions
-  MemoryTierEnum recommendTier(const QuantumPattern &pattern) const;
-
-private:
-  ManifoldConfig config_;
-  std::unique_ptr<HamiltonianEvolver> hamiltonian_;
-  std::array<double, 3> adaptive_thresholds_;
-  std::mutex threshold_mutex_;
-
-  double calculateHamiltonianEnergy(const QuantumPattern &pattern) const;
-  double predictFutureCoherence(const QuantumPattern &pattern, double dt) const;
-};
 
 // 2. ENHANCED QUANTUM PROCESSING WITH MANIFOLD ANALYSIS
 class QuantumManifoldProcessor : public QuantumProcessorQFH {
@@ -356,93 +334,7 @@ public:
   double calculateEntropyRate(const std::vector<QuantumPattern> &patterns);
 };
 
-// COMPREHENSIVE VALIDATION FRAMEWORK
-class ManifoldValidator {
-public:
-  struct ValidationResult {
-    bool passed;
-    double processing_rate; // patterns/second
-    double error_rate;
-    std::vector<std::string> failed_tests;
-    std::chrono::milliseconds total_time;
-  };
 
-  // Deterministic coherence validation
-  ValidationResult
-  validateCoherenceSimulation(AdvancedMemoryTierOptimizer &optimizer,
-                              int n_simulations = 10000);
-
-  // CUDA profiling analysis
-  ValidationResult validateCUDAPerformance(CUDAQuantumKernel &kernel,
-                                           int n_patterns = 100000);
-
-  // End-to-end system validation
-  ValidationResult validateSystemIntegration(
-      AdvancedMemoryTierOptimizer &memory_opt,
-      QuantumManifoldProcessor &quantum_proc, APICoherenceModulator &api_mod,
-      SemanticProcessor &semantic_proc, PerformanceAnalyzer &perf_analyzer,
-      int target_patterns_per_second = 10000, double max_error_rate = 0.001);
-
-private:
-    // Deterministic quantum state generator based on Hamiltonian evolution
-    class DeterministicPatternGenerator {
-        uint64_t state_;
-        double phase_;
-        double coherence_base_;
-        
-    public:
-        explicit DeterministicPatternGenerator(uint64_t seed = 0x42ULL)
-            : state_(seed), phase_(0.0), coherence_base_(0.707) {}
-        
-        QuantumPattern generatePattern(int index) {
-            // Deterministic evolution based on quantum state progression
-            state_ = (state_ * 0x5DEECE66DULL + 0xBULL) & ((1ULL << 48) - 1);
-            phase_ = std::fmod(phase_ + 2.0 * M_PI / 137.036, 2.0 * M_PI); // Fine structure constant
-            
-            QuantumPattern pattern;
-            pattern.position.resize(3);
-            for (int i = 0; i < 3; ++i) {
-                pattern.position[i] = static_cast<double>((state_ >> (i * 16)) & 0xFFFF) / 65535.0;
-            }
-            
-            double t = static_cast<double>(index) * 0.01;
-            pattern.amplitude = std::complex<double>(
-                std::cos(phase_ + t), 
-                std::sin(phase_ + t)
-            );
-            // Real quantum coherence calculations based on pattern position and field interactions
-            glm::dvec3 pos_vec(pattern.position[0], pattern.position[1], pattern.position[2]);
-            pattern.coherence = calculateQuantumCoherence(pos_vec, t);
-            pattern.stability = calculateQuantumStability(pos_vec, phase_, t);
-            pattern.generation = index;
-            pattern.state = (pattern.coherence > 0.7) ? ManifoldQuantumState::COHERENT : ManifoldQuantumState::SUPERPOSITION;
-            pattern.phase = phase_;
-            
-            return pattern;
-        }
-        
-    private:
-        double calculateQuantumCoherence(const glm::dvec3& position, double t) {
-            // Real coherence calculation based on field strength and interaction
-            double field_strength = glm::length(position) * 0.1;
-            double coherence = coherence_base_ * std::exp(-field_strength * t * 0.01);
-            return std::clamp(coherence, 0.0, 1.0);
-        }
-        
-        double calculateQuantumStability(const glm::dvec3& position, double phase, double t) {
-            // Real stability calculation based on phase coherence and position
-            double phase_coherence = std::cos(phase + t * 0.1);
-            double position_stability = 1.0 / (1.0 + glm::length(position) * 0.01);
-            return std::clamp(phase_coherence * position_stability, 0.0, 1.0);
-        }
-    };
-    
-    DeterministicPatternGenerator pattern_gen_;
-
-    std::vector<QuantumPattern> generateTestPatterns(int count);
-    bool validateProcessingRate(double rate, double target);
-    bool validateErrorRate(double rate, double max_allowed);
-};
 
 // Integration with existing SEP architecture
 class QuantumManifoldOptimizationEngine {
@@ -470,17 +362,16 @@ public:
 
   OptimizationMetrics getOptimizationMetrics() const;
 
-  // Validate system performance
-  ManifoldValidator::ValidationResult validate();
+
 
 private:
   ManifoldConfig config_;
-  std::unique_ptr<AdvancedMemoryTierOptimizer> memory_optimizer_;
+
   std::unique_ptr<QuantumManifoldProcessor> quantum_processor_;
   std::unique_ptr<APICoherenceModulator> api_modulator_;
   std::unique_ptr<SemanticProcessor> semantic_processor_;
   std::unique_ptr<PerformanceAnalyzer> performance_analyzer_;
-  std::unique_ptr<ManifoldValidator> validator_;
+
   std::vector<QuantumPattern> last_run_metrics_;
 
   std::atomic<bool> running_{false};

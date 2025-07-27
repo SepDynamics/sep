@@ -162,8 +162,37 @@ std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::v
 }
 
 
+QuantumManifoldOptimizationEngine::QuantumManifoldOptimizationEngine(const ManifoldConfig &config)
+    : config_(config) {}
+
+void QuantumManifoldOptimizationEngine::initialize() {}
+
+CUDAQuantumKernel::~CUDAQuantumKernel() {}
+
 void QuantumManifoldOptimizationEngine::processPatterns(const std::vector<QuantumPattern>& patterns) {
-    last_run_metrics_ = patterns; // Store the whole patterns
+    std::vector<Pattern> to_optimize;
+    for(const auto& p : patterns) {
+        Pattern new_p;
+        new_p.quantum_state.coherence = p.coherence;
+        new_p.quantum_state.stability = p.stability;
+        new_p.quantum_state.entropy = p.phase; // Using phase as entropy
+        to_optimize.push_back(new_p);
+    }
+
+    QuantumManifoldOptimizer::Config config;
+    QuantumManifoldOptimizer optimizer(config);
+    auto optimized_patterns = optimizer.optimize(to_optimize);
+
+    std::vector<QuantumPattern> results;
+    for(size_t i = 0; i < patterns.size(); ++i) {
+        QuantumPattern qp = patterns[i];
+        qp.coherence = optimized_patterns[i].quantum_state.coherence;
+        qp.stability = optimized_patterns[i].quantum_state.stability;
+        qp.phase = optimized_patterns[i].quantum_state.entropy;
+        results.push_back(qp);
+    }
+
+    last_run_metrics_ = results;
 }
 
 std::vector<QuantumPattern> QuantumManifoldOptimizationEngine::getMetrics() const {

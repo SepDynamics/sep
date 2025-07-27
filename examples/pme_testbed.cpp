@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
         sep::quantum::manifold::QuantumPattern q_p;
         q_p.id = "pattern_" + candle.time;
         q_p.coherence = 1.0 / (1.0 + candle.high - candle.low); // Simplified volatility
-        q_p.stability = candle.volume > 0 ? (candle.close - candle.open) / candle.volume : 0; // Simplified volume-weighted stability
+        q_p.stability = (candle.close - candle.open) * 10000; // Simplified stability
         q_p.phase = std::abs(candle.close - candle.open) / (candle.high - candle.low + 1e-6); // Simplified complexity, using phase as entropy
         quantum_patterns.push_back(q_p);
     }
@@ -80,8 +80,8 @@ int main(int argc, char** argv) {
     double stability_w = 0.5;
     double coherence_w = 0.3;
     double entropy_w = 0.2;
-    double buy_score_threshold = 0.7;
-    double sell_score_threshold = 0.7;
+    double buy_score_threshold = 0.55;
+    double sell_score_threshold = 0.55;
 
     if (argc == 7) {
         stability_w = std::stod(argv[2]);

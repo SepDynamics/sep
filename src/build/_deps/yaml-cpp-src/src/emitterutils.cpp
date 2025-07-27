@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <cstdint>
+#include <cstdint> // required for uint8_t helpers
 #include <iomanip>
 #include <sstream>
 

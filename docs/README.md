@@ -44,7 +44,7 @@ The project now compiles successfully. Use the provided scripts to build and run
 # Build the project
 ./build.sh
 
-# Run the workbench application
+# Run the workbench application (live mode)
 ./run_workbench.sh
 ```
 

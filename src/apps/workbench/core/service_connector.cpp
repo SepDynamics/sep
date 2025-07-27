@@ -14,6 +14,7 @@
 #include <iostream>
 #include <thread>
 #include <cstring>
+#include <deque>
 #include "engine/data_parser.h"
 
 // Platform-specific includes
@@ -148,7 +149,31 @@ bool ServiceConnector::connect() {
         
         connection_state_ = sep::workbench::ConnectionState::CONNECTED;
         health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
-        
+
+        if (oanda_connector_) {
+            oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
+                if (mtf_analyzer_) {
+                    mtf_analyzer_->ingestMarketData("EUR_USD", c);
+                }
+                if (signals_tab_) {
+                    std::deque<common::CandleData> tmp{c};
+                    signals_tab_->setCandleData(tmp);
+                }
+                if (service_engine_) {
+                    auto* pme = service_engine_->getPatternMetricEngine();
+                    if (pme) {
+                        float ohlc[4] = {
+                            static_cast<float>(c.open),
+                            static_cast<float>(c.high),
+                            static_cast<float>(c.low),
+                            static_cast<float>(c.close)};
+                        const uint8_t* bytes = reinterpret_cast<const uint8_t*>(ohlc);
+                        pme->ingestData(bytes, sizeof(ohlc));
+                    }
+                }
+            });
+        }
+
         // Start health monitoring
         startHealthMonitoring();
         

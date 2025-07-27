@@ -61,6 +61,7 @@ void BackendTabController::setServiceConnector(ServiceConnector* connector) {
     service_connector_ = connector;
     if (service_connector_) {
         trade_manager_ = service_connector_->getTradeManager();
+        service_connector_->setBacktester(backtester_.get());
     }
 }
 
@@ -173,6 +174,15 @@ void BackendTabController::renderBacktesterPanel() {
     ImGui::InputFloat("Take Profit (pips)", &take_profit_pips_);
     ImGui::End();
 
+    ImGui::Begin("Backtest Runner");
+    ImGui::InputText("Dataset", backtest_file_buffer_, sizeof(backtest_file_buffer_));
+    if (ImGui::Button("Run Backtest")) {
+        data_loader_->load_data(backtest_file_buffer_);
+        backtester_->run(pattern_engine_.get(), data_loader_.get());
+        globalEventBus().publish(BacktestResultEvent{backtester_->getResult()});
+    }
+    ImGui::End();
+
     ImGui::Begin("Signal Validation");
     if (ImGui::Button("Validate Signals")) {
         data_loader_->load_data(file_path_buffer_);
@@ -215,16 +225,34 @@ void BackendTabController::renderBacktestingSuite() {
     ImGui::Text("Total PnL: %.2f", last_result_.total_pnl);
     ImGui::Text("Sharpe Ratio: %.2f", last_result_.sharpe_ratio);
     ImGui::Text("Max Drawdown: %.2f", last_result_.max_drawdown);
+
     if (!pnl_history_.empty()) {
-        if (ImPlot::BeginPlot("Backtest Metrics", ImVec2(-1,150))) {
+        if (ImPlot::BeginPlot("PnL History", ImVec2(-1,120))) {
             std::vector<float> xs(pnl_history_.size());
             for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
             ImPlot::PlotLine("PnL", xs.data(), pnl_history_.data(), static_cast<int>(pnl_history_.size()));
+            ImPlot::EndPlot();
+        }
+    }
+
+    if (!win_rate_history_.empty()) {
+        if (ImPlot::BeginPlot("Win Rate", ImVec2(-1,120))) {
+            std::vector<float> xs(win_rate_history_.size());
+            for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
             ImPlot::PlotLine("WinRate", xs.data(), win_rate_history_.data(), static_cast<int>(win_rate_history_.size()));
+            ImPlot::EndPlot();
+        }
+    }
+
+    if (!sharpe_history_.empty()) {
+        if (ImPlot::BeginPlot("Sharpe Ratio", ImVec2(-1,120))) {
+            std::vector<float> xs(sharpe_history_.size());
+            for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
             ImPlot::PlotLine("Sharpe", xs.data(), sharpe_history_.data(), static_cast<int>(sharpe_history_.size()));
             ImPlot::EndPlot();
         }
     }
+
     if (!equity_curve_.empty()) {
         if (ImPlot::BeginPlot("Equity Curve", ImVec2(-1,150))) {
             std::vector<float> xs(equity_curve_.size());

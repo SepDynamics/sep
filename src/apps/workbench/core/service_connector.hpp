@@ -91,6 +91,7 @@ public:
 
     void setSignalsTab(SignalsTabController* tab);
     void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer);
+    void setBacktester(sep::workbench::backtester::Backtester* bt) { backtester_ = bt; }
     const std::deque<common::CandleData>& getInitialData() const { return initial_data_; }
 
 private:
@@ -135,6 +136,7 @@ private:
 
     SignalsTabController* signals_tab_{nullptr};
     MultiTimeframeAnalyzer* mtf_analyzer_{nullptr};
+    sep::workbench::backtester::Backtester* backtester_{nullptr};
     std::deque<common::CandleData> initial_data_;
     std::deque<common::SEPSignalData> initial_signals_;
 

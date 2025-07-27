@@ -971,6 +971,14 @@ void ServiceConnector::loadInitialData(const std::string& path)
         {
             signals_tab_->setSEPSignals(initial_signals_);
         }
+
+        if (backtester_)
+        {
+            backtester::DataLoader loader;
+            loader.load_data(path);
+            backtester_->run(&engine, &loader);
+            globalEventBus().publish(BacktestResultEvent{backtester_->getResult()});
+        }
     }
 }
 

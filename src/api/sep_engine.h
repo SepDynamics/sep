@@ -14,6 +14,8 @@
 #include "quantum/processor.h"
 #include "quantum/relationship.h"
 #include "quantum/pattern_processor.hpp"
+#include "quantum/quantum_processor.h"
+#include "pattern/pattern_processor.hpp"
 
 
 

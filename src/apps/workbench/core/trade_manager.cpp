@@ -153,6 +153,15 @@ nlohmann::json TradeManager::executeSell(const std::string& instrument, double u
     }
 }
 
+nlohmann::json TradeManager::executeOrder(const std::string& instrument, double units) {
+    if (units > 0) {
+        return executeBuy(instrument, units);
+    } else if (units < 0) {
+        return executeSell(instrument, -units);
+    }
+    return {{"error", "Order units cannot be zero"}};
+}
+
 void TradeManager::updateOrderStatus(const std::string& order_id, OrderState state) {
     std::lock_guard<std::mutex> lock(mutex_);
     auto it = std::find_if(orders_.begin(), orders_.end(),

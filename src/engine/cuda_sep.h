@@ -16,6 +16,7 @@ struct cudaDeviceProp;
 #endif
 
 #include "engine/standard_includes.h"
+#include "engine/stream.h"
 
 #ifndef SEP_cudaMemAttachGlobal
 #define SEP_cudaMemAttachGlobal cudaMemAttachGlobal
@@ -26,9 +27,6 @@ struct cudaDeviceProp;
 
 namespace sep {
 namespace cuda {
-
-    // Stream class forward declaration
-    class Stream;
 
 #ifdef __CUDACC__
 // When compiling CUDA files, use the real CUDA functions directly

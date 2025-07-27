@@ -2,11 +2,10 @@
 #define SEP_CUDA_EVENT_H
 
 #include <cuda_runtime.h>
+#include "engine/stream.h"
 
 namespace sep {
 namespace cuda {
-
-class Stream;
 
 class Event {
  public:

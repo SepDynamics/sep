@@ -8,6 +8,7 @@
 #include "backtester/ui/backtester_tab_controller.h"
 #include "ui_layout_manager.h"
 #include "multi_timeframe_analyzer.h"
+#include "engine/engine.h"
 #include <map>
 #include <mutex>
 

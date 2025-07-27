@@ -1,4 +1,5 @@
 #include "oanda_trader_app.hpp"
+#include "engine/engine.h"
 
 #include <GL/gl.h>
 #include <imgui_impl_glfw.h>

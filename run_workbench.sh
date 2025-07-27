@@ -4,8 +4,8 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd "$SCRIPT_DIR"
 
-# SEP Workbench Runner with OANDA Credentials
-# This script sets up the environment and runs the SEP workbench
+# SEP Workbench Live Trading Runner with OANDA
+# This script sets up the environment and launches the workbench in live mode
 
 echo "==================================="
 echo "SEP Workbench with OANDA Trading"
@@ -31,7 +31,7 @@ fi
 
 echo "OANDA Account: $OANDA_ACCOUNT_ID"
 echo "Using PRACTICE server: api-fxpractice.oanda.com"
-echo "This is REAL money trading - be careful!"
+echo "Live mode enabled - real-time data will be streamed." 
 echo ""
 
 # Check if build directory exists

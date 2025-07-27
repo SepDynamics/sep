@@ -61,7 +61,7 @@ export OANDA_ACCOUNT_ID="001-001-13487160-001"
 This script will:
 - Load OANDA credentials from `keys.txt`
 - Verify the credentials are set
-- Launch the SEP workbench with OANDA integration enabled
+- Launch the SEP workbench with OANDA integration enabled in live mode
 
 ## How It Works
 

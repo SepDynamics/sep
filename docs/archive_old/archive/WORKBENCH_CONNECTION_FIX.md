@@ -102,3 +102,4 @@ The workbench will display connection status:
 - CUDA is NOT optional
 - The engine connection is MANDATORY
 - The workbench will **not** start a local engine if the service is missing. Ensure the SEP engine service is running before launching the workbench.
+- Connection failures now propagate an error state in the UI; no fallback engine is launched.

@@ -52,6 +52,8 @@ private:
     std::unique_ptr<sep::workbench::backtester::DataLoader> data_loader_;
     std::unique_ptr<sep::quantum::PatternMetricEngine> pattern_engine_;
     FileDialog file_dialog_;
+    enum class DialogTarget { None, DataSource, Backtest };
+    DialogTarget dialog_target_{DialogTarget::None};
 
     backtester::BacktestResult last_result_{};
 

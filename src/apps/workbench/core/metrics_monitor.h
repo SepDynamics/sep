@@ -109,6 +109,7 @@ public:
     const SystemMetrics& getSystemMetrics() const;
     const RollingMetrics& getRollingMetrics() const;
     const ThresholdSignal& getLatestSignal() const;
+    void ingestSignals(const std::vector<sep::quantum::Signal>& signals);
     sep::quantum::SignalThresholds calculateSignalThresholds() const;
     sep::connectors::MarketData getLatestMarketData() const;
     void setLatestMarketData(const sep::connectors::MarketData& data);
@@ -151,6 +152,7 @@ private:
     SystemMetrics system_metrics_;
     RollingMetrics rolling_metrics_;
     ThresholdSignal latest_signal_;
+    std::vector<sep::quantum::Signal> latest_signals_;
     sep::connectors::MarketData latest_market_data_;
     
     // Historical data for rolling calculations

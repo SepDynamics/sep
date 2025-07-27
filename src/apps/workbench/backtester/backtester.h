@@ -2,6 +2,7 @@
 
 #include "quantum/pattern_metric_engine.h"
 #include "data_loader.h"
+#include "common/financial_data_types.h"
 #include <vector>
 #include <string>
 
@@ -29,6 +30,8 @@ public:
     Backtester();
 
     void run(sep::quantum::PatternMetricEngine* engine, DataLoader* data_loader);
+    void run(sep::quantum::PatternMetricEngine* engine,
+             const std::vector<sep::common::CandleData>& data);
     const BacktestResult& getResult() const;
 
 private:

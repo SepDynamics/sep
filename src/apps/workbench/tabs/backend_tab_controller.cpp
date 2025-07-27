@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <iostream>
 #include <cstring>
+#include "common/financial_data_types.h"
 
 #include "imgui.h"
 #include "implot.h"
@@ -44,8 +45,14 @@ void BackendTabController::render() {
 
     std::string selected;
     if (file_dialog_.render(selected)) {
-        strncpy(file_path_buffer_, selected.c_str(), sizeof(file_path_buffer_) - 1);
-        file_path_buffer_[sizeof(file_path_buffer_) - 1] = '\0';
+        if (dialog_target_ == DialogTarget::DataSource) {
+            strncpy(file_path_buffer_, selected.c_str(), sizeof(file_path_buffer_) - 1);
+            file_path_buffer_[sizeof(file_path_buffer_) - 1] = '\0';
+        } else if (dialog_target_ == DialogTarget::Backtest) {
+            strncpy(backtest_file_buffer_, selected.c_str(), sizeof(backtest_file_buffer_) - 1);
+            backtest_file_buffer_[sizeof(backtest_file_buffer_) - 1] = '\0';
+        }
+        dialog_target_ = DialogTarget::None;
     }
 
     ImGui::Columns(1);
@@ -74,6 +81,7 @@ void BackendTabController::renderDataSourceSelector() {
             ImGui::InputText("File Path", file_path_buffer_, sizeof(file_path_buffer_));
             ImGui::SameLine();
             if (ImGui::Button("Browse")) {
+                dialog_target_ = DialogTarget::DataSource;
                 file_dialog_.open(std::filesystem::path(file_path_buffer_).empty() ? "." : std::filesystem::path(file_path_buffer_).parent_path().string());
             }
             if (ImGui::Button("Load File", ImVec2(-1, 0))) {
@@ -176,9 +184,25 @@ void BackendTabController::renderBacktesterPanel() {
 
     ImGui::Begin("Backtest Runner");
     ImGui::InputText("Dataset", backtest_file_buffer_, sizeof(backtest_file_buffer_));
+    ImGui::SameLine();
+    if (ImGui::Button("Browse##bt")) {
+        dialog_target_ = DialogTarget::Backtest;
+        file_dialog_.open(std::filesystem::path(backtest_file_buffer_).empty() ? "." : std::filesystem::path(backtest_file_buffer_).parent_path().string());
+    }
     if (ImGui::Button("Run Backtest")) {
         data_loader_->load_data(backtest_file_buffer_);
-        backtester_->run(pattern_engine_.get(), data_loader_.get());
+        backtester_->run(pattern_engine_.get(), data_loader_->get_data());
+        if (monitor_) {
+            const auto& candles = data_loader_->get_data();
+            std::vector<uint8_t> bytes;
+            bytes.reserve(candles.size() * sizeof(common::CandleData));
+            for (const auto& c : candles) {
+                const uint8_t* b = reinterpret_cast<const uint8_t*>(&c);
+                bytes.insert(bytes.end(), b, b + sizeof(common::CandleData));
+            }
+            monitor_->ingestData(bytes.data(), bytes.size());
+            monitor_->ingestSignals(pattern_engine_->getSignals());
+        }
         globalEventBus().publish(BacktestResultEvent{backtester_->getResult()});
     }
     ImGui::End();

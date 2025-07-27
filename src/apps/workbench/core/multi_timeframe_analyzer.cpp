@@ -3,6 +3,7 @@
 #include "common/financial_data_types.h"
 #include "connectors/market_data_converter.h"
 #include "metrics_monitor.h"
+#include "apps/workbench/config.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -52,8 +53,10 @@ bool MultiTimeframeAnalyzer::initialize() {
         metrics_collector_ = std::make_unique<core::MetricsCollector>();
         
         // Initialize pattern engines for each timeframe
+        const auto& thresholds = Config::getInstance().signal_thresholds();
         for (const auto& tf : config_.timeframes) {
             auto engine = std::make_unique<quantum::PatternMetricEngine>();
+            engine->setSignalThresholds(thresholds);
             pattern_engines_[tf] = std::move(engine);
         }
         
@@ -521,6 +524,12 @@ std::map<std::string, TimeframeMetrics> MultiTimeframeAnalyzer::getLatestMetrics
 void MultiTimeframeAnalyzer::updateConfig(const Config& new_config) {
     std::lock_guard<std::mutex> lock(analysis_mutex_);
     config_ = new_config;
+    const auto& th = Config::getInstance().signal_thresholds();
+    for (auto& [tf, engine] : pattern_engines_) {
+        if (engine) {
+            engine->setSignalThresholds(th);
+        }
+    }
     SEP_LOG_INFO("MultiTimeframeAnalyzer configuration updated");
 }
 

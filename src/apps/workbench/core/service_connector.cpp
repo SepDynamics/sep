@@ -71,14 +71,40 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
 
         if (oanda_connector_->initialize()) {
             oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
-                if (!mtf_analyzer_) return;
+                if (!mtf_analyzer_)
+                    return;
 
                 mtf_analyzer_->ingestMarketData("EUR_USD", c);
 
                 if (signals_tab_) {
                     signals_tab_->setCandleData(mtf_analyzer_->getCandles("1m"));
+
                     auto metrics = mtf_analyzer_->getLatestMetrics("EUR_USD");
-                    signals_tab_->setLatestMetrics(metrics);
+                    if (!metrics.empty()) {
+                        const auto& m1 = metrics.begin()->second;
+                        common::SEPSignalData sig;
+                        sig.timestamp = c.timestamp;
+                        sig.coherence = m1.dominant_coherence;
+                        sig.stability = m1.stability_index;
+                        sig.entropy = m1.entropy_level;
+                        sig.trend_strength = m1.trend_strength;
+                        sig.alpha_signal = (sig.coherence + sig.stability - sig.entropy) / 2.0f;
+                        auto th = Config::getInstance().signal_thresholds();
+                        if (sig.coherence > th.buy_min_coherence &&
+                            sig.stability > th.buy_min_stability &&
+                            sig.entropy < th.buy_max_entropy) {
+                            sig.signal_type = common::MultiTimeframeSignal::BUY;
+                        } else if (sig.stability < th.sell_max_stability &&
+                                   sig.entropy > th.sell_min_entropy) {
+                            sig.signal_type = common::MultiTimeframeSignal::SELL;
+                        } else {
+                            sig.signal_type = common::MultiTimeframeSignal::NEUTRAL;
+                        }
+                        streaming_signals_.push_back(sig);
+                        if (streaming_signals_.size() > 1440)
+                            streaming_signals_.pop_front();
+                        signals_tab_->setSEPSignals(streaming_signals_);
+                    }
                 }
             });
 
@@ -165,8 +191,33 @@ bool ServiceConnector::connect() {
 
                 if (signals_tab_) {
                     signals_tab_->setCandleData(mtf_analyzer_->getCandles("1m"));
+
                     auto metrics = mtf_analyzer_->getLatestMetrics("EUR_USD");
-                    signals_tab_->setLatestMetrics(metrics);
+                    if (!metrics.empty()) {
+                        const auto& m1 = metrics.begin()->second;
+                        common::SEPSignalData sig;
+                        sig.timestamp = c.timestamp;
+                        sig.coherence = m1.dominant_coherence;
+                        sig.stability = m1.stability_index;
+                        sig.entropy = m1.entropy_level;
+                        sig.trend_strength = m1.trend_strength;
+                        sig.alpha_signal = (sig.coherence + sig.stability - sig.entropy) / 2.0f;
+                        auto th = Config::getInstance().signal_thresholds();
+                        if (sig.coherence > th.buy_min_coherence &&
+                            sig.stability > th.buy_min_stability &&
+                            sig.entropy < th.buy_max_entropy) {
+                            sig.signal_type = common::MultiTimeframeSignal::BUY;
+                        } else if (sig.stability < th.sell_max_stability &&
+                                   sig.entropy > th.sell_min_entropy) {
+                            sig.signal_type = common::MultiTimeframeSignal::SELL;
+                        } else {
+                            sig.signal_type = common::MultiTimeframeSignal::NEUTRAL;
+                        }
+                        streaming_signals_.push_back(sig);
+                        if (streaming_signals_.size() > 1440)
+                            streaming_signals_.pop_front();
+                        signals_tab_->setSEPSignals(streaming_signals_);
+                    }
                 }
 
                 if (service_engine_) {
@@ -290,7 +341,31 @@ void ServiceConnector::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyze
             {
                 signals_tab_->setCandleData(mtf_analyzer_->getCandles("1m"));
                 auto metrics = mtf_analyzer_->getLatestMetrics("EUR_USD");
-                signals_tab_->setLatestMetrics(metrics);
+                if (!metrics.empty()) {
+                    const auto& m1 = metrics.begin()->second;
+                    common::SEPSignalData sig;
+                    sig.timestamp = c.timestamp;
+                    sig.coherence = m1.dominant_coherence;
+                    sig.stability = m1.stability_index;
+                    sig.entropy = m1.entropy_level;
+                    sig.trend_strength = m1.trend_strength;
+                    sig.alpha_signal = (sig.coherence + sig.stability - sig.entropy) / 2.0f;
+                    auto th = Config::getInstance().signal_thresholds();
+                    if (sig.coherence > th.buy_min_coherence &&
+                        sig.stability > th.buy_min_stability &&
+                        sig.entropy < th.buy_max_entropy) {
+                        sig.signal_type = common::MultiTimeframeSignal::BUY;
+                    } else if (sig.stability < th.sell_max_stability &&
+                               sig.entropy > th.sell_min_entropy) {
+                        sig.signal_type = common::MultiTimeframeSignal::SELL;
+                    } else {
+                        sig.signal_type = common::MultiTimeframeSignal::NEUTRAL;
+                    }
+                    streaming_signals_.push_back(sig);
+                    if (streaming_signals_.size() > 1440)
+                        streaming_signals_.pop_front();
+                    signals_tab_->setSEPSignals(streaming_signals_);
+                }
             }
         });
     }

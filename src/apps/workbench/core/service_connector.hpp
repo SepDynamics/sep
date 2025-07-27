@@ -137,6 +137,7 @@ private:
     sep::workbench::backtester::Backtester* backtester_{nullptr};
     std::deque<common::CandleData> initial_data_;
     std::deque<common::SEPSignalData> initial_signals_;
+    std::deque<common::SEPSignalData> streaming_signals_;
 
 public:
     const std::deque<common::SEPSignalData>& getInitialSignals() const { return initial_signals_; }

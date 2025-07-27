@@ -130,119 +130,16 @@ void SignalsTabController::render() {
         ImGui::End();
     }
 
-    // Real data fetching implementation
-    if (oanda_connector_) {
-        try {
-            // Fetch latest 24 hours of EUR/USD M1 data using correct method
-            auto now = std::chrono::system_clock::now();
-            auto day_ago = now - std::chrono::hours(24);
-            
-            // Format time strings for OANDA API
-            auto now_t = std::chrono::system_clock::to_time_t(now);
-            auto day_ago_t = std::chrono::system_clock::to_time_t(day_ago);
-            
-            std::string from_time = std::to_string(day_ago_t);
-            std::string to_time = std::to_string(now_t);
-            
-            auto latest_candles = oanda_connector_->getHistoricalData("EUR_USD", "M1", from_time, to_time, 1440);
-            if (!latest_candles.empty()) {
-                // Update our candle data buffer with new data
-                for (const auto& oanda_candle : latest_candles) {
-                    // Parse OANDA timestamp (RFC 3339 format)
-                    std::tm tm = {};
-                    std::istringstream ss(oanda_candle.time);
-                    ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-                    auto timestamp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-                    
-                    // Create CandleData using proper constructor
-                    sep::common::CandleData candle_data{
-                        oanda_candle.open, oanda_candle.high, 
-                        oanda_candle.low, oanda_candle.close, 
-                        static_cast<double>(oanda_candle.volume), timestamp};
-                    
-                    // Add to deque, maintain max 1440 candles (24h of M1)
-                    candle_data_.push_back(candle_data);
-                    if (candle_data_.size() > 1440) {
-                        candle_data_.pop_front();
-                    }
-                }
-                if (auto_detect_trends_) {
-                    detectTrendLines();
-                }
-            }
-        } catch (const std::exception& e) {
-            std::cerr << "[SignalsTab] OANDA fetch error: " << e.what() << std::endl;
+    {
+        std::lock_guard<std::mutex> lock(metrics_mutex_);
+        if (metrics_updated_) {
+            metrics_updated_ = false;
         }
     }
-    
-    if (signal_generator_ && workbench_engine_) {
-        try {
-            // Get latest SEP signals from pattern metric engine
-            auto* pme = workbench_engine_->getPatternMetricEngine();
-            if (pme && !candle_data_.empty()) {
-                // Convert latest candle data to raw bytes for SEP processing
-                std::vector<uint8_t> candle_bytes;
-                for (const auto& candle : candle_data_) {
-                    // Convert OHLC data to bytes (4 floats = 16 bytes per candle)
-                    float ohlc[4] = {
-                        static_cast<float>(candle.open),
-                        static_cast<float>(candle.high),
-                        static_cast<float>(candle.low),
-                        static_cast<float>(candle.close)
-                    };
-                    
-                    const uint8_t* byte_ptr = reinterpret_cast<const uint8_t*>(ohlc);
-                    candle_bytes.insert(candle_bytes.end(), byte_ptr, byte_ptr + sizeof(ohlc));
-                }
-                
-                // Ingest the OHLC data into the pattern engine
-                pme->ingestData(candle_bytes.data(), candle_bytes.size());
-                
-                // IMPORTANT: Also feed the same data to the MetricsMonitor for unified processing
-                if (metrics_monitor_) {
-                    metrics_monitor_->ingestData(candle_bytes.data(), candle_bytes.size());
-                }
-                
-                // Evolve patterns and compute metrics
-                pme->evolvePatterns();
-                const auto& metrics_results = pme->computeMetrics();
-                
-                // Determine thresholds either from MetricsMonitor or user settings
-                sep::quantum::SignalThresholds thresholds;
-                if (metrics_monitor_) {
-                    thresholds = metrics_monitor_->calculateSignalThresholds();
-                } else {
-                    thresholds.buy_min_coherence = buy_min_coherence_;
-                    thresholds.buy_min_stability = buy_min_stability_;
-                    thresholds.buy_max_entropy = buy_max_entropy_;
-                    thresholds.sell_max_stability = sell_max_stability_;
-                    thresholds.sell_min_entropy = sell_min_entropy_;
-                }
-                pme->setSignalThresholds(thresholds);
-
-                // Convert metrics to SEP signal data
-                for (size_t i = 0; i < std::min(metrics_results.size(), candle_data_.size()); i++) {
-                    const auto& metrics = metrics_results[i];
-                    const auto& candle = candle_data_[candle_data_.size() - metrics_results.size() + i];
-                    
-                    sep::common::SEPSignalData sep_signal;
-                    sep_signal.signal_value = (metrics.coherence + metrics.stability - metrics.entropy) / 2.0f;
-                    sep_signal.timestamp = candle.timestamp;
-                    
-                    const float offset = 0.05f;
-
-                    // Determine signal type using threshold struct
-
-                    
-                    // Add to signal buffer, maintain max 1440 signals
-                    sep_signals_.push_back(sep_signal);
-                    if (sep_signals_.size() > 1440) {
-                        sep_signals_.pop_front();
-                    }
-                }
-            }
-        } catch (const std::exception& e) {
-            std::cerr << "[SignalsTab] SEP signal generation error: " << e.what() << std::endl;
+    if (candle_data_updated_) {
+        candle_data_updated_ = false;
+        if (auto_detect_trends_) {
+            detectTrendLines();
         }
     }
     setupChartArea();

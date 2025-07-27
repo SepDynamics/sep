@@ -407,6 +407,24 @@ void MetricsDashboard::renderBacktesterPanel()
         }
     }
 
+    if (!result.trades.empty()) {
+        ImGui::Separator();
+        ImGui::Text("Trades");
+        ImGui::Columns(4, "trades");
+        ImGui::Text("Type"); ImGui::NextColumn();
+        ImGui::Text("Entry"); ImGui::NextColumn();
+        ImGui::Text("Exit"); ImGui::NextColumn();
+        ImGui::Text("Hold"); ImGui::NextColumn();
+        ImGui::Separator();
+        for (const auto& t : result.trades) {
+            ImGui::Text("%s", t.type == sep::quantum::SignalType::BUY ? "BUY" : "SELL"); ImGui::NextColumn();
+            ImGui::Text("%.5f", t.entry_price); ImGui::NextColumn();
+            ImGui::Text("%.5f", t.exit_price); ImGui::NextColumn();
+            ImGui::Text("%d", t.holding_period); ImGui::NextColumn();
+        }
+        ImGui::Columns(1);
+    }
+
     ImGui::End();
 }
 

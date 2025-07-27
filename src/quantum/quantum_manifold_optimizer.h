@@ -455,6 +455,8 @@ public:
   // Process patterns through complete optimization pipeline
   void processPatterns(const std::vector<QuantumPattern> &patterns);
 
+  std::vector<QuantumPattern> getMetrics() const;
+
   // Get optimization metrics
   struct OptimizationMetrics {
     double avg_coherence;
@@ -466,7 +468,7 @@ public:
     double anomaly_detection_rate;
   };
 
-  OptimizationMetrics getMetrics() const;
+  OptimizationMetrics getOptimizationMetrics() const;
 
   // Validate system performance
   ManifoldValidator::ValidationResult validate();
@@ -479,6 +481,7 @@ private:
   std::unique_ptr<SemanticProcessor> semantic_processor_;
   std::unique_ptr<PerformanceAnalyzer> performance_analyzer_;
   std::unique_ptr<ManifoldValidator> validator_;
+  std::vector<QuantumPattern> last_run_metrics_;
 
   std::atomic<bool> running_{false};
   std::thread processing_thread_;

@@ -5,6 +5,7 @@
 #include <iomanip>
 
 #include "quantum/quantum_manifold_optimizer.h"
+#include "quantum/signal.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -50,48 +51,22 @@ int main(int argc, char** argv) {
     sep::quantum::manifold::QuantumManifoldOptimizationEngine engine;
     engine.initialize();
 
+
+
+    // Convert candles to QuantumPatterns
+    std::vector<sep::quantum::manifold::QuantumPattern> quantum_patterns;
     for (const auto& candle : candles) {
-        std::string pattern_id = "pattern_" + candle.time;
-        
-        std::vector<float> ohlcv;
-        ohlcv.push_back(static_cast<float>(candle.open));
-        ohlcv.push_back(static_cast<float>(candle.high));
-        ohlcv.push_back(static_cast<float>(candle.low));
-        ohlcv.push_back(static_cast<float>(candle.close));
-        ohlcv.push_back(static_cast<float>(candle.volume));
-
-        // Normalize OHLCV data to range [0, 1] to ensure stability is calculated correctly
-        if (ohlcv.size() > 1) {
-            float min_val = ohlcv[0];
-            float max_val = ohlcv[0];
-            for (size_t i = 1; i < ohlcv.size(); ++i) {
-                if (ohlcv[i] < min_val) min_val = ohlcv[i];
-                if (ohlcv[i] > max_val) max_val = ohlcv[i];
-            }
-
-            float range = max_val - min_val;
-            if (range > 1e-6) {
-                for (size_t i = 0; i < ohlcv.size(); ++i) {
-                    ohlcv[i] = (ohlcv[i] - min_val) / range;
-                }
-            }
-        }
-
-        sep::compat::PatternData pattern;
-        strncpy(pattern.id, pattern_id.c_str(), sep::compat::PatternData::MAX_ID_LENGTH - 1);
-        pattern.id[sep::compat::PatternData::MAX_ID_LENGTH - 1] = '\0';
-        
-        const unsigned char* bytes = reinterpret_cast<const unsigned char*>(ohlcv.data());
-        pattern.data.assign(bytes, bytes + ohlcv.size() * sizeof(float));
-
-        // This part will need to be replaced with the new data ingestion method for the full engine.
-        // For now, we will comment it out and focus on the structural integration.
-        // engine.addPattern(pattern);
+        sep::quantum::manifold::QuantumPattern q_p;
+        q_p.id = "pattern_" + candle.time;
+        q_p.coherence = 1.0 / (1.0 + candle.high - candle.low); // Simplified volatility
+        q_p.stability = candle.volume > 0 ? (candle.close - candle.open) / candle.volume : 0; // Simplified volume-weighted stability
+        q_p.phase = std::abs(candle.close - candle.open) / (candle.high - candle.low + 1e-6); // Simplified complexity, using phase as entropy
+        quantum_patterns.push_back(q_p);
     }
 
-    // This part will be replaced by the full engine's processing pipeline.
-    // For now, we will create a dummy metrics vector to allow the rest of the file to compile.
-    std::vector<sep::quantum::PatternMetric> metrics;
+    // Process the patterns through the engine
+    engine.processPatterns(quantum_patterns);
+    auto metrics = engine.getMetrics();
     
     std::vector<sep::quantum::Signal> signals;
 
@@ -119,7 +94,7 @@ int main(int argc, char** argv) {
 
     for (const auto& metric : metrics) {
         sep::quantum::Signal signal;
-        signal.pattern_id = std::string(metric.pattern_id);
+        signal.pattern_id = metric.id;
         
         const Candle* candle = nullptr;
         for (const auto& c : candles) {
@@ -129,10 +104,10 @@ int main(int argc, char** argv) {
         }
 
         // --- THIS IS YOUR OPTIMIZATION TARGET ---
-        double buy_score = (metric.stability * stability_w) + (metric.coherence * coherence_w) + ((1.0 - metric.entropy) * entropy_w);
+        double buy_score = (metric.stability * stability_w) + (metric.coherence * coherence_w) + ((1.0 - metric.phase) * entropy_w);
         buy_score /= (stability_w + coherence_w + entropy_w);
 
-        double sell_score = ((1.0 - metric.stability) * stability_w) + ((1.0 - metric.coherence) * coherence_w) + (metric.entropy * entropy_w);
+        double sell_score = ((1.0 - metric.stability) * stability_w) + ((1.0 - metric.coherence) * coherence_w) + (metric.phase * entropy_w);
         sell_score /= (stability_w + coherence_w + entropy_w);
 
         if (buy_score > buy_score_threshold) {
@@ -153,7 +128,7 @@ int main(int argc, char** argv) {
     std::cout << "timestamp,open,high,low,close,volume,pattern_id,coherence,stability,entropy,signal,signal_confidence" << std::endl;
 
     for (const auto& metric : metrics) {
-        std::string pattern_id_str(metric.pattern_id);
+        std::string pattern_id_str = metric.id;
         std::string timestamp = pattern_id_str.substr(8);
 
         const Candle* candle = nullptr;
@@ -167,7 +142,7 @@ int main(int argc, char** argv) {
         if (candle) {
             const sep::quantum::Signal* signal = nullptr;
             for (const auto& s : signals) {
-                if (s.pattern_id == metric.pattern_id) {
+                if (s.pattern_id == metric.id) {
                     signal = &s;
                     break;
                 }
@@ -180,10 +155,10 @@ int main(int argc, char** argv) {
                       << candle->low << ","
                       << candle->close << ","
                       << candle->volume << ","
-                      << metric.pattern_id << ","
+                      << pattern_id_str << ","
                       << metric.coherence << ","
                       << metric.stability << ","
-                      << metric.entropy << ",";
+                      << metric.phase << ",";
 
             if (signal) {
                 switch (signal->type) {

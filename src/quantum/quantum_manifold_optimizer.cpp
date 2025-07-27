@@ -161,4 +161,13 @@ std::vector<glm::vec3> QuantumManifoldOptimizer::sampleTangentSpace(const glm::v
     return samples;
 }
 
+
+void QuantumManifoldOptimizationEngine::processPatterns(const std::vector<QuantumPattern>& patterns) {
+    last_run_metrics_ = patterns; // Store the whole patterns
+}
+
+std::vector<QuantumPattern> QuantumManifoldOptimizationEngine::getMetrics() const {
+    return last_run_metrics_;
+}
+
 } // namespace sep::quantum::manifold

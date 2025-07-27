@@ -13,8 +13,14 @@ SEPSignalStrategy::~SEPSignalStrategy() = default;
 std::vector<sep::quantum::Signal>
 SEPSignalStrategy::execute(const std::vector<sep::common::CandleData>& candles,
                            const std::vector<sep::quantum::Signal>& engine_signals) {
-    std::vector<sep::quantum::Signal> signals = engine_signals;
-    if (!signals.empty()) {
+    std::vector<sep::quantum::Signal> signals;
+    if (!engine_signals.empty()) {
+        signals = engine_signals;
+        for (auto& s : signals) {
+            if (s.confidence < 0.5f) {
+                s.type = sep::quantum::SignalType::HOLD;
+            }
+        }
         return signals;
     }
     if (candles.empty()) {

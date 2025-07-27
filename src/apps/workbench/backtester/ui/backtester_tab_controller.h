@@ -4,6 +4,7 @@
 #include "apps/workbench/backtester/strategies/base_strategy.h"
 #include "apps/workbench/core/file_dialog.hpp"
 #include "apps/workbench/core/ui_layout_manager.h"
+#include "connectors/oanda_connector.h"
 #include <memory>
 #include <vector>
 
@@ -14,9 +15,14 @@ public:
 
     void render();
 
+    void setPatternMetricEngine(sep::quantum::PatternMetricEngine* engine);
+    void setOandaConnector(sep::connectors::OandaConnector* connector);
+
 private:
     std::unique_ptr<BacktesterEngine> engine_;
     sep::quantum::PatternMetricEngine pattern_engine_;
+    sep::quantum::PatternMetricEngine* pattern_engine_ptr_ = nullptr;
+    sep::connectors::OandaConnector* oanda_connector_ = nullptr;
     sep::quantum::GPUContext gpu_context_{};
     bool use_gpu_ = false;
     std::vector<std::string> strategy_names_{"SEP Signal"};

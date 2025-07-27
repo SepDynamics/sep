@@ -15,6 +15,16 @@ BacktesterTabController::BacktesterTabController()
 BacktesterTabController::~BacktesterTabController() {
 }
 
+void BacktesterTabController::setPatternMetricEngine(
+    sep::quantum::PatternMetricEngine* engine) {
+    pattern_engine_ptr_ = engine;
+}
+
+void BacktesterTabController::setOandaConnector(
+    sep::connectors::OandaConnector* connector) {
+    oanda_connector_ = connector;
+}
+
 void BacktesterTabController::render() {
     ImGui::Begin("Backtester");
     ImGui::InputText("Dataset", dataset_path_, sizeof(dataset_path_));
@@ -48,8 +58,12 @@ void BacktesterTabController::render() {
             if (strategy_index_ == 0) {
                 strat_ptr = &strategy;
             }
-            pattern_engine_.init(use_gpu_ ? &gpu_context_ : nullptr);
-            result_ = engine_->run(dataset_path_, &pattern_engine_, strat_ptr);
+            sep::quantum::PatternMetricEngine* engine_to_use = pattern_engine_ptr_;
+            if (!engine_to_use) {
+                engine_to_use = &pattern_engine_;
+                engine_to_use->init(use_gpu_ ? &gpu_context_ : nullptr);
+            }
+            result_ = engine_->run(dataset_path_, engine_to_use, strat_ptr);
             globalEventBus().publish(BacktestResultEvent{result_});
             running_ = false;
         }

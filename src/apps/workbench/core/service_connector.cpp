@@ -154,14 +154,19 @@ bool ServiceConnector::connect() {
         health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
 
         if (oanda_connector_) {
+            // Forward live candle data from the connector into the active analysis
+            // components. PatternMetricEngine::ingestData already protects its
+            // internal state with a mutex, so we simply push the OHLC bytes.
             oanda_connector_->setCandleCallback([this](const common::CandleData& c) {
                 if (mtf_analyzer_) {
                     mtf_analyzer_->ingestMarketData("EUR_USD", c);
                 }
+
                 if (signals_tab_) {
-                    std::deque<common::CandleData> tmp{c};
-                    signals_tab_->setCandleData(tmp);
+                    std::deque<common::CandleData> buf{c};
+                    signals_tab_->setCandleData(buf);
                 }
+
                 if (service_engine_) {
                     auto* pme = service_engine_->getPatternMetricEngine();
                     if (pme) {
@@ -170,8 +175,7 @@ bool ServiceConnector::connect() {
                             static_cast<float>(c.high),
                             static_cast<float>(c.low),
                             static_cast<float>(c.close)};
-                        const uint8_t* bytes = reinterpret_cast<const uint8_t*>(ohlc);
-                        pme->ingestData(bytes, sizeof(ohlc));
+                        pme->ingestData(reinterpret_cast<uint8_t*>(ohlc), sizeof(ohlc));
                     }
                 }
             });

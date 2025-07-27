@@ -145,7 +145,8 @@ bool WorkbenchEngine::initialize()
 
         signals_tab_ = std::make_unique<workbench::SignalsTabController>();
         engine_tab_ = std::make_unique<workbench::EngineTabController>();
-        backend_tab_ = std::make_unique<workbench::BackendTabController>();
+        backend_tab_ = std::make_unique<workbench::BackendTabController>(metrics_monitor_,
+                                                                         multi_timeframe_analyzer_.get());
         backtester_tab_ = std::make_unique<BacktesterTabController>();
 
         signals_tab_->initialize();

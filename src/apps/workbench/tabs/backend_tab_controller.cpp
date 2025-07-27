@@ -215,6 +215,16 @@ void BackendTabController::renderBacktestingSuite() {
     ImGui::Text("Total PnL: %.2f", last_result_.total_pnl);
     ImGui::Text("Sharpe Ratio: %.2f", last_result_.sharpe_ratio);
     ImGui::Text("Max Drawdown: %.2f", last_result_.max_drawdown);
+    if (!pnl_history_.empty()) {
+        if (ImPlot::BeginPlot("Backtest Metrics", ImVec2(-1,150))) {
+            std::vector<float> xs(pnl_history_.size());
+            for (size_t i = 0; i < xs.size(); ++i) xs[i] = static_cast<float>(i);
+            ImPlot::PlotLine("PnL", xs.data(), pnl_history_.data(), static_cast<int>(pnl_history_.size()));
+            ImPlot::PlotLine("WinRate", xs.data(), win_rate_history_.data(), static_cast<int>(win_rate_history_.size()));
+            ImPlot::PlotLine("Sharpe", xs.data(), sharpe_history_.data(), static_cast<int>(sharpe_history_.size()));
+            ImPlot::EndPlot();
+        }
+    }
     if (!equity_curve_.empty()) {
         if (ImPlot::BeginPlot("Equity Curve", ImVec2(-1,150))) {
             std::vector<float> xs(equity_curve_.size());
@@ -261,16 +271,10 @@ void BackendTabController::updateTradeHistory() {
 
 void BackendTabController::onBacktestResult(const BacktestResultEvent& e) {
     last_result_ = e.result;
-    equity_curve_.clear();
-    float equity = 0.0f;
-    equity_curve_.push_back(equity);
-    for (const auto& t : last_result_.trades) {
-        float diff = (t.type == sep::quantum::SignalType::BUY)
-                         ? t.exit_price - t.entry_price
-                         : t.entry_price - t.exit_price;
-        equity += diff;
-        equity_curve_.push_back(equity);
-    }
+    equity_curve_ = e.result.equity_curve;
+    pnl_history_.push_back(last_result_.total_pnl);
+    win_rate_history_.push_back(last_result_.win_rate);
+    sharpe_history_.push_back(last_result_.sharpe_ratio);
 }
 
 void BackendTabController::renderTradeHistoryPanel() {

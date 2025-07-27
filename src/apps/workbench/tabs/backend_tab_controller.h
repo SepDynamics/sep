@@ -73,6 +73,9 @@ private:
 
     std::vector<std::string> trade_history_;
     std::vector<float> equity_curve_;
+    std::vector<float> pnl_history_;
+    std::vector<float> win_rate_history_;
+    std::vector<float> sharpe_history_;
 };
 
 } // namespace sep::workbench

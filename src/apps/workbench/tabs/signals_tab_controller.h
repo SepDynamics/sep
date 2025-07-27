@@ -38,6 +38,7 @@ public:
     void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
     void setWorkbenchEngine(WorkbenchEngine* engine);
     void setLatestMetrics(const std::map<std::string, TimeframeMetrics>& metrics);
+    void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer) { mtf_analyzer_ = analyzer; }
 
         void setCandleData(const std::deque<sep::common::CandleData>& data);
         void setCandleData(const std::vector<sep::common::CandleData>& data);
@@ -50,6 +51,7 @@ private:
     QuantumSignalGenerator* signal_generator_ = nullptr;
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     WorkbenchEngine* workbench_engine_ = nullptr;
+    MultiTimeframeAnalyzer* mtf_analyzer_ = nullptr;
     // Chart data
         std::deque<sep::common::CandleData> candle_data_;
         std::deque<sep::common::SEPSignalData> sep_signals_;

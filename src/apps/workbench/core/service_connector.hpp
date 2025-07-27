@@ -80,6 +80,9 @@ public:
     void startHealthMonitoring();
     void stopHealthMonitoring();
     bool sendHeartbeat();
+
+    bool startStreaming(const std::vector<std::string>& instruments);
+    void stopStreaming();
     
     // Callbacks
     using ConnectionCallback = std::function<void(ConnectionState)>;

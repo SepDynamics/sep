@@ -103,6 +103,10 @@ void SignalsTabController::renderThresholdControlPanel() {
 }
 
 void SignalsTabController::render() {
+    if (mtf_analyzer_) {
+        setLatestMetrics(mtf_analyzer_->getLatestMetrics(selected_instrument_));
+        setCandleData(mtf_analyzer_->getCandles("1m"));
+    }
     ImGui::Columns(2, "SignalsColumns", true);
     renderThresholdControlPanel();
     ImGui::NextColumn();

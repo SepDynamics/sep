@@ -265,8 +265,9 @@ void ServiceConnector::disconnect() {
     }
     
     std::cout << "[ServiceConnector] Disconnecting from SEP service..." << std::endl;
-    
+
     stopHealthMonitoring();
+    stopStreaming();
     
     // Clean up connection based on connection type
     if (service_handle_) {
@@ -659,6 +660,19 @@ bool ServiceConnector::validateServiceVersion() {
     std::cout << "[ServiceConnector] Version validation failed, assuming compatibility" << std::endl;
     health_metrics_.version_info = "SEP Service v0.1.0 (assumed)";
     return true;
+}
+
+bool ServiceConnector::startStreaming(const std::vector<std::string>& instruments) {
+    if (!oanda_connector_) {
+        return false;
+    }
+    return oanda_connector_->startPriceStream(instruments);
+}
+
+void ServiceConnector::stopStreaming() {
+    if (oanda_connector_) {
+        oanda_connector_->stopPriceStream();
+    }
 }
 
 bool ServiceConnector::connectSharedMemory() {

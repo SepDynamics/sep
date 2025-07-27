@@ -90,6 +90,7 @@ public:
     // Signal generator
     QuantumSignalGenerator* getSignalGenerator() const { return signal_generator_.get(); }
     sep::quantum::PatternMetricEngine* getPatternMetricEngine() const { return active_engine_ ? active_engine_->getPatternMetricEngine() : nullptr; }
+    MultiTimeframeAnalyzer* getMultiTimeframeAnalyzer() const { return multi_timeframe_analyzer_.get(); }
 
     // Static callbacks for GLFW
     static void errorCallback(int error, const char* description);

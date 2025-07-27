@@ -359,6 +359,7 @@ void SignalsTabController::renderCandlesticks() {
         high[i] = c.high;
     }
 
+    ImPlot::SetNextAxisLimits(ImAxis_Y1, local_min - range * 0.05, local_max + range * 0.05, ImPlotCond_Always);
     ImPlot::PlotCandlestick("OHLC", xs.data(), open.data(), close.data(), low.data(), high.data(), static_cast<int>(count));
 }
 
@@ -381,6 +382,15 @@ void SignalsTabController::renderTechnicalIndicators() {
             for (size_t i = start_idx + 1; i < end_idx; ++i) {
                 local_min = std::min(local_min, candle_data_[i].low);
                 local_max = std::max(local_max, candle_data_[i].high);
+            }
+            for (const auto& [name, ind] : indicators_) {
+                if (!ind.enabled) continue;
+                size_t idx_start = ind.values.size() > MAX_VISIBLE ? ind.values.size() - MAX_VISIBLE : 0;
+                for (size_t j = idx_start; j < ind.values.size(); ++j) {
+                    if (ind.values[j] <= 0) continue;
+                    local_min = std::min(local_min, ind.values[j]);
+                    local_max = std::max(local_max, ind.values[j]);
+                }
             }
         }
     }
@@ -545,7 +555,8 @@ void SignalsTabController::renderVolumeChart() {
 }
 
 void SignalsTabController::renderMetricsGraphs() {
-    if (!metrics_monitor_) return;
+    if (!metrics_monitor_)
+        return;
 
     const auto& roll = metrics_monitor_->getRollingMetrics();
     coherence_history_1h_.push_back(roll.coherence_1h_avg);
@@ -563,8 +574,28 @@ void SignalsTabController::renderMetricsGraphs() {
     if (stability_history_4h_.size() > MAX_POINTS) stability_history_4h_.pop_front();
     if (entropy_history_4h_.size() > MAX_POINTS) entropy_history_4h_.pop_front();
 
-    renderMetricPlot("Coherence", coherence_history_1h_, coherence_history_4h_,
-                     ImVec4(0.0f, 0.9f, 0.0f, 1.0f), ImVec4(0.0f, 0.7f, 0.0f, 1.0f));
+    static double cross_idx = 0.0;
+    ImPlotRect zoom_rect(0, 0, (double)coherence_history_1h_.size(), 1.0);
+
+    if (ImPlot::BeginPlot("Metrics", ImVec2(-1, 150), ImPlotFlags_NoLegend | ImPlotFlags_NoMenus)) {
+        ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_AutoFit, ImPlotAxisFlags_AutoFit);
+
+        std::vector<double> xs(coherence_history_1h_.size());
+        std::iota(xs.begin(), xs.end(), 0.0);
+
+        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.9f, 0.0f, 1.0f));
+        ImPlot::PlotLine("C1", xs.data(), coherence_history_1h_.data(), (int)coherence_history_1h_.size());
+
+        if (!coherence_history_4h_.empty()) {
+            ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.7f, 0.0f, 1.0f));
+            ImPlot::PlotLine("C4", xs.data(), coherence_history_4h_.data(), (int)coherence_history_4h_.size());
+        }
+
+        ImPlot::DragLineX(200, &cross_idx, ImVec4(0.7f,0.7f,0.7f,1.0f));
+        ImPlot::DragRect(201, &zoom_rect.X.Min, &zoom_rect.Y.Min, &zoom_rect.X.Max, &zoom_rect.Y.Max);
+        ImPlot::EndPlot();
+    }
+
     renderMetricPlot("Stability", stability_history_1h_, stability_history_4h_,
                      ImVec4(0.9f, 0.9f, 0.0f, 1.0f), ImVec4(0.7f, 0.7f, 0.0f, 1.0f));
     renderMetricPlot("Entropy", entropy_history_1h_, entropy_history_4h_,

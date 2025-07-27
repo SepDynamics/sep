@@ -16,7 +16,7 @@
 
 namespace sep::workbench {
 
-class MultiTimeframeAnalyzer;
+#include "../core/multi_timeframe_analyzer.h"
 
 class EngineTabController {
 public:

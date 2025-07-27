@@ -19,6 +19,7 @@
 #include "apps/workbench/signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/core/metrics_monitor.h"
 #include "apps/workbench/core/multi_timeframe_analyzer.h"
+#include "apps/workbench/core/alpha_tracker.h"
 #include "memory/memory_tier_manager.hpp"
 #include "engine/data_parser.h"
 
@@ -110,6 +111,7 @@ bool WorkbenchEngine::initialize()
         metrics_monitor_ = ::std::make_shared<MetricsMonitor>();
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
         multi_timeframe_analyzer_->setMetricsMonitor(metrics_monitor_.get());
+        alpha_tracker_ = std::make_unique<AlphaTracker>();
         multi_timeframe_analyzer_->setMetricsCallback([this](const std::map<std::string, workbench::TimeframeMetrics>& m) {
             if (metrics_monitor_) {
                 auto rolling = metrics_monitor_->getRollingMetrics();
@@ -147,6 +149,7 @@ bool WorkbenchEngine::initialize()
         engine_tab_ = std::make_unique<workbench::EngineTabController>();
         backend_tab_ = std::make_unique<workbench::BackendTabController>(metrics_monitor_,
                                                                          multi_timeframe_analyzer_.get());
+        alpha_demo_tab_ = std::make_unique<AlphaDemoTabController>(this);
         backtester_tab_ = std::make_unique<BacktesterTabController>();
 
         signals_tab_->initialize();
@@ -780,6 +783,11 @@ void WorkbenchEngine::renderTabs()
                 backtester_tab_->render();
                 ImGui::EndTabItem();
             }
+            if (ImGui::BeginTabItem("Alpha Demo"))
+            {
+                alpha_demo_tab_->render();
+                ImGui::EndTabItem();
+            }
             ImGui::EndTabBar();
         }
     }
@@ -905,6 +913,14 @@ void WorkbenchEngine::updateData()
                     
                     // Update signals tab with processed SEP signals
                     signals_tab_->setSEPSignals(sep_signals);
+
+                    // Process signals with alpha tracker
+                    if (alpha_tracker_) {
+                        const auto& current_candle = multi_timeframe_analyzer_->getCurrentCandle("1m");
+                        for (const auto& signal : sep_signals) {
+                            alpha_tracker_->processSignal(signal, current_candle);
+                        }
+                    }
                     
                     std::cout << "[WorkbenchEngine] Generated " << sep_signals.size() 
                               << " SEP signals from " << metrics.size() << " patterns" << std::endl;

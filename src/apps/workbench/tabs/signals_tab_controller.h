@@ -19,9 +19,9 @@
 
 namespace sep::workbench {
 
-class MetricsMonitor;
+#include "../core/metrics_monitor.h"
 
-class WorkbenchEngine;
+#include "../core/workbench_core.hpp"
 
 class SignalsTabController {
 public:

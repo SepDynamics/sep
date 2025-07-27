@@ -98,7 +98,15 @@ The capabilities of the SEP Engine have been rigorously validated through a seri
 *   **POC 6: Predictive Backtesting:** Demonstrated the engine's end-to-end capability to process real financial time-series data, generate pattern-based trading signals, and produce a quantifiable (though unoptimized) alpha. This test validated the entire CUDA-accelerated pipeline and established a solid framework for future strategy refinement.
     *   **Document:** [`poc_6_predictive_backtest.md`](docs/proofs/poc_6_predictive_backtest.md)
 
-## 5. Building and Running
+## 5. Alpha Generation Analysis
+
+A comprehensive backtest was performed to validate the alpha-generating capabilities of the SEP Engine. Using a confidence-based trading strategy derived from the QFH and QBSA patents, the system demonstrated a positive return on a 48-hour EUR/USD dataset.
+
+*   **Strategy Performance:** The implemented strategy yielded a **+0.0054 pip** gain, outperforming the benchmark.
+*   **Detailed Report:** A full analysis of the strategy and its performance is available in the [`Alpha Analysis Report`](docs/strategy/alpha_analysis_report.md).
+*   **Theoretical Framework:** The underlying theory connecting coherence to the P vs NP problem is detailed in the whitepaper, [`Coherence as Third-Party Register`](docs/strategy/Alpha_WP.md).
+
+## 6. Building and Running
 
 ### Build
 

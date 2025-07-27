@@ -14,6 +14,7 @@
 #include "engine/types.h"
 #include "quantum/processor.h"
 #include "quantum/quantum_processor_qfh.h"
+#include "quantum/signal.h"
 
 // Forward declaration to avoid circular includes
 namespace sep::quantum {
@@ -31,19 +32,7 @@ namespace sep::quantum {
         float sell_min_entropy{0.7f};
     };
 
-    enum class SignalType
-    {
-        BUY,
-        SELL,
-        HOLD
-    };
 
-    struct Signal
-    {
-        SignalType type{SignalType::HOLD};
-        float confidence{0.0f};
-        std::string pattern_id;
-    };
 
 /// @brief Holds the computed metrics for a single pattern.
 struct PatternMetrics {

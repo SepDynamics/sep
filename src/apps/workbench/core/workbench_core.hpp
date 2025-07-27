@@ -4,6 +4,7 @@
 #include "tabs/signals_tab_controller.h"
 #include "tabs/engine_tab_controller.h"
 #include "tabs/backend_tab_controller.h"
+
 #include "backtester/ui/backtester_tab_controller.h"
 #include "ui_layout_manager.h"
 #include "multi_timeframe_analyzer.h"
@@ -25,11 +26,13 @@ namespace sep {
 namespace sep::workbench {
 
 // Forward declarations
-class ServiceConnector;
-class LandingPage;
-class Renderer;
-class QuantumSignalGenerator;
-class MetricsMonitor;
+#include "apps/workbench/core/service_connector.hpp"
+#include "apps/workbench/core/landing_page.hpp"
+#include "apps/workbench/renderer.h"
+#include "apps/workbench/signal_generator/quantum_signal_generator.h"
+#include "apps/workbench/core/metrics_monitor.h"
+#include "apps/workbench/tabs/alpha_demo_tab_controller.h"
+#include "apps/workbench/core/alpha_tracker.h"
 
 enum class ApplicationState {
     INITIALIZING,
@@ -91,6 +94,7 @@ public:
     QuantumSignalGenerator* getSignalGenerator() const { return signal_generator_.get(); }
     sep::quantum::PatternMetricEngine* getPatternMetricEngine() const { return active_engine_ ? active_engine_->getPatternMetricEngine() : nullptr; }
     MultiTimeframeAnalyzer* getMultiTimeframeAnalyzer() const { return multi_timeframe_analyzer_.get(); }
+    AlphaTracker* getAlphaTracker() const { return alpha_tracker_.get(); }
 
     // Static callbacks for GLFW
     static void errorCallback(int error, const char* description);
@@ -116,9 +120,11 @@ private:
     std::unique_ptr<EngineTabController> engine_tab_;
     std::unique_ptr<BackendTabController> backend_tab_;
     std::unique_ptr<BacktesterTabController> backtester_tab_;
+    std::unique_ptr<AlphaDemoTabController> alpha_demo_tab_;
     std::unique_ptr<QuantumSignalGenerator> signal_generator_;
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     std::unique_ptr<MultiTimeframeAnalyzer> multi_timeframe_analyzer_;
+    std::unique_ptr<AlphaTracker> alpha_tracker_;
     
     // Engine components (may be null if service not connected)
     std::unique_ptr<sep::core::Engine> offline_engine_;

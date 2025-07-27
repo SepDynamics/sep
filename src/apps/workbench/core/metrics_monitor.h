@@ -96,6 +96,7 @@ public:
 
     // Data ingestion
     void ingestData(const uint8_t* data, size_t size);
+    void ingestCandle(const sep::common::CandleData& candle);
     void ingestFile(const std::string& filepath);
     void ingestStream(std::istream& stream);
 

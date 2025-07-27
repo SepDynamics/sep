@@ -7,6 +7,8 @@
 #include <sstream>
 #include <limits>
 #include <ctime>
+#include "common/financial_data_types.h"
+#include <nlohmann/json.hpp>
 
 #include <implot.h>
 
@@ -668,14 +670,40 @@ void TradingHUD::renderTradingControls() {
     
     // Manual trading buttons
     if (ImGui::Button("BUY", ImVec2(-1, 30))) {
-        if (trade_manager_) {
-            trade_manager_->executeOrder(selected_instrument_, position_size);
+        if (oanda_connector_) {
+            auto md = oanda_connector_->getMarketData(selected_instrument_);
+            nlohmann::json order;
+            order["order"]["instrument"] = selected_instrument_;
+            order["order"]["units"] = std::to_string(static_cast<int>(std::abs(position_size)));
+            order["order"]["type"] = "MARKET";
+            order["order"]["timeInForce"] = "FOK";
+            order["order"]["positionFill"] = "DEFAULT";
+            double sl_price = md.ask - stop_loss_pips * 0.0001;
+            order["order"]["stopLossOnFill"]["price"] = std::to_string(sl_price);
+            if (take_profit_pips > 0.0f) {
+                double tp_price = md.ask + take_profit_pips * 0.0001;
+                order["order"]["takeProfitOnFill"]["price"] = std::to_string(tp_price);
+            }
+            oanda_connector_->placeOrder(order);
         }
     }
 
     if (ImGui::Button("SELL", ImVec2(-1, 30))) {
-        if (trade_manager_) {
-            trade_manager_->executeOrder(selected_instrument_, -position_size);
+        if (oanda_connector_) {
+            auto md = oanda_connector_->getMarketData(selected_instrument_);
+            nlohmann::json order;
+            order["order"]["instrument"] = selected_instrument_;
+            order["order"]["units"] = std::to_string(-static_cast<int>(std::abs(position_size)));
+            order["order"]["type"] = "MARKET";
+            order["order"]["timeInForce"] = "FOK";
+            order["order"]["positionFill"] = "DEFAULT";
+            double sl_price = md.bid + stop_loss_pips * 0.0001;
+            order["order"]["stopLossOnFill"]["price"] = std::to_string(sl_price);
+            if (take_profit_pips > 0.0f) {
+                double tp_price = md.bid - take_profit_pips * 0.0001;
+                order["order"]["takeProfitOnFill"]["price"] = std::to_string(tp_price);
+            }
+            oanda_connector_->placeOrder(order);
         }
     }
     
@@ -974,19 +1002,7 @@ void TradingHUD::updateCandleData(const std::vector<sep::connectors::OandaCandle
     
     for (const auto& oanda_candle : oanda_candles) {
         // Convert OANDA candle to internal format
-        std::tm tm = {};
-        std::stringstream ss(oanda_candle.time);
-        ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-        auto tp = std::chrono::system_clock::from_time_t(timegm(&tm));
-        auto dot_pos = oanda_candle.time.find('.');
-        if (dot_pos != std::string::npos) {
-            auto frac = oanda_candle.time.substr(dot_pos + 1);
-            frac.erase(frac.find('Z'));
-            while (frac.size() < 9) frac.push_back('0');
-            int nanosec = std::stoi(frac.substr(0, 9));
-            tp += std::chrono::nanoseconds(nanosec);
-        }
-        auto timestamp = tp;
+        auto timestamp = sep::common::parseTimestamp(oanda_candle.time);
         
         candle_data_.emplace_back(
             oanda_candle.open,
@@ -3754,16 +3770,13 @@ void TradingHUD::computeCorrelationMatrix(float correlation_matrix[6][6], const 
 
 float TradingHUD::calculatePearsonCorrelation(const std::vector<float>& x, const std::vector<float>& y) {
     if (x.size() != y.size() || x.empty()) return 0.0f;
-    
-    float mean_x = 0.0f, mean_y = 0.0f;
-    for (size_t i = 0; i < x.size(); ++i) {
-        mean_x += x[i];
-        mean_y += y[i];
-    }
-    mean_x /= x.size();
-    mean_y /= y.size();
-    
-    float numerator = 0.0f, sum_sq_x = 0.0f, sum_sq_y = 0.0f;
+
+    float mean_x = std::accumulate(x.begin(), x.end(), 0.0f) / static_cast<float>(x.size());
+    float mean_y = std::accumulate(y.begin(), y.end(), 0.0f) / static_cast<float>(y.size());
+
+    float numerator = 0.0f;
+    float sum_sq_x = 0.0f;
+    float sum_sq_y = 0.0f;
     for (size_t i = 0; i < x.size(); ++i) {
         float dx = x[i] - mean_x;
         float dy = y[i] - mean_y;
@@ -3771,9 +3784,9 @@ float TradingHUD::calculatePearsonCorrelation(const std::vector<float>& x, const
         sum_sq_x += dx * dx;
         sum_sq_y += dy * dy;
     }
-    
+
     float denominator = std::sqrt(sum_sq_x * sum_sq_y);
-    return (denominator == 0.0f) ? 0.0f : numerator / denominator;
+    return denominator == 0.0f ? 0.0f : numerator / denominator;
 }
 
 float TradingHUD::calculateSupportResistanceStrength(float level_high, float level_low) {

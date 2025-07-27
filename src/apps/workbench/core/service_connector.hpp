@@ -126,11 +126,9 @@ private:
     
     // Service engine creation
     sep::core::Engine* createServiceEngineProxy(int socket_fd);
-    sep::core::Engine* createLocalEngine();
     sep::core::ServiceProxyEngine* createHttpEngineProxy(int socket_fd);
     
     // Engine instances
-    std::unique_ptr<sep::core::Engine> local_engine_;
     std::unique_ptr<sep::core::ServiceProxyEngine> http_proxy_engine_;
     sep::core::ServiceProxyEngine* service_proxy_engine_{nullptr};
 

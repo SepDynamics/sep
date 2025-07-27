@@ -445,11 +445,21 @@ bool ServiceConnector::sendHeartbeat() {
             }
         } else if (recv_result == 0) {
             // Connection closed
-            std::cerr << "[ServiceConnector] Connection closed by service" << std::endl;
+        std::cerr << "[ServiceConnector] Connection closed by service" << std::endl;
+        connection_state_ = sep::workbench::ConnectionState::CONNECTION_FAILED;
+        globalEventBus().publish(ConnectionStateEvent{connection_state_});
+        if (connection_callback_) {
+            connection_callback_(connection_state_);
+        }
         }
     }
-    
+
     health_metrics_.is_responsive = false;
+    connection_state_ = sep::workbench::ConnectionState::CONNECTION_FAILED;
+    globalEventBus().publish(ConnectionStateEvent{connection_state_});
+    if (connection_callback_) {
+        connection_callback_(connection_state_);
+    }
     return false;
 }
 
@@ -897,37 +907,6 @@ sep::core::Engine* ServiceConnector::createServiceEngineProxy(int socket_fd)
     return nullptr;
 }
 
-core::Engine* ServiceConnector::createLocalEngine()
-{
-    try {
-        std::cout << "[ServiceConnector] Initializing local SEP engine..." << std::endl;
-        
-        // Create a real local engine instance
-        local_engine_ = std::make_unique<core::Engine>();
-        
-        // Initialize the engine with default configuration
-        config::CudaConfig cuda_config;
-        cuda_config.use_gpu = true;
-        cuda_config.max_memory_mb = 1024;
-        
-        if (!local_engine_->init(cuda_config)) {
-            std::cerr << "[ServiceConnector] Failed to initialize local engine" << std::endl;
-            return nullptr;
-        }
-        
-        std::cout << "[ServiceConnector] Local SEP engine initialized successfully" << std::endl;
-        health_metrics_.is_responsive = true;
-        health_metrics_.version_info = "SEP Local Engine v1.0";
-
-        service_proxy_engine_ = nullptr;
-
-        return local_engine_.get();
-        
-    } catch (const std::exception& e) {
-        std::cerr << "[ServiceConnector] Exception creating local engine: " << e.what() << std::endl;
-        return nullptr;
-    }
-}
 
 core::ServiceProxyEngine* ServiceConnector::createHttpEngineProxy(int socket_fd)
 {

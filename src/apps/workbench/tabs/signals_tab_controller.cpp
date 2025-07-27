@@ -219,6 +219,20 @@ void SignalsTabController::setCandleData(const std::vector<sep::common::CandleDa
     }
 }
 
+void SignalsTabController::addCandle(const sep::common::CandleData& candle) {
+    candle_data_.push_back(candle);
+    if (candle_data_.size() > 1440) {
+        candle_data_.pop_front();
+    }
+    volume_max_ = std::max(volume_max_, static_cast<float>(candle.volume));
+    updatePriceRange();
+    chart_zoom_.index_end = candle_data_.size();
+    candle_data_updated_ = true;
+    if (auto_detect_trends_) {
+        detectTrendLines();
+    }
+}
+
 void SignalsTabController::setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals) {
     sep_signals_ = signals;
     if (sep_signals_.size() > 1440) {

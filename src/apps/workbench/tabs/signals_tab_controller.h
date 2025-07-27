@@ -41,6 +41,7 @@ public:
 
         void setCandleData(const std::deque<sep::common::CandleData>& data);
         void setCandleData(const std::vector<sep::common::CandleData>& data);
+        void addCandle(const sep::common::CandleData& candle);
         const std::deque<sep::common::CandleData>& getCandleData() const { return candle_data_; }
         void setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals);
 

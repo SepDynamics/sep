@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <sstream>
 #include <limits>
+#include <ctime>
 
 #include <implot.h>
 
@@ -151,7 +152,11 @@ void TradingHUD::renderTopBar() {
     static int current_instrument = 0;
     if (ImGui::Combo("##Instrument", &current_instrument, instruments, IM_ARRAYSIZE(instruments))) {
         selected_instrument_ = instruments[current_instrument];
-        // TODO: Load new instrument data
+        if (oanda_connector_) {
+            auto candles = oanda_connector_->getHistoricalData(selected_instrument_, "M1", "", "", 500);
+            updateCandleData(candles);
+            instrument_history_[selected_instrument_] = std::deque<CandleData>(candle_data_.begin(), candle_data_.end());
+        }
     }
     
     ImGui::SameLine();
@@ -160,7 +165,13 @@ void TradingHUD::renderTopBar() {
     
     // Live mode toggle
     if (ImGui::Checkbox("Live Mode", &live_mode_)) {
-        // TODO: Start/stop live data feed
+        if (oanda_connector_) {
+            if (live_mode_) {
+                oanda_connector_->startPriceStream({selected_instrument_});
+            } else {
+                oanda_connector_->stopPriceStream();
+            }
+        }
     }
     
     ImGui::SameLine();
@@ -657,13 +668,15 @@ void TradingHUD::renderTradingControls() {
     
     // Manual trading buttons
     if (ImGui::Button("BUY", ImVec2(-1, 30))) {
-        // TODO: Execute buy order
-        std::cout << "[TradingHUD] Manual BUY order requested" << std::endl;
+        if (trade_manager_) {
+            trade_manager_->executeOrder(selected_instrument_, position_size);
+        }
     }
-    
+
     if (ImGui::Button("SELL", ImVec2(-1, 30))) {
-        // TODO: Execute sell order
-        std::cout << "[TradingHUD] Manual SELL order requested" << std::endl;
+        if (trade_manager_) {
+            trade_manager_->executeOrder(selected_instrument_, -position_size);
+        }
     }
     
     ImGui::Spacing();
@@ -961,7 +974,19 @@ void TradingHUD::updateCandleData(const std::vector<sep::connectors::OandaCandle
     
     for (const auto& oanda_candle : oanda_candles) {
         // Convert OANDA candle to internal format
-        auto timestamp = std::chrono::system_clock::now(); // TODO: Parse actual timestamp
+        std::tm tm = {};
+        std::stringstream ss(oanda_candle.time);
+        ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
+        auto tp = std::chrono::system_clock::from_time_t(timegm(&tm));
+        auto dot_pos = oanda_candle.time.find('.');
+        if (dot_pos != std::string::npos) {
+            auto frac = oanda_candle.time.substr(dot_pos + 1);
+            frac.erase(frac.find('Z'));
+            while (frac.size() < 9) frac.push_back('0');
+            int nanosec = std::stoi(frac.substr(0, 9));
+            tp += std::chrono::nanoseconds(nanosec);
+        }
+        auto timestamp = tp;
         
         candle_data_.emplace_back(
             oanda_candle.open,
@@ -990,6 +1015,7 @@ void TradingHUD::updateCandleData(const std::vector<sep::connectors::OandaCandle
     }
     
     trimDataToTimeWindow();
+    instrument_history_[selected_instrument_] = std::deque<CandleData>(candle_data_.begin(), candle_data_.end());
     data_changed_ = true;
 }
 
@@ -2743,10 +2769,8 @@ void TradingHUD::renderMarketCorrelationMatrix() {
         const char* pairs[] = {"EUR_USD", "GBP_USD", "USD_JPY", "AUD_USD", "USD_CAD", "USD_CHF"};
         int num_pairs = sizeof(pairs) / sizeof(pairs[0]);
         
-        // TODO: Calculate real correlation matrix from historical price data
-        // For now, using approximated correlations based on market conditions
         float correlation_matrix[6][6];
-        calculateMarketCorrelations(correlation_matrix, pairs, num_pairs);
+        computeCorrelationMatrix(correlation_matrix, pairs, num_pairs);
         
         ImGui::Text("Correlation Matrix (24h rolling):");
         ImGui::Spacing();
@@ -3695,6 +3719,36 @@ float TradingHUD::calculateCurrencyPairCorrelation(const std::string& pair1, con
         std::cerr << "ERROR: Failed to calculate correlation between " << pair1 
                   << " and " << pair2 << ": " << e.what() << std::endl;
         return 0.0f;
+    }
+}
+
+void TradingHUD::computeCorrelationMatrix(float correlation_matrix[6][6], const char* pairs[], int num_pairs) {
+    for (int i = 0; i < num_pairs; ++i) {
+        for (int j = 0; j < num_pairs; ++j) {
+            if (i == j) {
+                correlation_matrix[i][j] = 1.0f;
+                continue;
+            }
+            auto it1 = instrument_history_.find(pairs[i]);
+            auto it2 = instrument_history_.find(pairs[j]);
+            if (it1 == instrument_history_.end() || it2 == instrument_history_.end()) {
+                correlation_matrix[i][j] = 0.0f;
+                continue;
+            }
+            const auto& h1 = it1->second;
+            const auto& h2 = it2->second;
+            size_t min_size = std::min(h1.size(), h2.size());
+            if (min_size < 2) {
+                correlation_matrix[i][j] = 0.0f;
+                continue;
+            }
+            std::vector<float> r1, r2;
+            for (size_t k = 1; k < min_size; ++k) {
+                r1.push_back((h1[k].close - h1[k-1].close) / h1[k-1].close);
+                r2.push_back((h2[k].close - h2[k-1].close) / h2[k-1].close);
+            }
+            correlation_matrix[i][j] = calculatePearsonCorrelation(r1, r2);
+        }
     }
 }
 

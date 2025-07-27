@@ -305,6 +305,7 @@ bool cancelOrder(const std::string& order_id);
     float calculateCurrentCoherence();
     void resetCoherenceStrategy();
     void calculateMarketCorrelations(float correlation_matrix[6][6], const char* pairs[], int num_pairs);
+    void computeCorrelationMatrix(float correlation_matrix[6][6], const char* pairs[], int num_pairs);
     
     // Forex pattern validation
     bool validateMarketConditions(float coherence, float stability, float entropy);
@@ -376,6 +377,9 @@ private:
     bool show_grid_ = true;
     bool show_trend_lines_ = true;
     bool auto_detect_trends_ = true;
+
+    // Historical candle storage for multiple instruments
+    std::unordered_map<std::string, std::deque<CandleData>> instrument_history_;
     
     // Multi-timeframe settings
     enum TimeFrame { TF_24H, TF_6H, TF_3H };

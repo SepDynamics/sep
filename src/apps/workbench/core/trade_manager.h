@@ -58,6 +58,7 @@ public:
 
     nlohmann::json executeBuy(const std::string& instrument, double units);
     nlohmann::json executeSell(const std::string& instrument, double units);
+    nlohmann::json executeOrder(const std::string& instrument, double units);
 
     void setRiskConfig(const RiskConfig& cfg) { risk_config_ = cfg; }
     const RiskConfig& getRiskConfig() const { return risk_config_; }

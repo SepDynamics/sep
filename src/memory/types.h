@@ -5,11 +5,9 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
+#include "memory/redis_manager.h"
 
 namespace sep {
-namespace persistence {
-class IRedisManager;
-} // namespace persistence
 
 namespace memory {
 

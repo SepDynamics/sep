@@ -3,8 +3,8 @@
 #include "metrics_monitor.h"
 #include "memory_monitor.hpp"
 #include "file_dialog.hpp"
-#include "oanda_connector.h"
-#include "market_data_converter.h"
+#include "connectors/oanda_connector.h"
+#include "connectors/market_data_converter.h"
 #include "backtester/backtester.h"
 #include <memory>
 #include <vector>

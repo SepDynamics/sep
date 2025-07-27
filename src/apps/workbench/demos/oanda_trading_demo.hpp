@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../core/demo_interface.hpp"
-#include "../../connectors/oanda_connector.h"
+#include "connectors/oanda_connector.h"
 #include <memory>
 #include <string>
 #include <vector>

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../connectors/oanda_connector.h"
+#include "connectors/oanda_connector.h"
 
 int main() {
     // Replace with your actual API key and account ID for testing

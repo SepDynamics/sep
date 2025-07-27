@@ -105,6 +105,17 @@ void Backtester::run(sep::quantum::PatternMetricEngine* engine,
     result_.max_drawdown = max_drawdown;
 }
 
+void Backtester::run(sep::quantum::PatternMetricEngine* engine,
+                     const std::string& dataset_path) {
+    if (!engine) {
+        return;
+    }
+
+    DataLoader loader;
+    const auto candles = loader.load_data(dataset_path);
+    run(engine, candles);
+}
+
 void Backtester::run(const std::vector<sep::quantum::Signal>& signals,
                      const std::vector<sep::common::CandleData>& candles) {
     result_ = {};

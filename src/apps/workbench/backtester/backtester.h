@@ -32,6 +32,8 @@ public:
     void run(sep::quantum::PatternMetricEngine* engine, DataLoader* data_loader);
     void run(sep::quantum::PatternMetricEngine* engine,
              const std::vector<sep::common::CandleData>& data);
+    void run(sep::quantum::PatternMetricEngine* engine,
+             const std::string& dataset_path);
     void run(const std::vector<sep::quantum::Signal>& signals,
              const std::vector<sep::common::CandleData>& data);
     const BacktestResult& getResult() const;

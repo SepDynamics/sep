@@ -17,6 +17,11 @@ namespace workbench {
         initParticles();
     }
 
+void CosmoDemo::setPatternMetricEngine(sep::quantum::PatternMetricEngine* engine)
+{
+    pattern_engine_ = engine;
+}
+
 void CosmoDemo::initParticles() {
     particles_.clear();
     std::size_t count = 100;
@@ -59,7 +64,11 @@ void CosmoDemo::integrate(float dt) {
 }
 
 void CosmoDemo::on_update(float) {
-    integrate(time_step_);
+    float scale = 1.0f;
+    if (pattern_engine_) {
+        scale += 0.001f * static_cast<float>(pattern_engine_->getPatterns().size());
+    }
+    integrate(time_step_ * scale);
 }
 
 void CosmoDemo::on_render() {

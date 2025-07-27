@@ -62,3 +62,7 @@ This phase involves building out the UI and logic for each of the three main tab
 -   **Interactivity**: Users can zoom, pan, and inspect data points on the charts.
 -   **Tab Separation**: UI components are logically separated into their respective controllers with clear responsibilities.
 -   **Maintainability**: The core engine can be modified and built independently of the GUI.
+
+## Demo Engine Integration
+
+`DemoOrchestrator` now forwards the active `PatternMetricEngine` to the current demo via `DemoManager`. Demos can query pattern metrics to influence simulations or visualizations. The reference is cleared when a demo is unloaded to avoid dangling pointers.

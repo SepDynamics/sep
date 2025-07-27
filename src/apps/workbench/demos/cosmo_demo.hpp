@@ -5,6 +5,7 @@
 
 #include "demo_base.hpp"
 #include "demo_manager.hpp"
+#include "quantum/pattern_metric_engine.h"
 #include "imgui.h"
 
 // Forward declarations
@@ -20,6 +21,7 @@ namespace workbench {
 class CosmoDemo : public Demo {
 public:
     void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
+    void setPatternMetricEngine(sep::quantum::PatternMetricEngine* engine) override;
     void on_update(float dt) override;
     void on_render() override;
     void on_ui_render() override;
@@ -41,6 +43,7 @@ private:
 
     sep::core::Engine* engine_{nullptr};
     sep::SimpleRenderer* renderer_{nullptr};
+    sep::quantum::PatternMetricEngine* pattern_engine_{nullptr};
 
     void initParticles();
     void integrate(float dt);

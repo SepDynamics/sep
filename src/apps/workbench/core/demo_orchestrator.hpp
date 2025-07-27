@@ -16,6 +16,9 @@ namespace sep {
         class Engine;
     }
     class SimpleRenderer;
+    namespace quantum {
+        class PatternMetricEngine;
+    }
 }
 
 namespace sep::workbench {
@@ -111,6 +114,7 @@ private:
     // Engine references
     sep::core::Engine* engine_{nullptr};
     sep::SimpleRenderer* renderer_{nullptr};
+    sep::quantum::PatternMetricEngine* pattern_engine_{nullptr};
     
     // Metrics
     DemoMetrics metrics_;

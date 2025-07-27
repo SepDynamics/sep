@@ -5,6 +5,7 @@
 #include "engine/cuda_helpers.h"
 #include "engine/cuda_sep.h"
 #endif
+#include "engine/core.h"
 
 namespace sep::cuda {
 

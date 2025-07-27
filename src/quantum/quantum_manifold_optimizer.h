@@ -7,6 +7,7 @@
 #include "engine/cufft.h"
 #endif
 #include "engine/types.h"
+#include "engine/core.h"
 #include "memory/types.h"
 #include "quantum/config.h"
 #include "quantum/pattern_evolution_bridge.h"

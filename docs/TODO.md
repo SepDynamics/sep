@@ -48,7 +48,7 @@ This phase runs in parallel with feature development and focuses on improving co
 -   **Tasks**:
     -   [x] **`emitterutils.cpp`**: Address `CRITICAL` `undeclared identifier` errors by including `<cstdint>`.
     -   [x] **`glm` Experimental Extensions**: `glm_config.h` is now force-included for all targets so `GLM_ENABLE_EXPERIMENTAL` is always defined.
-    -   [ ] **PipeWire Null Dereference**: Investigate the `HIGH` severity null pointer dereference in `/usr/include/spa-0.2/spa/pod/parser.h`. This is likely an external library issue but should be understood.
+    -   [x] **PipeWire Null Dereference**: Investigated upstream issue. Added defensive check in `PipeWireCapture::streamProcess` for null `spa_buffer` chunk.
 
 ### 2.2: High-Priority Code Quality Improvements
 -   **Status**: **NOT STARTED**

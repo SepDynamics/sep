@@ -193,6 +193,10 @@ void BackendTabController::renderBacktesterPanel() {
         dialog_target_ = DialogTarget::Backtest;
         file_dialog_.open(std::filesystem::path(backtest_file_buffer_).empty() ? "." : std::filesystem::path(backtest_file_buffer_).parent_path().string());
     }
+    ImGui::SameLine();
+    if (ImGui::Button("Open Backtester Tab")) {
+        globalEventBus().publish(PanelVisibilityEvent{"Backtester", true});
+    }
     if (ImGui::Button("Load Dataset")) {
         data_loader_->load_data(backtest_file_buffer_);
         dataset_loaded_ = !data_loader_->get_data().empty();

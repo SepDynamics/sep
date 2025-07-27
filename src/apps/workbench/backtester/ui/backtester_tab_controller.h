@@ -18,6 +18,8 @@ public:
     void setPatternMetricEngine(sep::quantum::PatternMetricEngine* engine);
     void setOandaConnector(sep::connectors::OandaConnector* connector);
 
+    void runBacktest(const std::string& path);
+
 private:
     std::unique_ptr<BacktesterEngine> engine_;
     sep::quantum::PatternMetricEngine pattern_engine_;

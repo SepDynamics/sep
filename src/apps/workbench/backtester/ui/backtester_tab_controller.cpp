@@ -25,6 +25,23 @@ void BacktesterTabController::setOandaConnector(
     oanda_connector_ = connector;
 }
 
+void BacktesterTabController::runBacktest(const std::string& path) {
+    running_ = true;
+    SEPSignalStrategy strategy;
+    BaseStrategy* strat_ptr = nullptr;
+    if (strategy_index_ == 0) {
+        strat_ptr = &strategy;
+    }
+    sep::quantum::PatternMetricEngine* engine_to_use = pattern_engine_ptr_;
+    if (!engine_to_use) {
+        engine_to_use = &pattern_engine_;
+        engine_to_use->init(use_gpu_ ? &gpu_context_ : nullptr);
+    }
+    result_ = engine_->run(path, engine_to_use, strat_ptr);
+    globalEventBus().publish(BacktestResultEvent{result_});
+    running_ = false;
+}
+
 void BacktesterTabController::render() {
     ImGui::Begin("Backtester");
     ImGui::InputText("Dataset", dataset_path_, sizeof(dataset_path_));
@@ -36,6 +53,7 @@ void BacktesterTabController::render() {
     if (file_dialog_.render(selected)) {
         strncpy(dataset_path_, selected.c_str(), sizeof(dataset_path_) - 1);
         dataset_path_[sizeof(dataset_path_) - 1] = '\0';
+        runBacktest(dataset_path_);
     }
     ImGui::Combo("Strategy", &strategy_index_,
                 [](void* data, int idx, const char** out_text) {
@@ -52,20 +70,7 @@ void BacktesterTabController::render() {
 
     if (!running_) {
         if (ImGui::Button("Start")) {
-            running_ = true;
-            SEPSignalStrategy strategy;
-            BaseStrategy* strat_ptr = nullptr;
-            if (strategy_index_ == 0) {
-                strat_ptr = &strategy;
-            }
-            sep::quantum::PatternMetricEngine* engine_to_use = pattern_engine_ptr_;
-            if (!engine_to_use) {
-                engine_to_use = &pattern_engine_;
-                engine_to_use->init(use_gpu_ ? &gpu_context_ : nullptr);
-            }
-            result_ = engine_->run(dataset_path_, engine_to_use, strat_ptr);
-            globalEventBus().publish(BacktestResultEvent{result_});
-            running_ = false;
+            runBacktest(dataset_path_);
         }
     } else {
         if (ImGui::Button("Stop")) {

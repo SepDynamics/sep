@@ -1,0 +1,44 @@
+Copyright (c) 2024-2025 SepDynamics. All rights reserved.
+
+Proprietary License for SEP Engine
+
+NOTICE: This software and its associated documentation files (the "SEP Engine") 
+contain proprietary algorithms, data structures, and methodologies that are the 
+exclusive intellectual property of SepDynamics.
+
+TERMS AND CONDITIONS:
+
+1. OWNERSHIP: All rights, title, and interest in and to the SEP Engine, including 
+   but not limited to all quantum-inspired pattern analysis algorithms, financial 
+   modeling techniques, CUDA acceleration methods, and related innovations, are 
+   owned exclusively by SepDynamics.
+
+2. PATENT PROTECTION: This software contains inventions that are patent pending 
+   or may be subject to future patent applications. The following core innovations 
+   are considered proprietary intellectual property:
+   - Quantum Field Harmonics (QFH) algorithms
+   - Quantum Bit State Analysis (QBSA) methodologies  
+   - Quantum Manifold Optimization techniques
+   - Pattern evolution and coherence management systems
+   - CUDA-accelerated quantum-inspired financial prediction models
+
+3. RESTRICTIONS: No part of this software may be reproduced, distributed, 
+   transmitted, displayed, published, or broadcast without the prior written 
+   permission of SepDynamics. This includes but is not limited to:
+   - Source code, algorithms, and methodologies
+   - Documentation and technical specifications
+   - Binary distributions and compiled forms
+   - Derivative works based on this software
+
+4. RESEARCH AND DEVELOPMENT: This repository is made available for research 
+   transparency and collaboration purposes only. Any use, reproduction, or 
+   adaptation requires explicit written authorization from SepDynamics.
+
+5. THIRD-PARTY COMPONENTS: Some components may be subject to separate license 
+   terms (Apache-2.0 for specific modules as indicated in source files). 
+   However, the core SEP Engine innovations remain proprietary.
+
+For licensing inquiries, commercial use, or collaboration opportunities, 
+please contact: legal@sepdynamics.com
+
+SepDynamics reserves all rights not expressly granted herein.

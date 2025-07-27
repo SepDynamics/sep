@@ -46,7 +46,6 @@ struct SepEngine::Impl
 {
     bool          initialized = false;
     HealthMetrics health_metrics;
-    // Using forward declaration instead of direct dependency
     std::unique_ptr<sep::quantum::QuantumProcessor> quantum_processor;
     sep::memory::MemoryTierManager&                 memory_manager;
     std::unique_ptr<sep::pattern::PatternProcessor> pattern_processor;

@@ -259,7 +259,8 @@ void SystemMetricsPanel::updateMetrics() {
     // Update processing rate (simplified)
     static size_t last_pattern_count = 0;
     float time_delta = elapsed / 1000.0f;
-    metrics_.processing_rate = (patterns.size() - last_pattern_count) / time_delta;
+    float processed = static_cast<float>(patterns.size() - last_pattern_count);
+    metrics_.processing_rate = processed / time_delta;
     last_pattern_count = patterns.size();
     
     last_update_ = now;

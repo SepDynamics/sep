@@ -1,16 +1,17 @@
 #pragma once
 
-#include "std_includes.h"
-#include "tabs/signals_tab_controller.h"
-#include "tabs/engine_tab_controller.h"
-#include "tabs/backend_tab_controller.h"
-
-#include "backtester/ui/backtester_tab_controller.h"
-#include "ui_layout_manager.h"
-#include "multi_timeframe_analyzer.h"
-#include "engine/engine.h"
 #include <map>
 #include <mutex>
+
+#include "apps/workbench/core/alpha_tracker.h"
+#include "apps/workbench/tabs/alpha_demo_tab_controller.h"
+#include "backtester/ui/backtester_tab_controller.h"
+#include "engine/engine.h"
+#include "multi_timeframe_analyzer.h"
+#include "tabs/backend_tab_controller.h"
+#include "tabs/engine_tab_controller.h"
+#include "tabs/signals_tab_controller.h"
+#include "ui_layout_manager.h"
 
 // Forward declaration for GLFW
 struct GLFWwindow;
@@ -23,13 +24,14 @@ namespace sep {
 namespace sep::workbench {
 
 // Forward declarations
-#include "apps/workbench/core/service_connector.hpp"
-#include "apps/workbench/core/landing_page.hpp"
-#include "apps/workbench/renderer.h"
-#include "apps/workbench/signal_generator/quantum_signal_generator.h"
-#include "apps/workbench/core/metrics_monitor.h"
-#include "apps/workbench/tabs/alpha_demo_tab_controller.h"
-#include "apps/workbench/core/alpha_tracker.h"
+class ServiceConnector;
+class LandingPage;
+class Renderer;
+class QuantumSignalGenerator;
+class MetricsMonitor;
+class AlphaTracker;
+class AlphaDemoTabController;
+class SignalsTabController;
 
 enum class ApplicationState {
     INITIALIZING,
@@ -89,7 +91,10 @@ public:
 
     // Signal generator
     QuantumSignalGenerator* getSignalGenerator() const { return signal_generator_.get(); }
-    sep::quantum::PatternMetricEngine* getPatternMetricEngine() const { return active_engine_ ? active_engine_->getPatternMetricEngine() : nullptr; }
+    ::sep::quantum::PatternMetricEngine* getPatternMetricEngine() const
+    {
+        return active_engine_ ? active_engine_->getPatternMetricEngine() : nullptr;
+    }
     MultiTimeframeAnalyzer* getMultiTimeframeAnalyzer() const { return multi_timeframe_analyzer_.get(); }
     AlphaTracker* getAlphaTracker() const { return alpha_tracker_.get(); }
 
@@ -124,8 +129,8 @@ private:
     std::unique_ptr<AlphaTracker> alpha_tracker_;
     
     // Engine components (may be null if service not connected)
-    std::unique_ptr<sep::core::Engine> offline_engine_;
-    sep::core::Engine* active_engine_{nullptr};
+    std::unique_ptr<::sep::core::Engine> offline_engine_;
+    ::sep::core::Engine* active_engine_{nullptr};
 
     // Window configuration
     struct WindowConfig {
@@ -166,7 +171,7 @@ private:
     void handleErrorRecovery();
 
     // Connector integration
-    void setupOandaCallbacks(sep::connectors::OandaConnector* oanda_ptr);
+    void setupOandaCallbacks(::sep::connectors::OandaConnector* oanda_ptr);
 
     // Cross-thread metric delivery
     std::map<std::string, TimeframeMetrics> pending_metrics_;

@@ -474,7 +474,7 @@ void EngineTabController::renderCorrelationPanel() {
 
             // Convert and export metrics
             const sep::workbench::CorrelationMetrics& wb_metrics = correlation_metrics;
-            sep::common::CorrelationMetrics common_metrics{
+            ::sep::common::CorrelationMetrics common_metrics{
                 wb_metrics.coherence_pearson,
                 wb_metrics.coherence_spearman,
                 wb_metrics.stability_pearson,
@@ -484,7 +484,7 @@ void EngineTabController::renderCorrelationPanel() {
                 wb_metrics.sample_count
             };
 
-            std::map<std::string, sep::common::CorrelationMetrics> data{{selected_timeframe, common_metrics}};
+            std::map<std::string, ::sep::common::CorrelationMetrics> data{{selected_timeframe, common_metrics}};
             
             // Export files with proper extension handling
             std::string csv_path = base_path.extension().empty() ? path_str + ".csv" : path_str;
@@ -495,9 +495,9 @@ void EngineTabController::renderCorrelationPanel() {
             bool json_ok = parser.exportCorrelationJSON(json_path, data);
             
             // Convert and export history
-            std::deque<sep::common::CorrelationMetrics> common_history;
+            std::deque<::sep::common::CorrelationMetrics> common_history;
             for (const auto& wb_metric : history) {
-                common_history.push_back(sep::common::CorrelationMetrics{
+                common_history.push_back(::sep::common::CorrelationMetrics{
                     wb_metric.coherence_pearson,
                     wb_metric.coherence_spearman,
                     wb_metric.stability_pearson,

@@ -1,10 +1,19 @@
 #include "std_includes.h"
+#include <signal.h>  // C signal handling
 #include "workbench_core.hpp"
 #include "engine/logging.h"
 #include "apps/workbench/core/service_proxy_engine.h"
 #include "apps/workbench/core/service_connector.hpp"
 #include "apps/workbench/backtester/backtester.h"
 #include "apps/workbench/backtester/data/data_loader.h"
+
+// Declare signal handling functions and constants
+extern "C" {
+    typedef void (*sighandler_t)(int);
+    sighandler_t signal(int signum, sighandler_t handler);
+}
+#define SIGINT 2
+#define SIGTERM 15
 
 // Global workbench instance for signal handling
 static sep::workbench::WorkbenchEngine* g_workbench = nullptr;
@@ -23,9 +32,9 @@ int main(int argc, char* argv[]) {
     sep::logging::LoggerConfig config;
     config.file.path = "pattern_engine.log";
     sep::logging::Manager::getInstance().createLogger("pattern_engine", config);
-    // Install signal handlers
-    (void)std::signal(SIGINT, signalHandler);
-    (void)std::signal(SIGTERM, signalHandler);
+    // Install signal handlers (using numeric values for compatibility)
+    (void)signal(2, signalHandler);   // SIGINT
+    (void)signal(15, signalHandler);  // SIGTERM
     
     // Parse command line arguments for OANDA credentials
     std::string api_key, account_id;

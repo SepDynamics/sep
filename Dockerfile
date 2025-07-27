@@ -13,6 +13,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     clang-15 \
     clang-tidy-15 \
     clang-format-15 \
+    iwyu \
     ninja-build \
     libfmt-dev \
     libtbb-dev \

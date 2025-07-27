@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <atomic>
 #include <chrono>
-#include <csignal>
+#include <signal.h>  // Use C version for compatibility
 #include <exception>
 #include <functional>
 #include <iostream>
@@ -14,4 +14,3 @@
 #include <thread>
 #include <type_traits>
 #include <vector>
-#include <csignal>

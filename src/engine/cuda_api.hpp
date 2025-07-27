@@ -55,42 +55,39 @@ SEP_API cudaError_t sep_cuda_memcpy_async(
 // C++ specific includes and definitions
 #include "types.h"
 
-namespace sep::cuda {
+namespace sep
+{
 
-// Memory allocation/deallocation
-using cudaError_t = ::cudaError_t;
-using cudaMemcpyKind = ::cudaMemcpyKind;
-using cudaStream_t = ::cudaStream_t;
+    // Memory allocation/deallocation
+    // Note: Use global types directly to avoid redefinition conflicts
 
-// Memory management
-cudaError_t allocateManaged(void** ptr, size_t size);
-cudaError_t deallocate(void* ptr);
+    // Memory management
+    ::cudaError_t allocateManaged(void** ptr, size_t size);
+    ::cudaError_t deallocate(void* ptr);
 
-// Async memory copy operations
-cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
-                           cudaMemcpyKind kind, cudaStream_t stream);
+    // Async memory copy operations
+    ::cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, ::cudaMemcpyKind kind,
+                                  ::cudaStream_t stream);
 
-// Overload taking raw stream pointer for backward compatibility
-cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count,
-                           cudaMemcpyKind kind, void* stream);
+    // Overload taking raw stream pointer for backward compatibility
+    ::cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, ::cudaMemcpyKind kind,
+                                  void* stream);
 
-// CUDA kernel launch functions
-cudaError_t launchQBSAKernel(const std::uint32_t *d_probe_indices,
-                           const std::uint32_t *d_expectations, std::uint32_t num_probes,
-                           std::uint32_t *d_bitfield, std::uint32_t *d_corrections,
-                           std::uint32_t *d_correction_count, cudaStream_t stream);
+    // CUDA kernel launch functions
+    ::cudaError_t launchQBSAKernel(const std::uint32_t* d_probe_indices,
+                                   const std::uint32_t* d_expectations, std::uint32_t num_probes,
+                                   std::uint32_t* d_bitfield, std::uint32_t* d_corrections,
+                                   std::uint32_t* d_correction_count, ::cudaStream_t stream);
 
-cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
-                          std::uint32_t num_chunks,
-                          std::uint32_t *d_collapse_indices,
-                          std::uint32_t *d_collapse_counts,
-                          cudaStream_t stream);
+    ::cudaError_t launchQSHKernel(const std::uint64_t* d_chunks, std::uint32_t num_chunks,
+                                  std::uint32_t* d_collapse_indices,
+                                  std::uint32_t* d_collapse_counts, ::cudaStream_t stream);
 
-// Pattern processing functions
-cudaError_t launch_pattern_processing(compat::PatternData* patterns, compat::PatternData* results,
-                                      size_t pattern_count,
-                                      const compat::PatternData* previous_patterns,
-                                      cudaStream_t stream);
+    // Pattern processing functions
+    ::cudaError_t launch_pattern_processing(compat::PatternData* patterns,
+                                            compat::PatternData* results, size_t pattern_count,
+                                            const compat::PatternData* previous_patterns,
+                                            ::cudaStream_t stream);
 
-} // namespace sep::cuda
+}  // namespace sep
 #endif // __cplusplus

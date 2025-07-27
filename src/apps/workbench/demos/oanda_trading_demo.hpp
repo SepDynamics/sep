@@ -28,12 +28,21 @@ public:
     OandaTradingDemo();
     ~OandaTradingDemo() override = default;
 
-    void render() override;
-    void update() override;
-    void reset() override;
+    // DemoInterface implementation
+    void on_load(sep::core::Engine* engine, sep::SimpleRenderer* renderer) override;
+    void on_unload() override;
+    void on_update(float dt) override;
+    void on_render() override;
+    void on_ui_render() override;
+    void on_key_press(int key) override;
     
-    std::string getName() const override { return "OANDA Trading Hub"; }
-    std::string getDescription() const override { 
+    // Additional methods (not overrides)
+    void render();
+    void update();
+    void reset();
+    
+    std::string getName() const { return "OANDA Trading Hub"; }
+    std::string getDescription() const { 
         return "Real-time forex trading with pattern analysis"; 
     }
 

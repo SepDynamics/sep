@@ -10,10 +10,10 @@
 // Minimal context types for compilation
 namespace sep::context {
 struct Context {
-    ::sep::string type;
+    std::string type;
     nlohmann::json content;
     std::vector<nlohmann::json> relationships;
-    std::vector<::sep::string> tags;
+    std::vector<std::string> tags;
     nlohmann::json metadata;
     nlohmann::json processorResult;
 };
@@ -22,11 +22,11 @@ struct CheckResult {
   enum class Status { VALID = 0, INVALID = 1, STABLE = 2 };
   Status status{Status::VALID};
   float score{0.0f};
-  ::sep::string error;
+  std::string error;
 };
 
 struct Batch {
-    ::sep::string layer;
+    std::string layer;
     std::vector<Context> contexts;
 };
 

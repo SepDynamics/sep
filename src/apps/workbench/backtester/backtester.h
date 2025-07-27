@@ -1,7 +1,7 @@
 #pragma once
 
 #include "quantum/pattern_metric_engine.h"
-#include "data_loader.h"
+#include "data/data_loader.h"
 #include "common/financial_data_types.h"
 #include <vector>
 #include <string>

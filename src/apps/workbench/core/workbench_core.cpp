@@ -203,7 +203,7 @@ bool WorkbenchEngine::initialize()
             backtester::DataLoader loader;
             auto candles = loader.load_data("eur_usd_m1_48h.json");
             if (!candles.empty()) {
-                std::deque<sep::common::CandleData> dq(candles.begin(), candles.end());
+                std::deque<::sep::common::CandleData> dq(candles.begin(), candles.end());
                 signals_tab_->setCandleData(dq);
             }
         }
@@ -914,13 +914,19 @@ void WorkbenchEngine::updateData()
                     // Update signals tab with processed SEP signals
                     signals_tab_->setSEPSignals(sep_signals);
 
-                    // Process signals with alpha tracker
+                    // TODO: Process signals with alpha tracker 
+                    // Type conversion needed: SEPSignalData -> quantum::Signal
+                    /*
                     if (alpha_tracker_) {
-                        const auto& current_candle = multi_timeframe_analyzer_->getCurrentCandle("1m");
-                        for (const auto& signal : sep_signals) {
-                            alpha_tracker_->processSignal(signal, current_candle);
+                        const auto& candles = multi_timeframe_analyzer_->getCandles("1m");
+                        if (!candles.empty()) {
+                            const auto& current_candle = candles.back();
+                            for (const auto& signal : sep_signals) {
+                                alpha_tracker_->processSignal(signal, current_candle);
+                            }
                         }
                     }
+                    */
                     
                     std::cout << "[WorkbenchEngine] Generated " << sep_signals.size() 
                               << " SEP signals from " << metrics.size() << " patterns" << std::endl;

@@ -42,12 +42,14 @@ docker run --gpus all --rm \
     mkdir -p build
     cd build
     
-    # Configure
+    # Configure with include dependency tracking
     cmake .. -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_C_COMPILER=clang-15 \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE \
         -DCMAKE_CXX_COMPILER=clang++-15 \
+        -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS:-}" \
+        -DCMAKE_CUDA_FLAGS="${CMAKE_CUDA_FLAGS} ${EXTRA_CUDA_FLAGS:-}" \
         -DSEP_USE_CUDA=ON
     
     # Build with logging
@@ -70,6 +72,12 @@ fix_compile_commands() {
 if [ -f output/build_log.txt ]; then
     echo "Extracting errors to output/errors.txt..."
     grep -i "error\|failed\|fatal" output/build_log.txt > output/errors.txt 2>/dev/null || echo "No errors found" > output/errors.txt
+fi
+
+# Run include analysis if there were errors
+if [ -f output/errors.txt ] && [ -s output/errors.txt ] && [ "$(head -1 output/errors.txt)" != "No errors found" ]; then
+    echo "Running include dependency analysis..."
+    ./scripts/analyze_includes.sh
 fi
 
 echo "Build complete!"

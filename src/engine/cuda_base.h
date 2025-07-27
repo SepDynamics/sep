@@ -25,6 +25,10 @@ enum cudaMemcpyKind {
     cudaMemcpyDeviceToDevice = 3,
     cudaMemcpyDefault = 4
 };
+
+// Missing stream constants
+constexpr unsigned int cudaStreamDefault = 0;
+constexpr unsigned int cudaStreamNonBlocking = 1;
 #endif
 
 // Device properties structure

@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include "connectors/oanda_connector.h"
 #include "quantum/pattern_metric_engine.h"
+#include "common/financial_data_types.h"
+#include "quantum/signal.h"
 
 namespace sep::workbench {
 

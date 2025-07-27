@@ -1,10 +1,12 @@
 #pragma once
 
-#include "apps/workbench/core/workbench_core.hpp"
 #include "apps/workbench/core/alpha_tracker.h"
 #include "imgui.h"
 
 namespace sep::workbench {
+
+// Forward declarations
+class WorkbenchEngine;
 
 class AlphaDemoTabController {
 public:

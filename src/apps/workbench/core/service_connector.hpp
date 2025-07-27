@@ -92,7 +92,7 @@ public:
     void setConfig(const ConnectionConfig& config) { config_ = config; }
     const ConnectionConfig& getConfig() const { return config_; }
 
-    void setSignalsTab(SignalsTabController* tab);
+    void setSignalsTab(sep::workbench::SignalsTabController* tab);
     void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer);
     void setBacktester(sep::workbench::backtester::Backtester* bt) { backtester_ = bt; }
     const std::deque<common::CandleData>& getInitialData() const { return initial_data_; }
@@ -135,7 +135,7 @@ private:
     std::unique_ptr<sep::core::ServiceProxyEngine> http_proxy_engine_;
     sep::core::ServiceProxyEngine* service_proxy_engine_{nullptr};
 
-    SignalsTabController* signals_tab_{nullptr};
+    sep::workbench::SignalsTabController* signals_tab_{nullptr};
     MultiTimeframeAnalyzer* mtf_analyzer_{nullptr};
     sep::workbench::backtester::Backtester* backtester_{nullptr};
     std::deque<common::CandleData> initial_data_;

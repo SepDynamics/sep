@@ -13,15 +13,18 @@ echo "SEP Workbench with OANDA Trading"
 echo "==================================="
 
 # Source the OANDA credentials
-if [ -f "keys.txt" ]; then
+if [ -f "OANDA.env" ]; then
     echo "Loading OANDA credentials..."
+    source OANDA.env
+elif [ -f "keys.txt" ]; then
+    echo "Loading OANDA credentials from keys.txt..."
     source keys.txt
 else
-    echo "keys.txt not found. Creating with placeholder values."
-    echo "export OANDA_API_KEY=\"<your_api_key>\"" > keys.txt
-    echo "export OANDA_ACCOUNT_ID=\"<your_account_id>\"" >> keys.txt
-    echo "Please edit keys.txt with your actual OANDA credentials."
-    source keys.txt
+    echo "OANDA.env or keys.txt not found. Creating OANDA.env with placeholder values."
+    echo "export OANDA_API_KEY=\"<your_api_key>\"" > OANDA.env
+    echo "export OANDA_ACCOUNT_ID=\"<your_account_id>\"" >> OANDA.env
+    echo "Please edit OANDA.env with your actual OANDA credentials."
+    source OANDA.env
 fi
 
 # Verify credentials are loaded

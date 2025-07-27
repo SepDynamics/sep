@@ -27,7 +27,7 @@ class MetricsMonitor;
 struct TimeframeData {
     std::string timeframe_id;        // "1m", "5m", "15m", "1h", "4h", "1D"
     int interval_minutes;            // 1, 5, 15, 60, 240, 1440
-    std::deque<sep::common::CandleData> candles;  // Rolling window of candles
+    std::deque<::sep::common::CandleData> candles;  // Rolling window of candles
     size_t max_candles = 1000;      // Keep last 1000 candles
     
     TimeframeData() : interval_minutes(1) {}  // Default constructor
@@ -40,7 +40,7 @@ struct TimeframeMetrics {
     std::chrono::system_clock::time_point timestamp;
     
     // Core SEP metrics from PatternMetricEngine
-    std::vector<sep::quantum::PatternMetrics> detected_patterns;
+    std::vector<::sep::quantum::PatternMetrics> detected_patterns;
     float dominant_coherence = 0.0f;
     float stability_index = 0.0f;
     float entropy_level = 0.0f;
@@ -124,9 +124,9 @@ private:
     MetricsMonitor* metrics_monitor_{nullptr};
     
     // SEP Engine components - one per timeframe for parallel processing
-    std::map<std::string, std::unique_ptr<sep::quantum::PatternMetricEngine>> pattern_engines_;
-    std::unique_ptr<sep::quantum::CoherenceManager> coherence_manager_;
-    std::unique_ptr<sep::core::MetricsCollector> metrics_collector_;
+    std::map<std::string, std::unique_ptr<::sep::quantum::PatternMetricEngine>> pattern_engines_;
+    std::unique_ptr<::sep::quantum::CoherenceManager> coherence_manager_;
+    std::unique_ptr<::sep::core::MetricsCollector> metrics_collector_;
     
     // Timeframe data management
     std::map<std::string, TimeframeData> timeframe_data_;
@@ -145,17 +145,17 @@ private:
     size_t max_correlation_history_ = 1000;
     
     // Internal methods
-    std::vector<sep::common::CandleData> resampleCandles(
-        const std::vector<sep::common::CandleData>& source_candles, 
+    std::vector<::sep::common::CandleData> resampleCandles(
+        const std::vector<::sep::common::CandleData>& source_candles, 
         int target_interval_minutes);
     
     TimeframeMetrics analyzeTimeframe(
         const std::string& timeframe, 
-        const std::vector<sep::common::CandleData>& candles);
+        const std::vector<::sep::common::CandleData>& candles);
     
-    float calculateTrendStrength(const std::vector<sep::quantum::PatternMetrics>& patterns);
-    float calculateVolatilityPrediction(const std::vector<sep::quantum::PatternMetrics>& patterns);
-    float calculateBreakoutProbability(const sep::quantum::PatternMetrics& latest_pattern);
+    float calculateTrendStrength(const std::vector<::sep::quantum::PatternMetrics>& patterns);
+    float calculateVolatilityPrediction(const std::vector<::sep::quantum::PatternMetrics>& patterns);
+    float calculateBreakoutProbability(const ::sep::quantum::PatternMetrics& latest_pattern);
     
     MultiTimeframeSignal::ActionRecommendation determineAction(
         const std::map<std::string, TimeframeMetrics>& tf_metrics);
@@ -172,9 +172,9 @@ public:
     void shutdown();
     
     // Data ingestion
-    void ingestMarketData(const std::string& instrument, const sep::common::CandleData& candle);
+    void ingestMarketData(const std::string& instrument, const ::sep::common::CandleData& candle);
     void ingestHistoricalData(const std::string& instrument,
-                            const std::vector<sep::common::CandleData>& historical_candles);
+                            const std::vector<::sep::common::CandleData>& historical_candles);
 
     void setMetricsCallback(MetricsCallback cb);
     void setMetricsMonitor(MetricsMonitor* monitor) { metrics_monitor_ = monitor; }
@@ -187,7 +187,7 @@ public:
     void updateAllTimeframes(const std::string& instrument);
 
     // Access stored candles for a given timeframe (e.g. "1m")
-    const std::deque<sep::common::CandleData>& getCandles(const std::string& timeframe) const;
+    const std::deque<::sep::common::CandleData>& getCandles(const std::string& timeframe) const;
     
     // Configuration and tuning
     void updateConfig(const Config& new_config);

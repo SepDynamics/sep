@@ -1,60 +1,64 @@
 #pragma once
 
 #include <deque>
+#include <map>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <map>
-#include <mutex>
 
-#include "common/financial_data_types.h"
-#include "imgui.h"
-#include "implot.h"
-#include "connectors/oanda_connector.h"
-#include "signal_generator/quantum_signal_generator.h"
 #include "apps/workbench/config.hpp"
 #include "apps/workbench/core/common_structs.h"
+#include "apps/workbench/core/metrics_monitor.h"
 #include "apps/workbench/core/multi_timeframe_analyzer.h"
+#include "common/financial_data_types.h"
+#include "connectors/oanda_connector.h"
+#include "imgui.h"
+#include "implot.h"
+#include "signal_generator/quantum_signal_generator.h"
 
 namespace sep::workbench {
 
-#include "../core/metrics_monitor.h"
+    // Forward declarations
+    class WorkbenchEngine;
 
-#include "../core/workbench_core.hpp"
+    class SignalsTabController
+    {
+    public:
+        SignalsTabController();
+        ~SignalsTabController();
 
-class SignalsTabController {
-public:
-    SignalsTabController();
-    ~SignalsTabController();
+        bool initialize();
+        void render();
+        void renderThresholdControlPanel();
+        void shutdown();
 
-    bool initialize();
-    void render();
-    void renderThresholdControlPanel();
-    void shutdown();
+        void setOandaConnector(::sep::connectors::OandaConnector* connector);
+        void setQuantumSignalGenerator(QuantumSignalGenerator* generator);
+        void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
+        void setWorkbenchEngine(WorkbenchEngine* engine);
+        void setLatestMetrics(const std::map<std::string, TimeframeMetrics>& metrics);
+        void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer)
+        {
+            mtf_analyzer_ = analyzer;
+        }
 
-    void setOandaConnector(sep::connectors::OandaConnector* connector);
-    void setQuantumSignalGenerator(QuantumSignalGenerator* generator);
-    void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
-    void setWorkbenchEngine(WorkbenchEngine* engine);
-    void setLatestMetrics(const std::map<std::string, TimeframeMetrics>& metrics);
-    void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer) { mtf_analyzer_ = analyzer; }
-
-        void setCandleData(const std::deque<sep::common::CandleData>& data);
-        void setCandleData(const std::vector<sep::common::CandleData>& data);
-        void addCandle(const sep::common::CandleData& candle);
-        const std::deque<sep::common::CandleData>& getCandleData() const { return candle_data_; }
-        void setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals);
+    void setCandleData(const std::deque<::sep::common::CandleData>& data);
+    void setCandleData(const std::vector<::sep::common::CandleData>& data);
+    void addCandle(const ::sep::common::CandleData& candle);
+    const std::deque<::sep::common::CandleData>& getCandleData() const { return candle_data_; }
+    void setSEPSignals(const std::deque<::sep::common::SEPSignalData>& signals);
 
 private:
-    sep::connectors::OandaConnector* oanda_connector_ = nullptr;
+    ::sep::connectors::OandaConnector* oanda_connector_ = nullptr;
     QuantumSignalGenerator* signal_generator_ = nullptr;
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     WorkbenchEngine* workbench_engine_ = nullptr;
     MultiTimeframeAnalyzer* mtf_analyzer_ = nullptr;
     // Chart data
-        std::deque<sep::common::CandleData> candle_data_;
-        std::deque<sep::common::SEPSignalData> sep_signals_;
+    std::deque<::sep::common::CandleData> candle_data_;
+    std::deque<::sep::common::SEPSignalData> sep_signals_;
     std::unordered_map<std::string, TechnicalIndicator> indicators_;
     std::vector<TrendLine> trend_lines_;
     EnhancedHoverInfo hover_info_;
@@ -137,8 +141,8 @@ private:
     void updateHoverInfo();
     void calculateEnhancedHoverMetrics();
     void detectTrendLines();
-    ImU32 getSignalColor(sep::common::MultiTimeframeSignal signal_type);
-    ImU32 getCandleColor(const sep::common::CandleData& candle, bool is_body = true);
+    ImU32 getSignalColor(::sep::common::MultiTimeframeSignal signal_type);
+    ImU32 getCandleColor(const ::sep::common::CandleData& candle, bool is_body = true);
 };
 
 } // namespace sep::workbench

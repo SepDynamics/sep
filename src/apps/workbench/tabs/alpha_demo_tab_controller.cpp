@@ -1,4 +1,5 @@
 #include "alpha_demo_tab_controller.h"
+#include "../core/workbench_core.hpp"
 
 namespace sep::workbench {
 
@@ -11,7 +12,7 @@ void AlphaDemoTabController::render() {
         return;
     }
 
-    ImGui::Text("Strategy Pips Gained: %.2f", alpha_tracker_->getStrategyPips());
+    ImGui::Text("Strategy Pips Gained: %.2f", alpha_tracker_->getStrategyPipsGained());
     ImGui::Text("Benchmark Pips: %.2f", alpha_tracker_->getBenchmarkPips());
 }
 

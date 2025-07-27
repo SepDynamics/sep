@@ -553,7 +553,14 @@ void SignalsTabController::renderMetricsGraphs() {
     if (!metrics_monitor_)
         return;
 
+    // Update metrics history
     const auto& roll = metrics_monitor_->getRollingMetrics();
+    const auto& system_metrics = metrics_monitor_->getSystemMetrics();
+    const auto& signal_data = metrics_monitor_->getSimpleThresholdSignals();
+    
+    coherence_history_.push_back(signal_data.coherence);
+    stability_history_.push_back(signal_data.stability);
+    entropy_history_.push_back(signal_data.entropy);
     coherence_history_1h_.push_back(roll.coherence_1h_avg);
     stability_history_1h_.push_back(roll.stability_1h_avg);
     entropy_history_1h_.push_back(roll.entropy_1h_avg);
@@ -561,7 +568,10 @@ void SignalsTabController::renderMetricsGraphs() {
     stability_history_4h_.push_back(roll.stability_4h_avg);
     entropy_history_4h_.push_back(roll.entropy_4h_avg);
 
-    const size_t MAX_POINTS = 240; // roughly 4 hours if updated each minute
+    const size_t MAX_POINTS = 300; // 5 hours worth of data
+    if (coherence_history_.size() > MAX_POINTS) coherence_history_.pop_front();
+    if (stability_history_.size() > MAX_POINTS) stability_history_.pop_front();
+    if (entropy_history_.size() > MAX_POINTS) entropy_history_.pop_front();
     if (coherence_history_1h_.size() > MAX_POINTS) coherence_history_1h_.pop_front();
     if (stability_history_1h_.size() > MAX_POINTS) stability_history_1h_.pop_front();
     if (entropy_history_1h_.size() > MAX_POINTS) entropy_history_1h_.pop_front();
@@ -569,37 +579,148 @@ void SignalsTabController::renderMetricsGraphs() {
     if (stability_history_4h_.size() > MAX_POINTS) stability_history_4h_.pop_front();
     if (entropy_history_4h_.size() > MAX_POINTS) entropy_history_4h_.pop_front();
 
-    static double cross_idx = 0.0;
-    ImPlotRect zoom_rect(0, 0, (double)coherence_history_1h_.size(), 1.0);
+    // Real-time metrics display header
+    ImGui::Text("SEP Alpha Generation Metrics - Real-time");
+    ImGui::Separator();
+    
+    // Current signal status with color coding
+    ImGui::Columns(4, "signal_status");
+    if (signal_data.buySignal) {
+        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "BUY SIGNAL");
+    } else if (signal_data.sellSignal) {
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "SELL SIGNAL");
+    } else {
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "HOLD");
+    }
+    ImGui::NextColumn();
+    ImGui::Text("Coherence: %.3f", signal_data.coherence);
+    ImGui::NextColumn();
+    ImGui::Text("Stability: %.3f", signal_data.stability);
+    ImGui::NextColumn();
+    ImGui::Text("Entropy: %.3f", signal_data.entropy);
+    ImGui::Columns(1);
+    
+    ImGui::Separator();
 
-    if (ImPlot::BeginPlot("Metrics", ImVec2(-1, 150), ImPlotFlags_NoLegend | ImPlotFlags_NoMenus)) {
-        ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_AutoFit, ImPlotAxisFlags_AutoFit);
-
-        std::vector<double> xs(coherence_history_1h_.size());
-        std::iota(xs.begin(), xs.end(), 0.0);
-
-        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.9f, 0.0f, 1.0f));
-        std::vector<float> c1_data(coherence_history_1h_.begin(), coherence_history_1h_.end());
-        if (!c1_data.empty()) {
-            ImPlot::PlotLine("C1", c1_data.data(), (int)c1_data.size());
-        }
-
-        if (!coherence_history_4h_.empty()) {
-            ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.7f, 0.0f, 1.0f));
-            std::vector<float> c4_data(coherence_history_4h_.begin(), coherence_history_4h_.end());
-            if (!c4_data.empty()) {
-                ImPlot::PlotLine("C4", c4_data.data(), (int)c4_data.size());
+    // Primary Alpha Generation Metrics (normalized 0-1 for hover sync)
+    if (ImPlot::BeginPlot("SEP Core Alpha Metrics", ImVec2(-1, 180), ImPlotFlags_Crosshairs)) {
+        ImPlot::SetupAxes("Time", "Normalized Value (0-1)", ImPlotAxisFlags_None, ImPlotAxisFlags_None);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 1.0, ImGuiCond_Always);
+        
+        // Plot coherence (primary alpha signal from strategy docs) - safe copy
+        if (!coherence_history_.empty() && coherence_history_.size() > 0) {
+            // Create safe temporary arrays
+            static std::vector<float> coherence_plot_data;
+            coherence_plot_data.clear();
+            coherence_plot_data.reserve(coherence_history_.size());
+            for (const auto& val : coherence_history_) {
+                coherence_plot_data.push_back(val);
+            }
+            if (!coherence_plot_data.empty()) {
+                ImPlot::SetNextLineStyle(ImVec4(0.2f, 0.8f, 0.2f, 1.0f), 3.0f);
+                ImPlot::PlotLine("Coherence", coherence_plot_data.data(), (int)coherence_plot_data.size());
             }
         }
-
-        ImPlot::DragLineX(200, &cross_idx, ImVec4(0.7f,0.7f,0.7f,1.0f));
-        ImPlot::DragRect(201, &zoom_rect.X.Min, &zoom_rect.Y.Min, &zoom_rect.X.Max, &zoom_rect.Y.Max, ImVec4(1,1,0,1));
+        
+        // Plot stability (risk management metric) - safe copy
+        if (!stability_history_.empty() && stability_history_.size() > 0) {
+            static std::vector<float> stability_plot_data;
+            stability_plot_data.clear();
+            stability_plot_data.reserve(stability_history_.size());
+            for (const auto& val : stability_history_) {
+                stability_plot_data.push_back(val);
+            }
+            if (!stability_plot_data.empty()) {
+                ImPlot::SetNextLineStyle(ImVec4(0.2f, 0.2f, 0.8f, 1.0f), 3.0f);
+                ImPlot::PlotLine("Stability", stability_plot_data.data(), (int)stability_plot_data.size());
+            }
+        }
+        
+        // Plot entropy (volatility/uncertainty detection) - safe copy
+        if (!entropy_history_.empty() && entropy_history_.size() > 0) {
+            static std::vector<float> entropy_plot_data;
+            entropy_plot_data.clear();
+            entropy_plot_data.reserve(entropy_history_.size());
+            for (const auto& val : entropy_history_) {
+                entropy_plot_data.push_back(val);
+            }
+            if (!entropy_plot_data.empty()) {
+                ImPlot::SetNextLineStyle(ImVec4(0.8f, 0.2f, 0.2f, 1.0f), 3.0f);
+                ImPlot::PlotLine("Entropy", entropy_plot_data.data(), (int)entropy_plot_data.size());
+            }
+        }
+        
+        // Trading thresholds from alpha_analysis_report.md
+        double buy_coherence_threshold = 0.9;  // Buy signal threshold
+        double sell_stability_threshold = 0.3; // Sell signal threshold
+        double signal_confidence_threshold = 0.6; // Signal confidence threshold
+        
+        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.8f, 0.0f, 0.4f), 1.5f);
+        ImPlot::PlotInfLines("Buy Coherence (0.9)", &buy_coherence_threshold, 1);
+        
+        ImPlot::SetNextLineStyle(ImVec4(0.8f, 0.0f, 0.0f, 0.4f), 1.5f);
+        ImPlot::PlotInfLines("Sell Stability (0.3)", &sell_stability_threshold, 1);
+        
+        ImPlot::SetNextLineStyle(ImVec4(0.8f, 0.8f, 0.0f, 0.4f), 1.5f);
+        ImPlot::PlotInfLines("Confidence (0.6)", &signal_confidence_threshold, 1);
+        
         ImPlot::EndPlot();
     }
-
-    renderMetricPlot("Stability", stability_history_1h_, stability_history_4h_,
+    
+    // Multi-Timeframe Coherence Analysis
+    if (ImPlot::BeginPlot("Multi-Timeframe Coherence Analysis", ImVec2(-1, 140), ImPlotFlags_Crosshairs)) {
+        ImPlot::SetupAxes("Time", "Coherence", ImPlotAxisFlags_None, ImPlotAxisFlags_None);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 1.0, ImGuiCond_Always);
+        
+        // Real-time coherence - safe copy
+        if (!coherence_history_.empty() && coherence_history_.size() > 0) {
+            static std::vector<float> rt_coherence_data;
+            rt_coherence_data.clear();
+            rt_coherence_data.reserve(coherence_history_.size());
+            for (const auto& val : coherence_history_) {
+                rt_coherence_data.push_back(val);
+            }
+            if (!rt_coherence_data.empty()) {
+                ImPlot::SetNextLineStyle(ImVec4(0.2f, 0.8f, 0.2f, 1.0f), 2.0f);
+                ImPlot::PlotLine("Real-time", rt_coherence_data.data(), (int)rt_coherence_data.size());
+            }
+        }
+        
+        // 1H timeframe - safe copy
+        if (!coherence_history_1h_.empty() && coherence_history_1h_.size() > 0) {
+            static std::vector<float> h1_coherence_data;
+            h1_coherence_data.clear();
+            h1_coherence_data.reserve(coherence_history_1h_.size());
+            for (const auto& val : coherence_history_1h_) {
+                h1_coherence_data.push_back(val);
+            }
+            if (!h1_coherence_data.empty()) {
+                ImPlot::SetNextLineStyle(ImVec4(0.8f, 0.8f, 0.2f, 1.0f), 2.0f);
+                ImPlot::PlotLine("1H Average", h1_coherence_data.data(), (int)h1_coherence_data.size());
+            }
+        }
+        
+        // 4H timeframe - safe copy
+        if (!coherence_history_4h_.empty() && coherence_history_4h_.size() > 0) {
+            static std::vector<float> h4_coherence_data;
+            h4_coherence_data.clear();
+            h4_coherence_data.reserve(coherence_history_4h_.size());
+            for (const auto& val : coherence_history_4h_) {
+                h4_coherence_data.push_back(val);
+            }
+            if (!h4_coherence_data.empty()) {
+                ImPlot::SetNextLineStyle(ImVec4(0.6f, 0.4f, 0.8f, 1.0f), 2.0f);
+                ImPlot::PlotLine("4H Average", h4_coherence_data.data(), (int)h4_coherence_data.size());
+            }
+        }
+        
+        ImPlot::EndPlot();
+    }
+    
+    // Additional metrics plots using existing function
+    renderMetricPlot("Stability Analysis", stability_history_1h_, stability_history_4h_,
                      ImVec4(0.9f, 0.9f, 0.0f, 1.0f), ImVec4(0.7f, 0.7f, 0.0f, 1.0f));
-    renderMetricPlot("Entropy", entropy_history_1h_, entropy_history_4h_,
+    renderMetricPlot("Entropy (Volatility)", entropy_history_1h_, entropy_history_4h_,
                      ImVec4(0.9f, 0.0f, 0.0f, 1.0f), ImVec4(0.7f, 0.0f, 0.0f, 1.0f));
 }
 

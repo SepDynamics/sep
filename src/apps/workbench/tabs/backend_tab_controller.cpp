@@ -189,8 +189,14 @@ void BackendTabController::renderBacktesterPanel() {
         dialog_target_ = DialogTarget::Backtest;
         file_dialog_.open(std::filesystem::path(backtest_file_buffer_).empty() ? "." : std::filesystem::path(backtest_file_buffer_).parent_path().string());
     }
-    if (ImGui::Button("Run Backtest")) {
+    if (ImGui::Button("Load Dataset")) {
         data_loader_->load_data(backtest_file_buffer_);
+        dataset_loaded_ = !data_loader_->get_data().empty();
+    }
+    if (ImGui::Button("Run Backtest")) {
+        if (!dataset_loaded_) {
+            data_loader_->load_data(backtest_file_buffer_);
+        }
         backtester_->run(pattern_engine_.get(), data_loader_->get_data());
         equity_curve_ = backtester_->getEquityCurve();
         if (monitor_) {
@@ -242,8 +248,8 @@ void BackendTabController::renderBacktesterPanel() {
 }
 
 void BackendTabController::renderBacktestingSuite() {
-    ImGui::Begin("BacktestingSuite");
-    ImGui::PushID("BacktestingSuite");
+    ImGui::Begin("Backtest Results");
+    ImGui::PushID("BacktestResults");
 
     ImGui::Text("Total Trades: %d", last_result_.total_trades);
     ImGui::Text("Win Rate: %.2f", last_result_.win_rate);

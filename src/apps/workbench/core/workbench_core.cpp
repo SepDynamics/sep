@@ -159,6 +159,7 @@ bool WorkbenchEngine::initialize()
         signals_tab_->setQuantumSignalGenerator(signal_generator_.get());
         signals_tab_->setMetricsMonitor(metrics_monitor_);
         signals_tab_->setWorkbenchEngine(this);
+        signals_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         service_connector_->setSignalsTab(signals_tab_.get());
         engine_tab_->setSEPEngine(active_engine_);
         engine_tab_->setMetricsMonitor(metrics_monitor_);
@@ -191,7 +192,7 @@ bool WorkbenchEngine::initialize()
             auto oanda_ptr = service_connector_->getOandaConnector();
             std::cout << "[WorkbenchEngine] OANDA connector available: " << (oanda_ptr ? "Yes" : "No") << std::endl;
             setupOandaCallbacks(oanda_ptr);
-            oanda_ptr->startPriceStream({"EUR_USD"});
+            service_connector_->startStreaming({"EUR_USD"});
         }
 
         const char* skip_env = std::getenv("SEP_SKIP_FETCH");
@@ -690,6 +691,11 @@ void WorkbenchEngine::shutdown()
     // Stop the main loop
     should_exit_ = true;
 
+    if (service_connector_) {
+        service_connector_->stopStreaming();
+        service_connector_->disconnect();
+    }
+
     // Clean up components (demo system removed)
     
     // Clean up ImGui
@@ -929,6 +935,14 @@ void WorkbenchEngine::setupOandaCallbacks(connectors::OandaConnector* oanda_ptr)
                 pme->evolvePatterns();
                 pme->computeMetrics();
             }
+        }
+
+        if (multi_timeframe_analyzer_) {
+            common::CandleData tick_candle{
+                md.mid, md.mid, md.mid, md.mid, md.volume,
+                std::chrono::time_point<std::chrono::system_clock>(
+                    std::chrono::nanoseconds(md.timestamp))};
+            multi_timeframe_analyzer_->ingestMarketData(md.instrument, tick_candle);
         }
     });
 

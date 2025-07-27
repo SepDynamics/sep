@@ -11,6 +11,9 @@
 #include "api/types.h"
 #include "engine/types.h"
 #include "quantum/types.h"
+#include "quantum/processor.h"
+#include "quantum/relationship.h"
+#include "quantum/pattern_processor.hpp"
 
 
 
@@ -19,13 +22,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
-namespace sep::context {
-class Processor;
-class RelationshipManager;
-}  // namespace sep::context
-namespace sep::pattern {
-class PatternProcessor;
-}  // namespace pattern
+
 
 namespace sep::api {
 

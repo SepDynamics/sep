@@ -189,7 +189,12 @@ bool ServiceConnector::connect() {
     
     connection_state_ = sep::workbench::ConnectionState::CONNECTION_FAILED;
     std::cerr << "[ServiceConnector] Failed to connect to SEP service" << std::endl;
-    
+
+    globalEventBus().publish(ConnectionStateEvent{connection_state_});
+    if (connection_callback_) {
+        connection_callback_(connection_state_);
+    }
+
     // Return false to indicate connection failure
     return false;
 }
@@ -380,17 +385,14 @@ void ServiceConnector::monitoringLoop() {
 }
 
 bool ServiceConnector::sendHeartbeat() {
-    if (connection_state_ != sep::workbench::ConnectionState::CONNECTED || !service_handle_) {
+    if (connection_state_ != sep::workbench::ConnectionState::CONNECTED || !service_handle_ || !service_engine_) {
+        connection_state_ = sep::workbench::ConnectionState::CONNECTION_FAILED;
+        health_metrics_.is_responsive = false;
+        globalEventBus().publish(ConnectionStateEvent{connection_state_});
+        if (connection_callback_) {
+            connection_callback_(connection_state_);
+        }
         return false;
-    }
-    
-    // For now, skip actual heartbeat check if we're in offline mode
-    // This prevents immediate disconnection when no service is running
-    if (!service_engine_) {
-        // We're in offline mode, just update metrics
-        health_metrics_.last_heartbeat = std::chrono::steady_clock::now();
-        health_metrics_.is_responsive = true;
-        return true;
     }
     
     // Send HTTP GET request for health check
@@ -763,7 +765,7 @@ bool ServiceConnector::connectTCP() {
     // Attempt connection
     if (::connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
         std::cerr << "[ServiceConnector] Connection failed: " << strerror(errno) << std::endl;
-        std::cerr << "[ServiceConnector] SEP service not available - will use offline mode" << std::endl;
+        std::cerr << "[ServiceConnector] SEP service not available" << std::endl;
 #ifdef _WIN32
         closesocket(sock);
 #else
@@ -785,6 +787,7 @@ bool ServiceConnector::connectTCP() {
         if (service_engine_)
         {
             std::cout << "[ServiceConnector] Service engine proxy created" << std::endl;
+            return true;
         }
         else
         {
@@ -797,7 +800,14 @@ bool ServiceConnector::connectTCP() {
         service_engine_ = nullptr;
     }
 
-    return true;
+    // Cleanup on failure
+#ifdef _WIN32
+    closesocket(sock);
+#else
+    close(sock);
+#endif
+    service_handle_ = nullptr;
+    return false;
 }
 
 sep::core::Engine* ServiceConnector::createServiceEngineProxy(int socket_fd)
@@ -810,9 +820,8 @@ sep::core::Engine* ServiceConnector::createServiceEngineProxy(int socket_fd)
         int health_sock = socket(AF_INET, SOCK_STREAM, 0);
         if (health_sock == -1)
         {
-            std::cerr << "[ServiceConnector] Failed to create health check socket - creating local engine" << std::endl;
-            // Create a real local engine instance instead of stub
-            return createLocalEngine();
+            std::cerr << "[ServiceConnector] Failed to create health check socket" << std::endl;
+            return nullptr;
         }
 
         struct sockaddr_in health_addr;
@@ -871,9 +880,8 @@ sep::core::Engine* ServiceConnector::createServiceEngineProxy(int socket_fd)
                   << std::endl;
     }
 
-    std::cout << "[ServiceConnector] Remote service unavailable - creating local engine" << std::endl;
-    // Create a real local engine instance for offline operation
-    return createLocalEngine();
+    std::cerr << "[ServiceConnector] Remote service unavailable" << std::endl;
+    return nullptr;
 }
 
 core::Engine* ServiceConnector::createLocalEngine()

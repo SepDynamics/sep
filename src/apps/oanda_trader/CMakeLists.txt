@@ -59,8 +59,8 @@ target_link_libraries(quantum_tracker PUBLIC
     glfw
     Threads::Threads
     ${CMAKE_DL_LIBS}
-    CUDA::cudart
-    CUDA::cuda_driver
+    $<$<BOOL:${SEP_USE_CUDA}>:CUDA::cudart>
+    $<$<BOOL:${SEP_USE_CUDA}>:CUDA::cuda_driver>
 )
 
 set_target_properties(quantum_tracker PROPERTIES

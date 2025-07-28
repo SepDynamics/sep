@@ -47,7 +47,7 @@ MIN_PACKAGES=(
   libyaml-cpp-dev libimgui-dev libgl1-mesa-dev libglfw3-dev
   libcurl4-openssl-dev curl python3 python3-pip gdb
   libpipewire-0.3-dev libspa-0.2-dev fftw3-dev libtbb-dev
-  valgrind
+  valgrind nodejs npm
 )
 
 FULL_PACKAGES=(

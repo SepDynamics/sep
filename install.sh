@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # SEP Engine dependency installer
 set -uo pipefail
-sudo ln -sf /workspace/sep /sep
-cd /sep || exit 1
 
 
 # Pinned Python version used for all installs  

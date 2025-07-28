@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # SEP Engine dependency installer
 set -euo pipefail
-exit
 sudo ln -sf /workspace/sep /sep
 cd /sep
 
@@ -71,6 +70,14 @@ sudo apt-get update -y
 echo "Installing base packages..."
 sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 
+# Install Docker and Docker Compose
+echo "Installing Docker..."
+sudo apt-get install -y docker.io docker-compose-v2 >> "$LOG_DIR/apt.log"
+sudo systemctl enable --now docker >/dev/null 2>&1 || true
+if [ "$EUID" -ne 0 ]; then
+  sudo usermod -aG docker "$USER" || true
+fi
+
 # Build and install GoogleTest as the packaged version only ships sources
 if [ -d /usr/src/googletest ]; then
   echo "Building GoogleTest..."
@@ -105,4 +112,17 @@ if apt-cache show gcc-14 >/dev/null 2>&1; then
   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100
   sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
 fi
+
+# Verify installed packages
+echo "Verifying installations..."
+docker --version || { echo "Docker not installed"; exit 1; }
+docker compose version || true
+python3.13 --version || true
+for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
+  if dpkg -s "$pkg" >/dev/null 2>&1; then
+    echo "$pkg installed"
+  else
+    echo "$pkg missing" >&2
+  fi
+done
 

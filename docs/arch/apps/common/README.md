@@ -1,3 +1,3 @@
-# `src/apps/common`
+# `src/apps/common` (Deprecated)
 
-Shared helper code for application user interfaces. Currently this holds a reusable ImGui demo panel used by multiple GUI programs.
+This directory previously stored shared UI helpers. The code has moved to [`src/ui`](../../ui/README.md) to simplify the application layout.

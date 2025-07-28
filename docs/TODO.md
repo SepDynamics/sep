@@ -148,6 +148,13 @@
 - [ ] **CI/CD Pipeline**: Automated testing and deployment
 - [ ] **Release Management**: Version tagging and release automation
 
+### Source Layout Refactoring
+- [ ] **Remove CMake build artifacts**
+- [x] **Consolidate UI helpers** (moved to `src/ui`)
+- [ ] **Merge memory helpers with engine**
+- [ ] **Group quantum algorithms into a single library**
+- [ ] **Add READMEs for each source subdirectory**
+
 ## 🎯 **Success Metrics**
 
 ### Phase 3 Targets

@@ -552,6 +552,10 @@ void QuantumTrackerWindow::renderPipsDisplay() {
     
     ImGui::Text("Data Points: %zu / 2880 (48h)", pips_tracker_.price_history_.size());
     ImGui::Text("Window Complete: %s", pips_tracker_.price_history_.size() >= 2880 ? "YES" : "NO");
+
+    // Advanced performance metrics
+    ImGui::Text("Sharpe Ratio: %.2f", pips_tracker_.calculateSharpeRatio());
+    ImGui::Text("Max Drawdown: %.2f%%", pips_tracker_.calculateMaxDrawdown() * 100.0);
     
     ImGui::End();
 }

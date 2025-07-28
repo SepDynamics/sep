@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <cmath>
 
 #include "connectors/oanda_connector.h"
 #include "quantum_signal_bridge.hpp"
@@ -38,25 +39,58 @@ struct PipsTracker {
     double start_price_48h_{0.0};
     
     void updatePips(double new_price) {
+        if (!std::isfinite(new_price)) {
+            return; // Basic data-quality check
+        }
+
         if (!price_history_.empty()) {
             double pip_change = (new_price - current_price_) * 10000; // Convert to pips
             pip_history_.push_back(pip_change);
-            
+
             // Maintain 48h window (assuming 1-minute data = 2880 points)
             if (pip_history_.size() > 2880) {
                 pip_history_.pop_front();
                 price_history_.pop_front();
             }
         }
-        
+
         price_history_.push_back(new_price);
         current_price_ = new_price;
-        
+
         // Calculate 48h total
         if (!price_history_.empty()) {
             start_price_48h_ = price_history_.front();
             total_pips_48h_ = (current_price_ - start_price_48h_) * 10000;
         }
+    }
+
+    double calculateSharpeRatio() const {
+        if (pip_history_.size() < 2) return 0.0;
+        double mean = 0.0;
+        for (double p : pip_history_) mean += p;
+        mean /= static_cast<double>(pip_history_.size());
+
+        double var = 0.0;
+        for (double p : pip_history_) {
+            double diff = p - mean;
+            var += diff * diff;
+        }
+        var /= static_cast<double>(pip_history_.size());
+        double stddev = std::sqrt(var);
+        if (stddev < 1e-6) return 0.0;
+        return (mean / stddev) * std::sqrt(1440.0); // Approx. minutes per day
+    }
+
+    double calculateMaxDrawdown() const {
+        if (price_history_.empty()) return 0.0;
+        double peak = price_history_.front();
+        double max_dd = 0.0;
+        for (double p : price_history_) {
+            peak = std::max(peak, p);
+            double dd = (p - peak) / peak;
+            if (dd < max_dd) max_dd = dd;
+        }
+        return max_dd;
     }
 };
 

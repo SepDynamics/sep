@@ -220,50 +220,39 @@ float QuantumSignalBridge::calculateCoherence(const sep::quantum::QFHResult& qfh
 }
 
 float QuantumSignalBridge::calculateStability(const std::vector<sep::connectors::MarketData>& history) {
-    if (history.size() < 10) return 0.0f;
-    
-    // Calculate directional stability based on recent price trend
-    // Use a stable window from recent data instead of the full shifting history
-    size_t window_size = std::min(20UL, history.size());  // Use last 20 points or available data
-    size_t start_idx = history.size() - window_size;
-    
-    double price_start = history[start_idx].mid;
-    double price_end = history.back().mid;
-    double price_change = (price_end - price_start) * 10000; // Convert to pips
-    
-    // DEBUG: Track stability calculation details
-    static int debug_count = 0;
-    if (debug_count++ < 10) {
-        std::cout << "[QuantumSignal] STABILITY DEBUG #" << debug_count 
-                  << " - History size: " << history.size() << " Window: " << window_size
-                  << " Start[" << start_idx << "]: " << price_start << " End: " << price_end 
-                  << " Change: " << price_change << " pips" << std::endl;
+    if (history.size() < 10) {
+        return 0.5f; // Neutral if insufficient history
     }
-    
-    // Calculate volatility for normalization
-    double price_sum = 0.0, price_sq_sum = 0.0;
-    for (const auto& data : history) {
-        price_sum += data.mid;
-        price_sq_sum += data.mid * data.mid;
+
+    size_t window = std::min<size_t>(30, history.size());
+    size_t start = history.size() - window;
+
+    std::vector<double> diffs;
+    diffs.reserve(window - 1);
+    double prev = history[start].mid;
+    double sum = 0.0;
+    for (size_t i = start + 1; i < history.size(); ++i) {
+        double diff = history[i].mid - prev;
+        diffs.push_back(diff);
+        sum += diff;
+        prev = history[i].mid;
     }
-    
-    double mean = price_sum / history.size();
-    double variance = (price_sq_sum / history.size()) - (mean * mean);
-    double volatility = std::sqrt(variance) * 10000; // Scale to pips
-    
-    // Stability = directional change scaled by inverse volatility
-    // High volatility reduces the magnitude of stability
-    float stability_factor = 1.0f / (1.0f + static_cast<float>(volatility));
-    float directional_stability = static_cast<float>(price_change) * stability_factor;
-    
-    // Clamp to reasonable range [-5.0, 5.0] then normalize to [0, 1]
-    float clamped_stability = std::max(-5.0f, std::min(5.0f, directional_stability));
-    
-    // Normalize to [0, 1] range where:
-    // 0.0 = maximum bearish (-5.0)
-    // 0.5 = neutral (0.0) 
-    // 1.0 = maximum bullish (+5.0)
-    return (clamped_stability + 5.0f) / 10.0f;
+
+    double mean = sum / diffs.size();
+    double var = 0.0;
+    for (double d : diffs) {
+        double delta = d - mean;
+        var += delta * delta;
+    }
+    var /= diffs.size();
+    double stddev = std::sqrt(var);
+    if (!std::isfinite(stddev)) {
+        return 0.5f;
+    }
+
+    double score = std::tanh(std::abs(mean) / (stddev + 1e-6));
+    double normalized = mean >= 0.0 ? 0.5 + score * 0.5 : 0.5 - score * 0.5;
+    return static_cast<float>(normalized);
 }
 
 QuantumTradingSignal::Action QuantumSignalBridge::determineDirection(

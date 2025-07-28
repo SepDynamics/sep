@@ -5,6 +5,7 @@ import json
 
 import pandas as pd
 import numpy as np
+from performance_metrics import sharpe_ratio
 from pathlib import Path
 import shutil
 import tempfile
@@ -101,7 +102,7 @@ def main():
         result = {
             "baseline_alpha": alpha,
             "total_return_alpha": alpha,
-            "sharpe_ratio": alpha / 10.0,  # Simple approximation
+            "sharpe_ratio": sharpe_ratio([m.get('pnl', 0.0) for m in metrics_data]),
             "experiment_type": "direct_metrics"
         }
         
@@ -162,7 +163,7 @@ def main():
     final_result = {
         "baseline_alpha": baseline_alpha,
         "total_return_alpha": results[-1]["alpha"] if results else baseline_alpha,
-        "sharpe_ratio": (results[-1]["alpha"] if results else baseline_alpha) / 10.0,
+        "sharpe_ratio": sharpe_ratio([r["alpha"] for r in results]) if results else 0.0,
         "training_iterations": results,
         "experiment_type": "full_experiment"
     }

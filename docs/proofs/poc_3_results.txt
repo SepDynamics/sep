@@ -1,8 +1,0 @@
-
-=== Processing File (state cleared): "/workspace/train_data" for 1 iterations ===
-
-Metrics for /workspace/train_data:
-  Average Coherence: 0.4682
-  Average Stability: 0.5000
-  Average Entropy:   0.1000
-  Total Patterns:    57

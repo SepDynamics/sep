@@ -5,7 +5,7 @@ sudo ln -sf /workspace/sep /sep
 cd /sep
 
 
-# Pinned Python version used for all installs
+# Pinned Python version used for all installs  
 PYTHON_VERSION="3.13.*"
 
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
@@ -41,21 +41,20 @@ BUILD_DIR="$WS_DIR/build/deps"
 mkdir -p "$LOG_DIR" "$BUILD_DIR"
 
 MIN_PACKAGES=(
-  build-essential cmake git
-  libspdlog-dev libfmt-dev libgflags-dev libgoogle-glog-dev
-  libbenchmark-dev libgtest-dev nlohmann-json3-dev pkg-config
+  build-essential cmake git clang-15 clang-tidy-15 clang-format-15 ninja-build
+  libspdlog-dev libfmt-dev libbenchmark-dev libgtest-dev 
+  nlohmann-json3-dev pkg-config libhiredis-dev libglm-dev
+  libyaml-cpp-dev libimgui-dev libgl1-mesa-dev libglfw3-dev
+  libcurl4-openssl-dev curl python3 python3-pip gdb
+  libpipewire-0.3-dev libspa-0.2-dev fftw3-dev libtbb-dev
   valgrind
 )
 
 FULL_PACKAGES=(
   "${MIN_PACKAGES[@]}"
-  libglu1-mesa-dev libpcre3-dev libtbb-dev libxrandr-dev libglfw3-dev
-  libboost-all-dev libopencolorio-dev libopenimageio-dev
-  libembree-dev libpugixml-dev libopenjp2-7-dev
-  libcurl4-openssl-dev libhttp-parser-dev
-  libhiredis-dev libglm-dev libglfw3 libglfw3-dev
-  liblz4-dev libzstd-dev
-  libpipewire-0.3-dev libfftw3-dev libopenexr-dev
+  libglu1-mesa-dev libpcre3-dev libxrandr-dev 
+  libboost-all-dev libpugixml-dev libopenjp2-7-dev
+  libhttp-parser-dev liblz4-dev libzstd-dev
 )
 
 if [ "$USE_MINIMAL" -eq 1 ]; then
@@ -106,12 +105,12 @@ if ! command -v python3.13 >/dev/null; then
     "python3.13-dev=${PYTHON_VERSION}" | tee -a "$LOG_DIR/apt.log"
 fi
 
-# Install GCC 14 if available
-if apt-cache show gcc-14 >/dev/null 2>&1; then
-  sudo apt-get install -y gcc-14 g++-14 | tee -a "$LOG_DIR/apt.log"
-  sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100
-  sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
-fi
+# Install Python packages for analysis
+pip3 install pandas numpy matplotlib codechecker
+
+# Set up clang tool symlinks
+sudo ln -sf /usr/bin/clang-tidy-15 /usr/bin/clang-tidy
+sudo ln -sf /usr/bin/clang-format-15 /usr/bin/clang-format
 
 # Verify installed packages
 echo "Verifying installations..."

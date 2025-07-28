@@ -22,10 +22,10 @@ bool QuantumTrackerWindow::initialize() {
             return false;
         }
         
-        // Configure with EXACT alpha strategy thresholds (verified +0.0084 pips)
-        quantum_bridge_->setConfidenceThreshold(0.6f);  // 60% - from alpha analysis
-        quantum_bridge_->setCoherenceThreshold(0.4f);   // 40% - based on POC results  
-        quantum_bridge_->setStabilityThreshold(0.0f);   // 0% - from alpha analysis
+        // Configure with runtime-adjustable thresholds
+        quantum_bridge_->setConfidenceThreshold(conf_threshold_);
+        quantum_bridge_->setCoherenceThreshold(coh_threshold_);
+        quantum_bridge_->setStabilityThreshold(stab_threshold_);
         
         std::cout << "[QuantumTracker] Initialized successfully" << std::endl;
         return true;
@@ -340,6 +340,9 @@ void QuantumTrackerWindow::render() {
     ImGui::Separator();
     
     renderQuantumDiagnostics();
+    ImGui::Separator();
+
+    renderThresholdControls();
     ImGui::Separator();
     
     renderMetricPlots();
@@ -668,6 +671,23 @@ void QuantumTrackerWindow::renderQuantumDiagnostics() {
         ImGui::Text("Waiting for quantum signal...");
     }
     
+    ImGui::End();
+}
+
+void QuantumTrackerWindow::renderThresholdControls() {
+    ImGui::Begin("🎛 Threshold Controls");
+
+    bool updated = false;
+    updated |= ImGui::SliderFloat("Confidence", &conf_threshold_, 0.0f, 1.0f);
+    updated |= ImGui::SliderFloat("Coherence", &coh_threshold_, 0.0f, 1.0f);
+    updated |= ImGui::SliderFloat("Stability", &stab_threshold_, -1.0f, 1.0f);
+
+    if (updated && quantum_bridge_) {
+        quantum_bridge_->setConfidenceThreshold(conf_threshold_);
+        quantum_bridge_->setCoherenceThreshold(coh_threshold_);
+        quantum_bridge_->setStabilityThreshold(stab_threshold_);
+    }
+
     ImGui::End();
 }
 

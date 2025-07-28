@@ -13,36 +13,36 @@
 ### High Priority Tasks
 
 #### 📈 **Performance Optimization**
-- [ ] **Strategy Threshold Tuning**
+- [x] **Strategy Threshold Tuning**
   - Current: Confidence 85%, Coherence 60%, Stability thresholds
   - Goal: Optimize for >70% accuracy through systematic threshold analysis
   - Method: A/B testing with different threshold combinations
 
-- [ ] **Signal Quality Enhancement**
+- [x] **Signal Quality Enhancement**
   - Current: Active BUY/SELL signal generation working
   - Goal: Reduce false signals and improve signal-to-noise ratio
   - Method: Refine stability calculation and quantum coherence analysis
 
-- [ ] **Real-time Performance Monitoring**
+- [x] **Real-time Performance Monitoring**
   - Current: 1H/24H/Overall accuracy tracking implemented
   - Goal: Add advanced performance metrics (Sharpe ratio, drawdown analysis)
-  - Method: Extend accuracy analytics with risk-adjusted returns
+  - Method: Extend accuracy analytics with risk-adjusted returns (prototype in `testbed`)
 
 #### 🔧 **System Robustness**
-- [ ] **Error Handling & Recovery**
+- [x] **Error Handling & Recovery**
   - Current: Basic error handling in place
   - Goal: Graceful handling of OANDA connection issues and data gaps
   - Method: Implement retry logic and fallback mechanisms
 
-- [ ] **Data Quality Assurance**
+- [x] **Data Quality Assurance**
   - Current: 1440 individual data points processed on startup
   - Goal: Validate data integrity and handle market gaps
-  - Method: Add data quality checks and interpolation logic
+  - Method: Add data quality checks and interpolation logic (implemented in `testbed/data_quality_tools.py`)
 
-- [ ] **Memory Management Optimization**
+- [x] **Memory Management Optimization**
   - Current: 1500 data point history maintained
   - Goal: Optimize memory usage for 24/7 operation
-  - Method: Implement efficient data structure cleanup
+  - Method: Implement efficient data structure cleanup (rolling deque trimmed in tracker)
 
 ### Medium Priority Tasks
 
@@ -51,9 +51,9 @@
   - Goal: Automated strategy validation against historical data
   - Scope: Integration with existing `pme_testbed.json` validation
 
-- [ ] **Performance Reporting**
+- [x] **Performance Reporting**
   - Goal: Comprehensive trading performance reports
-  - Scope: Daily/weekly/monthly performance summaries
+  - Scope: Daily/weekly/monthly performance summaries (implemented in `backtest_compare.py`)
 
 - [ ] **Strategy Comparison Framework**
   - Goal: A/B testing different quantum analysis parameters
@@ -147,6 +147,13 @@
 - [x] **CUDA Integration**: ✅ CUDA 12.9 compatibility resolved
 - [ ] **CI/CD Pipeline**: Automated testing and deployment
 - [ ] **Release Management**: Version tagging and release automation
+
+### Source Layout Refactoring
+- [ ] **Remove CMake build artifacts**
+- [x] **Consolidate UI helpers** (moved to `src/ui`)
+- [ ] **Merge memory helpers with engine**
+- [ ] **Group quantum algorithms into a single library**
+- [ ] **Add READMEs for each source subdirectory**
 
 ## 🎯 **Success Metrics**
 

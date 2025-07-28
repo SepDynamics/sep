@@ -14,6 +14,7 @@ target_link_libraries(oanda_trader PUBLIC
     sep_engine
     sep_connectors
     sep_quantum
+    sep_ui
     imgui
     glad
     OpenGL::GL
@@ -46,6 +47,7 @@ target_link_libraries(quantum_tracker PUBLIC
     sep_engine
     sep_connectors
     sep_quantum
+    sep_ui
     imgui
     implot
     glad

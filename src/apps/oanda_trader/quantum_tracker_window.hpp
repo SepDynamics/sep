@@ -168,6 +168,11 @@ private:
     static constexpr size_t MIN_HISTORY_FOR_SIGNAL = 20;
     static constexpr double HIGH_CONFIDENCE_THRESHOLD = 0.8;
     static constexpr double MEDIUM_CONFIDENCE_THRESHOLD = 0.6;
+
+    // Runtime-adjustable thresholds
+    float conf_threshold_{0.6f};
+    float coh_threshold_{0.4f};
+    float stab_threshold_{0.0f};
     
     // Internal methods
     void updatePredictions(const sep::connectors::MarketData& current_data);
@@ -191,6 +196,7 @@ private:
     void renderPipsDisplay();
     void renderQuantumDiagnostics();
     void renderMetricPlots();
+    void renderThresholdControls();
     
     // Utility functions
     double calculateDirectionalAccuracy(const QuantumPrediction& pred, double actual_price) const;

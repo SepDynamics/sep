@@ -108,35 +108,47 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
         signal.rupture_ratio = qfh_result.rupture_ratio;
         signal.quantum_collapse_detected = qfh_result.collapse_detected;
         
+        // Direction determination based on normalized stability [0, 1]:
+        // < 0.45 = BUY (low stability favors buying), > 0.55 = SELL (high stability favors selling)
+        if (signal.stability < 0.45f) {
+            signal.action = QuantumTradingSignal::BUY;
+        } else if (signal.stability > 0.55f) {
+            signal.action = QuantumTradingSignal::SELL;
+        } else {
+            // HOLD zone - stability between 0.45-0.55 indicates uncertain market conditions
+            signal.action = QuantumTradingSignal::HOLD;
+        }
+        
         // Apply strategy thresholds (from alpha analysis)
         bool meets_confidence = signal.confidence >= confidence_threshold_.load();
-        bool meets_coherence = signal.coherence >= coherence_threshold_.load();
-        bool meets_stability = signal.stability >= stability_threshold_.load();
+        bool meets_coherence = signal.coherence >= 0.6f;  // Coherence must be above 0.6
+        // For normalized stability [0,1], check distance from neutral (0.5)
+        bool meets_stability = std::abs(signal.stability - 0.5f) >= stability_threshold_.load();
         
         std::cout << "[QuantumSignal] Metrics - Confidence: " << signal.confidence 
                   << " (≥" << confidence_threshold_.load() << ": " << (meets_confidence ? "PASS" : "FAIL") << ")"
                   << " Coherence: " << signal.coherence 
                   << " (≥" << coherence_threshold_.load() << ": " << (meets_coherence ? "PASS" : "FAIL") << ")"
                   << " Stability: " << signal.stability 
-                  << " (≥" << stability_threshold_.load() << ": " << (meets_stability ? "PASS" : "FAIL") << ")"
+                  << " (|0.5-val|≥" << stability_threshold_.load() << ": " << (meets_stability ? "PASS" : "FAIL") << ")"
+                  << " Direction: " << (signal.action == QuantumTradingSignal::BUY ? "BUY" : 
+                                       signal.action == QuantumTradingSignal::SELL ? "SELL" : "HOLD")
                   << std::endl;
         
-        if (meets_confidence && meets_coherence && meets_stability) {
-            // Determine trade direction from quantum analysis
-            signal.action = determineDirection(qfh_result, qbsa_result);
-            signal.should_execute = (signal.action != QuantumTradingSignal::HOLD);
+        if (meets_confidence && meets_coherence && meets_stability && signal.action != QuantumTradingSignal::HOLD) {
+            signal.should_execute = true;
             
-            if (signal.should_execute) {
-                // Calculate risk management parameters
-                signal.suggested_position_size = calculatePositionSize(signal.confidence, 10000.0); // Default balance
-                signal.stop_loss_distance = calculateStopLoss(signal.coherence, current_data.mid);
-                signal.take_profit_distance = calculateTakeProfit(signal.confidence, current_data.mid);
-                
-                std::cout << "[QuantumSignal] SIGNAL GENERATED: " << current_data.instrument
-                          << " Action: " << (signal.action == QuantumTradingSignal::BUY ? "BUY" : "SELL")
-                          << " Size: " << signal.suggested_position_size << std::endl;
-            }
+            // Calculate risk management parameters
+            signal.suggested_position_size = calculatePositionSize(signal.confidence, 10000.0); // Default balance
+            signal.stop_loss_distance = calculateStopLoss(signal.coherence, current_data.mid);
+            signal.take_profit_distance = calculateTakeProfit(signal.confidence, current_data.mid);
+            
+            std::cout << "[QuantumSignal] SIGNAL GENERATED: " << current_data.instrument
+                      << " Action: " << (signal.action == QuantumTradingSignal::BUY ? "BUY" : "SELL")
+                      << " Size: " << signal.suggested_position_size << std::endl;
         } else {
+            signal.action = QuantumTradingSignal::HOLD;
+            signal.should_execute = false;
             std::cout << "[QuantumSignal] Thresholds not met - HOLD" << std::endl;
         }
         
@@ -187,10 +199,16 @@ float QuantumSignalBridge::calculateConfidence(const sep::quantum::QFHResult& qf
     float flip_stability = 1.0f - qfh_result.flip_ratio;  // Lower flip ratio = more stable
     float rupture_penalty = qfh_result.rupture_ratio;     // Higher rupture = less confident
     
-    // Apply modest adjustments (keep QBSA as primary factor)
-    float confidence = base_confidence * (0.9f + flip_stability * 0.1f) * (1.0f - rupture_penalty * 0.1f);
+    // Fix confidence stuck at high values - reduce coherence dominance
+    // Since coherence is always ~0.999, it shouldn't drive confidence
     
-    return std::max(0.0f, std::min(1.0f, confidence));
+    // Make confidence more responsive to market volatility and pattern quality
+    float confidence = base_confidence * 0.4f +           // Reduce QBSA dominance
+                      flip_stability * 0.4f +             // Increase flip influence  
+                      (1.0f - rupture_penalty) * 0.3f -   // Invert rupture (low rupture = high confidence)
+                      (qfh_result.entropy * 0.1f);        // Subtract entropy as uncertainty
+    
+    return std::max(0.2f, std::min(0.8f, confidence));    // More reasonable range
 }
 
 float QuantumSignalBridge::calculateCoherence(const sep::quantum::QFHResult& qfh_result) {
@@ -204,7 +222,25 @@ float QuantumSignalBridge::calculateCoherence(const sep::quantum::QFHResult& qfh
 float QuantumSignalBridge::calculateStability(const std::vector<sep::connectors::MarketData>& history) {
     if (history.size() < 10) return 0.0f;
     
-    // Calculate price stability as inverse of volatility
+    // Calculate directional stability based on recent price trend
+    // Use a stable window from recent data instead of the full shifting history
+    size_t window_size = std::min(20UL, history.size());  // Use last 20 points or available data
+    size_t start_idx = history.size() - window_size;
+    
+    double price_start = history[start_idx].mid;
+    double price_end = history.back().mid;
+    double price_change = (price_end - price_start) * 10000; // Convert to pips
+    
+    // DEBUG: Track stability calculation details
+    static int debug_count = 0;
+    if (debug_count++ < 10) {
+        std::cout << "[QuantumSignal] STABILITY DEBUG #" << debug_count 
+                  << " - History size: " << history.size() << " Window: " << window_size
+                  << " Start[" << start_idx << "]: " << price_start << " End: " << price_end 
+                  << " Change: " << price_change << " pips" << std::endl;
+    }
+    
+    // Calculate volatility for normalization
     double price_sum = 0.0, price_sq_sum = 0.0;
     for (const auto& data : history) {
         price_sum += data.mid;
@@ -213,45 +249,65 @@ float QuantumSignalBridge::calculateStability(const std::vector<sep::connectors:
     
     double mean = price_sum / history.size();
     double variance = (price_sq_sum / history.size()) - (mean * mean);
-    double volatility = std::sqrt(variance);
+    double volatility = std::sqrt(variance) * 10000; // Scale to pips
     
-    // Normalize volatility to stability (0-1 scale)
-    return 1.0f / (1.0f + static_cast<float>(volatility * 10000)); // Scale by pips
+    // Stability = directional change scaled by inverse volatility
+    // High volatility reduces the magnitude of stability
+    float stability_factor = 1.0f / (1.0f + static_cast<float>(volatility));
+    float directional_stability = static_cast<float>(price_change) * stability_factor;
+    
+    // Clamp to reasonable range [-5.0, 5.0] then normalize to [0, 1]
+    float clamped_stability = std::max(-5.0f, std::min(5.0f, directional_stability));
+    
+    // Normalize to [0, 1] range where:
+    // 0.0 = maximum bearish (-5.0)
+    // 0.5 = neutral (0.0) 
+    // 1.0 = maximum bullish (+5.0)
+    return (clamped_stability + 5.0f) / 10.0f;
 }
 
 QuantumTradingSignal::Action QuantumSignalBridge::determineDirection(
     const sep::quantum::QFHResult& qfh,
     const sep::quantum::QBSAResult& qbsa) {
     
-    // More balanced direction determination
-    // Use flip ratio as primary direction indicator
-    float flip_ratio = qfh.flip_ratio;
-    float correction_ratio = qbsa.correction_ratio;
-    float rupture_ratio = qfh.rupture_ratio;
+    // Direction determination based on test data analysis
+    // Stability is the primary indicator: positive = BUY, negative = SELL
     
-    std::cout << "[QuantumSignal] Direction analysis - Flip: " << flip_ratio 
-              << " Correction: " << correction_ratio << " Rupture: " << rupture_ratio << std::endl;
+    // Get the latest stability from the signal (calculated externally)
+    // Note: We'll use this through the main analysis function where stability is calculated
     
-    // Primary logic: flip ratio indicates market direction tendency
-    if (correction_ratio > 0.5f) {  // Lowered threshold from 0.7f
-        if (flip_ratio < 0.4f) {
+    std::cout << "[QuantumSignal] Direction analysis - Flip: " << qfh.flip_ratio 
+              << " Correction: " << qbsa.correction_ratio << " Rupture: " << qfh.rupture_ratio << std::endl;
+    
+    // For now, use QFH metrics as directional indicators until we can access stability here
+    // This is a simplified approach - the main logic should be in analyzeMarketData
+    
+    // Strong coherence patterns with decent confidence
+    if (qfh.coherence > 0.3f && qbsa.correction_ratio > 0.3f) {
+        // Use rupture ratio as primary direction indicator
+        // Low rupture = stable conditions = BUY tendency  
+        // High rupture = unstable conditions = SELL tendency
+        if (qfh.rupture_ratio < 0.3f) {
+            return QuantumTradingSignal::BUY;
+        } else if (qfh.rupture_ratio > 0.4f) {
+            return QuantumTradingSignal::SELL;
+        }
+    }
+    
+    // Secondary: Flip ratio analysis
+    if (qbsa.correction_ratio > 0.5f) {
+        if (qfh.flip_ratio < 0.4f) {
             // Low flip ratio suggests stable upward trend
             return QuantumTradingSignal::BUY;
-        } else if (flip_ratio > 0.6f) {
+        } else if (qfh.flip_ratio > 0.6f) {
             // High flip ratio suggests volatility/downward pressure
             return QuantumTradingSignal::SELL;
         }
     }
     
-    // Secondary logic: rupture analysis for trend strength
-    if (rupture_ratio > 0.8f) {
-        // High rupture suggests strong trend break - go opposite
-        return (flip_ratio > 0.5f) ? QuantumTradingSignal::BUY : QuantumTradingSignal::SELL;
-    }
-    
     // Quantum collapse detection for reversal signals
     if (qfh.collapse_detected) {
-        return (flip_ratio > 0.5f) ? QuantumTradingSignal::SELL : QuantumTradingSignal::BUY;
+        return (qfh.flip_ratio > 0.5f) ? QuantumTradingSignal::SELL : QuantumTradingSignal::BUY;
     }
     
     return QuantumTradingSignal::HOLD;

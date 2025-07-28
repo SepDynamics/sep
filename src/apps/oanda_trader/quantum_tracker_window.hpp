@@ -126,7 +126,7 @@ private:
     static constexpr size_t MAX_PLOT_POINTS = 200;
     
     // Configuration
-    static constexpr size_t MAX_HISTORY_SIZE = 200;
+    static constexpr size_t MAX_HISTORY_SIZE = 1500;  // Support 24+ hours of data
     static constexpr size_t MIN_HISTORY_FOR_SIGNAL = 20;
     static constexpr double HIGH_CONFIDENCE_THRESHOLD = 0.8;
     static constexpr double MEDIUM_CONFIDENCE_THRESHOLD = 0.6;

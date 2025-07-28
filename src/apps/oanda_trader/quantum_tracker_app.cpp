@@ -225,7 +225,11 @@ void QuantumTrackerApp::loadHistoricalData() {
             std::cout << ". Converting to MarketData..." << std::endl;
             
             // Convert candles to MarketData and feed to quantum tracker
-            for (const auto& candle : *historical_candles) {
+            // Process last 1440 candles (24 hours) with rate limiting for visual feedback
+            size_t start_idx = historical_candles->size() > 1440 ? historical_candles->size() - 1440 : 0;
+            
+            for (size_t i = start_idx; i < historical_candles->size(); ++i) {
+                const auto& candle = (*historical_candles)[i];
                 sep::connectors::MarketData market_data;
                 market_data.instrument = "EUR_USD";
                 market_data.mid = candle.close;
@@ -235,6 +239,13 @@ void QuantumTrackerApp::loadHistoricalData() {
                 market_data.atr = 0.0001; // Default ATR for historical data
                 
                 quantum_tracker_->processNewMarketData(market_data);
+                
+                // Rate limit for visual feedback (every 50th candle, very small delay)
+                if (i % 50 == 0) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                    std::cout << "[QuantumTracker] Processed " << (i - start_idx + 1) 
+                              << "/" << (historical_candles->size() - start_idx) << " candles" << std::endl;
+                }
             }
             
             std::cout << "[QuantumTracker] Historical data processed successfully!" << std::endl;

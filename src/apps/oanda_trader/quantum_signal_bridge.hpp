@@ -83,7 +83,7 @@ private:
     std::unique_ptr<sep::quantum::QBSAProcessor> qbsa_processor_;
     
     // Strategy thresholds (based on POC results showing coherence ~0.47)
-    std::atomic<float> confidence_threshold_{0.6f};
+    std::atomic<float> confidence_threshold_{0.85f};
     std::atomic<float> coherence_threshold_{0.4f};  // Realistic threshold based on POC data
     std::atomic<float> stability_threshold_{0.0f};
     

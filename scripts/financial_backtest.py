@@ -2,7 +2,11 @@ import argparse
 import json
 import pandas as pd
 import numpy as np
-from performance_metrics import sharpe_ratio, max_drawdown
+from performance_metrics import (
+    sharpe_ratio,
+    max_drawdown,
+    calculate_advanced_metrics,
+)
 
 def calculate_gauge(metrics_df):
     """
@@ -67,10 +71,10 @@ def run_analysis_a(df):
     strat_returns = df['strategy_returns'].dropna()
     bench_returns = df['benchmark_returns'].dropna()
 
-    sr = sharpe_ratio(strat_returns)
+    metrics = calculate_advanced_metrics(strat_returns)
     strategy_drawdown = max_drawdown(df['strategy_cumulative_returns'])
     benchmark_drawdown = max_drawdown(df['benchmark_cumulative_returns'])
-    
+
     # Alpha (simplified version)
     alpha = df['strategy_returns'].mean() - df['benchmark_returns'].mean()
     alpha_annualized = alpha * 252
@@ -78,8 +82,10 @@ def run_analysis_a(df):
     print("--- Performance Metrics ---")
     print(f"Strategy Total Return: {df['strategy_cumulative_returns'].iloc[-1]:.2%}")
     print(f"Benchmark Total Return: {df['benchmark_cumulative_returns'].iloc[-1]:.2%}")
-    print(f"Sharpe Ratio: {sr:.2f}")
+    print(f"Sharpe Ratio: {metrics['sharpe']:.2f}")
     print(f"Max Drawdown: {strategy_drawdown:.2%} (Benchmark: {benchmark_drawdown:.2%})")
+    print(f"Calmar Ratio: {metrics['calmar']:.2f}")
+    print(f"95% VaR: {metrics['var_95']:.4f}")
     print(f"Annualized Alpha: {alpha_annualized:.2%}")
     print("\n")
 

@@ -32,6 +32,11 @@ bool QuantumSignalBridge::initialize() {
         qbsa_opts.collapse_threshold = 0.6f;
         qbsa_processor_ = std::make_unique<sep::quantum::QBSAProcessor>(qbsa_opts);
         
+        // Initialize pattern evolution bridge
+        sep::quantum::PatternEvolutionBridge::Config evo_cfg;
+        evolver_ = std::make_unique<sep::quantum::PatternEvolutionBridge>(evo_cfg);
+        evolver_->initializeEvolutionState();
+
         // Load existing patterns
         loadPatterns();
         
@@ -48,6 +53,7 @@ bool QuantumSignalBridge::initialize() {
 void QuantumSignalBridge::shutdown() {
     if (initialized_) {
         savePatterns();
+        evolver_.reset();
         initialized_ = false;
     }
 }
@@ -346,30 +352,35 @@ void QuantumSignalBridge::debugDataFormat(const std::vector<sep::connectors::Mar
 
 void QuantumSignalBridge::loadPatterns() {
     std::ifstream file(patterns_file_path_);
-    if (file.is_open()) {
-        try {
-            nlohmann::json patterns_json;
-            file >> patterns_json;
-            
-            // Load patterns from JSON
-            // Implementation depends on Pattern structure
-            std::cout << "[QuantumSignal] Loaded patterns from " << patterns_file_path_ << std::endl;
-        } catch (const std::exception& e) {
-            std::cout << "[QuantumSignal] Could not load patterns: " << e.what() << std::endl;
+    if (!file.is_open()) {
+        return;
+    }
+
+    try {
+        nlohmann::json patterns_json;
+        file >> patterns_json;
+        if (patterns_json.is_array()) {
+            active_patterns_.clear();
+            for (const auto& pj : patterns_json) {
+                sep::quantum::Pattern p = pj.get<sep::quantum::Pattern>();
+                active_patterns_[p.id] = p;
+                active_pattern_scores_[p.id] = p.quantum_state.stability;
+            }
         }
+        std::cout << "[QuantumSignal] Loaded patterns from " << patterns_file_path_ << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "[QuantumSignal] Could not load patterns: " << e.what() << std::endl;
     }
 }
 
 void QuantumSignalBridge::savePatterns() {
     try {
-        nlohmann::json patterns_json;
-        
-        // Save patterns to JSON
-        // Implementation depends on Pattern structure
-        
+        nlohmann::json patterns_json = nlohmann::json::array();
+        for (const auto& kv : active_patterns_) {
+            patterns_json.push_back(kv.second);
+        }
         std::ofstream file(patterns_file_path_);
         file << patterns_json.dump(2);
-        
         std::cout << "[QuantumSignal] Saved patterns to " << patterns_file_path_ << std::endl;
     } catch (const std::exception& e) {
         std::cerr << "[QuantumSignal] Could not save patterns: " << e.what() << std::endl;
@@ -378,23 +389,82 @@ void QuantumSignalBridge::savePatterns() {
 
 void QuantumSignalBridge::evolvePatternsWithFeedback(const std::string& pattern_id, bool profitable) {
     std::lock_guard<std::mutex> lock(analysis_mutex_);
-    
-    // Simplified pattern feedback for now
-    if (active_pattern_scores_.find(pattern_id) != active_pattern_scores_.end()) {
-        float adjustment = profitable ? 0.1f : -0.1f;
-        active_pattern_scores_[pattern_id] += adjustment;
-        std::cout << "[QuantumSignal] Applied feedback for pattern " << pattern_id 
-                  << " (profitable: " << profitable << ", new score: " 
-                  << active_pattern_scores_[pattern_id] << ")" << std::endl;
-    } else {
-        active_pattern_scores_[pattern_id] = profitable ? 0.6f : 0.4f;
-        std::cout << "[QuantumSignal] Created new pattern " << pattern_id 
-                  << " (profitable: " << profitable << ")" << std::endl;
+
+    auto it = active_patterns_.find(pattern_id);
+    if (it == active_patterns_.end()) {
+        sep::quantum::Pattern p;
+        p.id = pattern_id;
+        p.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count();
+        p.quantum_state.coherence = 0.5f;
+        p.quantum_state.stability = 0.5f;
+        active_patterns_[pattern_id] = p;
+        it = active_patterns_.find(pattern_id);
     }
+
+    float adjustment = profitable ? 0.05f : -0.05f;
+    it->second.quantum_state.stability += adjustment;
+
+    active_pattern_scores_[pattern_id] += profitable ? 0.1f : -0.1f;
+
+    std::vector<sep::quantum::Pattern> patterns;
+    patterns.reserve(active_patterns_.size());
+    for (auto& kv : active_patterns_) {
+        patterns.push_back(kv.second);
+    }
+
+    if (evolver_) {
+        auto result = evolver_->evolvePatterns(patterns, 1.0f);
+        active_patterns_.clear();
+        for (auto& p : result.evolved_patterns) {
+            active_patterns_[p.id] = p;
+        }
+    }
+
+    savePatterns();
 }
 
 std::string QuantumSignalBridge::generatePatternId(const std::string& instrument, uint64_t timestamp) {
     return "pattern_" + instrument + "_" + std::to_string(timestamp);
+}
+
+void QuantumSignalBridge::addManagedPosition(const QuantumTradingSignal& signal, double current_price) {
+    ManagedPosition pos;
+    pos.id = generatePatternId(signal.instrument, signal.timestamp);
+    pos.instrument = signal.instrument;
+    pos.units = signal.action == QuantumTradingSignal::BUY ? signal.suggested_position_size : -signal.suggested_position_size;
+    pos.entry_price = current_price;
+    pos.stop_loss = signal.action == QuantumTradingSignal::BUY
+                        ? current_price - signal.stop_loss_distance
+                        : current_price + signal.stop_loss_distance;
+    pos.take_profit = signal.action == QuantumTradingSignal::BUY
+                          ? current_price + signal.take_profit_distance
+                          : current_price - signal.take_profit_distance;
+    pos.open_time = signal.timestamp;
+    managed_positions_.push_back(pos);
+}
+
+void QuantumSignalBridge::updatePositions(const sep::connectors::MarketData& data) {
+    for (auto it = managed_positions_.begin(); it != managed_positions_.end();) {
+        if (it->instrument != data.instrument) {
+            ++it;
+            continue;
+        }
+
+        bool close = false;
+        if (it->units > 0) {
+            if (data.mid <= it->stop_loss || data.mid >= it->take_profit) close = true;
+        } else {
+            if (data.mid >= it->stop_loss || data.mid <= it->take_profit) close = true;
+        }
+
+        if (close) {
+            std::cout << "[Position] Closed " << it->instrument << " at " << data.mid << std::endl;
+            it = managed_positions_.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
 } // namespace sep::trading

@@ -9,6 +9,8 @@
 #include "connectors/oanda_connector.h"
 #include "quantum/qfh.h"
 #include "quantum/qbsa.h"
+#include "quantum/pattern_evolution_bridge.h"
+#include "quantum/types.h"
 
 namespace sep::trading {
 
@@ -43,6 +45,16 @@ struct QuantumTradingSignal {
     uint64_t timestamp = 0;
 };
 
+struct ManagedPosition {
+    std::string id;
+    std::string instrument;
+    double units{0.0};
+    double entry_price{0.0};
+    double stop_loss{0.0};
+    double take_profit{0.0};
+    uint64_t open_time{0};
+};
+
 /**
  * Bridge between quantum engine and trading execution
  * Implements patent-backed QFH/QBSA analysis for signal generation
@@ -71,6 +83,8 @@ public:
     
     // Risk management
     double calculatePositionSize(float confidence, double account_balance);
+    void addManagedPosition(const QuantumTradingSignal& signal, double current_price);
+    void updatePositions(const sep::connectors::MarketData& data);
     
     // Diagnostics
     const std::vector<uint8_t>& getLastBitPattern() const { return last_bits_; }
@@ -116,9 +130,14 @@ private:
     // Thread safety
     mutable std::mutex analysis_mutex_;
     
-    // Patterns storage (simplified for now)
+    // Patterns storage
     std::map<std::string, float> active_pattern_scores_;
+    std::unordered_map<std::string, sep::quantum::Pattern> active_patterns_;
+    std::unique_ptr<sep::quantum::PatternEvolutionBridge> evolver_;
     std::string patterns_file_path_;
+
+    // Managed positions
+    std::vector<ManagedPosition> managed_positions_;
     
     bool initialized_ = false;
 };

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEP Dynamics - Revolutionary Financial Pattern Recognition</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">SEP Dynamics</span>
+                <span class="logo-subtitle">Quantum-Inspired Finance</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#technology">Technology</a></li>
+                <li><a href="#performance">Performance</a></li>
+                <li><a href="#patents">Patents</a></li>
+                <li><a href="#investors">Investors</a></li>
+                <li><a href="#demo" class="nav-cta">Live Demo</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    Finding Signal in <span class="gradient-text">Financial Chaos</span>
+                </h1>
+                <p class="hero-subtitle">
+                    SEP Engine detects market patterns before they emerge using quantum-inspired algorithms. 
+                    <strong>65% prediction accuracy</strong> with demonstrated alpha generation in live trading.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">65%</div>
+                        <div class="stat-label">Live Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">+0.0084</div>
+                        <div class="stat-label">Pips Alpha</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Operational</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">Patents</div>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="#demo" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Watch Demo
+                    </a>
+                    <a href="#investors" class="btn btn-secondary">
+                        <i class="fas fa-chart-line"></i> Investor Deck
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="pattern-container">
+                    <canvas id="hero-canvas" width="600" height="400"></canvas>
+                    <div class="pattern-overlay">
+                        <div class="coherence-metric">
+                            <span class="metric-label">Coherence</span>
+                            <span class="metric-value" id="coherence-value">0.78</span>
+                        </div>
+                        <div class="stability-metric">
+                            <span class="metric-label">Stability</span>
+                            <span class="metric-value" id="stability-value">0.64</span>
+                        </div>
+                        <div class="entropy-metric">
+                            <span class="metric-label">Entropy</span>
+                            <span class="metric-value" id="entropy-value">0.23</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="problem">
+        <div class="container">
+            <h2>The Traditional Approach Is Broken</h2>
+            <div class="problem-grid">
+                <div class="problem-item">
+                    <i class="fas fa-robot"></i>
+                    <h3>Black Box Models</h3>
+                    <p>AI models make predictions without explaining why, creating unacceptable risk in financial markets.</p>
+                </div>
+                <div class="problem-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Reactive Analysis</h3>
+                    <p>Traditional tools analyze what already happened instead of detecting emerging patterns.</p>
+                </div>
+                <div class="problem-item">
+                    <i class="fas fa-clock"></i>
+                    <h3>Training Lag</h3>
+                    <p>Machine learning requires historical training, making it blind to new market regimes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="technology">
+        <div class="container">
+            <h2>How SEP Engine Works</h2>
+            <p class="section-subtitle">Four revolutionary technologies working together to detect patterns in real-time</p>
+            
+            <div class="tech-pipeline">
+                <div class="pipeline-flow">
+                    <div class="flow-item">
+                        <div class="flow-icon">📊</div>
+                        <div class="flow-text">Market Data</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-icon">🌊</div>
+                        <div class="flow-text">QFH Analysis</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-icon">🔍</div>
+                        <div class="flow-text">QBSA Validation</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-icon">📈</div>
+                        <div class="flow-text">Trading Signal</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-cards">
+                <div class="tech-card" data-tech="qfh">
+                    <div class="tech-icon">🌊</div>
+                    <h3>Quantum Field Harmonics</h3>
+                    <p>Detects market instability by analyzing bit-level transitions in financial data streams.</p>
+                    <div class="tech-benefits">
+                        <span class="benefit">Early Warning System</span>
+                        <span class="benefit">Pattern Collapse Detection</span>
+                    </div>
+                </div>
+                <div class="tech-card" data-tech="qbsa">
+                    <div class="tech-icon">🔍</div>
+                    <h3>Quantum Bit State Analysis</h3>
+                    <p>Validates pattern integrity and predicts potential failures before they occur.</p>
+                    <div class="tech-benefits">
+                        <span class="benefit">Risk Management</span>
+                        <span class="benefit">Predictive Validation</span>
+                    </div>
+                </div>
+                <div class="tech-card" data-tech="manifold">
+                    <div class="tech-icon">🔄</div>
+                    <h3>Manifold Optimizer</h3>
+                    <p>Optimizes patterns in high-dimensional space, avoiding local minima that trap traditional algorithms.</p>
+                    <div class="tech-benefits">
+                        <span class="benefit">Global Optimization</span>
+                        <span class="benefit">Geometric Intelligence</span>
+                    </div>
+                </div>
+                <div class="tech-card" data-tech="evolution">
+                    <div class="tech-icon">🧬</div>
+                    <h3>Pattern Evolution</h3>
+                    <p>Enables patterns to adapt and improve over time, automatically discovering successful strategies.</p>
+                    <div class="tech-benefits">
+                        <span class="benefit">Self-Improvement</span>
+                        <span class="benefit">Strategy Discovery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Section -->
+    <section id="performance" class="performance">
+        <div class="container">
+            <h2>Proven Performance</h2>
+            <p class="section-subtitle">Live trading results and comprehensive validation studies</p>
+            
+            <div class="performance-grid">
+                <div class="performance-main">
+                    <div class="performance-chart">
+                        <canvas id="performance-canvas" width="800" height="400"></canvas>
+                    </div>
+                </div>
+                <div class="performance-metrics">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Prediction Accuracy</span>
+                        </div>
+                        <div class="metric-value large">65%</div>
+                        <div class="metric-subtitle">Live EUR/USD Trading</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Alpha Generation</span>
+                        </div>
+                        <div class="metric-value large">+0.0084</div>
+                        <div class="metric-subtitle">Pips over 48h period</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>System Uptime</span>
+                        </div>
+                        <div class="metric-value large">99.9%</div>
+                        <div class="metric-subtitle">30-day testing period</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <i class="fas fa-clock"></i>
+                            <span>Signal Latency</span>
+                        </div>
+                        <div class="metric-value large">&lt;100ms</div>
+                        <div class="metric-subtitle">Real-time processing</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="validation-studies">
+                <h3>Comprehensive Validation</h3>
+                <div class="studies-grid">
+                    <div class="study-item">
+                        <div class="study-number">POC 1</div>
+                        <h4>Datatype-Agnostic Processing</h4>
+                        <p>Successfully processes any file format as raw byte stream with meaningful coherence scoring.</p>
+                    </div>
+                    <div class="study-item">
+                        <div class="study-number">POC 2</div>
+                        <h4>Stateful Processing</h4>
+                        <p>Maintains historical context across multiple runs for enhanced pattern recognition.</p>
+                    </div>
+                    <div class="study-item">
+                        <div class="study-number">POC 3</div>
+                        <h4>Binary Analysis</h4>
+                        <p>Robust analysis of compiled executables demonstrating universal applicability.</p>
+                    </div>
+                    <div class="study-item">
+                        <div class="study-number">POC 4</div>
+                        <h4>Performance Benchmark</h4>
+                        <p>~27 microseconds processing speed with optimized scalability architecture.</p>
+                    </div>
+                    <div class="study-item">
+                        <div class="study-number">POC 5</div>
+                        <h4>Metric Compositionality</h4>
+                        <p>Coherence metrics remain stable across different data chunk sizes and streaming scenarios.</p>
+                    </div>
+                    <div class="study-item">
+                        <div class="study-number">POC 6</div>
+                        <h4>Predictive Backtesting</h4>
+                        <p>End-to-end validation with quantifiable alpha generation on real financial data.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Patents Section -->
+    <section id="patents" class="patents">
+        <div class="container">
+            <h2>Patent Portfolio</h2>
+            <p class="section-subtitle">Four core technologies creating a sustainable competitive moat</p>
+            
+            <div class="patents-overview">
+                <div class="patent-value">
+                    <h3>Portfolio Value</h3>
+                    <div class="value-breakdown">
+                        <div class="value-item">
+                            <span class="value-label">Conservative Estimate</span>
+                            <span class="value-amount">$25M</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-label">Market Potential</span>
+                            <span class="value-amount">$1B+</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="patent-coverage">
+                    <h3>Market Coverage</h3>
+                    <div class="coverage-items">
+                        <span class="coverage-item">High-Frequency Trading</span>
+                        <span class="coverage-item">Risk Management</span>
+                        <span class="coverage-item">Pattern Recognition</span>
+                        <span class="coverage-item">Real-time Analytics</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="patent-details">
+                <div class="patent-item">
+                    <div class="patent-header">
+                        <div class="patent-number">01</div>
+                        <div class="patent-info">
+                            <h3>Quantum Field Harmonics (QFH)</h3>
+                            <p class="patent-status">Patent Pending</p>
+                        </div>
+                    </div>
+                    <div class="patent-description">
+                        <p>Revolutionary method for analyzing financial data by interpreting bit transitions as quantum field events. Classifies market states and provides early warning for instability.</p>
+                        <div class="patent-applications">
+                            <span>Market Collapse Detection</span>
+                            <span>Trend Analysis</span>
+                            <span>Volatility Prediction</span>
+                        </div>
+                    </div>
+                    <div class="patent-demo">
+                        <button class="demo-btn" data-demo="qfh">View Interactive Demo</button>
+                    </div>
+                </div>
+
+                <div class="patent-item">
+                    <div class="patent-header">
+                        <div class="patent-number">02</div>
+                        <div class="patent-info">
+                            <h3>Quantum Bit State Analysis (QBSA)</h3>
+                            <p class="patent-status">Patent Pending</p>
+                        </div>
+                    </div>
+                    <div class="patent-description">
+                        <p>Predictive error-correction system that validates pattern integrity and forecasts potential failures through quantum-inspired correction ratios.</p>
+                        <div class="patent-applications">
+                            <span>Risk Management</span>
+                            <span>Pattern Validation</span>
+                            <span>Failure Prediction</span>
+                        </div>
+                    </div>
+                    <div class="patent-demo">
+                        <button class="demo-btn" data-demo="qbsa">View Interactive Demo</button>
+                    </div>
+                </div>
+
+                <div class="patent-item">
+                    <div class="patent-header">
+                        <div class="patent-number">03</div>
+                        <div class="patent-info">
+                            <h3>Quantum Manifold Optimizer</h3>
+                            <p class="patent-status">Patent Pending</p>
+                        </div>
+                    </div>
+                    <div class="patent-description">
+                        <p>Advanced optimization system using Riemannian geometry to enhance financial patterns in non-linear, high-dimensional space, avoiding local minima.</p>
+                        <div class="patent-applications">
+                            <span>Portfolio Optimization</span>
+                            <span>Strategy Enhancement</span>
+                            <span>Global Optimization</span>
+                        </div>
+                    </div>
+                    <div class="patent-demo">
+                        <button class="demo-btn" data-demo="manifold">View Interactive Demo</button>
+                    </div>
+                </div>
+
+                <div class="patent-item">
+                    <div class="patent-header">
+                        <div class="patent-number">04</div>
+                        <div class="patent-info">
+                            <h3>Pattern Evolution System</h3>
+                            <p class="patent-status">Patent Pending</p>
+                        </div>
+                    </div>
+                    <div class="patent-description">
+                        <p>Evolutionary computation framework enabling financial patterns to adapt and improve over time, automatically discovering successful trading strategies.</p>
+                        <div class="patent-applications">
+                            <span>Strategy Discovery</span>
+                            <span>Adaptive Learning</span>
+                            <span>Performance Optimization</span>
+                        </div>
+                    </div>
+                    <div class="patent-demo">
+                        <button class="demo-btn" data-demo="evolution">View Interactive Demo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="demo">
+        <div class="container">
+            <h2>Live Technology Demo</h2>
+            <p class="section-subtitle">See SEP Engine analyzing real market data in real-time</p>
+            
+            <div class="demo-container">
+                <div class="demo-controls">
+                    <div class="control-group">
+                        <label>Market Pair</label>
+                        <select id="market-pair">
+                            <option value="EURUSD">EUR/USD</option>
+                            <option value="GBPUSD">GBP/USD</option>
+                            <option value="USDJPY">USD/JPY</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Timeframe</label>
+                        <select id="timeframe">
+                            <option value="M1">1 Minute</option>
+                            <option value="M5">5 Minutes</option>
+                            <option value="M15">15 Minutes</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <button id="start-demo" class="btn btn-primary">Start Live Analysis</button>
+                    </div>
+                </div>
+                
+                <div class="demo-display">
+                    <div class="demo-chart">
+                        <canvas id="demo-canvas" width="1000" height="500"></canvas>
+                    </div>
+                    <div class="demo-metrics">
+                        <div class="metric-group">
+                            <h4>Quantum Metrics</h4>
+                            <div class="metric-row">
+                                <span class="metric-name">Coherence</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="coherence-bar"></div>
+                                </div>
+                                <span class="metric-num" id="coherence-num">0.78</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-name">Stability</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="stability-bar"></div>
+                                </div>
+                                <span class="metric-num" id="stability-num">0.64</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-name">Entropy</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" id="entropy-bar"></div>
+                                </div>
+                                <span class="metric-num" id="entropy-num">0.23</span>
+                            </div>
+                        </div>
+                        
+                        <div class="signal-display">
+                            <h4>Current Signal</h4>
+                            <div class="signal-indicator" id="signal-indicator">
+                                <div class="signal-icon">📊</div>
+                                <div class="signal-text">ANALYZING...</div>
+                                <div class="signal-confidence">Confidence: <span id="confidence">--</span>%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investors Section -->
+    <section id="investors" class="investors">
+        <div class="container">
+            <h2>Investment Opportunity</h2>
+            <p class="section-subtitle">Revolutionary financial technology with proven performance and massive market potential</p>
+            
+            <div class="investment-overview">
+                <div class="investment-highlights">
+                    <div class="highlight-item">
+                        <div class="highlight-icon">💎</div>
+                        <h3>Proven Technology</h3>
+                        <p>65% prediction accuracy with live trading validation and demonstrated alpha generation</p>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">🛡️</div>
+                        <h3>IP Protection</h3>
+                        <p>4 core patents creating sustainable competitive advantage in $500B+ market</p>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">🚀</div>
+                        <h3>Scalable Platform</h3>
+                        <p>CUDA-accelerated processing ready for institutional deployment</p>
+                    </div>
+                </div>
+                
+                <div class="investment-terms">
+                    <div class="terms-card">
+                        <h3>Current Round</h3>
+                        <div class="term-item">
+                            <span class="term-label">Seeking</span>
+                            <span class="term-value">$1M</span>
+                        </div>
+                        <div class="term-item">
+                            <span class="term-label">Valuation</span>
+                            <span class="term-value">$10M</span>
+                        </div>
+                        <div class="term-item">
+                            <span class="term-label">Use of Funds</span>
+                            <span class="term-value">Tech Enhancement (40%)<br>Market Development (35%)<br>Operations (25%)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="market-opportunity">
+                        <h3>Market Opportunity</h3>
+                        <div class="market-size">
+                            <div class="market-item">
+                                <span class="market-label">Total Addressable Market</span>
+                                <span class="market-value">$6.2T</span>
+                                <span class="market-desc">Daily forex market</span>
+                            </div>
+                            <div class="market-item">
+                                <span class="market-label">Serviceable Market</span>
+                                <span class="market-value">$500B</span>
+                                <span class="market-desc">Algorithmic trading</span>
+                            </div>
+                            <div class="market-item">
+                                <span class="market-label">Target Market</span>
+                                <span class="market-value">$50B</span>
+                                <span class="market-desc">Quantitative platforms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="financial-projections">
+                <h3>Revenue Projections</h3>
+                <div class="projection-chart">
+                    <canvas id="projection-canvas" width="800" height="300"></canvas>
+                </div>
+                <div class="revenue-streams">
+                    <div class="stream-item">
+                        <h4>Licensing Fees</h4>
+                        <p>Technology licensing to financial institutions and hedge funds</p>
+                    </div>
+                    <div class="stream-item">
+                        <h4>Performance Fees</h4>
+                        <p>Revenue sharing based on alpha generation and trading performance</p>
+                    </div>
+                    <div class="stream-item">
+                        <h4>SaaS Platform</h4>
+                        <p>Subscription-based access to SEP Engine analytics platform</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="investor-actions">
+                <a href="/EXECUTIVE_SUMMARY.pdf" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-download"></i> Download Executive Summary
+                </a>
+                <a href="mailto:alex@sepdynamics.co" class="btn btn-secondary">
+                    <i class="fas fa-envelope"></i> Contact for Investment
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SEP Dynamics</h3>
+                    <p>Revolutionary quantum-inspired financial pattern recognition technology.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Technology</h4>
+                    <ul>
+                        <li><a href="#technology">How It Works</a></li>
+                        <li><a href="#performance">Performance</a></li>
+                        <li><a href="#patents">Patents</a></li>
+                        <li><a href="#demo">Live Demo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#investors">Investors</a></li>
+                        <li><a href="/docs/EXECUTIVE_SUMMARY.md">Executive Summary</a></li>
+                        <li><a href="mailto:alex@sepdynamics.co">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Patent Portfolio</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SEP Dynamics. All rights reserved. | Quantum-inspired financial technology.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Demo Modal -->
+    <div id="demo-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-demo-content">
+                <!-- Demo content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

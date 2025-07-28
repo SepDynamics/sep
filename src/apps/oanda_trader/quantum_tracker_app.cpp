@@ -212,7 +212,7 @@ void QuantumTrackerApp::connectToOanda() {
 }
 
 void QuantumTrackerApp::loadHistoricalData() {
-    std::cout << "[QuantumTracker] Loading 48H TICK-LEVEL data for EUR_USD..." << std::endl;
+    std::cout << "[QuantumTracker] Loading 2H TICK-LEVEL data for EUR_USD..." << std::endl;
     std::cout << "[QuantumTracker] This will collect ALL price updates, not just M1 candles!" << std::endl;
     
     if (!tick_manager_) {

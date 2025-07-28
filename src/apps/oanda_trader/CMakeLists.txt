@@ -66,6 +66,11 @@ target_link_libraries(quantum_tracker PUBLIC
 set_target_properties(quantum_tracker PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
+    CUDA_STANDARD 17
+    CUDA_STANDARD_REQUIRED ON
 )
+
+# CUDA separable compilation for better linking
+set_property(TARGET quantum_tracker PROPERTY CUDA_SEPARABLE_COMPILATION ON)
 
 install(TARGETS oanda_trader quantum_tracker DESTINATION bin)

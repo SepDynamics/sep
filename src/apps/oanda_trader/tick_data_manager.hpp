@@ -1,7 +1,12 @@
 #pragma once
 
 #include "connectors/oanda_connector.h"
-#include "tick_cuda_kernels.cuh"
+
+// Forward declarations for CUDA types to avoid header conflicts
+namespace sep::apps::cuda {
+    struct CudaContext;
+    struct WindowResult;
+}
 #include <chrono>
 #include <memory>
 #include <vector>
@@ -103,9 +108,9 @@ private:
     std::vector<WindowCalculation> hourly_calculations_;
     std::vector<WindowCalculation> daily_calculations_;
     
-    // Configurable window sizes
+    // Configurable window sizes (reduced for faster testing)
     std::chrono::minutes hourly_window_{60};    // 1 hour default
-    std::chrono::hours daily_window_{24};       // 24 hours default
+    std::chrono::hours daily_window_{1};        // 1 hour default (reduced from 24H)
     
     // Performance optimization
     size_t last_calculation_index_ = 0;
@@ -118,12 +123,13 @@ private:
                                     uint64_t window_end) const;
     void maintainTickHistory();
     void recalculateAllWindows();
+    void calculateWindowsCPU(); // CPU-only calculation without CUDA recursion
     
     // CUDA acceleration
     bool initializeCuda();
     void calculateWindowsCudaAccelerated();
     bool cuda_enabled_ = false;
-    cuda::CudaContext cuda_context_;
+    std::unique_ptr<cuda::CudaContext> cuda_context_;
 };
 
 } // namespace sep::apps

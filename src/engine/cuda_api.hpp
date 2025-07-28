@@ -1,14 +1,15 @@
 #pragma once
 
-// Include C API definitions first
-#ifndef __CUDACC__
-// Forward declare CUDA types for non-CUDA files
+// Include CUDA headers when available
+#if defined(__CUDACC__) || defined(CUDA_RUNTIME_H) || defined(__NVCC__)
+#include <cuda_runtime.h>
+#else
+// Forward declare CUDA types for non-CUDA files only when CUDA headers not included
+#ifndef CUDA_RUNTIME_H
 typedef int cudaError_t;
 typedef int cudaMemcpyKind;
 typedef struct CUstream_st* cudaStream_t;
-#else
-// Include real CUDA headers for CUDA files
-#include <cuda_runtime.h>
+#endif
 #endif
 
 #include <cstddef>  // For size_t

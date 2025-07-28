@@ -2,6 +2,9 @@ import argparse
 import pandas as pd
 from typing import Dict, Tuple
 
+from performance_metrics import sharpe_ratio, max_drawdown
+from data_quality_tools import detect_gaps, interpolate_missing
+
 
 def load_dataset(path: str) -> pd.DataFrame:
     """Load the pme_testbed.json output as a DataFrame."""
@@ -25,6 +28,11 @@ def load_dataset(path: str) -> pd.DataFrame:
         raise ValueError(f"Dataset missing columns: {missing}")
     df['timestamp'] = pd.to_datetime(df['timestamp'])
     df = df.set_index('timestamp').sort_index()
+
+    gaps = detect_gaps(df)
+    if gaps:
+        print(f"Found {len(gaps)} missing timestamps, interpolating...")
+        df = interpolate_missing(df)
     return df
 
 
@@ -61,12 +69,30 @@ def run_backtest(df: pd.DataFrame, params: Dict[str, float]) -> Tuple[pd.Series,
     return daily, weekly, monthly, capital
 
 
+def performance_summary(equity: pd.Series) -> Dict[str, float]:
+    """Return Sharpe ratio and max drawdown for an equity curve."""
+    returns = equity.diff().fillna(0)
+    sr = sharpe_ratio(returns)
+    dd = max_drawdown(equity)
+    return {"sharpe_ratio": sr, "max_drawdown": dd}
+
+
 def compare_strategies(df: pd.DataFrame, params_a: Dict[str, float], params_b: Dict[str, float]):
     daily_a, weekly_a, monthly_a, final_a = run_backtest(df.copy(), params_a)
     daily_b, weekly_b, monthly_b, final_b = run_backtest(df.copy(), params_b)
 
     print("Strategy A final pips:", round(final_a, 5))
     print("Strategy B final pips:", round(final_b, 5))
+
+    perf_a = performance_summary(daily_a.cumsum())
+    perf_b = performance_summary(daily_b.cumsum())
+
+    print("\nPerformance A: SR={:.2f} DD={:.2%}".format(
+        perf_a["sharpe_ratio"], perf_a["max_drawdown"]
+    ))
+    print("Performance B: SR={:.2f} DD={:.2%}".format(
+        perf_b["sharpe_ratio"], perf_b["max_drawdown"]
+    ))
 
     print("\nDaily Returns A vs B")
     print(pd.DataFrame({'A': daily_a, 'B': daily_b}).tail())

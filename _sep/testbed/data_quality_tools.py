@@ -1,6 +1,7 @@
 import pandas as pd
 from collections import deque
 from typing import Deque
+import numpy as np
 
 
 def detect_gaps(df: pd.DataFrame, freq: str = "T") -> list:
@@ -27,6 +28,47 @@ def trim_history(history: Deque, max_size: int) -> None:
         history.popleft()
 
 
+def refine_signals(df: pd.DataFrame, signal_col: str = "signal", window: int = 3) -> pd.DataFrame:
+    """Return a copy of ``df`` with a noise-reduced signal column.
+
+    The function applies a centered rolling window majority vote to the signal
+    column.  This helps filter out spurious BUY/SELL flips that can occur when
+    the quantum metrics oscillate around decision thresholds.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input data containing a signal column with values -1, 0 or 1.
+    signal_col : str, optional
+        Name of the signal column. Defaults to ``"signal"``.
+    window : int, optional
+        Size of the rolling window used for the majority vote.  A larger window
+        results in a smoother signal. Defaults to ``3``.
+
+    Returns
+    -------
+    pd.DataFrame
+        Copy of ``df`` with an additional ``signal_refined`` column.
+    """
+
+    if signal_col not in df.columns:
+        return df.copy()
+
+    def _vote(arr: np.ndarray) -> float:
+        s = np.sign(arr).sum()
+        if s > 0:
+            return 1.0
+        if s < 0:
+            return -1.0
+        return 0.0
+
+    result = df.copy()
+    result["signal_refined"] = (
+        result[signal_col]
+        .rolling(window=window, center=True, min_periods=1)
+        .apply(_vote, raw=True)
+    )
+    return result
 def smooth_metrics(df: pd.DataFrame, window: int = 5) -> pd.DataFrame:
     """Return a DataFrame with smoothed coherence and stability values."""
     if df.empty:

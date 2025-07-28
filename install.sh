@@ -64,8 +64,19 @@ fi
 echo "Updating package lists..."
 sudo apt-get update -y
 
+# Prevent Java keystore errors when OpenJDK installs
+sudo rm -f /etc/ssl/certs/java/cacerts /usr/lib/security/cacerts
+sudo mkdir -p /etc/ssl/certs/java /usr/lib/security
+
 echo "Installing base packages..."
 sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
+
+# Ensure Java keystore exists if keytool is available
+if command -v keytool >/dev/null && [ ! -s /usr/lib/security/cacerts ]; then
+  sudo keytool -genkey -alias temp -keystore /usr/lib/security/cacerts \
+    -storepass changeit -keypass changeit -dname "CN=temp" -validity 1 \
+    >/dev/null 2>&1
+fi
 
 # Install Docker and Docker Compose
 echo "Installing Docker..."

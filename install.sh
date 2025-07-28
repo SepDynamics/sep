@@ -2,7 +2,6 @@
 # SEP Engine dependency installer
 set -uo pipefail
 
-
 # Pinned Python version used for all installs  
 PYTHON_VERSION="3.12.*"
 
@@ -31,6 +30,16 @@ if [ "$USE_CUDA" -eq 0 ]; then
   export SEP_HAS_CUDA=0
 else
   export SEP_HAS_CUDA=1
+  CUDA_PACKAGES=(cuda-toolkit-12-9 cuda-compiler-12-9 cuda-cudart-dev-12-9)
+fi
+
+# Build the sep-engine-builder image if a container runtime is available
+if command -v "${DOCKER_BIN:-docker}" >/dev/null 2>&1; then
+  RUNTIME="${DOCKER_BIN:-docker}"
+  if ! "$RUNTIME" image inspect sep-engine-builder >/dev/null 2>&1; then
+    echo "Building sep-engine-builder container image..."
+    "$RUNTIME" build -t sep-engine-builder . || echo "Container build failed"
+  fi
 fi
 
 WS_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -64,28 +73,31 @@ fi
 echo "Updating package lists..."
 sudo apt-get update -y
 
-# Some Java-based packages require this directory to exist to avoid dpkg errors
-sudo mkdir -p /etc/ssl/certs/java
-
-sudo apt-get install -y ca-certificates-java >/dev/null 2>&1 || true
+# Prevent Java keystore errors when OpenJDK installs
+sudo rm -f /etc/ssl/certs/java/cacerts /usr/lib/security/cacerts
+sudo mkdir -p /etc/ssl/certs/java /usr/lib/security
 
 echo "Installing base packages..."
 sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
+if [ "$USE_CUDA" -eq 1 ]; then
+  echo "Installing CUDA packages..."
+  sudo apt-get install -y "${CUDA_PACKAGES[@]}" | tee -a "$LOG_DIR/apt.log"
+fi
 
-if [ "$SEP_HAS_CUDA" -eq 1 ]; then
-  echo "Installing CUDA toolkit..."
-  if ! sudo apt-get install -y --no-install-recommends \
-      cuda-toolkit-12-5 cuda-cudart-dev-12-5 \
-      | tee -a "$LOG_DIR/apt.log"; then
-    echo "CUDA toolkit installation failed; continuing without CUDA support" | tee -a "$LOG_DIR/apt.log"
-    export SEP_HAS_CUDA=0
-  fi
+# Ensure Java keystore exists if keytool is available
+if command -v keytool >/dev/null && [ ! -s /usr/lib/security/cacerts ]; then
+  sudo keytool -genkey -alias temp -keystore /usr/lib/security/cacerts \
+    -storepass changeit -keypass changeit -dname "CN=temp" -validity 1 \
+    >/dev/null 2>&1
 fi
 
 # Install Docker and Docker Compose
 echo "Installing Docker..."
-sudo apt-get install -y docker.io docker-compose-v2 | sudo tee -a "$LOG_DIR/apt.log" >/dev/null
-sudo systemctl enable --now docker >/dev/null 2>&1 || true
+sudo apt-get install -y docker.io docker-compose-plugin | tee -a "$LOG_DIR/apt.log" >/dev/null
+# Attempt to start Docker if systemd is available
+if command -v systemctl >/dev/null 2>&1; then
+  sudo systemctl enable --now docker >/dev/null 2>&1 || true
+fi
 if [ "$EUID" -ne 0 ]; then
   sudo usermod -aG docker "$USER" || true
 fi
@@ -94,9 +106,9 @@ fi
 if [ -d /usr/src/googletest ]; then
   echo "Building GoogleTest..."
   sudo cmake /usr/src/googletest -B /usr/src/googletest/build \
-    | sudo tee -a "$LOG_DIR/gtest.log" >/dev/null
+    | tee -a "$LOG_DIR/gtest.log" >/dev/null
   sudo cmake --build /usr/src/googletest/build --target install \
-    | sudo tee -a "$LOG_DIR/gtest.log" >/dev/null
+    | tee -a "$LOG_DIR/gtest.log" >/dev/null
   sudo ldconfig
 fi
 
@@ -130,7 +142,7 @@ echo "Verifying installations..."
 docker --version || { echo "Docker not installed"; exit 1; }
 docker compose version || true
 "$PYTHON_EXEC" --version || true
-for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
+for pkg in "${PACKAGES[@]}" docker.io docker-compose-plugin; do
   if dpkg -s "$pkg" >/dev/null 2>&1; then
     echo "$pkg installed"
   else
@@ -147,4 +159,3 @@ if ! docker info >/dev/null 2>&1; then
     export DOCKER_BIN=podman
   fi
 fi
-

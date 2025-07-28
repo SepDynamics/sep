@@ -1,4 +1,6 @@
-FROM nvidia/cuda:12.9.0-devel-ubuntu22.04
+# Use fully qualified image reference for better compatibility with Docker
+# alternatives like Podman which require explicit registry prefixes.
+FROM docker.io/nvidia/cuda:12.9.0-devel-ubuntu22.04
 
 # Set CUDA environment variables
 ENV CUDA_HOME=/usr/local/cuda

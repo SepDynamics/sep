@@ -1,6 +1,5 @@
 # SEP Apps - Standalone Applications
 
-add_subdirectory(common)
 add_subdirectory(oanda_trader)
 
 add_executable(data_downloader data_downloader.cpp)

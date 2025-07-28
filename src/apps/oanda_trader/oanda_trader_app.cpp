@@ -36,7 +36,19 @@ bool OandaTraderApp::initialize() {
     
     // Initialize SEP engine
     sep_engine_ = std::make_unique<sep::core::Engine>();
-    
+
+    // Initialize quantum bridge for signal processing
+    quantum_bridge_ = std::make_unique<sep::trading::QuantumSignalBridge>();
+    if (!quantum_bridge_->initialize()) {
+        last_error_ = "Failed to initialize quantum signal bridge";
+        return false;
+    }
+
+    // Set default thresholds based on tracker configuration
+    quantum_bridge_->setConfidenceThreshold(0.6f);
+    quantum_bridge_->setCoherenceThreshold(0.4f);
+    quantum_bridge_->setStabilityThreshold(0.0f);
+
     return true;
 }
 
@@ -220,7 +232,7 @@ void OandaTraderApp::renderAccountInfo() {
 
 void OandaTraderApp::renderMarketData() {
     ImGui::Begin("Market Data");
-    
+
     ImGui::Text("Real-time market data:");
     ImGui::Separator();
     
@@ -229,7 +241,19 @@ void OandaTraderApp::renderMarketData() {
         ImGui::Text("%s - Bid: %.5f, Ask: %.5f, Time: %llu",
                     instrument.c_str(), data.bid, data.ask, (unsigned long long)data.timestamp);
     }
-    
+
+    {
+        std::lock_guard<std::mutex> lock(signal_mutex_);
+        if (last_signal_.timestamp != 0) {
+            const char* action_str = last_signal_.action == sep::trading::QuantumTradingSignal::BUY ? "BUY" :
+                                      last_signal_.action == sep::trading::QuantumTradingSignal::SELL ? "SELL" : "HOLD";
+            ImGui::Separator();
+            ImGui::Text("Quantum Signal: %s", action_str);
+            ImGui::Text("Conf: %.2f Coh: %.2f Stab: %.2f", last_signal_.confidence,
+                        last_signal_.coherence, last_signal_.stability);
+        }
+    }
+
     ImGui::End();
 }
 
@@ -415,27 +439,47 @@ void OandaTraderApp::connectToOanda() {
     
     // Set the price callback
     oanda_connector_->setPriceCallback([this](const sep::connectors::MarketData& data) {
-        std::lock_guard<std::mutex> lock(market_data_mutex_);
-        market_data_map_[data.instrument] = data;
-        
-        // Log real market data
-        std::cout << "[Market Data] " << data.instrument
-                  << " - Bid: " << data.bid
-                  << ", Ask: " << data.ask
-                  << ", Mid: " << data.mid
-                  << ", Time: " << data.timestamp << std::endl;
+        {
+            std::lock_guard<std::mutex> lock(market_data_mutex_);
+            market_data_map_[data.instrument] = data;
+        }
+
+        {
+            std::lock_guard<std::mutex> lock(market_history_mutex_);
+            market_history_.push_back(data);
+            if (market_history_.size() > 256) {
+                market_history_.pop_front();
+            }
+        }
+
+        if (quantum_bridge_) {
+            std::vector<sep::connectors::MarketData> history_copy;
+            {
+                std::lock_guard<std::mutex> lock(market_history_mutex_);
+                history_copy.assign(market_history_.begin(), market_history_.end());
+            }
+
+            auto signal = quantum_bridge_->analyzeMarketData(data, history_copy);
+            {
+                std::lock_guard<std::mutex> lock(signal_mutex_);
+                last_signal_ = signal;
+            }
+            if (signal.should_execute) {
+                std::cout << "[Signal] " << (signal.action == sep::trading::QuantumTradingSignal::BUY ? "BUY" : "SELL")
+                          << " confidence:" << signal.confidence << " size:" << signal.suggested_position_size << std::endl;
+            }
+        }
     });
 
-    // Start the price stream in a new thread with error handling
+    // Start the price stream using managed thread
     try {
-        data_stream_thread_ = std::thread([this]() {
+        data_stream_thread_.start([this]() {
             std::cout << "[OANDA] Starting price stream for EUR_USD..." << std::endl;
             if (!oanda_connector_->startPriceStream({"EUR_USD"})) {
                 std::cerr << "[OANDA] Failed to start price stream: "
                           << oanda_connector_->getLastError() << std::endl;
             }
         });
-        data_stream_thread_.detach();
     } catch (const std::exception& e) {
         std::cerr << "[OANDA] Exception starting price stream: " << e.what() << std::endl;
     }
@@ -471,8 +515,9 @@ void OandaTraderApp::shutdown() {
     if (oanda_connector_) {
         oanda_connector_->stopPriceStream();
     }
-    if (data_stream_thread_.joinable()) {
-        data_stream_thread_.join();
+    data_stream_thread_.join();
+    if (quantum_bridge_) {
+        quantum_bridge_->shutdown();
     }
     cleanupGraphics();
 }

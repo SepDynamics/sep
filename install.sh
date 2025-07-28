@@ -33,6 +33,15 @@ else
   export SEP_HAS_CUDA=1
 fi
 
+# Build the sep-engine-builder image if a container runtime is available
+if command -v "${DOCKER_BIN:-docker}" >/dev/null 2>&1; then
+  RUNTIME="${DOCKER_BIN:-docker}"
+  if ! "$RUNTIME" image inspect sep-engine-builder >/dev/null 2>&1; then
+    echo "Building sep-engine-builder container image..."
+    "$RUNTIME" build -t sep-engine-builder . || echo "Container build failed"
+  fi
+fi
+
 WS_DIR="$(cd "$(dirname "$0")" && pwd)"
 LOG_DIR="$WS_DIR/logs"
 BUILD_DIR="$WS_DIR/build/deps"
@@ -70,7 +79,10 @@ sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 # Install Docker and Docker Compose
 echo "Installing Docker..."
 sudo apt-get install -y docker.io docker-compose-v2 | sudo tee -a "$LOG_DIR/apt.log" >/dev/null
-sudo systemctl enable --now docker >/dev/null 2>&1 || true
+# Attempt to start Docker if systemd is available
+if command -v systemctl >/dev/null 2>&1; then
+  sudo systemctl enable --now docker >/dev/null 2>&1 || true
+fi
 if [ "$EUID" -ne 0 ]; then
   sudo usermod -aG docker "$USER" || true
 fi

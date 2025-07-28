@@ -5,7 +5,7 @@ out/
 dist/
 bin/
 output/
-*CMakeFiles/*
+CMakeFiles/
 Makefile
 _work/
 _diag/

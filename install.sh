@@ -4,7 +4,7 @@ set -uo pipefail
 
 
 # Pinned Python version used for all installs  
-PYTHON_VERSION="3.13.*"
+PYTHON_VERSION="3.12.*"
 
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
@@ -93,18 +93,18 @@ if [ ! -d "third_party/glm" ]; then
   git clone https://github.com/g-truc/glm.git third_party/glm
 fi
 
-# Install Python 3.13 from deadsnakes if not present
-if ! command -v python3.13 >/dev/null; then
-  echo "Installing Python 3.13..."
-  sudo add-apt-repository ppa:deadsnakes/ppa -y
-  sudo apt-get update -y
-  # Explicitly install the pinned version
-  sudo apt-get install -y "python3.13=${PYTHON_VERSION}" \
-    "python3.13-dev=${PYTHON_VERSION}" | tee -a "$LOG_DIR/apt.log"
+# Detect available Python version
+if command -v python3.13 >/dev/null; then
+  PYTHON_EXEC=python3.13
+elif command -v python3.12 >/dev/null; then
+  PYTHON_EXEC=python3.12
+else
+  PYTHON_EXEC=python3
 fi
 
-# Install Python packages for analysis
-pip3 install --break-system-packages pandas numpy matplotlib codechecker
+# Install Python packages for analysis using detected interpreter
+"$PYTHON_EXEC" -m pip install --break-system-packages \
+  pandas numpy matplotlib codechecker
 
 # Set up clang tool symlinks
 sudo ln -sf /usr/bin/clang-tidy-15 /usr/bin/clang-tidy
@@ -114,7 +114,7 @@ sudo ln -sf /usr/bin/clang-format-15 /usr/bin/clang-format
 echo "Verifying installations..."
 docker --version || { echo "Docker not installed"; exit 1; }
 docker compose version || true
-python3.13 --version || true
+"$PYTHON_EXEC" --version || true
 for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
   if dpkg -s "$pkg" >/dev/null 2>&1; then
     echo "$pkg installed"

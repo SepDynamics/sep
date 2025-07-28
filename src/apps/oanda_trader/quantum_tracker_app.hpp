@@ -11,6 +11,7 @@
 #include "quantum_tracker_window.hpp"
 #include "data_cache_manager.hpp"
 #include "tick_data_manager.hpp"
+#include "rolling_window_chart.hpp"
 
 namespace sep::apps {
 
@@ -44,6 +45,7 @@ private:
     std::unique_ptr<QuantumTrackerWindow> quantum_tracker_;
     std::unique_ptr<DataCacheManager> cache_manager_;
     std::unique_ptr<TickDataManager> tick_manager_;
+    std::unique_ptr<RollingWindowChart> window_chart_;
     
     // Threading for market data
     std::thread data_stream_thread_;

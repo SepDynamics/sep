@@ -1,4 +1,5 @@
 #include "rolling_window_chart.hpp"
+#include "tick_data_manager.hpp"
 #include <imgui.h>
 #include <implot.h>
 #include <iostream>

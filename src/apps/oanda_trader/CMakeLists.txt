@@ -28,7 +28,7 @@ set_target_properties(oanda_trader PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 
-# Add the new quantum tracker app
+# Add the new quantum tracker app with CUDA support
 add_executable(quantum_tracker
     quantum_tracker_main.cpp
     quantum_tracker_app.cpp
@@ -37,6 +37,7 @@ add_executable(quantum_tracker
     data_cache_manager.cpp
     tick_data_manager.cpp
     rolling_window_chart.cpp
+    tick_cuda_kernels.cu
 )
 
 target_include_directories(quantum_tracker PUBLIC
@@ -58,6 +59,8 @@ target_link_libraries(quantum_tracker PUBLIC
     glfw
     Threads::Threads
     ${CMAKE_DL_LIBS}
+    CUDA::cudart
+    CUDA::cuda_driver
 )
 
 set_target_properties(quantum_tracker PROPERTIES

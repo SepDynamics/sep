@@ -1,10 +1,13 @@
 #pragma once
 
-#include "tick_data_manager.hpp"
 #include <memory>
 #include <vector>
+#include <cstdint>
 
 namespace sep::apps {
+
+// Forward declarations
+class TickDataManager;
 
 /**
  * Chart component for displaying rolling window calculations

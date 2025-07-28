@@ -1,6 +1,7 @@
 #pragma once
 
 #include "connectors/oanda_connector.h"
+#include "tick_cuda_kernels.cuh"
 #include <chrono>
 #include <memory>
 #include <vector>
@@ -118,10 +119,11 @@ private:
     void maintainTickHistory();
     void recalculateAllWindows();
     
-    // CUDA acceleration (for future implementation)
+    // CUDA acceleration
     bool initializeCuda();
-    void calculateWindowsCuda(const TickData* ticks, size_t count);
+    void calculateWindowsCudaAccelerated();
     bool cuda_enabled_ = false;
+    cuda::CudaContext cuda_context_;
 };
 
 } // namespace sep::apps

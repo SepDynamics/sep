@@ -15,7 +15,13 @@ TickDataManager::TickDataManager() {
     daily_calculations_.reserve(CALCULATION_ARRAY_SIZE);
 }
 
-TickDataManager::~TickDataManager() = default;
+TickDataManager::~TickDataManager() {
+    // Cleanup CUDA resources if initialized
+    if (cuda_enabled_ && cuda_context_.initialized) {
+        std::cout << "[TickDataManager] Cleaning up CUDA resources..." << std::endl;
+        cuda::cleanupCudaDevice(cuda_context_);
+    }
+}
 
 bool TickDataManager::initialize(sep::connectors::OandaConnector* connector) {
     if (!connector) {
@@ -245,6 +251,15 @@ void TickDataManager::maintainTickHistory() {
 void TickDataManager::recalculateAllWindows() {
     std::cout << "[TickDataManager] Recalculating all rolling windows..." << std::endl;
     
+    // Use CUDA acceleration if available
+    if (cuda_enabled_ && cuda_context_.initialized) {
+        calculateWindowsCudaAccelerated();
+        return;
+    }
+    
+    // Fallback to CPU calculation
+    std::cout << "[TickDataManager] Using CPU calculations..." << std::endl;
+    
     hourly_calculations_.clear();
     daily_calculations_.clear();
     
@@ -270,7 +285,7 @@ void TickDataManager::recalculateAllWindows() {
         daily_calculations_.push_back(daily_calc);
     }
     
-    std::cout << "[TickDataManager] Generated " << hourly_calculations_.size() 
+    std::cout << "[TickDataManager] CPU calculations completed! Generated " << hourly_calculations_.size() 
               << " hourly and " << daily_calculations_.size() << " daily calculations" << std::endl;
 }
 
@@ -348,14 +363,100 @@ std::vector<uint64_t> TickDataManager::getTimestamps() const {
 }
 
 bool TickDataManager::initializeCuda() {
-    // TODO: Implement CUDA initialization
-    // For now, return false to use CPU calculations
-    return false;
+    std::cout << "[TickDataManager] Initializing CUDA acceleration..." << std::endl;
+    
+    cudaError_t error = cuda::initializeCudaDevice(cuda_context_);
+    if (error != cudaSuccess) {
+        std::cerr << "[TickDataManager] CUDA initialization failed: " << cudaGetErrorString(error) << std::endl;
+        return false;
+    }
+    
+    std::cout << "[TickDataManager] CUDA acceleration initialized successfully!" << std::endl;
+    return true;
 }
 
-void TickDataManager::calculateWindowsCuda(const TickData* ticks, size_t count) {
-    // TODO: Implement CUDA-accelerated window calculations
-    // This would process multiple windows in parallel on GPU
+void TickDataManager::calculateWindowsCudaAccelerated() {
+    if (!cuda_enabled_ || !cuda_context_.initialized) {
+        std::cerr << "[TickDataManager] CUDA not available, falling back to CPU" << std::endl;
+        recalculateAllWindows();
+        return;
+    }
+    
+    std::cout << "[TickDataManager] Running CUDA-accelerated window calculations..." << std::endl;
+    
+    // Convert tick history to CUDA format
+    std::vector<cuda::TickData> cuda_ticks;
+    cuda_ticks.reserve(tick_history_.size());
+    
+    for (const auto& tick : tick_history_) {
+        cuda::TickData cuda_tick;
+        cuda_tick.price = tick.price;
+        cuda_tick.bid = tick.bid;
+        cuda_tick.ask = tick.ask;
+        cuda_tick.timestamp = tick.timestamp;
+        cuda_tick.volume = tick.volume;
+        cuda_ticks.push_back(cuda_tick);
+    }
+    
+    // Prepare result arrays
+    size_t calculation_count = std::min(CALCULATION_ARRAY_SIZE, tick_history_.size());
+    std::vector<cuda::WindowResult> hourly_cuda_results(calculation_count);
+    std::vector<cuda::WindowResult> daily_cuda_results(calculation_count);
+    
+    // Calculate current time and window sizes in nanoseconds
+    uint64_t current_time = tick_history_.empty() ? 0 : tick_history_.back().timestamp;
+    uint64_t hourly_window_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(hourly_window_).count();
+    uint64_t daily_window_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(daily_window_).count();
+    
+    // Launch CUDA calculation
+    cudaError_t error = cuda::calculateWindowsCuda(
+        cuda_context_,
+        cuda_ticks,
+        hourly_cuda_results,
+        daily_cuda_results,
+        current_time,
+        hourly_window_ns,
+        daily_window_ns
+    );
+    
+    if (error != cudaSuccess) {
+        std::cerr << "[TickDataManager] CUDA calculation failed: " << cudaGetErrorString(error) << std::endl;
+        std::cerr << "[TickDataManager] Falling back to CPU calculations" << std::endl;
+        recalculateAllWindows();
+        return;
+    }
+    
+    // Convert results back to internal format
+    hourly_calculations_.clear();
+    daily_calculations_.clear();
+    
+    for (const auto& cuda_result : hourly_cuda_results) {
+        WindowCalculation calc;
+        calc.mean_price = cuda_result.mean_price;
+        calc.volatility = cuda_result.volatility;
+        calc.price_change = cuda_result.price_change;
+        calc.pip_change = cuda_result.pip_change;
+        calc.tick_count = cuda_result.tick_count;
+        calc.window_start = cuda_result.window_start;
+        calc.window_end = cuda_result.window_end;
+        hourly_calculations_.push_back(calc);
+    }
+    
+    for (const auto& cuda_result : daily_cuda_results) {
+        WindowCalculation calc;
+        calc.mean_price = cuda_result.mean_price;
+        calc.volatility = cuda_result.volatility;
+        calc.price_change = cuda_result.price_change;
+        calc.pip_change = cuda_result.pip_change;
+        calc.tick_count = cuda_result.tick_count;
+        calc.window_start = cuda_result.window_start;
+        calc.window_end = cuda_result.window_end;
+        daily_calculations_.push_back(calc);
+    }
+    
+    std::cout << "[TickDataManager] CUDA calculations completed! Generated " 
+              << hourly_calculations_.size() << " hourly and " 
+              << daily_calculations_.size() << " daily calculations" << std::endl;
 }
 
 } // namespace sep::apps

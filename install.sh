@@ -31,6 +31,7 @@ if [ "$USE_CUDA" -eq 0 ]; then
   export SEP_HAS_CUDA=0
 else
   export SEP_HAS_CUDA=1
+  CUDA_PACKAGES=(cuda-toolkit-12-9 cuda-compiler-12-9 cuda-cudart-dev-12-9)
 fi
 
 WS_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -66,6 +67,10 @@ sudo apt-get update -y
 
 echo "Installing base packages..."
 sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
+if [ "$USE_CUDA" -eq 1 ]; then
+  echo "Installing CUDA packages..."
+  sudo apt-get install -y "${CUDA_PACKAGES[@]}" | tee -a "$LOG_DIR/apt.log"
+fi
 
 # Install Docker and Docker Compose
 echo "Installing Docker..."

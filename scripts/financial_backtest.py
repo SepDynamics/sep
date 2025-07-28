@@ -2,6 +2,7 @@ import argparse
 import json
 import pandas as pd
 import numpy as np
+from performance_metrics import sharpe_ratio, max_drawdown
 
 def calculate_gauge(metrics_df):
     """
@@ -63,8 +64,12 @@ def run_analysis_a(df):
     print("\n")
     
     # --- Key Performance Indicators (KPIs) ---
-    # (Assuming daily data, risk-free rate of 0)
-    sharpe_ratio = (df['strategy_returns'].mean() / df['strategy_returns'].std()) * np.sqrt(252)
+    strat_returns = df['strategy_returns'].dropna()
+    bench_returns = df['benchmark_returns'].dropna()
+
+    sr = sharpe_ratio(strat_returns)
+    strategy_drawdown = max_drawdown(df['strategy_cumulative_returns'])
+    benchmark_drawdown = max_drawdown(df['benchmark_cumulative_returns'])
     
     # Alpha (simplified version)
     alpha = df['strategy_returns'].mean() - df['benchmark_returns'].mean()
@@ -73,7 +78,8 @@ def run_analysis_a(df):
     print("--- Performance Metrics ---")
     print(f"Strategy Total Return: {df['strategy_cumulative_returns'].iloc[-1]:.2%}")
     print(f"Benchmark Total Return: {df['benchmark_cumulative_returns'].iloc[-1]:.2%}")
-    print(f"Sharpe Ratio: {sharpe_ratio:.2f}")
+    print(f"Sharpe Ratio: {sr:.2f}")
+    print(f"Max Drawdown: {strategy_drawdown:.2%} (Benchmark: {benchmark_drawdown:.2%})")
     print(f"Annualized Alpha: {alpha_annualized:.2%}")
     print("\n")
 

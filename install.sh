@@ -2,7 +2,6 @@
 # SEP Engine dependency installer
 set -uo pipefail
 
-
 # Pinned Python version used for all installs  
 PYTHON_VERSION="3.12.*"
 
@@ -94,7 +93,7 @@ fi
 
 # Install Docker and Docker Compose
 echo "Installing Docker..."
-sudo apt-get install -y docker.io docker-compose-v2 | sudo tee -a "$LOG_DIR/apt.log" >/dev/null
+sudo apt-get install -y docker.io docker-compose-plugin | tee -a "$LOG_DIR/apt.log" >/dev/null
 # Attempt to start Docker if systemd is available
 if command -v systemctl >/dev/null 2>&1; then
   sudo systemctl enable --now docker >/dev/null 2>&1 || true
@@ -107,9 +106,9 @@ fi
 if [ -d /usr/src/googletest ]; then
   echo "Building GoogleTest..."
   sudo cmake /usr/src/googletest -B /usr/src/googletest/build \
-    | sudo tee -a "$LOG_DIR/gtest.log" >/dev/null
+    | tee -a "$LOG_DIR/gtest.log" >/dev/null
   sudo cmake --build /usr/src/googletest/build --target install \
-    | sudo tee -a "$LOG_DIR/gtest.log" >/dev/null
+    | tee -a "$LOG_DIR/gtest.log" >/dev/null
   sudo ldconfig
 fi
 
@@ -143,7 +142,7 @@ echo "Verifying installations..."
 docker --version || { echo "Docker not installed"; exit 1; }
 docker compose version || true
 "$PYTHON_EXEC" --version || true
-for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
+for pkg in "${PACKAGES[@]}" docker.io docker-compose-plugin; do
   if dpkg -s "$pkg" >/dev/null 2>&1; then
     echo "$pkg installed"
   else
@@ -160,4 +159,3 @@ if ! docker info >/dev/null 2>&1; then
     export DOCKER_BIN=podman
   fi
 fi
-

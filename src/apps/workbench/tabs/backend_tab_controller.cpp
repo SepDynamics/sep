@@ -347,7 +347,7 @@ void BackendTabController::handleDataLoad() {
         const auto& m = metrics[i];
         const auto& candle = candles[candles.size() - metrics.size() + i];
         common::SEPSignalData sig;
-        sig.timestamp = candle.timestamp;
+        sig.timestamp = std::chrono::system_clock::from_time_t(candle.timestamp);
         sig.coherence = m.coherence;
         sig.stability = m.stability;
         sig.entropy = m.entropy;

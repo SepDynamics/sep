@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/candle_data.h"
+#include "common/candle_data.h"
 #include "engine/pattern_types.h"
 #include "quantum/signal.h"
 
@@ -8,7 +8,7 @@ namespace sep::workbench {
 
 class AlphaTracker {
 public:
-    void processSignal(const ::sep::quantum::Signal& signal, const CandleData& current_candle);
+    void processSignal(const ::sep::quantum::Signal& signal, const common::CandleData& current_candle);
     double getStrategyPipsGained() const { return strategy_pips_gained_; }
     double getBenchmarkPips() const { return benchmark_pips_; }
     void reset();

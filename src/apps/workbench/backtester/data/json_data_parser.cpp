@@ -28,12 +28,12 @@ std::vector<sep::common::CandleData> JsonDataParser::parse(const std::string& fi
         auto timestamp = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
         candles.emplace_back(sep::common::CandleData{
+            std::chrono::duration_cast<std::chrono::seconds>(timestamp.time_since_epoch()).count(),
             item.at("open").get<double>(),
             item.at("high").get<double>(),
             item.at("low").get<double>(),
             item.at("close").get<double>(),
-            item.at("volume").get<double>(),
-            timestamp
+            item.at("volume").get<long long>()
         });
     }
 

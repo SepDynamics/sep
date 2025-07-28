@@ -1,110 +1,54 @@
-# SEP Engine Data Flow Architecture
+# SEP Workbench: Real-Time Data Structures and Flow
 
-## Overview
+## I. Overview
 
-This document outlines the SEP Engine's data processing pipeline. As of the latest build, the pipeline is **operational and compiling successfully**. The architectural refactoring to decouple core components from the GUI is complete, and the focus has shifted to implementing and optimizing the data flow from market sources to the trading workbench.
+This document specifies the data structures and the flow of data through the real-time processing architecture of the SEP Workbench. The new architecture is designed to handle a continuous stream of market data, process it in real-time, and generate SEP signals for dynamic visualization.
 
-The current priority is to fully implement the connections between each stage of the pipeline to enable real-time signal generation and visualization.
+## II. Data Structures
 
-## Data Flow Diagram
+### 1. `CandleData`
 
-```mermaid
-graph TB
-    subgraph "Market Data Sources"
-        OANDA[OANDA API<br/>Live Market Data]
-        HIST[Historical Data<br/>48H M1 Candles]
-        STREAM[Real-time Stream<br/>Price Updates]
-    end
+- **Description:** Represents a single OHLCV (Open, High, Low, Close, Volume) data point.
+- **Location:** `src/common/candle_data.h`
+- **Fields:**
+  - `uint64_t timestamp`: The timestamp of the candle.
+  - `float open`: The opening price.
+  - `float high`: The highest price.
+  - `float low`: The lowest price.
+  - `float close`: The closing price.
+  - `int volume`: The trading volume.
 
-    subgraph "Data Ingestion Layer"
-        CONN[OandaConnector<br/>Rate Limited: 50ms]
-        PARSER[DataParser<br/>JSON → Patterns]
-        BUFFER[StreamBuffer<br/>Chunked Processing]
-    end
+### 2. `SEPSignal`
 
-    subgraph "Quantum Processing"
-        PME[PatternMetricEngine<br/>CUDA-Accelerated]
-        CUDA[CUDA Kernels<br/>Pattern Analysis]
-        QFH[QFH Processor<br/>Bitstream Analysis]
-        DAG[DAG Graph<br/>Pattern Correlations]
-    end
+- **Description:** Represents a single calculated SEP signal, which is a triplet of Coherence, Entropy, and Stability.
+- **Location:** `src/apps/workbench/core/workbench_core.hpp` (to be created)
+- **Fields:**
+  - `uint64_t timestamp`: The timestamp of the signal, corresponding to the latest data point used in the calculation.
+  - `float coherence`: The coherence value.
+  - `float entropy`: The entropy value.
+  - `float stability`: The stability value.
 
-    subgraph "Real-time Processing"
-        EVOLVE[Pattern Evolution<br/>Mutation Algorithms]
-        METRICS[Metrics Computation<br/>Coherence/Stability/Entropy]
-        THRESH[Threshold Detection<br/>Signal Generation]
-    end
+### 3. `RollingWindow`
 
-    subgraph "Visualization Layer"
-        DASHBOARD[Workbench Dashboard<br/>ImGui Interface]
-        SIGTAB[Signals Tab<br/>Candlestick & Metric Charts]
-        ENGTAB[Engine Tab<br/>Diagnostic Plots]
-        BACKTAB[Backend Tab<br/>Trading & Backtest UI]
-    end
+- **Description:** A rolling window of `CandleData` points.
+- **Implementation:** `std::deque<CandleData>`
+- **Location:** `RollingWindowManager` class.
 
-    subgraph "Trading Decision Layer"
-        SIGNALS[Alpha Signals<br/>Buy/Sell Indicators]
-        RISK[Risk Management<br/>Position Sizing]
-        ORDERS[Order Placement<br/>OANDA Trading API]
-        BACKTEST[Backtesting<br/>Performance Metrics]
-    end
+### 4. `SignalHistory`
 
-    %% Data Flow Connections
-    OANDA --> CONN
-    HIST --> CONN
-    STREAM --> BUFFER
-    CONN --> PARSER
-    BUFFER --> PME
-    PME --> CUDA
-    PME --> QFH
-    PME --> DAG
-    PME --> EVOLVE
-    EVOLVE --> METRICS
-    METRICS --> THRESH
-    METRICS --> SIGTAB
-    HIST --> SIGTAB
-    THRESH --> SIGTAB
-    METRICS --> ENGTAB
-    THRESH --> SIGNALS
-    SIGNALS --> RISK
-    SIGNALS --> BACKTEST
-    RISK --> ORDERS
-    ORDERS --> OANDA
-```
+- **Description:** A history of generated `SEPSignal` points.
+- **Implementation:** `std::vector<SEPSignal>`
+- **Location:** `SignalHistoryStore` class.
+- **Thread Safety:** Access to this data structure must be protected by a `std::mutex`.
 
-### Backtesting Integration
+## III. Data Flow
 
-`ServiceConnector` forwards every set of pattern signals produced by
-`PatternMetricEngine` into the backtester. When the user selects a dataset in the
-backend tab, `loadInitialData` parses the candles, generates SEP signals and then
-invokes `Backtester::run` with those signals. The resulting `BacktestResult` is
-sent through the global event bus so the UI plots refresh automatically.
+The data flows through the system in the following sequence:
 
-## Component Status
-
-### 1. **Data Parser (`data_parser.cpp`)**
--   **Function**: Converts raw market data (JSON, CSV, Binary) into engine-compatible `Pattern` objects.
--   **Status**: **Operational.** Compiles successfully and forms the entry point for data ingestion. The type and API mismatches from the refactoring have been resolved.
-
-### 2. **OANDA Connector (`oanda_connector.cpp`)**
--   **Function**: Fetches live and historical market data and handles trade execution via the OANDA API.
--   **Status**: **Partially Operational.** The connector can fetch data, but there is a known issue with the API request for historical data.
-
-### 3. **PatternMetricEngine (`pattern_metric_engine.cpp`)**
--   **Function**: The core analysis engine that applies quantum-inspired algorithms (QFH, QBSA) to detect patterns and compute metrics like Coherence, Stability, and Entropy.
--   **Status**: **Partially Operational.** The engine compiles and runs, but it is currently only generating "BUY" signals. This needs to be investigated.
-
-## Known Issues
-
--   **OANDA API Error:** The application is currently sending a `count` parameter along with `to` and `from` parameters in the OANDA API request, which is causing an error. This needs to be fixed to enable reliable data fetching.
--   **Application Freezing:** The application currently freezes during the initial data pull from OANDA. This is likely because the data is being fetched synchronously on the main thread.
--   **"Buy-Only" Signals:** The `PatternMetricEngine` is currently only generating "BUY" signals. This is highly suspicious and needs to be investigated.
-
-## Data Authenticity Policy
-
-The platform is designed for and operates on authentic data to ensure the reliability of its analysis and signals.
--   ✅ **OandaConnector**: Uses real REST API and streaming data from OANDA's practice environment.
--   ✅ **DataParser**: Performs direct conversion of genuine OHLC data into patterns without simulation.
--   ✅ **PatternMetricEngine**: All CUDA-accelerated algorithms operate on real, ingested market data.
-
-**Overall Conclusion**: The data pipeline's architecture is stable and the core components are operational. The next phase of development is to implement the connections between these components and visualize the real-time results in the workbench GUI.
+1.  **Data Ingestion:** The `DataIngestor` (in `oanda_connector.cpp`) fetches live market data (pips) from the OANDA API in a dedicated thread.
+2.  **Queueing:** The `DataIngestor` pushes the new `CandleData` into a thread-safe queue.
+3.  **Dequeuing:** The main processing loop in `workbench_core.cpp` pops the `CandleData` from the queue.
+4.  **Rolling Window Update:** The `RollingWindowManager` adds the new `CandleData` to its `std::deque` and removes the oldest data point if the window is full.
+5.  **Signal Generation:** The `SEPSignalGenerator` is invoked with the current `RollingWindow`. It calculates the Coherence, Entropy, and Stability, and creates a new `SEPSignal`.
+6.  **Signal Storage:** The new `SEPSignal` is pushed into the `SignalHistoryStore`'s `std::vector` under a mutex lock.
+7.  **GUI Rendering:** The `GUIRenderer` (in `signals_tab_controller.cpp`) locks the mutex on the `SignalHistoryStore`, copies the latest signals, and then unlocks the mutex. It then uses the copied data to update the charts.

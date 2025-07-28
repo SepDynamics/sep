@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cuda_runtime.h>
-#include <stddef.h>  // For size_t
-#include <stdio.h>   // For fprintf
-#include <stdlib.h>  // For malloc/free
+#include <cstddef>  // For size_t
+#include <cstdio>   // For fprintf
+#include <cstdlib>  // For malloc/free
 
 #include <cstring>  // For strcpy, memcpy, memset
 

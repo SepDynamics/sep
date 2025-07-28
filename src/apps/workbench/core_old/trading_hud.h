@@ -178,15 +178,7 @@ struct SEPSignalData {
                       spread(0), signal_type(NEUTRAL) {}
 };
 
-struct CandleData {
-    double open, high, low, close;
-    int volume;
-    std::chrono::system_clock::time_point timestamp;
-    
-    CandleData(double o, double h, double l, double c, int v, 
-               std::chrono::system_clock::time_point t)
-        : open(o), high(h), low(l), close(c), volume(v), timestamp(t) {}
-};
+#include "common/candle_data.h"
 
 struct EnhancedHoverInfo {
     bool active = false;

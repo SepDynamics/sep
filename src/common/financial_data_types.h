@@ -4,22 +4,9 @@
 #include <cstdint>
 #include <string>
 
+#include "common/candle_data.h"
+
 namespace sep::common {
-
-struct CandleData {
-    std::chrono::time_point<std::chrono::system_clock> timestamp;
-    double open;
-    double high;
-    double low;
-    double close;
-    double volume;
-
-    CandleData() = default;
-    
-    CandleData(double o, double h, double l, double c, double v,
-               std::chrono::time_point<std::chrono::system_clock> ts)
-        : timestamp(ts), open(o), high(h), low(l), close(c), volume(v) {}
-};
 
 enum class MultiTimeframeSignal {
     STRONG_BUY,

@@ -2,7 +2,7 @@
 
 namespace sep::workbench {
 
-void AlphaTracker::processSignal(const sep::quantum::Signal& signal, const sep::CandleData& current_candle) {
+void AlphaTracker::processSignal(const sep::quantum::Signal& signal, const sep::common::CandleData& current_candle) {
     if (initial_price_ == 0.0) {
         initial_price_ = current_candle.close;
     }

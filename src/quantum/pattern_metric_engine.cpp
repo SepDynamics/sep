@@ -213,10 +213,7 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
 {
     std::lock_guard<std::mutex> lock(engine_mutex_);
     
-    // PERFORMANCE FIX: Clear the processor state before the metric run.
-    // This prevents the O(N^2) slowdown from an ever-growing history in the processor.
-    // Each call to computeMetrics is now an independent analysis of the current patterns.
-    qfh_processor_->clear();
+
     
     current_metrics_.clear();
     current_metrics_.reserve(current_patterns_.size());

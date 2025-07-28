@@ -139,11 +139,11 @@ private:
     MultiTimeframeAnalyzer* mtf_analyzer_{nullptr};
     sep::workbench::backtester::Backtester* backtester_{nullptr};
     std::deque<common::CandleData> initial_data_;
-    std::deque<common::SEPSignalData> initial_signals_;
-    std::deque<common::SEPSignalData> streaming_signals_;
+    std::deque<SEPSignal> initial_signals_;
+    std::deque<SEPSignal> streaming_signals_;
 
 public:
-    const std::deque<common::SEPSignalData>& getInitialSignals() const { return initial_signals_; }
+    const std::deque<SEPSignal>& getInitialSignals() const { return initial_signals_; }
 
     void loadInitialData(const std::string& path);
 };

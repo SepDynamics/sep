@@ -156,8 +156,12 @@ void SignalsTabController::render() {
 }
 
 void SignalsTabController::shutdown() {
+    std::lock_guard<std::mutex> lock(candle_data_mutex_);
     candle_data_.clear();
-    sep_signals_.clear();
+    {
+        std::lock_guard<std::mutex> lock(signals_mutex_);
+        sep_signals_.clear();
+    }
     indicators_.clear();
     trend_lines_.clear();
 }
@@ -166,7 +170,7 @@ void SignalsTabController::setOandaConnector(sep::connectors::OandaConnector* co
     oanda_connector_ = connector;
 }
 
-void SignalsTabController::setQuantumSignalGenerator(QuantumSignalGenerator* generator) {
+void SignalsTabController::setQuantumSignalGenerator(SEPSignalGenerator* generator) {
     signal_generator_ = generator;
 }
 
@@ -195,6 +199,7 @@ void SignalsTabController::setLatestMetrics(const std::map<std::string, Timefram
 }
 
 void SignalsTabController::setCandleData(const std::deque<sep::common::CandleData>& data) {
+    std::lock_guard<std::mutex> lock(candle_data_mutex_);
     candle_data_ = data;
     volume_max_ = 0.0f;
     for (const auto& c : candle_data_) {
@@ -208,6 +213,7 @@ void SignalsTabController::setCandleData(const std::deque<sep::common::CandleDat
 }
 
 void SignalsTabController::setCandleData(const std::vector<sep::common::CandleData>& data) {
+    std::lock_guard<std::mutex> lock(candle_data_mutex_);
     candle_data_.assign(data.begin(), data.end());
     volume_max_ = 0.0f;
     for (const auto& c : candle_data_) {
@@ -221,6 +227,7 @@ void SignalsTabController::setCandleData(const std::vector<sep::common::CandleDa
 }
 
 void SignalsTabController::addCandle(const sep::common::CandleData& candle) {
+    std::lock_guard<std::mutex> lock(candle_data_mutex_);
     candle_data_.push_back(candle);
     if (candle_data_.size() > 1440) {
         candle_data_.pop_front();
@@ -234,16 +241,19 @@ void SignalsTabController::addCandle(const sep::common::CandleData& candle) {
     }
 }
 
-void SignalsTabController::setSEPSignals(const std::deque<sep::common::SEPSignalData>& signals) {
+void SignalsTabController::setSEPSignals(const std::vector<SEPSignal>& signals) {
+    std::lock_guard<std::mutex> lock(signals_mutex_);
     sep_signals_ = signals;
     if (sep_signals_.size() > 1440) {
-        sep_signals_.erase(sep_signals_.begin(), sep_signals_.end() - 1440);
+        sep_signals_.erase(sep_signals_.begin(), sep_signals_.begin() + (sep_signals_.size() - 1440));
     }
     sep_signals_updated_ = true;
 }
 
 void SignalsTabController::renderMainChart() {
+    std::unique_lock<std::mutex> lock(candle_data_mutex_);
     if (candle_data_.empty()) {
+        lock.unlock();
         return;
     }
 
@@ -280,8 +290,8 @@ void SignalsTabController::renderMainChart() {
                 chart_zoom_.price_min = mouse_plot.y - (mouse_plot.y - chart_zoom_.price_min) * zoom;
                 chart_zoom_.price_max = mouse_plot.y + (chart_zoom_.price_max - mouse_plot.y) * zoom;
                 chart_zoom_.price_min = std::min(chart_zoom_.price_min, chart_zoom_.price_max - 0.00001);
-                chart_zoom_.time_start = candle_data_[chart_zoom_.index_start].timestamp;
-                chart_zoom_.time_end   = candle_data_[chart_zoom_.index_end - 1].timestamp;
+                chart_zoom_.time_start = std::chrono::system_clock::from_time_t(candle_data_[chart_zoom_.index_start].timestamp);
+                chart_zoom_.time_end   = std::chrono::system_clock::from_time_t(candle_data_[chart_zoom_.index_end - 1].timestamp);
                 chart_zoom_.is_zoomed = true;
             }
         }
@@ -294,8 +304,8 @@ void SignalsTabController::renderMainChart() {
             chart_zoom_.index_end = std::max(chart_zoom_.index_end, chart_zoom_.index_start + 1);
             chart_zoom_.price_min = rect.Y.Min;
             chart_zoom_.price_max = rect.Y.Max;
-            chart_zoom_.time_start = candle_data_[chart_zoom_.index_start].timestamp;
-            chart_zoom_.time_end   = candle_data_[chart_zoom_.index_end - 1].timestamp;
+            chart_zoom_.time_start = std::chrono::system_clock::from_time_t(candle_data_[chart_zoom_.index_start].timestamp);
+            chart_zoom_.time_end   = std::chrono::system_clock::from_time_t(candle_data_[chart_zoom_.index_end - 1].timestamp);
             chart_zoom_.is_zoomed = true;
         }
 
@@ -321,7 +331,13 @@ void SignalsTabController::renderMainChart() {
 }
 
 void SignalsTabController::renderCandlesticks() {
-    if (candle_data_.empty()) return;
+    std::unique_lock<std::mutex> lock(candle_data_mutex_);
+    if (candle_data_.empty()) {
+        lock.unlock();
+        return;
+    }
+    auto candle_data_copy = candle_data_;
+    lock.unlock();
 
     static std::vector<double> xs;
     static std::vector<double> open;
@@ -331,10 +347,10 @@ void SignalsTabController::renderCandlesticks() {
 
     ImPlotRect limits = ImPlot::GetPlotLimits();
     size_t start_idx = 0;
-    size_t end_idx = candle_data_.size();
+    size_t end_idx = candle_data_copy.size();
     if (limits.X.Size() > 0) {
         start_idx = static_cast<size_t>(std::max(0.0, std::floor(limits.X.Min)));
-        end_idx = static_cast<size_t>(std::min(static_cast<double>(candle_data_.size()), std::ceil(limits.X.Max)));
+        end_idx = static_cast<size_t>(std::min(static_cast<double>(candle_data_copy.size()), std::ceil(limits.X.Max)));
     }
     if (start_idx >= end_idx) return;
     const size_t count = end_idx - start_idx;
@@ -346,7 +362,7 @@ void SignalsTabController::renderCandlesticks() {
     high.resize(count);
 
     for (size_t i = 0; i < count; ++i) {
-        const auto& c = candle_data_[start_idx + i];
+        const auto& c = candle_data_copy[start_idx + i];
         xs[i] = static_cast<double>(start_idx + i);
         open[i] = c.open;
         close[i] = c.close;
@@ -463,24 +479,33 @@ void SignalsTabController::renderTechnicalIndicators() {
 }
 
 void SignalsTabController::renderSEPSignalOverlay() {
-    if (!show_sep_overlay_ || sep_signals_.empty()) return;
+    std::vector<SEPSignal> signals_copy;
+    {
+        std::lock_guard<std::mutex> lock(signals_mutex_);
+        if (!show_sep_overlay_ || sep_signals_.empty()) {
+            return;
+        }
+        signals_copy = sep_signals_;
+    }
+
+    if (signals_copy.empty()) return;
     
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     
     static constexpr size_t MAX_VISIBLE = 240;
-    size_t start_idx = sep_signals_.size() > MAX_VISIBLE ?
-                       sep_signals_.size() - MAX_VISIBLE : 0;
-    float signal_width = chart_size_.x / std::min(sep_signals_.size() - start_idx, (size_t)MAX_VISIBLE);
+    size_t start_idx = signals_copy.size() > MAX_VISIBLE ?
+                       signals_copy.size() - MAX_VISIBLE : 0;
+    float signal_width = chart_size_.x / std::min(signals_copy.size() - start_idx, (size_t)MAX_VISIBLE);
     
     // Draw SEP signal strength as overlay
-    for (size_t i = start_idx; i < sep_signals_.size(); i++) {
-        const auto& signal = sep_signals_[i];
+    for (size_t i = start_idx; i < signals_copy.size(); i++) {
+        const auto& signal = signals_copy[i];
         
         float x = chart_pos_.x + ((i - start_idx) + 0.5f) * signal_width;
         
         // Signal strength indicator (top of chart)
-        float signal_intensity = std::abs(signal.alpha_signal);
-        ImU32 signal_color = getSignalColor(signal.signal_type);
+        float signal_intensity = std::abs(signal.coherence); // Just using coherence for now
+        ImU32 signal_color = IM_COL32(255, 255, 0, 255); // Yellow for now
         
         float indicator_height = 20.0f * signal_intensity;
         ImVec2 signal_pos = ImVec2(x - 2, chart_pos_.y - indicator_height);
@@ -491,15 +516,15 @@ void SignalsTabController::renderSEPSignalOverlay() {
                                 signal_color);
         
         // Draw trend line
-        if (i > start_idx && i < sep_signals_.size()) {
-            const auto& prev_signal = sep_signals_[i-1];
+        if (i > start_idx && i < signals_copy.size()) {
+            const auto& prev_signal = signals_copy[i-1];
             float prev_x = chart_pos_.x + ((i - 1 - start_idx) + 0.5f) * signal_width;
             
             // Map trend strength to chart height
             float trend_y = chart_pos_.y + chart_size_.y * 0.1f + 
-                           (chart_size_.y * 0.8f * (1.0f - (signal.trend_strength + 1.0f) / 2.0f));
+                           (chart_size_.y * 0.8f * (1.0f - (signal.stability + 1.0f) / 2.0f));
             float prev_trend_y = chart_pos_.y + chart_size_.y * 0.1f + 
-                                (chart_size_.y * 0.8f * (1.0f - (prev_signal.trend_strength + 1.0f) / 2.0f));
+                                (chart_size_.y * 0.8f * (1.0f - (prev_signal.stability + 1.0f) / 2.0f));
             
             draw_list->AddLine(ImVec2(prev_x, prev_trend_y), ImVec2(x, trend_y), 
                               IM_COL32(255, 255, 255, 180), 2.0f);
@@ -508,7 +533,13 @@ void SignalsTabController::renderSEPSignalOverlay() {
 }
 
 void SignalsTabController::renderVolumeChart() {
-    if (candle_data_.empty()) return;
+    std::unique_lock<std::mutex> lock(candle_data_mutex_);
+    if (candle_data_.empty()) {
+        lock.unlock();
+        return;
+    }
+    auto candle_data_copy = candle_data_;
+    lock.unlock();
     
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     
@@ -522,19 +553,19 @@ void SignalsTabController::renderVolumeChart() {
                             IM_COL32(10, 10, 15, 200));
     
     static constexpr size_t MAX_VISIBLE = 240;
-    size_t start_idx = candle_data_.size() > MAX_VISIBLE ?
-                       candle_data_.size() - MAX_VISIBLE : 0;
-    float candle_width = chart_size_.x / std::min(candle_data_.size() - start_idx, (size_t)MAX_VISIBLE);
+    size_t start_idx = candle_data_copy.size() > MAX_VISIBLE ?
+                       candle_data_copy.size() - MAX_VISIBLE : 0;
+    float candle_width = chart_size_.x / std::min(candle_data_copy.size() - start_idx, (size_t)MAX_VISIBLE);
     
     // Find max volume for scaling
     float max_vol = 1.0f;
-    for (size_t i = start_idx; i < candle_data_.size(); i++) {
-        max_vol = std::max(max_vol, (float)candle_data_[i].volume);
+    for (size_t i = start_idx; i < candle_data_copy.size(); i++) {
+        max_vol = std::max(max_vol, (float)candle_data_copy[i].volume);
     }
     
     // Draw volume bars
-    for (size_t i = start_idx; i < candle_data_.size(); i++) {
-        const auto& candle = candle_data_[i];
+    for (size_t i = start_idx; i < candle_data_copy.size(); i++) {
+        const auto& candle = candle_data_copy[i];
         
         float x = chart_pos_.x + ((i - start_idx) + 0.5f) * candle_width;
         float vol_height = (candle.volume / max_vol) * volume_height * 0.9f;
@@ -796,8 +827,7 @@ void SignalsTabController::renderHoverInfo() {
                 ImVec4(0.0f, 1.0f, 0.0f, 1.0f) : ImVec4(1.0f, 0.3f, 0.3f, 1.0f);
             ImGui::TextColored(entropy_color, "Entropy:   %.3f", sep.entropy);
             
-            ImGui::Text("Alpha:     %.3f", sep.alpha_signal);
-            ImGui::Text("Trend:     %.3f", sep.trend_strength);
+
             
             ImGui::Spacing();
             ImGui::TextColored(ImVec4(0.8f, 1.0f, 0.8f, 1.0f), "Multi-Timeframe:");
@@ -912,7 +942,7 @@ void SignalsTabController::renderChartGrid() {
 
         size_t idx = static_cast<size_t>(xval + 0.5);
         idx = std::clamp(idx, size_t(0), candle_data_.empty() ? 0 : candle_data_.size() - 1);
-        auto t = candle_data_.empty() ? std::chrono::system_clock::now() : candle_data_[idx].timestamp;
+        auto t = candle_data_.empty() ? std::chrono::system_clock::now() : std::chrono::system_clock::from_time_t(candle_data_[idx].timestamp);
         char time_text[16];
         std::time_t tt = std::chrono::system_clock::to_time_t(t);
         std::strftime(time_text, sizeof(time_text), "%H:%M", std::localtime(&tt));
@@ -956,11 +986,11 @@ ImVec2 SignalsTabController::priceToScreen(double price, std::chrono::system_clo
     float x = chart_pos_.x;
     if (!candle_data_.empty()) {
         auto time_range = candle_data_.back().timestamp - candle_data_.front().timestamp;
-        auto time_offset = time - candle_data_.front().timestamp;
+        auto time_offset = time - std::chrono::system_clock::time_point(std::chrono::seconds(candle_data_.front().timestamp));
         
-        if (time_range.count() > 0) {
+        if (time_range > 0) {
             x = chart_pos_.x + (static_cast<float>(time_offset.count()) / 
-                               static_cast<float>(time_range.count())) * chart_size_.x;
+                               static_cast<float>(time_range)) * chart_size_.x;
         }
     }
     
@@ -982,9 +1012,9 @@ std::chrono::system_clock::time_point SignalsTabController::screenToTime(float x
     float normalized_x = (x - chart_pos_.x) / chart_size_.x;
     auto time_range = candle_data_.back().timestamp - candle_data_.front().timestamp;
     auto time_offset = std::chrono::duration_cast<std::chrono::system_clock::duration>(
-        time_range * normalized_x);
+        std::chrono::duration<double>(time_range) * normalized_x);
     
-    return candle_data_.front().timestamp + time_offset;
+    return std::chrono::system_clock::time_point(std::chrono::seconds(candle_data_.front().timestamp)) + time_offset;
 }
 
 void SignalsTabController::updatePriceRange() {
@@ -1053,8 +1083,8 @@ void SignalsTabController::handleMouseInput() {
                 chart_zoom_.index_end = static_cast<size_t>(std::clamp(chart_zoom_.index_end + dx, 1.0,
                     (double)candle_data_.size()));
                 chart_zoom_.index_end = std::max(chart_zoom_.index_end, chart_zoom_.index_start + 1);
-                chart_zoom_.time_start = candle_data_[chart_zoom_.index_start].timestamp;
-                chart_zoom_.time_end = candle_data_[chart_zoom_.index_end - 1].timestamp;
+                chart_zoom_.time_start = std::chrono::system_clock::from_time_t(candle_data_[chart_zoom_.index_start].timestamp);
+                chart_zoom_.time_end = std::chrono::system_clock::from_time_t(candle_data_[chart_zoom_.index_end - 1].timestamp);
                 pan_start_pos_ = ImGui::GetMousePos();
                 chart_zoom_.is_zoomed = true;
             }
@@ -1082,8 +1112,8 @@ void SignalsTabController::handleMouseInput() {
 
             chart_zoom_.index_start = idx_start;
             chart_zoom_.index_end = std::max(idx_end, idx_start + 1);
-            chart_zoom_.time_start = candle_data_[chart_zoom_.index_start].timestamp;
-            chart_zoom_.time_end   = candle_data_[chart_zoom_.index_end - 1].timestamp;
+            chart_zoom_.time_start = std::chrono::system_clock::from_time_t(candle_data_[chart_zoom_.index_start].timestamp);
+            chart_zoom_.time_end   = std::chrono::system_clock::from_time_t(candle_data_[chart_zoom_.index_end - 1].timestamp);
             chart_zoom_.is_zoomed = true;
         }
 
@@ -1106,19 +1136,20 @@ void SignalsTabController::updateHoverInfo() {
 
     size_t idx = static_cast<size_t>(plot_pos.x + 0.5);
     idx = std::clamp(idx, size_t(0), candle_data_.size() - 1);
-    hover_info_.time = candle_data_[idx].timestamp;
+    hover_info_.time = std::chrono::system_clock::from_time_t(candle_data_[idx].timestamp);
     hover_info_.nearest_candle = &candle_data_[idx];
 
-    auto nearest_sep = sep_signals_.end();
-    auto min_diff = std::chrono::system_clock::duration::max();
-    for (auto it = sep_signals_.begin(); it != sep_signals_.end(); ++it) {
-        auto diff = it->timestamp > hover_info_.time ? it->timestamp - hover_info_.time : hover_info_.time - it->timestamp;
-        if (diff < min_diff) {
-            min_diff = diff;
-            nearest_sep = it;
-        }
+    // Find the signal with the closest timestamp
+    auto nearest_sep_it = std::min_element(sep_signals_.begin(), sep_signals_.end(), 
+    [&](const SEPSignal& a, const SEPSignal& b) {
+    auto diff_a = a.timestamp - hover_info_.time;
+    auto diff_b = b.timestamp - hover_info_.time;
+    return std::abs(std::chrono::duration_cast<std::chrono::seconds>(diff_a).count()) < std::abs(std::chrono::duration_cast<std::chrono::seconds>(diff_b).count());
+    });
+
+    if (nearest_sep_it != sep_signals_.end()) {
+        hover_info_.nearest_sep_signal = &(*nearest_sep_it);
     }
-    hover_info_.nearest_sep_signal = nearest_sep != sep_signals_.end() ? &*nearest_sep : nullptr;
 
     calculateEnhancedHoverMetrics();
 }
@@ -1136,7 +1167,7 @@ void SignalsTabController::calculateEnhancedHoverMetrics() {
             auto prev_it = std::prev(current_it);
             double price_change = hover_info_.nearest_candle->close - prev_it->close;
             auto time_diff = std::chrono::duration_cast<std::chrono::minutes>(
-                hover_info_.nearest_candle->timestamp - prev_it->timestamp).count();
+                std::chrono::system_clock::from_time_t(hover_info_.nearest_candle->timestamp) - std::chrono::system_clock::from_time_t(prev_it->timestamp)).count();
             hover_info_.price_momentum = time_diff > 0 ? 
                 static_cast<float>(price_change / time_diff) : 0.0f;
         }
@@ -1156,7 +1187,7 @@ void SignalsTabController::calculateEnhancedHoverMetrics() {
     
     if (sep_signals_.size() >= 2) {
         auto sep_it = std::find_if(sep_signals_.begin(), sep_signals_.end(),
-            [this](const sep::common::SEPSignalData& s) { return &s == hover_info_.nearest_sep_signal; });
+            [this](const SEPSignal& s) { return &s == hover_info_.nearest_sep_signal; });
         
         if (sep_it != sep_signals_.begin()) {
             auto prev_sep_it = std::prev(sep_it);
@@ -1216,8 +1247,8 @@ void SignalsTabController::detectTrendLines() {
             TrendLine resistance;
             resistance.start_price = candle_data_[idx1].high;
             resistance.end_price = candle_data_[idx2].high;
-            resistance.start_time = candle_data_[idx1].timestamp;
-            resistance.end_time = candle_data_[idx2].timestamp;
+            resistance.start_time = std::chrono::system_clock::from_time_t(candle_data_[idx1].timestamp);
+            resistance.end_time = std::chrono::system_clock::from_time_t(candle_data_[idx2].timestamp);
             resistance.is_support = false;
             resistance.color = IM_COL32(255, 100, 100, 255);
             
@@ -1235,8 +1266,8 @@ void SignalsTabController::detectTrendLines() {
             TrendLine support;
             support.start_price = candle_data_[idx1].low;
             support.end_price = candle_data_[idx2].low;
-            support.start_time = candle_data_[idx1].timestamp;
-            support.end_time = candle_data_[idx2].timestamp;
+            support.start_time = std::chrono::system_clock::from_time_t(candle_data_[idx1].timestamp);
+            support.end_time = std::chrono::system_clock::from_time_t(candle_data_[idx2].timestamp);
             support.is_support = true;
             support.color = IM_COL32(100, 255, 100, 255);
             
@@ -1251,13 +1282,13 @@ void SignalsTabController::detectTrendLines() {
     }
 }
 
-ImU32 SignalsTabController::getSignalColor(sep::common::MultiTimeframeSignal signal_type) {
+ImU32 SignalsTabController::getSignalColor(SEPSignal::ActionRecommendation signal_type) {
     switch (signal_type) {
-        case sep::common::MultiTimeframeSignal::STRONG_BUY:  return IM_COL32(0, 255, 0, 255);
-        case sep::common::MultiTimeframeSignal::BUY:         return IM_COL32(144, 238, 144, 255);
-        case sep::common::MultiTimeframeSignal::NEUTRAL:     return IM_COL32(255, 255, 0, 255);
-        case sep::common::MultiTimeframeSignal::SELL:        return IM_COL32(255, 165, 0, 255);
-        case sep::common::MultiTimeframeSignal::STRONG_SELL: return IM_COL32(255, 0, 0, 255);
+        case SEPSignal::ActionRecommendation::STRONG_BUY:  return IM_COL32(0, 255, 0, 255);
+        case SEPSignal::ActionRecommendation::BUY:         return IM_COL32(144, 238, 144, 255);
+        case SEPSignal::ActionRecommendation::NEUTRAL:     return IM_COL32(255, 255, 0, 255);
+        case SEPSignal::ActionRecommendation::SELL:        return IM_COL32(255, 165, 0, 255);
+        case SEPSignal::ActionRecommendation::STRONG_SELL: return IM_COL32(255, 0, 0, 255);
         default:                                             return IM_COL32(128, 128, 128, 255);
     }
 }

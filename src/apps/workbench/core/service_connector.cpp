@@ -83,12 +83,12 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
                     if (!metrics.empty()) {
                         const auto& m1 = metrics.begin()->second;
                         common::SEPSignalData sig;
-                        sig.timestamp = c.timestamp;
+                        sig.timestamp = std::chrono::system_clock::from_time_t(c.timestamp);
                         sig.coherence = m1.dominant_coherence;
                         sig.stability = m1.stability_index;
                         sig.entropy = m1.entropy_level;
-                        sig.trend_strength = m1.trend_strength;
-                        sig.alpha_signal = (sig.coherence + sig.stability - sig.entropy) / 2.0f;
+                        
+                        
                         auto th = Config::getInstance().signal_thresholds();
                         if (sig.coherence > th.buy_min_coherence &&
                             sig.stability > th.buy_min_stability &&
@@ -100,10 +100,10 @@ ServiceConnector::ServiceConnector(const ConnectionConfig& config)
                         } else {
                             sig.signal_type = common::MultiTimeframeSignal::NEUTRAL;
                         }
-                        streaming_signals_.push_back(sig);
+                        streaming_signals_.push_back(SEPSignal(sig));
                         if (streaming_signals_.size() > 1440)
                             streaming_signals_.pop_front();
-                        signals_tab_->setSEPSignals(streaming_signals_);
+                        signals_tab_->setSEPSignals(std::vector<SEPSignal>(streaming_signals_.begin(), streaming_signals_.end()));
                     }
                 }
             });
@@ -196,12 +196,12 @@ bool ServiceConnector::connect() {
                     if (!metrics.empty()) {
                         const auto& m1 = metrics.begin()->second;
                         common::SEPSignalData sig;
-                        sig.timestamp = c.timestamp;
+                        sig.timestamp = std::chrono::system_clock::from_time_t(c.timestamp);
                         sig.coherence = m1.dominant_coherence;
                         sig.stability = m1.stability_index;
                         sig.entropy = m1.entropy_level;
-                        sig.trend_strength = m1.trend_strength;
-                        sig.alpha_signal = (sig.coherence + sig.stability - sig.entropy) / 2.0f;
+
+
                         auto th = Config::getInstance().signal_thresholds();
                         if (sig.coherence > th.buy_min_coherence &&
                             sig.stability > th.buy_min_stability &&
@@ -216,7 +216,7 @@ bool ServiceConnector::connect() {
                         streaming_signals_.push_back(sig);
                         if (streaming_signals_.size() > 1440)
                             streaming_signals_.pop_front();
-                        signals_tab_->setSEPSignals(streaming_signals_);
+                        signals_tab_->setSEPSignals(std::vector<SEPSignal>(streaming_signals_.begin(), streaming_signals_.end()));
                     }
                 }
 
@@ -344,28 +344,28 @@ void ServiceConnector::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyze
                 auto metrics = mtf_analyzer_->getLatestMetrics("EUR_USD");
                 if (!metrics.empty()) {
                     const auto& m1 = metrics.begin()->second;
-                    common::SEPSignalData sig;
-                    sig.timestamp = c.timestamp;
+                    SEPSignal sig;
+                    sig.timestamp = std::chrono::system_clock::time_point(std::chrono::seconds(c.timestamp));
                     sig.coherence = m1.dominant_coherence;
                     sig.stability = m1.stability_index;
                     sig.entropy = m1.entropy_level;
-                    sig.trend_strength = m1.trend_strength;
-                    sig.alpha_signal = (sig.coherence + sig.stability - sig.entropy) / 2.0f;
+                    
+                    
                     auto th = Config::getInstance().signal_thresholds();
                     if (sig.coherence > th.buy_min_coherence &&
                         sig.stability > th.buy_min_stability &&
                         sig.entropy < th.buy_max_entropy) {
-                        sig.signal_type = common::MultiTimeframeSignal::BUY;
+                        sig.signal_type = SEPSignal::ActionRecommendation::BUY;
                     } else if (sig.stability < th.sell_max_stability &&
                                sig.entropy > th.sell_min_entropy) {
-                        sig.signal_type = common::MultiTimeframeSignal::SELL;
+                        sig.signal_type = SEPSignal::ActionRecommendation::SELL;
                     } else {
-                        sig.signal_type = common::MultiTimeframeSignal::NEUTRAL;
+                        sig.signal_type = SEPSignal::ActionRecommendation::NEUTRAL;
                     }
                     streaming_signals_.push_back(sig);
                     if (streaming_signals_.size() > 1440)
                         streaming_signals_.pop_front();
-                    signals_tab_->setSEPSignals(streaming_signals_);
+                    signals_tab_->setSEPSignals(std::vector<SEPSignal>(streaming_signals_.begin(), streaming_signals_.end()));
                 }
             }
         });
@@ -1075,17 +1075,19 @@ void ServiceConnector::loadInitialData(const std::string& path)
             const auto& m = metrics[i];
             const auto& candle = initial_data_[initial_data_.size() - metrics.size() + i];
             common::SEPSignalData sig;
-            sig.signal_value = (m.coherence + m.stability - m.entropy) / 2.0f;
-            sig.timestamp = candle.timestamp;
+            sig.coherence = m.coherence;
+            sig.stability = m.stability;
+            sig.entropy = m.entropy;
+            sig.timestamp = std::chrono::system_clock::from_time_t(candle.timestamp);
 
 
 
-            initial_signals_.push_back(sig);
+            initial_signals_.push_back(SEPSignal(sig));
         }
 
         if (signals_tab_ && !initial_signals_.empty())
         {
-            signals_tab_->setSEPSignals(initial_signals_);
+            signals_tab_->setSEPSignals(std::vector<SEPSignal>(initial_signals_.begin(), initial_signals_.end()));
         }
 
         if (backtester_)

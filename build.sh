@@ -3,17 +3,25 @@
 
 set -uo pipefail
 
+REBUILD=false
+if [ "${1:-}" == "--rebuild" ]; then
+    REBUILD=true
+fi
+
 echo "Building SEP Engine..."
 
-# Clean up previous build artifacts
-sudo rm -rf CMakeCache.txt CMakeFiles output Makefile #.cache .codechecker 
-sleep 2 
-clear 
-sudo rm -rf /sep/.Trash-1000 
-sleep 1
+if [ "$REBUILD" = true ]; then
+    echo "Performing a full rebuild..."
+    # Clean up previous build artifacts
+    sudo rm -rf CMakeCache.txt CMakeFiles output Makefile build .cache .codechecker
+    sleep 2
+    clear
+    sudo rm -rf /sep/.Trash-1000
+    sleep 1
+fi
 
 mkdir -p output
-totxt.save
+mkdir -p build
 
 # Ensure proper permissions for CodeChecker directories
 USER_ID=$(id -u)
@@ -37,9 +45,9 @@ docker run --gpus all --rm \
     echo "CMAKE_CUDA_COMPILER: $CMAKE_CUDA_COMPILER"
     ls -la $CUDA_HOME/bin/nvcc || echo "NVCC not found!"
     # Build as root - no user switching needed
+    # Add exception for dubious ownership
+    git config --global --add safe.directory '*'
     cd /sep
-    rm -rf build
-    mkdir -p build
     cd build
     
     # Configure with include dependency tracking

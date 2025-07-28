@@ -434,7 +434,7 @@ MarketData OandaConnector::parseMarketData(const nlohmann::json& price_data) {
     }
 
     if (price_data.contains("time")) {
-        market_data.timestamp = sep::common::time_point_to_nanoseconds(sep::common::parseTimestamp(price_data["time"].get<std::string>()));
+        market_data.timestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(sep::common::parseTimestamp(price_data["time"].get<std::string>()).time_since_epoch()).count();
     }
     
     if (price_data.contains("bids") && price_data["bids"].is_array() && !price_data["bids"].empty()) {
@@ -477,7 +477,14 @@ void OandaConnector::updateCandleBuilder(const MarketData& md) {
                 price_callback_(candle_md);
             }
         }
-        builder.candle = common::CandleData(md.mid, md.mid, md.mid, md.mid, md.volume, start);
+        builder.candle = common::CandleData{
+            std::chrono::duration_cast<std::chrono::seconds>(start.time_since_epoch()).count(),
+            static_cast<double>(md.mid),
+            static_cast<double>(md.mid),
+            static_cast<double>(md.mid),
+            static_cast<double>(md.mid),
+            static_cast<long long>(md.volume)
+        };
         builder.start = start;
         builder.active = true;
     } else {
@@ -788,7 +795,7 @@ bool OandaConnector::fetchHistoricalData(const std::string& instrument, const st
     for (const auto& c : candles)
     {
         sep::common::CandleData cd;
-        cd.timestamp = sep::common::parseTimestamp(c.time);
+        cd.timestamp = std::chrono::duration_cast<std::chrono::seconds>(sep::common::parseTimestamp(c.time).time_since_epoch()).count();
         cd.open = static_cast<float>(c.open);
         cd.high = static_cast<float>(c.high);
         cd.low = static_cast<float>(c.low);

@@ -19,19 +19,17 @@ namespace sep::workbench {
 
 class EngineTabController {
 public:
-    EngineTabController();
+    EngineTabController(std::shared_ptr<MetricsMonitor> monitor,
+                        core::Engine *engine,
+                        MultiTimeframeAnalyzer *analyzer,
+                        core::ServiceProxyEngine *proxy);
     ~EngineTabController();
 
     bool initialize();
     void render();
     void shutdown();
 
-    void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
-    void setSEPEngine(::sep::core::Engine* engine);
-    void setPatternMetricEngine(::sep::quantum::PatternMetricEngine* pattern_engine);
-    void setCoherenceManager(::sep::quantum::CoherenceManager* coherence_manager);
-    void setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer);
-    void setServiceProxyEngine(::sep::core::ServiceProxyEngine* engine);
+
 
 private:
     std::shared_ptr<MetricsMonitor> metrics_monitor_;

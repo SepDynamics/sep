@@ -11,8 +11,8 @@
 #ifndef SEP_UTIL_ERROR_HANDLING_H
 #define SEP_UTIL_ERROR_HANDLING_H
 
-#include <stddef.h>
-#include <stdio.h>
+#include <cstddef>
+#include <cstdio>
 #include <errno.h>
 
 #ifdef __cplusplus

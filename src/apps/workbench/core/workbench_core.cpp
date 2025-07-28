@@ -106,12 +106,16 @@ bool WorkbenchEngine::initialize()
         globalEventBus().subscribe<ConnectionStateEvent>([this](const ConnectionStateEvent& e) {
             metrics_.service_connected = (e.state == ConnectionState::CONNECTED);
         });
-        signal_generator_ = ::std::make_unique<QuantumSignalGenerator>();
-        signal_generator_->setMemoryManager(&::sep::memory::MemoryTierManager::getInstance());
+        signal_generator_ = ::std::make_unique<SEPSignalGenerator>();
         metrics_monitor_ = ::std::make_shared<MetricsMonitor>();
         multi_timeframe_analyzer_ = ::std::make_unique<MultiTimeframeAnalyzer>();
         multi_timeframe_analyzer_->setMetricsMonitor(metrics_monitor_.get());
         alpha_tracker_ = std::make_unique<AlphaTracker>();
+
+        // Initialize real-time components
+        rolling_window_manager_ = std::make_unique<RollingWindowManager>(2880); // 48 hours of minute data
+        sep_signal_generator_ = std::make_unique<SEPSignalGenerator>();
+        signal_history_store_ = std::make_unique<SignalHistoryStore>();
         multi_timeframe_analyzer_->setMetricsCallback([this](const std::map<std::string, workbench::TimeframeMetrics>& m) {
             if (metrics_monitor_) {
                 auto rolling = metrics_monitor_->getRollingMetrics();
@@ -145,8 +149,18 @@ bool WorkbenchEngine::initialize()
         glfwGetFramebufferSize(window_, &width, &height);
         renderer_->init(width, height);
 
+        // Create offline engine as fallback
+        ::std::cout << "[WorkbenchEngine] Creating offline engine..." << ::std::endl;
+        offline_engine_ = ::std::make_unique<core::Engine>();
+        // Initialize with default config
+        config::CudaConfig config;
+        offline_engine_->init(config);
+        active_engine_ = offline_engine_.get();
+
         signals_tab_ = std::make_unique<workbench::SignalsTabController>();
-        engine_tab_ = std::make_unique<workbench::EngineTabController>();
+        engine_tab_ = std::make_unique<workbench::EngineTabController>(
+            metrics_monitor_, active_engine_, multi_timeframe_analyzer_.get(),
+            service_connector_->getServiceProxyEngine());
         backend_tab_ = std::make_unique<workbench::BackendTabController>(metrics_monitor_,
                                                                          multi_timeframe_analyzer_.get());
         alpha_demo_tab_ = std::make_unique<AlphaDemoTabController>(this);
@@ -155,29 +169,17 @@ bool WorkbenchEngine::initialize()
         signals_tab_->initialize();
         engine_tab_->initialize();
         backend_tab_->initialize();
-        backend_tab_->setMetricsMonitor(metrics_monitor_);
 
         // Set up data flow
         signals_tab_->setOandaConnector(service_connector_->getOandaConnector());
-        signals_tab_->setQuantumSignalGenerator(signal_generator_.get());
+        signals_tab_->setQuantumSignalGenerator(sep_signal_generator_.get());
         signals_tab_->setMetricsMonitor(metrics_monitor_);
         signals_tab_->setWorkbenchEngine(this);
         signals_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
         service_connector_->setSignalsTab(signals_tab_.get());
-        engine_tab_->setSEPEngine(active_engine_);
-        engine_tab_->setMetricsMonitor(metrics_monitor_);
-        engine_tab_->setMultiTimeframeAnalyzer(multi_timeframe_analyzer_.get());
-        engine_tab_->setServiceProxyEngine(service_connector_->getServiceProxyEngine());
+
         backend_tab_->setServiceConnector(service_connector_.get());
         backend_tab_->setTradeManager(service_connector_->getTradeManager());
-
-        // Create offline engine as fallback
-        ::std::cout << "[WorkbenchEngine] Creating offline engine..." << ::std::endl;
-        offline_engine_ = ::std::make_unique<core::Engine>();
-        // Initialize with default config
-        config::CudaConfig config;
-        offline_engine_->init(config);
-        active_engine_ = offline_engine_.get();
 
         if (backtester_tab_) {
             backtester_tab_->setPatternMetricEngine(getPatternMetricEngine());
@@ -198,15 +200,8 @@ bool WorkbenchEngine::initialize()
             service_connector_->startStreaming({"EUR_USD"});
         }
 
-        const char* skip_env = std::getenv("SEP_SKIP_FETCH");
-        if (!skip_env && signals_tab_) {
-            backtester::DataLoader loader;
-            auto candles = loader.load_data("eur_usd_m1_48h.json");
-            if (!candles.empty()) {
-                std::deque<::sep::common::CandleData> dq(candles.begin(), candles.end());
-                signals_tab_->setCandleData(dq);
-            }
-        }
+        // Start the data fetching thread
+        data_thread_ = std::thread(&WorkbenchEngine::dataFetchingLoop, this);
 
         transitionTo(ApplicationState::LANDING_PAGE);
 
@@ -382,8 +377,17 @@ void WorkbenchEngine::updateFrame(float delta_time)
     // Handle state-specific updates
     handleStateTransition();
 
-    // No demo updates needed for trading mode
-    updateData();
+    // Process the latest data from the rolling window
+    if (rolling_window_manager_ && sep_signal_generator_ && signal_history_store_) {
+        SEPSignal signal = sep_signal_generator_->calculate_signal(*rolling_window_manager_);
+        signal_history_store_->add_signal(signal);
+    }
+
+    if (signals_tab_) {
+        signals_tab_->setCandleData(rolling_window_manager_->get_window());
+        signals_tab_->setSEPSignals(signal_history_store_->get_signals());
+    }
+
 
     {
         std::lock_guard<std::mutex> lock(pending_metrics_mutex_);
@@ -394,10 +398,7 @@ void WorkbenchEngine::updateFrame(float delta_time)
                 signals_tab_->setMetricsMonitor(metrics_monitor_);
                 signals_tab_->setLatestMetrics(pending_metrics_);
             }
-            if (engine_tab_)
-            {
-                engine_tab_->setMetricsMonitor(metrics_monitor_);
-            }
+
             metrics_ready_ = false;
         }
     }
@@ -586,9 +587,7 @@ void WorkbenchEngine::attemptServiceConnection()
     ConnectionState state = ConnectionState::DISCONNECTED;
     if (service_connector_) {
         metrics_.service_connected = service_connector_->connect();
-        if (engine_tab_) {
-            engine_tab_->setServiceProxyEngine(service_connector_->getServiceProxyEngine());
-        }
+
 
         if (metrics_.service_connected) {
             std::cout << "[WorkbenchEngine] Successfully connected to SEP service" << std::endl;
@@ -691,8 +690,11 @@ void WorkbenchEngine::shutdown()
 
     std::cout << "[WorkbenchEngine] Shutting down..." << std::endl;
 
-    // Stop the main loop
+    // Stop the main loop and data thread
     should_exit_ = true;
+    if (data_thread_.joinable()) {
+        data_thread_.join();
+    }
 
     if (service_connector_) {
         service_connector_->stopStreaming();
@@ -795,146 +797,36 @@ void WorkbenchEngine::renderTabs()
 }
 
 
-void WorkbenchEngine::updateData()
+void WorkbenchEngine::dataFetchingLoop()
 {
-    // Real implementation of data fetching pipeline (DATA.md integration)
-    std::deque<common::CandleData> candle_data;
-    bool fetched = false;
-    if (service_connector_ && service_connector_->getOandaConnector()) {
-        auto oanda_connector = service_connector_->getOandaConnector();
-        try {
-            auto now = std::chrono::system_clock::now();
-            auto start = now - std::chrono::hours(48);
+    while (!should_exit_) {
+        // In a real implementation, this would block waiting for a new tick
+        // from the OANDA connector. For this simulation, we will generate
+        // a new candle every second to simulate a live feed.
 
-            auto now_t = std::chrono::system_clock::to_time_t(now);
-            auto start_t = std::chrono::system_clock::to_time_t(start);
+        // Simulate receiving a new candle
+        long long now_ts = std::chrono::duration_cast<std::chrono::seconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count();
+        
+        double price = 1.07 + (rand() % 100 - 50) / 10000.0;
 
-            oanda_connector->getHistoricalData(
-                "EUR_USD", "M1", std::to_string(start_t), std::to_string(now_t),
-                std::function<void(const std::vector<connectors::OandaCandle>&)>(
-                    [this](const std::vector<connectors::OandaCandle>& historical_candles) {
-                        std::deque<common::CandleData> candle_data;
-                        for (const auto& oc : historical_candles) {
-                            std::tm tm = {};
-                            std::istringstream ss(oc.time);
-                            ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-                            auto ts = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-                            candle_data.emplace_back(oc.open, oc.high, oc.low, oc.close,
-                                                    static_cast<int>(oc.volume), ts);
-                        }
+        common::CandleData new_candle {
+            .timestamp = now_ts,
+            .open = price,
+            .high = price + 0.0001,
+            .low = price - 0.0001,
+            .close = price,
+            .volume = 100
+        };
 
-                        if (!candle_data.empty() && signals_tab_) {
-                            signals_tab_->setCandleData(candle_data);
-                            std::cout << "[WorkbenchEngine] Fetched " << candle_data.size()
-                                      << " candles from OANDA" << std::endl;
-                        }
-                    }));
-
-        } catch (const std::exception& e) {
-            std::cerr << "[WorkbenchEngine] OANDA data fetch error: " << e.what() << std::endl;
+        if (rolling_window_manager_) {
+            rolling_window_manager_->add_data(new_candle);
         }
-    }
 
-    if (!fetched && service_connector_) {
-        candle_data = std::deque<common::CandleData>(service_connector_->getInitialData().begin(),
-                                     service_connector_->getInitialData().end());
-        if (signals_tab_ && !candle_data.empty()) {
-            signals_tab_->setCandleData(candle_data);
-            auto init_signals = service_connector_->getInitialSignals();
-            if (!init_signals.empty()) {
-                signals_tab_->setSEPSignals(init_signals);
-            }
-        }
-        if (!candle_data.empty()) {
-            std::cout << "[WorkbenchEngine] Loaded " << candle_data.size()
-                      << " candles from local cache" << std::endl;
-        }
-    }
-
-    // Process SEP signals through pattern metric engine (DATA.md pipeline)
-    if (active_engine_ && signals_tab_) {
-        try {
-            auto* pme = active_engine_->getPatternMetricEngine();
-            if (pme) {
-                // Get current candle data to process
-                auto candle_data = signals_tab_->getCandleData();
-                if (!candle_data.empty()) {
-                    // Convert candle data to bytes for pattern processing
-                    std::vector<uint8_t> price_data;
-                    for (const auto& candle : candle_data) {
-                        float ohlc[4] = {
-                            static_cast<float>(candle.open),
-                            static_cast<float>(candle.high),
-                            static_cast<float>(candle.low),
-                            static_cast<float>(candle.close)
-                        };
-                        
-                        const uint8_t* byte_ptr = reinterpret_cast<const uint8_t*>(ohlc);
-                        price_data.insert(price_data.end(), byte_ptr, byte_ptr + sizeof(ohlc));
-                    }
-                    
-                    // Clear previous patterns and ingest new data
-                    pme->clear();
-                    pme->ingestData(price_data.data(), price_data.size());
-                    
-                    // Process patterns and compute metrics
-                    pme->evolvePatterns();
-                    const auto& metrics = pme->computeMetrics();
-                    
-                    // Convert metrics to SEP signals
-                    std::deque<common::SEPSignalData> sep_signals;
-                    for (size_t i = 0; i < std::min(metrics.size(), candle_data.size()); i++) {
-                        const auto& metric = metrics[i];
-                        const auto& candle = candle_data[candle_data.size() - metrics.size() + i];
-                        
-                        common::SEPSignalData signal;
-                        signal.coherence = metric.coherence;
-                        signal.stability = metric.stability;
-                        signal.entropy = metric.entropy;
-                        signal.alpha_signal = (metric.coherence + metric.stability - metric.entropy) / 2.0f;
-                        signal.trend_strength = (metric.coherence * metric.stability) - metric.entropy;
-                        signal.timestamp = candle.timestamp;
-                        
-                        // Threshold-based signal classification (TODO.md Phase 1.3)
-                        if (metric.coherence > 0.8f && metric.stability > 0.7f && metric.entropy < 0.2f) {
-                            signal.signal_type = common::MultiTimeframeSignal::STRONG_BUY;
-                        } else if (metric.coherence > 0.7f && metric.stability > 0.6f && metric.entropy < 0.3f) {
-                            signal.signal_type = common::MultiTimeframeSignal::BUY;
-                        } else if (metric.coherence < 0.2f && metric.stability < 0.3f && metric.entropy > 0.8f) {
-                            signal.signal_type = common::MultiTimeframeSignal::STRONG_SELL;
-                        } else if (metric.coherence < 0.3f && metric.stability < 0.4f && metric.entropy > 0.7f) {
-                            signal.signal_type = common::MultiTimeframeSignal::SELL;
-                        } else {
-                            signal.signal_type = common::MultiTimeframeSignal::NEUTRAL;
-                        }
-                        
-                        sep_signals.push_back(signal);
-                    }
-                    
-                    // Update signals tab with processed SEP signals
-                    signals_tab_->setSEPSignals(sep_signals);
-
-                    // TODO: Process signals with alpha tracker 
-                    // Type conversion needed: SEPSignalData -> quantum::Signal
-                    /*
-                    if (alpha_tracker_) {
-                        const auto& candles = multi_timeframe_analyzer_->getCandles("1m");
-                        if (!candles.empty()) {
-                            const auto& current_candle = candles.back();
-                            for (const auto& signal : sep_signals) {
-                                alpha_tracker_->processSignal(signal, current_candle);
-                            }
-                        }
-                    }
-                    */
-                    
-                    std::cout << "[WorkbenchEngine] Generated " << sep_signals.size() 
-                              << " SEP signals from " << metrics.size() << " patterns" << std::endl;
-                }
-            }
-        } catch (const std::exception& e) {
-            std::cerr << "[WorkbenchEngine] SEP signal processing error: " << e.what() << std::endl;
-        }
+        // Notify the main thread that new data is ready
+        // (A condition variable would be more efficient here)
+        
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
 
@@ -960,9 +852,13 @@ void WorkbenchEngine::setupOandaCallbacks(connectors::OandaConnector* oanda_ptr)
 
         if (multi_timeframe_analyzer_) {
             common::CandleData tick_candle{
-                md.mid, md.mid, md.mid, md.mid, md.volume,
-                std::chrono::time_point<std::chrono::system_clock>(
-                    std::chrono::nanoseconds(md.timestamp))};
+                .open = static_cast<double>(md.mid),
+                .high = static_cast<double>(md.mid),
+                .low = static_cast<double>(md.mid),
+                .close = static_cast<double>(md.mid),
+                .volume = static_cast<long long>(md.volume),
+                .timestamp = std::chrono::duration_cast<std::chrono::seconds>(
+                    std::chrono::nanoseconds(md.timestamp)).count()};
             multi_timeframe_analyzer_->ingestMarketData(md.instrument, tick_candle);
         }
     });

@@ -16,7 +16,7 @@
 #include "connectors/oanda_connector.h"
 #include "imgui.h"
 #include "implot.h"
-#include "signal_generator/quantum_signal_generator.h"
+#include "apps/workbench/core/sep_signal_generator.h"
 
 namespace sep::workbench {
 
@@ -35,7 +35,7 @@ namespace sep::workbench {
         void shutdown();
 
         void setOandaConnector(::sep::connectors::OandaConnector* connector);
-        void setQuantumSignalGenerator(QuantumSignalGenerator* generator);
+        void setQuantumSignalGenerator(SEPSignalGenerator* generator);
         void setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor);
         void setWorkbenchEngine(WorkbenchEngine* engine);
         void setLatestMetrics(const std::map<std::string, TimeframeMetrics>& metrics);
@@ -47,23 +47,28 @@ namespace sep::workbench {
     void setCandleData(const std::deque<::sep::common::CandleData>& data);
     void setCandleData(const std::vector<::sep::common::CandleData>& data);
     void addCandle(const ::sep::common::CandleData& candle);
-    const std::deque<::sep::common::CandleData>& getCandleData() const { return candle_data_; }
-    void setSEPSignals(const std::deque<::sep::common::SEPSignalData>& signals);
+    const std::deque<::sep::common::CandleData>& getCandleData() const {
+        std::lock_guard<std::mutex> lock(candle_data_mutex_);
+        return candle_data_;
+    }
+    void setSEPSignals(const std::vector<SEPSignal>& signals);
 
 private:
     ::sep::connectors::OandaConnector* oanda_connector_ = nullptr;
-    QuantumSignalGenerator* signal_generator_ = nullptr;
+    SEPSignalGenerator* signal_generator_ = nullptr;
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     WorkbenchEngine* workbench_engine_ = nullptr;
     MultiTimeframeAnalyzer* mtf_analyzer_ = nullptr;
     // Chart data
     std::deque<::sep::common::CandleData> candle_data_;
-    std::deque<::sep::common::SEPSignalData> sep_signals_;
+    mutable std::mutex candle_data_mutex_;
+    std::vector<SEPSignal> sep_signals_;
     std::unordered_map<std::string, TechnicalIndicator> indicators_;
     std::vector<TrendLine> trend_lines_;
     EnhancedHoverInfo hover_info_;
     std::map<std::string, TimeframeMetrics> latest_tf_metrics_;
     std::mutex metrics_mutex_;
+    mutable std::mutex signals_mutex_;
     bool metrics_updated_{false};
 
     // Chart interaction
@@ -141,7 +146,7 @@ private:
     void updateHoverInfo();
     void calculateEnhancedHoverMetrics();
     void detectTrendLines();
-    ImU32 getSignalColor(::sep::common::MultiTimeframeSignal signal_type);
+    ImU32 getSignalColor(SEPSignal::ActionRecommendation signal_type);
     ImU32 getCandleColor(const ::sep::common::CandleData& candle, bool is_body = true);
 };
 

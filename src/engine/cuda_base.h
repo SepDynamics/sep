@@ -1,7 +1,7 @@
 #ifndef SEP_COMPAT_CUDA_BASE_H
 #define SEP_COMPAT_CUDA_BASE_H
 
-#include <stddef.h>  // For size_t
+#include <cstddef>  // For size_t
 
 #ifndef SEP_ENGINE_HAS_CUDA
 #define SEP_ENGINE_HAS_CUDA 0

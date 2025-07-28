@@ -72,8 +72,8 @@ std::vector<quantum::Pattern> DataParser::parseBuffer(const uint8_t* data, size_
                         sep::common::CandleData candle;
                         
                         if (candle_json.contains("time") && candle_json["time"].is_string()) {
-                            candle.timestamp =
-                                sep::common::parseTimestamp(candle_json["time"].get<std::string>());
+                            auto tp = sep::common::parseTimestamp(candle_json["time"].get<std::string>());
+                            candle.timestamp = std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch()).count();
                         }
                         
                         if (candle_json.contains("volume") && candle_json["volume"].is_number()) {
@@ -190,7 +190,8 @@ std::vector<quantum::Pattern> DataParser::parseCSV(const std::string& path)
         if (!values.empty()) {
             quantum::Pattern pattern;
             pattern.id = std::to_string(line_num);
-            pattern.timestamp = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
+            auto current_time = std::chrono::system_clock::now();
+            pattern.timestamp = std::chrono::duration_cast<std::chrono::seconds>(current_time.time_since_epoch()).count();
 
             // Map values to pattern fields
             if (values.size() >= 1) pattern.position.x = values[0];
@@ -211,9 +212,9 @@ std::vector<quantum::Pattern> DataParser::parseCSV(const std::string& path)
             pattern.attributes = glm::vec4(0.0f);
             pattern.amplitude = {1.0f, 0.0f};
             pattern.momentum = glm::vec3(0.0f);
-            pattern.last_accessed = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
-            pattern.last_modified = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
-            
+            pattern.last_accessed = std::chrono::duration_cast<std::chrono::seconds>(current_time.time_since_epoch()).count();
+            pattern.last_modified = std::chrono::duration_cast<std::chrono::seconds>(current_time.time_since_epoch()).count();
+    
             patterns.push_back(pattern);
         }
     }
@@ -239,7 +240,8 @@ std::vector<quantum::Pattern> DataParser::parseBinary(const uint8_t* data, size_
     for (size_t i = 0; i < num_patterns; ++i) {
         quantum::Pattern pattern;
         pattern.id = std::to_string(i);
-        pattern.timestamp = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
+        auto current_time = std::chrono::system_clock::now();
+        pattern.timestamp = std::chrono::duration_cast<std::chrono::seconds>(current_time.time_since_epoch()).count();
 
         size_t offset = i * floats_per_pattern;
         pattern.position = glm::vec4(float_data[offset], float_data[offset + 1], float_data[offset + 2], float_data[offset + 3]);
@@ -258,9 +260,9 @@ std::vector<quantum::Pattern> DataParser::parseBinary(const uint8_t* data, size_
         pattern.attributes = glm::vec4(0.0f);
         pattern.amplitude = {1.0f, 0.0f};
         pattern.momentum = glm::vec3(0.0f);
-        pattern.last_accessed = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
-        pattern.last_modified = sep::common::time_point_to_nanoseconds(std::chrono::system_clock::now());
-
+        pattern.last_accessed = std::chrono::duration_cast<std::chrono::seconds>(current_time.time_since_epoch()).count();
+        pattern.last_modified = std::chrono::duration_cast<std::chrono::seconds>(current_time.time_since_epoch()).count();
+        
         patterns.push_back(pattern);
     }
 
@@ -409,7 +411,7 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
                 bool valid = true;
 
                 if (candle_json.contains("time") && candle_json["time"].is_string()) {
-                    candle.timestamp = sep::common::parseTimestamp(candle_json["time"].get<std::string>());
+                    candle.timestamp = std::chrono::duration_cast<std::chrono::seconds>(sep::common::parseTimestamp(candle_json["time"].get<std::string>()).time_since_epoch()).count();
                 } else {
                     std::cerr << "[DataParser] Missing time at index " << index << "\n";
                     valid = false;
@@ -444,7 +446,7 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
                     if (cur_ts <= prev_ts) {
                         std::cerr << "[DataParser] Non-increasing timestamp at index " << index << "\n";
                         valid = false;
-                    } else if (std::chrono::duration_cast<std::chrono::milliseconds>(cur_ts - prev_ts).count() != 60000) {
+                    } else if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::seconds(cur_ts) - std::chrono::seconds(prev_ts)).count() != 60000) {
                         std::cerr << "[DataParser] Missing candle between " << candles.size()-1
                                   << " and current" << "\n";
                     }
@@ -466,7 +468,7 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
             
             // Parse time
             if (candle_json.contains("time") && candle_json["time"].is_string()) {
-                candle.timestamp = sep::common::parseTimestamp(candle_json["time"].get<std::string>());
+                candle.timestamp = std::chrono::duration_cast<std::chrono::seconds>(sep::common::parseTimestamp(candle_json["time"].get<std::string>()).time_since_epoch()).count();
             }
             
             // Parse volume
@@ -504,7 +506,7 @@ std::vector<sep::common::CandleData> DataParser::parseQuantJSON(const std::strin
             if (!candles.empty()) {
                 auto prev_ts = candles.back().timestamp;
                 auto cur_ts = candle.timestamp;
-                if (std::chrono::duration_cast<std::chrono::milliseconds>(cur_ts - prev_ts).count() != 60000) {
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::seconds(cur_ts) - std::chrono::seconds(prev_ts)).count() != 60000) {
                     std::cerr << "[DataParser] Missing candle between previous and current\n";
                 }
             }
@@ -532,7 +534,7 @@ std::vector<quantum::Pattern> DataParser::candlesToPatterns(
         quantum::Pattern pattern;
 
         // Use timestamp as unique ID
-        pattern.id = std::to_string(sep::common::time_point_to_nanoseconds(candle.timestamp));
+        pattern.id = std::to_string(candle.timestamp);
 
         // Map OHLC to position vector (raw data, no normalization)
         pattern.position.x = candle.open;
@@ -544,9 +546,10 @@ std::vector<quantum::Pattern> DataParser::candlesToPatterns(
         pattern.data.push_back(static_cast<float>(candle.volume));
         
         // Set timestamp
-        pattern.timestamp = sep::common::time_point_to_nanoseconds(candle.timestamp);
-        pattern.last_accessed = sep::common::time_point_to_nanoseconds(candle.timestamp);
-        pattern.last_modified = sep::common::time_point_to_nanoseconds(candle.timestamp);
+        auto tp = std::chrono::system_clock::from_time_t(static_cast<time_t>(candle.timestamp));
+        pattern.timestamp = sep::common::time_point_to_nanoseconds(tp);
+        pattern.last_accessed = sep::common::time_point_to_nanoseconds(tp);
+        pattern.last_modified = sep::common::time_point_to_nanoseconds(tp);
         
         // Initialize quantum state with defaults - let the quantum algorithms determine these
         pattern.generation = 0;
@@ -574,13 +577,15 @@ void DataParser::writeQuantJSON(const std::vector<sep::common::CandleData>& cand
         if (!std::isfinite(c.open) || !std::isfinite(c.high) || !std::isfinite(c.low) ||
             !std::isfinite(c.close) || c.high < c.low)
         {
-            std::time_t tt = std::chrono::system_clock::to_time_t(c.timestamp);
+            auto tp = std::chrono::system_clock::from_time_t(static_cast<time_t>(c.timestamp));
+            std::time_t tt = std::chrono::system_clock::to_time_t(tp);
             std::cerr << "[DataParser] Invalid candle data at " << std::ctime(&tt) << std::endl;
             continue;
         }
 
         nlohmann::json cj;
-        std::time_t tt = std::chrono::system_clock::to_time_t(c.timestamp);
+        auto tp = std::chrono::system_clock::from_time_t(static_cast<time_t>(c.timestamp));
+        std::time_t tt = std::chrono::system_clock::to_time_t(tp);
         std::stringstream ss;
         ss << std::put_time(std::gmtime(&tt), "%Y-%m-%dT%H:%M:%S");
         cj["time"] = ss.str();

@@ -10,9 +10,19 @@
 
 namespace sep::workbench {
 
-EngineTabController::EngineTabController()
-    : backtester_(std::make_unique<backtester::Backtester>()),
-      data_loader_(std::make_unique<backtester::DataLoader>()) {}
+EngineTabController::EngineTabController(
+    std::shared_ptr<MetricsMonitor> monitor, core::Engine *engine,
+    MultiTimeframeAnalyzer *analyzer, core::ServiceProxyEngine *proxy)
+    : metrics_monitor_(monitor),
+      sep_engine_(engine),
+      multi_timeframe_analyzer_(analyzer),
+      service_proxy_engine_(proxy),
+      backtester_(std::make_unique<backtester::Backtester>()),
+      data_loader_(std::make_unique<backtester::DataLoader>()) {
+    if (sep_engine_) {
+        pattern_engine_ = sep_engine_->getPatternMetricEngine();
+    }
+}
 
 EngineTabController::~EngineTabController() { shutdown(); }
 bool EngineTabController::initialize() {
@@ -67,35 +77,17 @@ void EngineTabController::render() {
 
 void EngineTabController::shutdown() {}
 
-void EngineTabController::setMetricsMonitor(std::shared_ptr<MetricsMonitor> monitor) {
-    metrics_monitor_ = monitor;
-}
 
-void EngineTabController::setSEPEngine(core::Engine* engine) {
-    sep_engine_ = engine;
-    if (engine && engine != reinterpret_cast<core::Engine*>(service_proxy_engine_)) {
-        local_engine_ = engine;
-    }
-}
 
-void EngineTabController::setPatternMetricEngine(quantum::PatternMetricEngine* pattern_engine) {
-    pattern_engine_ = pattern_engine;
-}
 
-void EngineTabController::setCoherenceManager(quantum::CoherenceManager* coherence_manager) {
-    coherence_manager_ = coherence_manager;
-}
 
-void EngineTabController::setMultiTimeframeAnalyzer(MultiTimeframeAnalyzer* analyzer) {
-    multi_timeframe_analyzer_ = analyzer;
-}
 
-void EngineTabController::setServiceProxyEngine(core::ServiceProxyEngine* engine) {
-    service_proxy_engine_ = engine;
-    if (use_remote_engine_ && service_proxy_engine_) {
-        sep_engine_ = service_proxy_engine_;
-    }
-}
+
+
+
+
+
+
 
 void EngineTabController::renderSEPMetricsPanel() {
     ImGui::Text("SEP Real-Time Metrics");

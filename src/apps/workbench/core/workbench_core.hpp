@@ -2,7 +2,10 @@
 
 #include <map>
 #include <mutex>
+#include <thread>
+#include <deque>
 
+#include "common/candle_data.h"
 #include "apps/workbench/core/alpha_tracker.h"
 #include "apps/workbench/tabs/alpha_demo_tab_controller.h"
 #include "backtester/ui/backtester_tab_controller.h"
@@ -12,6 +15,9 @@
 #include "tabs/engine_tab_controller.h"
 #include "tabs/signals_tab_controller.h"
 #include "ui_layout_manager.h"
+#include "rolling_window_manager.h"
+#include "sep_signal_generator.h"
+#include "signal_history_store.h"
 
 // Forward declaration for GLFW
 struct GLFWwindow;
@@ -90,7 +96,7 @@ public:
     void showMetricsDashboard(bool show);
 
     // Signal generator
-    QuantumSignalGenerator* getSignalGenerator() const { return signal_generator_.get(); }
+    SEPSignalGenerator* getSignalGenerator() const { return signal_generator_.get(); }
     ::sep::quantum::PatternMetricEngine* getPatternMetricEngine() const
     {
         return active_engine_ ? active_engine_->getPatternMetricEngine() : nullptr;
@@ -123,10 +129,15 @@ private:
     std::unique_ptr<BackendTabController> backend_tab_;
     std::unique_ptr<BacktesterTabController> backtester_tab_;
     std::unique_ptr<AlphaDemoTabController> alpha_demo_tab_;
-    std::unique_ptr<QuantumSignalGenerator> signal_generator_;
+    std::unique_ptr<SEPSignalGenerator> signal_generator_;
     std::shared_ptr<MetricsMonitor> metrics_monitor_;
     std::unique_ptr<MultiTimeframeAnalyzer> multi_timeframe_analyzer_;
     std::unique_ptr<AlphaTracker> alpha_tracker_;
+
+    // Real-time components
+    std::unique_ptr<RollingWindowManager> rolling_window_manager_;
+    std::unique_ptr<SEPSignalGenerator> sep_signal_generator_;
+    std::unique_ptr<SignalHistoryStore> signal_history_store_;
     
     // Engine components (may be null if service not connected)
     std::unique_ptr<::sep::core::Engine> offline_engine_;
@@ -178,8 +189,15 @@ private:
     std::mutex pending_metrics_mutex_;
     bool metrics_ready_{false};
 
+    // Real-time data pipeline
+    std::thread data_thread_;
+    void dataFetchingLoop();
+
     // Singleton instance for static callbacks
     static WorkbenchEngine* instance_;
+
+    // Throttling for data updates
+    std::chrono::steady_clock::time_point last_update_time_;
 };
 
 } // namespace sep::workbench

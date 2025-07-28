@@ -194,27 +194,27 @@ std::vector<sep::common::CandleData> MultiTimeframeAnalyzer::resampleCandles(
     std::vector<sep::common::CandleData> resampled;
     
     // Group candles by target interval
-    auto start_time = source_candles[0].timestamp;
+    auto start_time = std::chrono::system_clock::time_point(std::chrono::seconds(source_candles[0].timestamp));
     auto interval_duration = std::chrono::minutes(target_interval_minutes);
     
-    sep::common::CandleData current_candle{0, 0, 0, 0, 0, std::chrono::system_clock::now()};
+    sep::common::CandleData current_candle{0, 0, 0, 0, 0, 0};
     bool candle_started = false;
     
     for (const auto& candle : source_candles) {
         auto time_diff = std::chrono::duration_cast<std::chrono::minutes>(
-            candle.timestamp - start_time);
+            std::chrono::system_clock::time_point(std::chrono::seconds(candle.timestamp)) - start_time);
         
         size_t interval_index = time_diff.count() / target_interval_minutes;
         auto interval_start = start_time + std::chrono::minutes(interval_index * target_interval_minutes);
         
-        if (!candle_started || candle.timestamp >= interval_start + interval_duration) {
+        if (!candle_started || std::chrono::system_clock::time_point(std::chrono::seconds(candle.timestamp)) >= interval_start + interval_duration) {
             // Start new interval
             if (candle_started) {
                 resampled.push_back(current_candle);
             }
             
             current_candle = candle;
-            current_candle.timestamp = interval_start;
+            current_candle.timestamp = std::chrono::duration_cast<std::chrono::seconds>(interval_start.time_since_epoch()).count();
             candle_started = true;
         } else {
             // Update current interval candle
@@ -239,7 +239,7 @@ TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
 
     TimeframeMetrics metrics(timeframe);
     if (!candles.empty()) {
-        metrics.timestamp = candles.back().timestamp;
+        metrics.timestamp = std::chrono::system_clock::time_point(std::chrono::seconds(candles.back().timestamp));
     }
     
     if (candles.empty() || !pattern_engines_.count(timeframe)) {
@@ -261,13 +261,11 @@ TimeframeMetrics MultiTimeframeAnalyzer::analyzeTimeframe(
             {
                 // Convert timestamp to ISO-8601 string expected by
                 // MarketDataConverter (e.g. "2021-04-07T00:00:00.000000000Z")
-                std::time_t tt = std::chrono::system_clock::to_time_t(candle.timestamp);
+                std::time_t tt = static_cast<time_t>(candle.timestamp);
                 std::tm tm = *std::gmtime(&tt);
                 std::ostringstream ts_stream;
                 ts_stream << std::put_time(&tm, "%Y-%m-%dT%H:%M:%S");
-                auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
-                    candle.timestamp.time_since_epoch()).count() % 1000000000LL;
-                ts_stream << '.' << std::setw(9) << std::setfill('0') << ns << 'Z';
+                ts_stream << '.' << std::setw(9) << std::setfill('0') << 0 << 'Z';
                 oanda_candle.time = ts_stream.str();
             }
             oanda_candles.push_back(oanda_candle);

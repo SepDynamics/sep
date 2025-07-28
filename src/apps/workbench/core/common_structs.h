@@ -8,6 +8,7 @@
 #include <vector>
 #include "imgui.h"
 #include "common/financial_data_types.h"
+#include "apps/workbench/core/sep_signal_generator.h"
 
 
 
@@ -61,7 +62,7 @@ struct EnhancedHoverInfo {
     double price;
     std::chrono::system_clock::time_point time;
         sep::common::CandleData* nearest_candle = nullptr;
-        sep::common::SEPSignalData* nearest_sep_signal = nullptr;
+        SEPSignal* nearest_sep_signal = nullptr;
     
     // Enhanced derived metrics
     float price_momentum = 0.0f;      // Rate of price change

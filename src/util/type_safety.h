@@ -8,9 +8,9 @@
 #ifndef SEP_TYPE_SAFETY_H
 #define SEP_TYPE_SAFETY_H
 
-#include <stddef.h>  /* For size_t */
+#include <cstddef>  /* For size_t */
 #include <stdint.h>  /* For fixed-width integer types */
-#include <float.h>   /* For floating-point limits */
+#include <cfloat>   /* For floating-point limits */
 #include <math.h>    /* For isnan, isinf, etc. */
 #include <stdbool.h> /* For bool type */
 #include <limits.h>  /* For INT_MAX, INT_MIN */

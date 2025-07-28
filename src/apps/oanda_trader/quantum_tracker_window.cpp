@@ -1,5 +1,6 @@
 #include "quantum_tracker_window.hpp"
 #include "imgui.h"
+#include <implot.h>
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -23,7 +24,7 @@ bool QuantumTrackerWindow::initialize() {
         
         // Configure with EXACT alpha strategy thresholds (verified +0.0084 pips)
         quantum_bridge_->setConfidenceThreshold(0.6f);  // 60% - from alpha analysis
-        quantum_bridge_->setCoherenceThreshold(0.9f);   // 90% - from alpha analysis  
+        quantum_bridge_->setCoherenceThreshold(0.4f);   // 40% - based on POC results  
         quantum_bridge_->setStabilityThreshold(0.0f);   // 0% - from alpha analysis
         
         std::cout << "[QuantumTracker] Initialized successfully" << std::endl;
@@ -69,6 +70,23 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
             // Store latest signal
             latest_signal_ = signal;
             has_latest_signal_ = true;
+            
+            // Update metric history for plotting
+            confidence_history_.push_back(signal.confidence);
+            coherence_history_.push_back(signal.coherence);
+            stability_history_.push_back(signal.stability);
+            price_history_plot_.push_back(static_cast<float>(data.mid));
+            timestamp_history_.push_back(std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::system_clock::now().time_since_epoch()).count());
+            
+            // Maintain plot history size
+            if (confidence_history_.size() > MAX_PLOT_POINTS) {
+                confidence_history_.pop_front();
+                coherence_history_.pop_front();
+                stability_history_.pop_front();
+                price_history_plot_.pop_front();
+                timestamp_history_.pop_front();
+            }
             
             // Make prediction for ANY directional signal (to track performance)
             if (signal.action != sep::trading::QuantumTradingSignal::HOLD && 
@@ -246,6 +264,9 @@ void QuantumTrackerWindow::render() {
     ImGui::Separator();
     
     renderQuantumDiagnostics();
+    ImGui::Separator();
+    
+    renderMetricPlots();
     ImGui::Separator();
     
     renderLatestSignal();
@@ -541,7 +562,7 @@ void QuantumTrackerWindow::renderQuantumDiagnostics() {
     if (has_latest_signal_) {
         ImGui::Text("🔍 Raw Quantum Metrics:");
         ImGui::Text("  Confidence: %.3f (threshold: %.1f)", latest_signal_.confidence, 0.6f);
-        ImGui::Text("  Coherence: %.3f (threshold: %.1f)", latest_signal_.coherence, 0.9f);
+        ImGui::Text("  Coherence: %.3f (threshold: %.1f)", latest_signal_.coherence, 0.4f);
         ImGui::Text("  Stability: %.3f (threshold: %.1f)", latest_signal_.stability, 0.0f);
         
         ImGui::Separator();
@@ -554,7 +575,7 @@ void QuantumTrackerWindow::renderQuantumDiagnostics() {
         ImGui::Separator();
         ImGui::Text("📊 Threshold Analysis:");
         bool conf_pass = latest_signal_.confidence >= 0.6f;
-        bool coh_pass = latest_signal_.coherence >= 0.9f;
+        bool coh_pass = latest_signal_.coherence >= 0.4f;
         bool stab_pass = latest_signal_.stability >= 0.0f;
         
         ImGui::TextColored(conf_pass ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), 
@@ -568,6 +589,66 @@ void QuantumTrackerWindow::renderQuantumDiagnostics() {
     }
     
     ImGui::End();
+}
+
+void QuantumTrackerWindow::renderMetricPlots() {
+    if (confidence_history_.empty()) {
+        return; // No data to plot yet
+    }
+    
+    // Create time axis for plotting (use float to match metric data)
+    std::vector<float> time_axis;
+    double start_time = timestamp_history_.empty() ? 0.0 : timestamp_history_.front();
+    for (size_t i = 0; i < timestamp_history_.size(); ++i) {
+        time_axis.push_back(static_cast<float>((timestamp_history_[i] - start_time) / 1000.0)); // Convert to seconds
+    }
+    
+    if (ImPlot::BeginPlot("Quantum Metrics Over Time", ImVec2(-1, 300))) {
+        ImPlot::SetupAxes("Time (seconds)", "Value");
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 1.0, ImGuiCond_Always);
+        
+        // Convert deques to vectors for plotting
+        std::vector<float> confidence_vec(confidence_history_.begin(), confidence_history_.end());
+        std::vector<float> coherence_vec(coherence_history_.begin(), coherence_history_.end());
+        std::vector<float> stability_vec(stability_history_.begin(), stability_history_.end());
+        
+        // Plot confidence
+        ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), 2.0f); // Red
+        ImPlot::PlotLine("Confidence", time_axis.data(), confidence_vec.data(), static_cast<int>(confidence_vec.size()));
+        
+        // Plot coherence  
+        ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), 2.0f); // Green
+        ImPlot::PlotLine("Coherence", time_axis.data(), coherence_vec.data(), static_cast<int>(coherence_vec.size()));
+        
+        // Plot stability
+        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), 2.0f); // Blue
+        ImPlot::PlotLine("Stability", time_axis.data(), stability_vec.data(), static_cast<int>(stability_vec.size()));
+        
+        // Add threshold lines
+        ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 0.5f), 1.0f); // Red dashed
+        float conf_threshold = 0.6f;
+        std::vector<float> conf_thresh_line(time_axis.size(), conf_threshold);
+        ImPlot::PlotLine("Conf Threshold", time_axis.data(), conf_thresh_line.data(), static_cast<int>(conf_thresh_line.size()));
+        
+        ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 0.5f), 1.0f); // Green dashed
+        float coh_threshold = 0.4f;
+        std::vector<float> coh_thresh_line(time_axis.size(), coh_threshold);
+        ImPlot::PlotLine("Coh Threshold", time_axis.data(), coh_thresh_line.data(), static_cast<int>(coh_thresh_line.size()));
+        
+        ImPlot::EndPlot();
+    }
+    
+    // Price plot
+    if (ImPlot::BeginPlot("Price Movement", ImVec2(-1, 200))) {
+        ImPlot::SetupAxes("Time (seconds)", "Price");
+        
+        std::vector<float> price_vec(price_history_plot_.begin(), price_history_plot_.end());
+        
+        ImPlot::SetNextLineStyle(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), 2.0f); // Yellow
+        ImPlot::PlotLine("EUR/USD", time_axis.data(), price_vec.data(), static_cast<int>(price_vec.size()));
+        
+        ImPlot::EndPlot();
+    }
 }
 
 } // namespace sep::apps

@@ -176,18 +176,19 @@ std::vector<uint8_t> QuantumSignalBridge::convertPriceToBits(
 
 float QuantumSignalBridge::calculateConfidence(const sep::quantum::QFHResult& qfh_result, 
                                               const sep::quantum::QBSAResult& qbsa_result) {
-    // Multi-factor confidence calculation
-    // 1. QBSA correction ratio (how well expectations are met)
-    float qbsa_factor = qbsa_result.correction_ratio;
+    // Confidence calculation based on strategy docs:
+    // Primary: QBSA correction_ratio (measures pattern stability)
+    // Secondary: QFH pattern quality indicators
     
-    // 2. QFH stability factor (inverse of flip ratio)
-    float stability_factor = 1.0f - qfh_result.flip_ratio;
+    // QBSA correction ratio is the main confidence indicator
+    float base_confidence = qbsa_result.correction_ratio;
     
-    // 3. Entropy factor (lower entropy = higher confidence)
-    float entropy_factor = 1.0f / (1.0f + qfh_result.entropy);
+    // Adjust based on QFH pattern quality (minor adjustments only)
+    float flip_stability = 1.0f - qfh_result.flip_ratio;  // Lower flip ratio = more stable
+    float rupture_penalty = qfh_result.rupture_ratio;     // Higher rupture = less confident
     
-    // Weighted combination
-    float confidence = (qbsa_factor * 0.4f) + (stability_factor * 0.3f) + (entropy_factor * 0.3f);
+    // Apply modest adjustments (keep QBSA as primary factor)
+    float confidence = base_confidence * (0.9f + flip_stability * 0.1f) * (1.0f - rupture_penalty * 0.1f);
     
     return std::max(0.0f, std::min(1.0f, confidence));
 }

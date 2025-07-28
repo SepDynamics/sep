@@ -3,10 +3,13 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui.h>
+#include <implot.h>
 
 #include <chrono>
+#include <condition_variable>
 #include <cstdlib>
 #include <iostream>
+#include <mutex>
 #include <thread>
 
 namespace sep::apps {
@@ -71,6 +74,7 @@ void QuantumTrackerApp::setupImGui() {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     
@@ -187,16 +191,64 @@ void QuantumTrackerApp::connectToOanda() {
     startMarketDataStream();
 }
 
-void QuantumTrackerApp::startMarketDataStream() {
-    // First, load 48 hours of historical data
-    std::cout << "[QuantumTracker] Loading 48 hours of historical EUR_USD data..." << std::endl;
-    if (!oanda_connector_->fetchHistoricalData("EUR_USD", "")) {
-        std::cerr << "[QuantumTracker] Failed to load historical data: " 
-                  << oanda_connector_->getLastError() << std::endl;
-        std::cerr << "[QuantumTracker] Continuing with live data only..." << std::endl;
+void QuantumTrackerApp::loadHistoricalData() {
+    std::cout << "[QuantumTracker] Loading most recent 2880 EUR_USD M1 candles..." << std::endl;
+    
+    // Use a shared pointer for thread-safe data sharing
+    auto historical_candles = std::make_shared<std::vector<sep::connectors::OandaCandle>>();
+    std::mutex data_mutex;
+    std::condition_variable data_ready;
+    bool data_received = false;
+    
+    // Use count parameter only (no from/to) to get most recent 2880 candles
+    oanda_connector_->getHistoricalData("EUR_USD", "M1", 
+                                       "", "",  // Empty from/to to use count parameter
+                                       [&](const std::vector<sep::connectors::OandaCandle>& fetched_candles) {
+                                           std::lock_guard<std::mutex> lock(data_mutex);
+                                           *historical_candles = fetched_candles;
+                                           data_received = true;
+                                           std::cout << "[QuantumTracker] Received " << fetched_candles.size() 
+                                                     << " candles from API (requested 2880)" << std::endl;
+                                           data_ready.notify_one();
+                                       });
+    
+    // Wait for data with timeout
+    std::unique_lock<std::mutex> lock(data_mutex);
+    if (data_ready.wait_for(lock, std::chrono::seconds(30), [&]{ return data_received; })) {
+        if (!historical_candles->empty()) {
+            std::cout << "[QuantumTracker] Loaded " << historical_candles->size() 
+                      << " historical data points";
+            
+            if (historical_candles->size() < 2000) {
+                std::cout << " (less than expected 2880, but proceeding)";
+            }
+            std::cout << ". Converting to MarketData..." << std::endl;
+            
+            // Convert candles to MarketData and feed to quantum tracker
+            for (const auto& candle : *historical_candles) {
+                sep::connectors::MarketData market_data;
+                market_data.instrument = "EUR_USD";
+                market_data.mid = candle.close;
+                market_data.bid = candle.close - 0.00001; // Approximate spread
+                market_data.ask = candle.close + 0.00001;
+                market_data.volume = candle.volume;
+                market_data.atr = 0.0001; // Default ATR for historical data
+                
+                quantum_tracker_->processNewMarketData(market_data);
+            }
+            
+            std::cout << "[QuantumTracker] Historical data processed successfully!" << std::endl;
+        } else {
+            std::cerr << "[QuantumTracker] Received empty historical data" << std::endl;
+        }
     } else {
-        std::cout << "[QuantumTracker] Historical data loaded successfully!" << std::endl;
+        std::cerr << "[QuantumTracker] Timeout waiting for historical data. Continuing with live data only..." << std::endl;
     }
+}
+
+void QuantumTrackerApp::startMarketDataStream() {
+    // Load historical data safely
+    loadHistoricalData();
     
     // Set the price callback to feed quantum tracker
     oanda_connector_->setPriceCallback([this](const sep::connectors::MarketData& data) {

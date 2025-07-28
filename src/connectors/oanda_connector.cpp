@@ -98,8 +98,9 @@ void OandaConnector::getHistoricalData(
             if (!to.empty()) {
                 endpoint += "&to=" + to;
             }
+            // Cannot use count with from/to parameters per OANDA API
         } else {
-            endpoint += "&count=50";  // Small count to test
+            endpoint += "&count=2880";  // Request 48 hours of M1 data
         }
 
         try {
@@ -330,6 +331,13 @@ double OandaConnector::calculateATR(const std::string& instrument, const std::st
     }
     
     double atr = std::accumulate(true_ranges.begin(), true_ranges.end(), 0.0) / true_ranges.size();
+    
+    // Add bounds checking to prevent extremely small or invalid values
+    if (atr < 1e-10 || !std::isfinite(atr)) {
+        last_error_ = "ATR calculation resulted in invalid value";
+        return 0.0001; // Return a reasonable minimum ATR for forex (1 pip)
+    }
+    
     return atr;
 }
 
@@ -388,6 +396,12 @@ MarketData OandaConnector::getMarketData(const std::string& instrument) {
     }
 
     market_data.atr = calculateATR(instrument);
+    
+    // Additional bounds checking for ATR after calculation
+    if (market_data.atr < 1e-10 || market_data.atr > 1.0) {
+        market_data.atr = 0.0001; // Default to 1 pip for forex
+    }
+    
     market_data.volatility_level = getVolatilityLevel(market_data.atr, instrument);
     market_data.spread = market_data.ask - market_data.bid;
 

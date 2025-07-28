@@ -20,20 +20,20 @@ namespace sep {
 namespace connectors {
 
 struct MarketData {
-    std::string instrument;
-    double bid;
-    double ask;
-    double mid;
-    uint64_t timestamp;
-    double volume;
+    std::string instrument = "";
+    double bid = 0.0;
+    double ask = 0.0;
+    double mid = 0.0;
+    uint64_t timestamp = 0;
+    double volume = 0.0;
     std::vector<double> bid_book;
     std::vector<double> ask_book;
 
     // Technical indicators
-    double atr;              // Average True Range
-    int volatility_level;    // 1-4 volatility classification
-    double spread;           // Bid-ask spread
-    double daily_change;     // Daily price change %
+    double atr = 0.0;              // Average True Range
+    int volatility_level = 1;      // 1-4 volatility classification
+    double spread = 0.0;           // Bid-ask spread
+    double daily_change = 0.0;     // Daily price change %
 };
 
 struct OandaCandle {

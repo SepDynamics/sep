@@ -117,6 +117,14 @@ private:
     sep::trading::QuantumTradingSignal latest_signal_;
     bool has_latest_signal_{false};
     
+    // Metric history for plotting
+    std::deque<float> confidence_history_;
+    std::deque<float> coherence_history_;
+    std::deque<float> stability_history_;
+    std::deque<float> price_history_plot_;
+    std::deque<double> timestamp_history_;
+    static constexpr size_t MAX_PLOT_POINTS = 200;
+    
     // Configuration
     static constexpr size_t MAX_HISTORY_SIZE = 200;
     static constexpr size_t MIN_HISTORY_FOR_SIGNAL = 20;
@@ -143,6 +151,7 @@ private:
     // New GUI.md requirements
     void renderPipsDisplay();
     void renderQuantumDiagnostics();
+    void renderMetricPlots();
     
     // Utility functions
     double calculateDirectionalAccuracy(const QuantumPrediction& pred, double actual_price) const;

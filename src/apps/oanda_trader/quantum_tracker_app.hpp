@@ -33,6 +33,7 @@ private:
     
     // OANDA integration
     void connectToOanda();
+    void loadHistoricalData();
     void startMarketDataStream();
     
     // Core components

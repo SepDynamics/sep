@@ -39,6 +39,7 @@ target_include_directories(quantum_tracker PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/third_party/imgui
+    ${implot_SOURCE_DIR}
 )
 
 target_link_libraries(quantum_tracker PUBLIC
@@ -46,6 +47,7 @@ target_link_libraries(quantum_tracker PUBLIC
     sep_connectors
     sep_quantum
     imgui
+    implot
     glad
     OpenGL::GL
     glfw

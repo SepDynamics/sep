@@ -47,12 +47,6 @@ struct PatternMetrics {
     }
 };
 
-/// @brief Holds the computed metrics for a single pattern.
-extern char pattern_id[compat::PatternData::MAX_ID_LENGTH];  ///< The ID of the pattern.
-extern float coherence;  ///< Measure of the pattern's internal consistency.
-extern float stability;  ///< Measure of how resistant the pattern is to change.
-extern float entropy;    ///< Measure of the pattern's complexity and randomness.
-extern std::vector<PatternRelationship> relationships;  ///< Relationships to other patterns.
 
 /// @brief Calculate Shannon entropy of a sequence of values.
 /// @param values Input data sequence.

@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build libgtest-dev libbenchmark-dev libglm-dev libfmt-dev clang-tidy nlohmann-json3-dev libgl1-mesa-dev libglx-dev libglu1-mesa-dev libglfw3-dev
+      - name: Configure
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G Ninja -DSEP_USE_CUDA=OFF
+      - name: Build
+        run: |
+          cd build
+          ninja
+      - name: Test
+        run: |
+          cd build
+          ctest --output-on-failure
+      - name: Static Analysis
+        run: |
+          clang-tidy $(git ls-files 'src/**/*.cpp') -- -std=c++17 || true
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true

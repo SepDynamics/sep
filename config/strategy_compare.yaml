@@ -1,0 +1,8 @@
+strategyA:
+  conf: 0.6
+  coh: 0.9
+  stab: 0.0
+strategyB:
+  conf: 0.7
+  coh: 0.85
+  stab: 0.1

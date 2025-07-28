@@ -5,8 +5,11 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <chrono>
 #include <cstdlib>
+#include <iomanip>
 #include <iostream>
+#include <thread>
 #include <nlohmann/json.hpp>
 
 #include "connectors/market_data_converter.h"
@@ -168,8 +171,10 @@ void OandaTraderApp::renderMainInterface() {
     renderPositions();
 
     ImGui::SetNextWindowPos(ImVec2(300, 668));
-    ImGui::SetNextWindowSize(ImVec2(1100, 232));
+    ImGui::SetNextWindowSize(ImVec2(550, 232));
     renderOrderHistory();
+
+    // Quantum analysis is handled by separate quantum_tracker app
 }
 
 void OandaTraderApp::renderConnectionStatus() {

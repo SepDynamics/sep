@@ -1,6 +1,9 @@
 #!/bin/bash
 # Simplified build script for running inside a container
 
+# Allow overriding the container runtime via DOCKER_BIN.
+DOCKER_BIN=${DOCKER_BIN:-docker}
+
 set -uo pipefail
 
 REBUILD=false
@@ -28,7 +31,7 @@ USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
 # Build and setup development environment
-docker run --gpus all --rm \
+"${DOCKER_BIN}" run --gpus all --rm \
     -v $(pwd):/sep \
     -e CUDA_HOME=/usr/local/cuda \
     -e CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda \

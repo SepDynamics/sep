@@ -2,7 +2,7 @@
 # SEP Engine dependency installer
 set -uo pipefail
 sudo ln -sf /workspace/sep /sep
-cd /sep
+cd /sep || exit 1
 
 
 # Pinned Python version used for all installs  
@@ -71,7 +71,7 @@ sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 
 # Install Docker and Docker Compose
 echo "Installing Docker..."
-sudo apt-get install -y docker.io docker-compose-v2 >> "$LOG_DIR/apt.log"
+sudo apt-get install -y docker.io docker-compose-v2 | sudo tee -a "$LOG_DIR/apt.log" >/dev/null
 sudo systemctl enable --now docker >/dev/null 2>&1 || true
 if [ "$EUID" -ne 0 ]; then
   sudo usermod -aG docker "$USER" || true
@@ -81,9 +81,9 @@ fi
 if [ -d /usr/src/googletest ]; then
   echo "Building GoogleTest..."
   sudo cmake /usr/src/googletest -B /usr/src/googletest/build \
-    >> "$LOG_DIR/gtest.log" 2>&1
+    | sudo tee -a "$LOG_DIR/gtest.log" >/dev/null
   sudo cmake --build /usr/src/googletest/build --target install \
-    >> "$LOG_DIR/gtest.log" 2>&1
+    | sudo tee -a "$LOG_DIR/gtest.log" >/dev/null
   sudo ldconfig
 fi
 
@@ -124,4 +124,14 @@ for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
     echo "$pkg missing" >&2
   fi
 done
+
+# Fallback if Docker daemon is unavailable
+if ! docker info >/dev/null 2>&1; then
+  echo "Docker daemon not detected. Installing podman as fallback..."
+  sudo apt-get install -y podman >> "$LOG_DIR/podman.log" 2>&1
+  if command -v podman >/dev/null; then
+    echo "Using podman in place of docker"
+    export DOCKER_BIN=podman
+  fi
+fi
 

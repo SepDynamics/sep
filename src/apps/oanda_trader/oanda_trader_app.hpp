@@ -7,11 +7,14 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include <deque>
 #include <vector>
 
 #include "connectors/oanda_connector.h"
 #include "engine/engine.h"
 #include "imgui.h"
+#include "util/managed_thread.hpp"
+#include "quantum_signal_bridge.hpp"
 
 namespace sep::apps {
 
@@ -61,9 +64,14 @@ private:
     std::string account_currency_ = "USD";
     
     // Real-time data handling
-    std::thread data_stream_thread_;
+    sep::util::ManagedThread data_stream_thread_;
     std::mutex market_data_mutex_;
     std::map<std::string, sep::connectors::MarketData> market_data_map_;
+    std::deque<sep::connectors::MarketData> market_history_;
+    std::mutex market_history_mutex_;
+    std::unique_ptr<sep::trading::QuantumSignalBridge> quantum_bridge_;
+    sep::trading::QuantumTradingSignal last_signal_;
+    std::mutex signal_mutex_;
     std::vector<nlohmann::json> open_positions_;
     std::mutex positions_mutex_;
     std::vector<nlohmann::json> order_history_;

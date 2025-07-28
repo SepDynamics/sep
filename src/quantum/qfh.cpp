@@ -117,38 +117,17 @@ sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const std::vect
                             static_cast<float>(result.events.size());
     }
 
-    // Enhance ratios with variance
-    if (!result.events.empty()) {
-        result.rupture_ratio *= (1.0f + result.rupture_count / (result.flip_count + 1e-6f));  // Boost if many ruptures
-        result.flip_ratio = std::clamp(result.flip_ratio * 1.5f, 0.0f, 1.0f);  // Amplify flips for dynamic data
-    }
+    // Keep natural ratios without artificial enhancement
     
     // Calculate coherence based on pattern consistency (from POC research)
     // High coherence = low variance in state transitions, consistent patterns
     if (!result.events.empty()) {
-        // Coherence based on balance of state types - closer to balanced = higher coherence
+        // Natural coherence calculation: inverse of entropy (no artificial adjustments)
+        // Calculate Shannon entropy of state distribution
         float null_ratio = static_cast<float>(result.null_state_count) / static_cast<float>(result.events.size());
         float flip_ratio = result.flip_ratio;
         float rupture_ratio = result.rupture_ratio;
         
-        // Calculate variance in state distribution (low variance = high coherence)
-        float mean_ratio = (null_ratio + flip_ratio + rupture_ratio) / 3.0f;
-        float variance = ((null_ratio - mean_ratio) * (null_ratio - mean_ratio) +
-                         (flip_ratio - mean_ratio) * (flip_ratio - mean_ratio) +
-                         (rupture_ratio - mean_ratio) * (rupture_ratio - mean_ratio)) / 3.0f;
-        
-        // Coherence is inverse of variance, scaled to [0,1]
-        result.coherence = 1.0f / (1.0f + variance * 10.0f);  // Scale factor to match POC results (~0.47)
-        
-        // Adjust coherence based on pattern regularity
-        if (result.aggregated_events.size() > 1) {
-            // More aggregated events = more pattern changes = lower coherence
-            float pattern_stability = 1.0f / (1.0f + static_cast<float>(result.aggregated_events.size()) / static_cast<float>(result.events.size()));
-            result.coherence = (result.coherence * 0.7f) + (pattern_stability * 0.3f);
-        }
-        
-        // Calculate entropy based on state distribution
-        // Shannon entropy of the three state types
         auto safe_log2 = [](float x) -> float {
             return (x > 0.0f) ? std::log2(x) : 0.0f;
         };
@@ -158,7 +137,10 @@ sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const std::vect
                           rupture_ratio * safe_log2(rupture_ratio));
         
         // Normalize entropy to [0,1] (max entropy for 3 states is log2(3) ≈ 1.585)
-        result.entropy = result.entropy / 1.585f;
+        result.entropy = std::clamp(result.entropy / 1.585f, 0.0f, 1.0f);
+        
+        // Coherence = inverse of entropy (natural relationship)
+        result.coherence = 1.0f - result.entropy;
     }
     
     // Detect collapse

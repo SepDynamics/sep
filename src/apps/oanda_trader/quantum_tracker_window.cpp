@@ -106,12 +106,81 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
     updateStatistics();
 }
 
+void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketData& data, 
+                                               const std::string& historical_timestamp) {
+    // This is the historical version - we need to calculate the proper timestamp
+    // For backtesting, we calculate how many minutes ago this candle was
+    static auto base_time = std::chrono::steady_clock::now();
+    static int processed_count = 0;
+    
+    // Each historical candle represents 1 minute in the past
+    // Start from 24 hours ago and work forward
+    auto historical_time = base_time - std::chrono::minutes(1440 - processed_count);
+    processed_count++;
+    
+    // Now do the same processing as regular but pass the historical timestamp to makePrediction
+    // Add to history
+    market_history_.push_back(data);
+    if (market_history_.size() > MAX_HISTORY_SIZE) {
+        market_history_.pop_front();
+    }
+    
+    // Update existing predictions
+    updatePredictions(data);
+    
+    // Generate new prediction if we have enough history
+    if (market_history_.size() >= MIN_HISTORY_FOR_SIGNAL) {
+        try {
+            // Convert deque to vector for quantum analysis
+            std::vector<sep::connectors::MarketData> history_vector(
+                market_history_.begin(), market_history_.end());
+            
+            // Get quantum signal
+            auto signal = quantum_bridge_->analyzeMarketData(data, history_vector);
+            
+            // Store latest signal
+            latest_signal_ = signal;
+            has_latest_signal_ = true;
+            
+            // Update metric history for plotting
+            confidence_history_.push_back(signal.confidence);
+            coherence_history_.push_back(signal.coherence);
+            stability_history_.push_back(signal.stability);
+            price_history_plot_.push_back(static_cast<float>(data.mid));
+            timestamp_history_.push_back(std::chrono::duration_cast<std::chrono::milliseconds>(
+                historical_time.time_since_epoch()).count());
+            
+            // Maintain plot history size
+            if (confidence_history_.size() > MAX_PLOT_POINTS) {
+                confidence_history_.pop_front();
+                coherence_history_.pop_front();
+                stability_history_.pop_front();
+                price_history_plot_.pop_front();
+                timestamp_history_.pop_front();
+            }
+            
+            // Make prediction for ANY directional signal (to track performance) WITH historical timestamp
+            if (signal.action != sep::trading::QuantumTradingSignal::HOLD && 
+                signal.confidence >= 0.1f) {  // Very low threshold for tracking
+                makePrediction(signal, data, historical_time);
+            }
+            
+        } catch (const std::exception& e) {
+            std::cerr << "[QuantumTracker] Signal processing error: " << e.what() << std::endl;
+        }
+    }
+    
+    // Update statistics
+    updateStatistics();
+}
+
 void QuantumTrackerWindow::makePrediction(const sep::trading::QuantumTradingSignal& signal, 
-                                         const sep::connectors::MarketData& current_data) {
+                                          const sep::connectors::MarketData& current_data,
+                                          std::optional<std::chrono::steady_clock::time_point> historical_time) {
     std::lock_guard<std::mutex> lock(predictions_mutex_);
     
     QuantumPrediction pred;
-    pred.timestamp = std::chrono::steady_clock::now();
+    pred.timestamp = historical_time.value_or(std::chrono::steady_clock::now());
     pred.instrument = signal.instrument;
     pred.predicted_direction = signal.action;
     pred.prediction_price = current_data.mid;
@@ -191,6 +260,7 @@ void QuantumTrackerWindow::updateStatistics() {
     
     int hour_correct = 0, hour_total = 0;
     int day_correct = 0, day_total = 0;
+    int overall_correct = 0, overall_total = 0;
     
     for (const auto& pred : predictions_) {
         stats_.total_predictions++;
@@ -200,18 +270,20 @@ void QuantumTrackerWindow::updateStatistics() {
         
         if (pred.resolved) {
             resolved_count++;
+            overall_total++;
             if (pred.correct) {
                 stats_.correct_predictions++;
+                overall_correct++;
             } else {
                 stats_.incorrect_predictions++;
             }
             
-            // Time-based accuracy
+            // Time-based accuracy (separate windows)
             if (pred.timestamp >= one_hour_ago) {
                 hour_total++;
                 if (pred.correct) hour_correct++;
-            }
-            if (pred.timestamp >= one_day_ago) {
+            } else if (pred.timestamp >= one_day_ago) {
+                // Only count in 24h if NOT in last hour (separate windows)
                 day_total++;
                 if (pred.correct) day_correct++;
             }
@@ -243,6 +315,10 @@ void QuantumTrackerWindow::updateStatistics() {
     
     if (day_total > 0) {
         stats_.last_24h_accuracy = (double)day_correct / day_total * 100.0;
+    }
+    
+    if (overall_total > 0) {
+        stats_.overall_accuracy = (double)overall_correct / overall_total * 100.0;
     }
     
     if (stats_.total_predictions > 0) {
@@ -602,9 +678,15 @@ void QuantumTrackerWindow::renderMetricPlots() {
     
     // Create time axis for plotting (use float to match metric data)
     std::vector<float> time_axis;
-    double start_time = timestamp_history_.empty() ? 0.0 : timestamp_history_.front();
+    // Use first timestamp ever recorded, not rolling window, to prevent chart compression
+    static double first_timestamp = 0.0;
+    static bool first_timestamp_set = false;
+    if (!first_timestamp_set && !timestamp_history_.empty()) {
+        first_timestamp = timestamp_history_.front();
+        first_timestamp_set = true;
+    }
     for (size_t i = 0; i < timestamp_history_.size(); ++i) {
-        time_axis.push_back(static_cast<float>((timestamp_history_[i] - start_time) / 1000.0)); // Convert to seconds
+        time_axis.push_back(static_cast<float>((timestamp_history_[i] - first_timestamp) / 1000.0)); // Convert to seconds
     }
     
     if (ImPlot::BeginPlot("Quantum Metrics Over Time", ImVec2(-1, 300))) {
@@ -630,12 +712,12 @@ void QuantumTrackerWindow::renderMetricPlots() {
         
         // Add threshold lines
         ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 0.5f), 1.0f); // Red dashed
-        float conf_threshold = 0.6f;
+        float conf_threshold = 0.8f;
         std::vector<float> conf_thresh_line(time_axis.size(), conf_threshold);
         ImPlot::PlotLine("Conf Threshold", time_axis.data(), conf_thresh_line.data(), static_cast<int>(conf_thresh_line.size()));
         
         ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 0.5f), 1.0f); // Green dashed
-        float coh_threshold = 0.4f;
+        float coh_threshold = 0.7f;
         std::vector<float> coh_thresh_line(time_axis.size(), coh_threshold);
         ImPlot::PlotLine("Coh Threshold", time_axis.data(), coh_thresh_line.data(), static_cast<int>(coh_thresh_line.size()));
         

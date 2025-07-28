@@ -228,6 +228,10 @@ void QuantumTrackerApp::loadHistoricalData() {
             // Process last 1440 candles (24 hours) with rate limiting for visual feedback
             size_t start_idx = historical_candles->size() > 1440 ? historical_candles->size() - 1440 : 0;
             
+            // Calculate historical timestamps - each candle is 1 minute earlier
+            auto now = std::chrono::steady_clock::now();
+            auto minutes_back = (historical_candles->size() - start_idx);
+            
             for (size_t i = start_idx; i < historical_candles->size(); ++i) {
                 const auto& candle = (*historical_candles)[i];
                 sep::connectors::MarketData market_data;
@@ -238,7 +242,7 @@ void QuantumTrackerApp::loadHistoricalData() {
                 market_data.volume = candle.volume;
                 market_data.atr = 0.0001; // Default ATR for historical data
                 
-                quantum_tracker_->processNewMarketData(market_data);
+                quantum_tracker_->processNewMarketData(market_data, candle.time);
                 
                 // Rate limit for visual feedback (every 50th candle, very small delay)
                 if (i % 50 == 0) {

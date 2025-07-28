@@ -96,10 +96,10 @@ private:
     std::unique_ptr<sep::quantum::QFHBasedProcessor> qfh_processor_;
     std::unique_ptr<sep::quantum::QBSAProcessor> qbsa_processor_;
     
-    // Strategy thresholds (based on POC results showing coherence ~0.47)
-    // Tuned thresholds for production (>70% accuracy target)
-    std::atomic<float> confidence_threshold_{0.75f};
-    std::atomic<float> coherence_threshold_{0.45f};
+    // Strategy thresholds (updated for improved accuracy)
+    // Higher thresholds for better signal quality
+    std::atomic<float> confidence_threshold_{0.8f};
+    std::atomic<float> coherence_threshold_{0.7f};
     std::atomic<float> stability_threshold_{0.05f};
     
     // Data processing

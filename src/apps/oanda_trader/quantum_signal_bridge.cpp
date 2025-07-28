@@ -1,10 +1,13 @@
 #include "quantum_signal_bridge.hpp"
-#include <iostream>
-#include <chrono>
+
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <fstream>
+#include <iostream>
 #include <nlohmann/json.hpp>
+
+#include "../../quantum/types_serialization.h"
 
 namespace sep::trading {
 
@@ -91,16 +94,25 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
         last_qfh_result_ = qfh_result;
         
         // Run QBSA analysis (patent-backed quantum bit state analysis)
-        std::vector<uint32_t> probe_indices;
+        std::vector<uint32_t> probe_values;
         std::vector<uint32_t> expectations;
-        
-        // Generate probe indices (every 4th bit for efficiency)
+
+        // Generate probe values (every 4th bit for efficiency)
         for (size_t i = 0; i < std::min(bits.size(), 64UL); i += 4) {
-            probe_indices.push_back(i);
-            expectations.push_back(bits[i] ^ 1); // Expect opposite state
+            probe_values.push_back(bits[i]);
+            // Expect pattern continuation (current state persists)
+            // This tests pattern stability rather than forcing opposite states
+            if (i + 1 < bits.size())
+            {
+                expectations.push_back(bits[i + 1]);  // Expect next bit to follow pattern
+            }
+            else
+            {
+                expectations.push_back(bits[i]);  // Fallback for edge case
+            }
         }
-        
-        auto qbsa_result = qbsa_processor_->analyze(probe_indices, expectations);
+
+        auto qbsa_result = qbsa_processor_->analyze(probe_values, expectations);
         last_qbsa_result_ = qbsa_result;
         
         // Calculate quantum metrics
@@ -113,21 +125,27 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
         signal.flip_ratio = qfh_result.flip_ratio;
         signal.rupture_ratio = qfh_result.rupture_ratio;
         signal.quantum_collapse_detected = qfh_result.collapse_detected;
-        
+
         // Direction determination based on normalized stability [0, 1]:
-        // < 0.45 = BUY (low stability favors buying), > 0.55 = SELL (high stability favors selling)
-        if (signal.stability < 0.45f) {
-            signal.action = QuantumTradingSignal::BUY;
-        } else if (signal.stability > 0.55f) {
+        // < 0.45 = SELL (low stability = volatile conditions), > 0.55 = BUY (high stability =
+        // trending conditions)
+        if (signal.stability < 0.45f)
+        {
             signal.action = QuantumTradingSignal::SELL;
-        } else {
+        }
+        else if (signal.stability > 0.55f)
+        {
+            signal.action = QuantumTradingSignal::BUY;
+        }
+        else
+        {
             // HOLD zone - stability between 0.45-0.55 indicates uncertain market conditions
             signal.action = QuantumTradingSignal::HOLD;
         }
-        
+
         // Apply strategy thresholds (from alpha analysis)
         bool meets_confidence = signal.confidence >= confidence_threshold_.load();
-        bool meets_coherence = signal.coherence >= 0.6f;  // Coherence must be above 0.6
+        bool meets_coherence = signal.coherence >= coherence_threshold_.load();
         // For normalized stability [0,1], check distance from neutral (0.5)
         bool meets_stability = std::abs(signal.stability - 0.5f) >= stability_threshold_.load();
         
@@ -204,17 +222,12 @@ float QuantumSignalBridge::calculateConfidence(const sep::quantum::QFHResult& qf
     // Adjust based on QFH pattern quality (minor adjustments only)
     float flip_stability = 1.0f - qfh_result.flip_ratio;  // Lower flip ratio = more stable
     float rupture_penalty = qfh_result.rupture_ratio;     // Higher rupture = less confident
-    
-    // Fix confidence stuck at high values - reduce coherence dominance
-    // Since coherence is always ~0.999, it shouldn't drive confidence
-    
-    // Make confidence more responsive to market volatility and pattern quality
-    float confidence = base_confidence * 0.4f +           // Reduce QBSA dominance
-                      flip_stability * 0.4f +             // Increase flip influence  
-                      (1.0f - rupture_penalty) * 0.3f -   // Invert rupture (low rupture = high confidence)
-                      (qfh_result.entropy * 0.1f);        // Subtract entropy as uncertainty
-    
-    return std::max(0.2f, std::min(0.8f, confidence));    // More reasonable range
+
+    // Natural QBSA correction ratio as confidence (no artificial adjustments)
+    // High correction ratio = low confidence (more corrections needed)
+    float confidence = 1.0f - base_confidence;  // Invert: 0 corrections = high confidence
+
+    return std::clamp(confidence, 0.0f, 1.0f);
 }
 
 float QuantumSignalBridge::calculateCoherence(const sep::quantum::QFHResult& qfh_result) {
@@ -362,7 +375,8 @@ void QuantumSignalBridge::loadPatterns() {
         if (patterns_json.is_array()) {
             active_patterns_.clear();
             for (const auto& pj : patterns_json) {
-                sep::quantum::Pattern p = pj.get<sep::quantum::Pattern>();
+                sep::quantum::Pattern p;
+                sep::quantum::from_json(pj, p);
                 active_patterns_[p.id] = p;
                 active_pattern_scores_[p.id] = p.quantum_state.stability;
             }
@@ -377,7 +391,9 @@ void QuantumSignalBridge::savePatterns() {
     try {
         nlohmann::json patterns_json = nlohmann::json::array();
         for (const auto& kv : active_patterns_) {
-            patterns_json.push_back(kv.second);
+            nlohmann::json pattern_json;
+            sep::quantum::to_json(pattern_json, kv.second);
+            patterns_json.push_back(pattern_json);
         }
         std::ofstream file(patterns_file_path_);
         file << patterns_json.dump(2);

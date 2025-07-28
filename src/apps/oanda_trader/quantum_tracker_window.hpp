@@ -7,6 +7,7 @@
 #include <vector>
 #include <chrono>
 #include <cmath>
+#include <optional>
 
 #include "connectors/oanda_connector.h"
 #include "quantum_signal_bridge.hpp"
@@ -109,6 +110,7 @@ struct QuantumTrackingStats {
     // Recent performance windows
     double last_hour_accuracy{0.0};
     double last_24h_accuracy{0.0};
+    double overall_accuracy{0.0};
     
     // Confidence buckets
     int high_confidence_correct{0};
@@ -130,6 +132,8 @@ public:
 
     // Main tracking interface
     void processNewMarketData(const sep::connectors::MarketData& data);
+    void processNewMarketData(const sep::connectors::MarketData& data, 
+                             const std::string& historical_timestamp);
     void render();
 
     // Statistics and performance
@@ -157,7 +161,7 @@ private:
     std::deque<float> stability_history_;
     std::deque<float> price_history_plot_;
     std::deque<double> timestamp_history_;
-    static constexpr size_t MAX_PLOT_POINTS = 200;
+    static constexpr size_t MAX_PLOT_POINTS = 1440;  // 24 hours at 1 minute intervals
     
     // Configuration
     static constexpr size_t MAX_HISTORY_SIZE = 1500;  // Support 24+ hours of data
@@ -168,7 +172,8 @@ private:
     // Internal methods
     void updatePredictions(const sep::connectors::MarketData& current_data);
     void makePrediction(const sep::trading::QuantumTradingSignal& signal, 
-                       const sep::connectors::MarketData& current_data);
+                       const sep::connectors::MarketData& current_data,
+                       std::optional<std::chrono::steady_clock::time_point> historical_time = std::nullopt);
     void evaluatePendingPredictions(const sep::connectors::MarketData& current_data);
     void updateStatistics();
     

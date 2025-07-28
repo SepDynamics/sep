@@ -80,8 +80,8 @@ float sep::quantum::QuantumProcessorQFHCommon::processPattern(const glm::vec3& p
     float coherence;
 
     if (m_patterns.empty()) {
-        // The first pattern is perfectly coherent with itself.
-        coherence = 1.0f;
+        // The first pattern has unknown coherence, start neutral
+        coherence = 0.5f;
     } else {
         if (m_patterns.back() == pattern) {
             return m_last_qfh_result.coherence;
@@ -121,7 +121,8 @@ float sep::quantum::QuantumProcessorQFHCommon::processPattern(const glm::vec3& p
 
     if (!m_pattern_bits.empty()) {
         analyzePatternBits();
-        coherence = 0.7f * coherence + 0.3f * (1.0f - m_last_qfh_result.rupture_ratio);
+        // Reduce coherence based on rupture ratio (more ruptures = less coherence)
+        coherence = coherence * (1.0f - m_last_qfh_result.rupture_ratio * 0.5f);
     }
     m_last_qfh_result.coherence = coherence;
     return coherence;

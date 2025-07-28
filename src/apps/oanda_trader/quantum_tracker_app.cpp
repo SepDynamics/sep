@@ -1,4 +1,6 @@
 #include "quantum_tracker_app.hpp"
+#include "data_cache_manager.hpp"
+#include "tick_data_manager.hpp"
 #include <GL/gl.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -29,6 +31,12 @@ bool QuantumTrackerApp::initialize() {
         return false;
     }
     
+    // Initialize cache manager
+    cache_manager_ = std::make_unique<DataCacheManager>();
+    
+    // Initialize tick data manager
+    tick_manager_ = std::make_unique<TickDataManager>();
+    
     // Initialize OANDA connector
     const char* api_key = std::getenv("OANDA_API_KEY");
     const char* account_id = std::getenv("OANDA_ACCOUNT_ID");
@@ -38,6 +46,18 @@ bool QuantumTrackerApp::initialize() {
     }
     
     oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id);
+    
+    // Initialize cache manager with OANDA connector
+    if (!cache_manager_->initialize(oanda_connector_.get())) {
+        last_error_ = "Failed to initialize data cache manager";
+        return false;
+    }
+    
+    // Initialize tick data manager with OANDA connector
+    if (!tick_manager_->initialize(oanda_connector_.get())) {
+        last_error_ = "Failed to initialize tick data manager";
+        return false;
+    }
     
     // Auto-connect to OANDA
     connectToOanda();
@@ -192,91 +212,83 @@ void QuantumTrackerApp::connectToOanda() {
 }
 
 void QuantumTrackerApp::loadHistoricalData() {
-    std::cout << "[QuantumTracker] Loading most recent 2880 EUR_USD M1 candles..." << std::endl;
+    std::cout << "[QuantumTracker] Loading 48H TICK-LEVEL data for EUR_USD..." << std::endl;
+    std::cout << "[QuantumTracker] This will collect ALL price updates, not just M1 candles!" << std::endl;
     
-    // Use a shared pointer for thread-safe data sharing
-    auto historical_candles = std::make_shared<std::vector<sep::connectors::OandaCandle>>();
-    std::mutex data_mutex;
-    std::condition_variable data_ready;
-    bool data_received = false;
-    
-    // Use count parameter only (no from/to) to get most recent 2880 candles
-    oanda_connector_->getHistoricalData("EUR_USD", "M1", 
-                                       "", "",  // Empty from/to to use count parameter
-                                       [&](const std::vector<sep::connectors::OandaCandle>& fetched_candles) {
-                                           std::lock_guard<std::mutex> lock(data_mutex);
-                                           *historical_candles = fetched_candles;
-                                           data_received = true;
-                                           std::cout << "[QuantumTracker] Received " << fetched_candles.size() 
-                                                     << " candles from API (requested 2880)" << std::endl;
-                                           data_ready.notify_one();
-                                       });
-    
-    // Wait for data with timeout
-    std::unique_lock<std::mutex> lock(data_mutex);
-    if (data_ready.wait_for(lock, std::chrono::seconds(30), [&]{ return data_received; })) {
-        if (!historical_candles->empty()) {
-            std::cout << "[QuantumTracker] Loaded " << historical_candles->size() 
-                      << " historical data points";
-            
-            if (historical_candles->size() < 2000) {
-                std::cout << " (less than expected 2880, but proceeding)";
-            }
-            std::cout << ". Converting to MarketData..." << std::endl;
-            
-            // Convert candles to MarketData and feed to quantum tracker
-            // Process last 1440 candles (24 hours) with rate limiting for visual feedback
-            size_t start_idx = historical_candles->size() > 1440 ? historical_candles->size() - 1440 : 0;
-            
-            // Calculate historical timestamps - each candle is 1 minute earlier
-            auto now = std::chrono::steady_clock::now();
-            auto minutes_back = (historical_candles->size() - start_idx);
-            
-            for (size_t i = start_idx; i < historical_candles->size(); ++i) {
-                const auto& candle = (*historical_candles)[i];
-                sep::connectors::MarketData market_data;
-                market_data.instrument = "EUR_USD";
-                market_data.mid = candle.close;
-                market_data.bid = candle.close - 0.00001; // Approximate spread
-                market_data.ask = candle.close + 0.00001;
-                market_data.volume = candle.volume;
-                market_data.atr = 0.0001; // Default ATR for historical data
-                
-                quantum_tracker_->processNewMarketData(market_data, candle.time);
-                
-                // Rate limit for visual feedback (every 50th candle, very small delay)
-                if (i % 50 == 0) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-                    std::cout << "[QuantumTracker] Processed " << (i - start_idx + 1) 
-                              << "/" << (historical_candles->size() - start_idx) << " candles" << std::endl;
-                }
-            }
-            
-            std::cout << "[QuantumTracker] Historical data processed successfully!" << std::endl;
-        } else {
-            std::cerr << "[QuantumTracker] Received empty historical data" << std::endl;
-        }
-    } else {
-        std::cerr << "[QuantumTracker] Timeout waiting for historical data. Continuing with live data only..." << std::endl;
+    if (!tick_manager_) {
+        std::cerr << "[QuantumTracker] Tick manager not initialized" << std::endl;
+        return;
     }
+    
+    // Load tick-level historical data (this gets ALL price updates)
+    if (!tick_manager_->loadHistoricalTicks("EUR_USD")) {
+        std::cerr << "[QuantumTracker] Failed to load historical tick data. Continuing with live data only..." << std::endl;
+        return;
+    }
+    
+    std::cout << "[QuantumTracker] Tick data collection completed!" << std::endl;
+    std::cout << "  - Total ticks: " << tick_manager_->getTickCount() << std::endl;
+    std::cout << "  - Average ticks/min: " << tick_manager_->getAverageTicksPerMinute() << std::endl;
+    std::cout << "  - Hourly calculations: " << tick_manager_->getHourlyCalculations().size() << std::endl;
+    std::cout << "  - Daily calculations: " << tick_manager_->getDailyCalculations().size() << std::endl;
+    
+    // Process the rolling window calculations through quantum tracker
+    auto hourly_prices = tick_manager_->getHourlyPrices();
+    auto daily_prices = tick_manager_->getDailyPrices();
+    auto timestamps = tick_manager_->getTimestamps();
+    
+    std::cout << "[QuantumTracker] Feeding " << hourly_prices.size() 
+              << " hourly calculations to quantum analysis..." << std::endl;
+    
+    // Feed rolling window calculations to quantum tracker for pattern analysis
+    for (size_t i = 0; i < hourly_prices.size() && i < timestamps.size(); ++i) {
+        sep::connectors::MarketData synthetic_data;
+        synthetic_data.instrument = "EUR_USD";
+        synthetic_data.mid = hourly_prices[i];
+        synthetic_data.bid = hourly_prices[i] - 0.00001;
+        synthetic_data.ask = hourly_prices[i] + 0.00001;
+        synthetic_data.timestamp = timestamps[i];
+        synthetic_data.volume = 100; // Synthetic volume
+        synthetic_data.atr = 0.0001;
+        
+        quantum_tracker_->processNewMarketData(synthetic_data, std::to_string(timestamps[i]));
+        
+        // Rate limit for visual feedback
+        if (i % 100 == 0) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            std::cout << "[QuantumTracker] Processed " << (i + 1) 
+                      << "/" << hourly_prices.size() << " rolling calculations" << std::endl;
+        }
+    }
+    
+    std::cout << "[QuantumTracker] TICK-LEVEL historical analysis complete!" << std::endl;
+    std::cout << "  - Now ready for real-time tick processing with rolling windows" << std::endl;
 }
 
 void QuantumTrackerApp::startMarketDataStream() {
     // Load historical data safely
     loadHistoricalData();
     
-    // Set the price callback to feed quantum tracker
+    // Set the price callback to feed BOTH tick manager and quantum tracker
     oanda_connector_->setPriceCallback([this](const sep::connectors::MarketData& data) {
-        // Feed data to quantum tracker
+        // Feed tick to tick manager for rolling window calculations
+        if (tick_manager_) {
+            tick_manager_->processNewTick(data);
+        }
+        
+        // Feed data to quantum tracker for pattern analysis
         quantum_tracker_->processNewMarketData(data);
         
-        // Log occasional data for debugging
+        // Log occasional data for debugging with tick info
         static int count = 0;
         if (++count % 100 == 0) {
-            std::cout << "[QuantumTracker] Processed " << count 
-                     << " data points. Stats: " 
-                     << quantum_tracker_->getStats().total_predictions << " predictions, "
-                     << quantum_tracker_->getStats().accuracy_percentage << "% accuracy" << std::endl;
+            std::cout << "[QuantumTracker] Processed " << count << " TICKS. ";
+            if (tick_manager_) {
+                std::cout << "Total ticks: " << tick_manager_->getTickCount() 
+                         << ", Hourly calcs: " << tick_manager_->getHourlyCalculations().size() << ". ";
+            }
+            std::cout << "Predictions: " << quantum_tracker_->getStats().total_predictions 
+                     << ", Accuracy: " << quantum_tracker_->getStats().accuracy_percentage << "%" << std::endl;
         }
     });
 

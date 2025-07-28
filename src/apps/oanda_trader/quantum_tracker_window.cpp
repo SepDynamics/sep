@@ -278,12 +278,14 @@ void QuantumTrackerWindow::updateStatistics() {
                 stats_.incorrect_predictions++;
             }
             
-            // Time-based accuracy (separate windows)
+            // Time-based accuracy (overlapping windows)
             if (pred.timestamp >= one_hour_ago) {
                 hour_total++;
                 if (pred.correct) hour_correct++;
-            } else if (pred.timestamp >= one_day_ago) {
-                // Only count in 24h if NOT in last hour (separate windows)
+            }
+            
+            if (pred.timestamp >= one_day_ago) {
+                // Count in 24h window (includes last hour)
                 day_total++;
                 if (pred.correct) day_correct++;
             }

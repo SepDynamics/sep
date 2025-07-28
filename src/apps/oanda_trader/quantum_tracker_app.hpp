@@ -9,6 +9,8 @@
 
 #include "connectors/oanda_connector.h"
 #include "quantum_tracker_window.hpp"
+#include "data_cache_manager.hpp"
+#include "tick_data_manager.hpp"
 
 namespace sep::apps {
 
@@ -40,6 +42,8 @@ private:
     GLFWwindow* window_ = nullptr;
     std::unique_ptr<sep::connectors::OandaConnector> oanda_connector_;
     std::unique_ptr<QuantumTrackerWindow> quantum_tracker_;
+    std::unique_ptr<DataCacheManager> cache_manager_;
+    std::unique_ptr<TickDataManager> tick_manager_;
     
     // Threading for market data
     std::thread data_stream_thread_;

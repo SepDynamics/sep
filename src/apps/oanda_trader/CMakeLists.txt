@@ -34,6 +34,9 @@ add_executable(quantum_tracker
     quantum_tracker_app.cpp
     quantum_tracker_window.cpp
     quantum_signal_bridge.cpp
+    data_cache_manager.cpp
+    tick_data_manager.cpp
+    rolling_window_chart.cpp
 )
 
 target_include_directories(quantum_tracker PUBLIC

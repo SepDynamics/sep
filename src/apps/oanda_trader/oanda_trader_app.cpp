@@ -263,7 +263,10 @@ void OandaTraderApp::renderTradePanel() {
 
             const double risk_amount = balance * (risk_per_trade / 100.0);
             const double stop_loss_pips = manual_atr * 10000;
-            const double pip_value = 0.0001; // For EUR_USD
+            double pip_value = 0.0001;
+            if (std::string(instrument) == "USD_JPY") {
+                pip_value = 0.01; // JPY pairs have different pip size
+            }
             const double position_units_double = std::floor(risk_amount / (stop_loss_pips * pip_value));
             const int position_units = static_cast<int>(position_units_double);
 
@@ -428,9 +431,10 @@ void OandaTraderApp::connectToOanda() {
 
     // Start the price stream in a new thread with error handling
     try {
-        data_stream_thread_ = std::thread([this]() {
-            std::cout << "[OANDA] Starting price stream for EUR_USD..." << std::endl;
-            if (!oanda_connector_->startPriceStream({"EUR_USD"})) {
+        std::vector<std::string> instruments = {"EUR_USD", "GBP_USD", "USD_JPY", "AUD_USD"};
+        data_stream_thread_ = std::thread([this, instruments]() {
+            std::cout << "[OANDA] Starting price streams..." << std::endl;
+            if (!oanda_connector_->startPriceStream(instruments)) {
                 std::cerr << "[OANDA] Failed to start price stream: "
                           << oanda_connector_->getLastError() << std::endl;
             }

@@ -277,9 +277,10 @@ void QuantumTrackerApp::startMarketDataStream() {
     });
 
     // Start the price stream once
-    std::cout << "[QuantumTracker] Starting EUR_USD price stream..." << std::endl;
-    if (!oanda_connector_->startPriceStream({"EUR_USD"})) {
-        std::cerr << "[QuantumTracker] Failed to start price stream: " 
+    std::cout << "[QuantumTracker] Starting multi-currency price stream..." << std::endl;
+    std::vector<std::string> instruments = {"EUR_USD", "GBP_USD", "USD_JPY", "AUD_USD"};
+    if (!oanda_connector_->startPriceStream(instruments)) {
+        std::cerr << "[QuantumTracker] Failed to start price stream: "
                   << oanda_connector_->getLastError() << std::endl;
     } else {
         std::cout << "[QuantumTracker] Price stream started successfully!" << std::endl;

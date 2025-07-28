@@ -180,13 +180,19 @@ def save_sample_data(data, output_path):
 def main():
     try:
         print("=== SEP Engine OANDA Sample Data Fetcher ===")
-        
+
+        import argparse
+        parser = argparse.ArgumentParser(description="Fetch OANDA sample data")
+        parser.add_argument("--instrument", default="EUR_USD",
+                            help="Currency pair to fetch")
+        args = parser.parse_args()
+
         # Load credentials
         print("Loading OANDA credentials...")
         credentials = load_oanda_credentials()
-        
+
         # Fetch data
-        data = fetch_oanda_data(credentials['api_key'])
+        data = fetch_oanda_data(credentials['api_key'], instrument=args.instrument)
         
         # Validate data
         print("\nValidating data integrity...")
@@ -206,10 +212,10 @@ def main():
             return 1
         
         # Save data
-        output_path = "Testing/OANDA/sample_48h.json"
+        output_path = f"Testing/OANDA/sample_48h_{args.instrument}.json"
         save_sample_data(data, output_path)
-        
-        print(f"\n✅ Successfully created 48-hour EUR/USD M1 sample dataset")
+
+        print(f"\n✅ Successfully created 48-hour {args.instrument} M1 sample dataset")
         print(f"   File: {output_path}")
         print(f"   Ready for workbench integration testing")
         

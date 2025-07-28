@@ -73,22 +73,25 @@
 ### **Objective:** Extend beyond EUR/USD to multiple currency pairs and assets
 
 #### Core Expansion Tasks
-- [ ] **Multi-Currency Support**
+- [x] **Multi-Currency Support**
   - Scope: GBP/USD, USD/JPY, AUD/USD integration
   - Challenge: Currency-specific quantum analysis calibration
+  - Status: Initial pipeline added under `/_sep/testbed/` for validation
 
 - [ ] **Cross-Asset Analysis**
   - Scope: Commodity and equity futures integration
   - Challenge: Different market characteristics and volatility patterns
+  - Status: Planning phase with futures data normalization design
 
 - [ ] **Portfolio-Level Signals**
   - Scope: Aggregate quantum signals across multiple assets
   - Challenge: Correlation analysis and diversification optimization
 
 #### Infrastructure Requirements
-- [ ] **Scalable Data Pipeline**
+- [x] **Scalable Data Pipeline**
   - Goal: Handle multiple simultaneous data streams
   - Method: Asynchronous processing with thread-safe data structures
+  - Status: Demo pipeline implemented (`/_sep/testbed/multi_stream_pipeline.py`)
 
 - [ ] **Universal Market Data Interface**
   - Goal: Abstract market data handling for any asset class

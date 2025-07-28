@@ -145,8 +145,12 @@ find_package(OpenGL REQUIRED)
 target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
 
 # Add subdirectories
-set(FMT_INSTALL OFF CACHE BOOL "" FORCE)
-add_subdirectory(third_party/fmt)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/fmt")
+    set(FMT_INSTALL OFF CACHE BOOL "" FORCE)
+    add_subdirectory(third_party/fmt)
+else()
+    find_package(fmt REQUIRED)
+endif()
 add_subdirectory(extern/crow)
 # Trigger rebuild again
 add_subdirectory(src)

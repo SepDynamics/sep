@@ -106,7 +106,7 @@ if ! command -v python3.13 >/dev/null; then
 fi
 
 # Install Python packages for analysis
-pip3 install pandas numpy matplotlib codechecker
+pip3 install --break-system-packages pandas numpy matplotlib codechecker
 
 # Set up clang tool symlinks
 sudo ln -sf /usr/bin/clang-tidy-15 /usr/bin/clang-tidy

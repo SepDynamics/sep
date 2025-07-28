@@ -30,6 +30,17 @@ mkdir -p build
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
+# Fallback to native build if container runtime is unavailable
+if ! "$DOCKER_BIN" info >/dev/null 2>&1; then
+    echo "Container runtime $DOCKER_BIN not available. Building natively..."
+    cd build
+    cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DSEP_USE_CUDA=OFF \
+        -DCMAKE_CXX_COMPILER=clang++-15 -DCMAKE_C_COMPILER=clang-15
+    ninja -k 0 2>&1 | tee ../output/build_log.txt
+    cd ..
+    exit 0
+fi
+
 # Build and setup development environment
 "${DOCKER_BIN}" run --gpus all --rm \
     -v $(pwd):/sep \

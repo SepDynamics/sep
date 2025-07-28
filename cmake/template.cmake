@@ -12,6 +12,9 @@ function(add_sep_library target_name)
             ${CMAKE_SOURCE_DIR}/src
     )
 
+    if(NOT SEP_USE_CUDA)
+        list(FILTER SEP_LIB_DEPENDENCIES EXCLUDE REGEX "^CUDA::")
+    endif()
     if(SEP_LIB_DEPENDENCIES)
         target_link_libraries(${target_name}
             PUBLIC

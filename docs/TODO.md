@@ -56,9 +56,9 @@
   - Goal: Comprehensive trading performance reports
   - Scope: Daily/weekly/monthly performance summaries (implemented in `backtest_compare.py`)
 
-- [ ] **Strategy Comparison Framework**
+- [x] **Strategy Comparison Framework**
   - Goal: A/B testing different quantum analysis parameters
-  - Scope: Side-by-side strategy performance comparison
+  - Scope: Side-by-side strategy performance comparison (see `strategy_comparison.py`)
 
 #### 🎨 **User Experience**
 - [ ] **GUI Enhancements**

@@ -69,4 +69,25 @@ def refine_signals(df: pd.DataFrame, signal_col: str = "signal", window: int = 3
         .apply(_vote, raw=True)
     )
     return result
+def smooth_metrics(df: pd.DataFrame, window: int = 5) -> pd.DataFrame:
+    """Return a DataFrame with smoothed coherence and stability values."""
+    if df.empty:
+        return df
+
+    df = df.copy()
+    df['coherence_smooth'] = (
+        df['coherence'].rolling(window=window, min_periods=1).mean()
+    )
+    df['stability_smooth'] = (
+        df['stability'].rolling(window=window, min_periods=1).mean()
+    )
+    return df
+
+
+def signal_quality(df: pd.DataFrame, weight_c: float = 0.7, weight_s: float = 0.3) -> pd.Series:
+    """Calculate a composite signal quality score using smoothed metrics."""
+    if 'coherence_smooth' not in df.columns or 'stability_smooth' not in df.columns:
+        df = smooth_metrics(df)
+
+    return weight_c * df['coherence_smooth'] + weight_s * df['stability_smooth']
 

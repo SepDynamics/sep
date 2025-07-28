@@ -1,5 +1,6 @@
-#include <csignal>
+#include <signal.h>
 #include <cstdlib>
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -214,13 +215,13 @@ int main(int argc, char** argv)
     if (daemon_mode)
     {
         // In daemon mode, block indefinitely until a signal is received
-        (void)std::signal(SIGINT, [](int) {
+        signal(SIGINT, [](int) {
             std::cout << "Received SIGINT, shutting down..." << std::endl;
-            exit(0);
+            std::exit(0);
         });
-        (void)std::signal(SIGTERM, [](int) {
+        signal(SIGTERM, [](int) {
             std::cout << "Received SIGTERM, shutting down..." << std::endl;
-            exit(0);
+            std::exit(0);
         });
 
         // Sleep indefinitely

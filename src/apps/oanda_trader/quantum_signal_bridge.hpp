@@ -1,122 +1,125 @@
 #pragma once
 
 #include <vector>
-#include <string>
 #include <memory>
+#include <deque>
+#include <atomic>
 #include <mutex>
-#include <cstdint>
 
 #include "connectors/oanda_connector.h"
 #include "quantum/qfh.h"
 #include "quantum/qbsa.h"
-#include "engine/standard_includes.h"
 
 namespace sep::trading {
 
-// Trading signal action
-enum class QuantumTradingAction : uint8_t {
-    HOLD = 0,
-    BUY = 1,
-    SELL = 2
-};
-
-// Comprehensive quantum trading signal
+/**
+ * Trading signal generated from quantum analysis
+ * Based on QFH/QBSA patent-backed algorithms
+ */
 struct QuantumTradingSignal {
+    enum Action { HOLD, BUY, SELL };
+    
     std::string instrument;
-    QuantumTradingAction action{QuantumTradingAction::HOLD};
-    float confidence{0.0f};          // QBSA correction_ratio
-    float coherence{0.0f};           // QFH coherence metric
-    float stability{0.0f};           // Pattern stability
-    float entropy{0.0f};             // QFH entropy
-    bool should_execute{false};      // Whether to execute trade
+    Action action = HOLD;
+    bool should_execute = false;
+    
+    // Quantum metrics (from patent analysis)
+    float confidence = 0.0f;        // QBSA correction_ratio
+    float coherence = 0.0f;         // Calculated from QFH
+    float stability = 0.0f;         // Pattern stability
+    float entropy = 0.0f;           // QFH entropy
+    
+    // QFH specific metrics
+    float flip_ratio = 0.0f;
+    float rupture_ratio = 0.0f;
+    bool quantum_collapse_detected = false;
     
     // Trading parameters
-    double suggested_position_size{0.0};
-    double stop_loss_distance{0.0};
-    double take_profit_distance{0.0};
+    double suggested_position_size = 0.0;
+    double stop_loss_distance = 0.0;
+    double take_profit_distance = 0.0;
     
-    // Quantum metrics for analysis
-    float rupture_ratio{0.0f};
-    float flip_ratio{0.0f};
-    bool quantum_collapse_detected{false};
+    // Timing
+    uint64_t timestamp = 0;
 };
 
-// Configuration for quantum signal generation
-struct QuantumSignalConfig {
-    // Strategy thresholds from alpha analysis
-    float confidence_threshold{0.6f};
-    float coherence_threshold{0.9f};
-    float stability_threshold{0.0f};
-    
-    // Risk management parameters
-    float max_position_ratio{0.02f};     // 2% of account balance max
-    float stop_loss_atr_multiplier{2.0f}; // Stop loss = 2 * ATR
-    float take_profit_atr_multiplier{3.0f}; // Take profit = 3 * ATR
-    
-    // Pattern analysis parameters
-    size_t min_history_size{20};         // Minimum data points for analysis
-    size_t max_history_size{100};        // Maximum data points to keep
-    size_t pattern_length{16};           // Bit pattern length for quantum analysis
-};
-
-// Bridge between quantum engine and trading execution
+/**
+ * Bridge between quantum engine and trading execution
+ * Implements patent-backed QFH/QBSA analysis for signal generation
+ */
 class QuantumSignalBridge {
 public:
-    explicit QuantumSignalBridge(const QuantumSignalConfig& config = {});
-    ~QuantumSignalBridge() = default;
-
-    // Initialization
+    QuantumSignalBridge();
+    ~QuantumSignalBridge();
+    
     bool initialize();
     void shutdown();
-
-    // Configuration
-    void setConfidenceThreshold(float threshold);
-    void setCoherenceThreshold(float threshold);
-    void setStabilityThreshold(float threshold);
-    const QuantumSignalConfig& getConfig() const;
-
-    // Main analysis entry point
+    
+    // Main analysis function - converts market data to trading signals
     QuantumTradingSignal analyzeMarketData(
         const sep::connectors::MarketData& current_data,
         const std::vector<sep::connectors::MarketData>& history
     );
-
-    // Pattern evolution feedback (for future implementation)
+    
+    // Strategy threshold configuration (from alpha analysis)
+    void setConfidenceThreshold(float threshold) { confidence_threshold_ = threshold; }
+    void setCoherenceThreshold(float threshold) { coherence_threshold_ = threshold; }
+    void setStabilityThreshold(float threshold) { stability_threshold_ = threshold; }
+    
+    // Pattern evolution feedback
     void evolvePatternsWithFeedback(const std::string& pattern_id, bool profitable);
-
-    // Position sizing based on quantum metrics
-    double calculatePositionSize(float confidence, double account_balance) const;
-
-    // Risk management calculations
-    double calculateStopLoss(double current_price, double atr, QuantumTradingAction action) const;
-    double calculateTakeProfit(double current_price, double atr, QuantumTradingAction action) const;
+    
+    // Risk management
+    double calculatePositionSize(float confidence, double account_balance);
+    
+    // Diagnostics
+    const std::vector<uint8_t>& getLastBitPattern() const { return last_bits_; }
+    const sep::quantum::QFHResult& getLastQFHResult() const { return last_qfh_result_; }
+    const sep::quantum::QBSAResult& getLastQBSAResult() const { return last_qbsa_result_; }
 
 private:
-    // Configuration
-    QuantumSignalConfig config_;
-    mutable std::mutex config_mutex_;
-
-    // Quantum processors
+    // Quantum processors (patent-backed)
     std::unique_ptr<sep::quantum::QFHBasedProcessor> qfh_processor_;
     std::unique_ptr<sep::quantum::QBSAProcessor> qbsa_processor_;
-
-    // Internal analysis methods
-    std::vector<uint8_t> convertPriceToBits(const std::vector<sep::connectors::MarketData>& history) const;
-    std::vector<uint32_t> generateProbeIndices(size_t pattern_length) const;
-    std::vector<uint32_t> generateExpectations(const std::vector<uint8_t>& bits) const;
     
-    // Signal generation
-    QuantumTradingAction determineAction(
-        const sep::quantum::QFHResult& qfh_result,
-        const sep::quantum::QBSAResult& qbsa_result,
-        const std::vector<sep::connectors::MarketData>& history
-    ) const;
+    // Strategy thresholds (from alpha analysis)
+    std::atomic<float> confidence_threshold_{0.6f};
+    std::atomic<float> coherence_threshold_{0.9f};
+    std::atomic<float> stability_threshold_{0.0f};
     
-    float calculateStability(const std::vector<sep::connectors::MarketData>& history) const;
+    // Data processing
+    std::vector<uint8_t> convertPriceToBits(const std::vector<sep::connectors::MarketData>& history);
+    float calculateConfidence(const sep::quantum::QFHResult& qfh_result, const sep::quantum::QBSAResult& qbsa_result);
+    float calculateCoherence(const sep::quantum::QFHResult& qfh_result);
+    float calculateStability(const std::vector<sep::connectors::MarketData>& history);
+    QuantumTradingSignal::Action determineDirection(
+        const sep::quantum::QFHResult& qfh,
+        const sep::quantum::QBSAResult& qbsa
+    );
     
-    // Validation
-    bool validateSignal(const QuantumTradingSignal& signal) const;
-    bool hasMinimumHistory(const std::vector<sep::connectors::MarketData>& history) const;
+    // Risk management
+    double calculateStopLoss(float coherence, double current_price);
+    double calculateTakeProfit(float confidence, double current_price);
+    
+    // Pattern management
+    void loadPatterns();
+    void savePatterns();
+    std::string generatePatternId(const std::string& instrument, uint64_t timestamp);
+    
+    // Debug and diagnostics
+    void debugDataFormat(const std::vector<sep::connectors::MarketData>& history);
+    std::vector<uint8_t> last_bits_;
+    sep::quantum::QFHResult last_qfh_result_;
+    sep::quantum::QBSAResult last_qbsa_result_;
+    
+    // Thread safety
+    mutable std::mutex analysis_mutex_;
+    
+    // Patterns storage (simplified for now)
+    std::map<std::string, float> active_pattern_scores_;
+    std::string patterns_file_path_;
+    
+    bool initialized_ = false;
 };
 
 } // namespace sep::trading

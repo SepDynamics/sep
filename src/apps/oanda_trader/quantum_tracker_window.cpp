@@ -44,6 +44,9 @@ void QuantumTrackerWindow::shutdown() {
 void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketData& data) {
     std::lock_guard<std::mutex> lock(data_mutex_);
     
+    // Update pips tracker (from GUI.md)
+    pips_tracker_.updatePips(data.mid);
+    
     // Add to history
     market_history_.push_back(data);
     if (market_history_.size() > MAX_HISTORY_SIZE) {
@@ -68,7 +71,7 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
             has_latest_signal_ = true;
             
             // Make prediction for ANY directional signal (to track performance)
-            if (signal.action != sep::trading::QuantumTradingAction::HOLD && 
+            if (signal.action != sep::trading::QuantumTradingSignal::HOLD && 
                 signal.confidence >= 0.1f) {  // Very low threshold for tracking
                 makePrediction(signal, data);
             }
@@ -135,10 +138,10 @@ void QuantumTrackerWindow::evaluatePendingPredictions(const sep::connectors::Mar
                 bool price_went_up = price_change > 0.0001; // Small threshold for forex
                 bool price_went_down = price_change < -0.0001;
                 
-                if (pred.predicted_direction == sep::trading::QuantumTradingAction::BUY && price_went_up) {
-                    pred.correct = true;
-                } else if (pred.predicted_direction == sep::trading::QuantumTradingAction::SELL && price_went_down) {
-                    pred.correct = true;
+                if (pred.predicted_direction == sep::trading::QuantumTradingSignal::BUY && price_went_up) {
+                pred.correct = true;
+                } else if (pred.predicted_direction == sep::trading::QuantumTradingSignal::SELL && price_went_down) {
+                pred.correct = true;
                 } else {
                     pred.correct = false;
                 }
@@ -238,6 +241,13 @@ void QuantumTrackerWindow::render() {
     renderPredictionStats();
     ImGui::Separator();
     
+    // New GUI.md requirements
+    renderPipsDisplay();
+    ImGui::Separator();
+    
+    renderQuantumDiagnostics();
+    ImGui::Separator();
+    
     renderLatestSignal();
     ImGui::Separator();
     
@@ -318,9 +328,9 @@ void QuantumTrackerWindow::renderLatestSignal() {
     // Signal action with color coding
     const char* action_str = actionToString(latest_signal_.action);
     ImVec4 action_color;
-    if (latest_signal_.action == sep::trading::QuantumTradingAction::BUY) {
+    if (latest_signal_.action == sep::trading::QuantumTradingSignal::BUY) {
         action_color = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
-    } else if (latest_signal_.action == sep::trading::QuantumTradingAction::SELL) {
+    } else if (latest_signal_.action == sep::trading::QuantumTradingSignal::SELL) {
         action_color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Red
     } else {
         action_color = ImVec4(0.7f, 0.7f, 0.7f, 1.0f); // Gray
@@ -433,7 +443,7 @@ void QuantumTrackerWindow::renderRecentPredictions() {
             
             // Direction
             ImGui::TableNextColumn();
-            ImVec4 color = (pred.predicted_direction == sep::trading::QuantumTradingAction::BUY) ?
+            ImVec4 color = (pred.predicted_direction == sep::trading::QuantumTradingSignal::BUY) ?
                           ImVec4(0.0f, 1.0f, 0.0f, 1.0f) : ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
             ImGui::TextColored(color, "%s", actionToString(pred.predicted_direction));
             
@@ -496,13 +506,68 @@ std::string QuantumTrackerWindow::formatDuration(std::chrono::steady_clock::time
     }
 }
 
-const char* QuantumTrackerWindow::actionToString(sep::trading::QuantumTradingAction action) const {
+const char* QuantumTrackerWindow::actionToString(sep::trading::QuantumTradingSignal::Action action) const {
     switch (action) {
-        case sep::trading::QuantumTradingAction::BUY: return "BUY";
-        case sep::trading::QuantumTradingAction::SELL: return "SELL";
-        case sep::trading::QuantumTradingAction::HOLD: return "HOLD";
+        case sep::trading::QuantumTradingSignal::BUY: return "BUY";
+        case sep::trading::QuantumTradingSignal::SELL: return "SELL";
+        case sep::trading::QuantumTradingSignal::HOLD: return "HOLD";
         default: return "UNKNOWN";
     }
+}
+
+// New GUI.md requirements implementation
+void QuantumTrackerWindow::renderPipsDisplay() {
+    ImGui::Begin("📈 Live Pips Tracking (48h Window)");
+    
+    ImGui::Text("Current Price: %.5f", pips_tracker_.current_price_);
+    ImGui::Text("48h Start Price: %.5f", pips_tracker_.start_price_48h_);
+    
+    // Color-coded pips display
+    if (pips_tracker_.total_pips_48h_ > 0) {
+        ImGui::TextColored(ImVec4(0, 1, 0, 1), "Total Pips (48h): +%.2f", pips_tracker_.total_pips_48h_);
+    } else {
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "Total Pips (48h): %.2f", pips_tracker_.total_pips_48h_);
+    }
+    
+    ImGui::Text("Data Points: %zu / 2880 (48h)", pips_tracker_.price_history_.size());
+    ImGui::Text("Window Complete: %s", pips_tracker_.price_history_.size() >= 2880 ? "YES" : "NO");
+    
+    ImGui::End();
+}
+
+void QuantumTrackerWindow::renderQuantumDiagnostics() {
+    ImGui::Begin("🔬 Quantum Engine Diagnostics");
+    
+    if (has_latest_signal_) {
+        ImGui::Text("🔍 Raw Quantum Metrics:");
+        ImGui::Text("  Confidence: %.3f (threshold: %.1f)", latest_signal_.confidence, 0.6f);
+        ImGui::Text("  Coherence: %.3f (threshold: %.1f)", latest_signal_.coherence, 0.9f);
+        ImGui::Text("  Stability: %.3f (threshold: %.1f)", latest_signal_.stability, 0.0f);
+        
+        ImGui::Separator();
+        ImGui::Text("🧬 QFH Analysis:");
+        ImGui::Text("  Flip Ratio: %.3f", latest_signal_.flip_ratio);
+        ImGui::Text("  Rupture Ratio: %.3f", latest_signal_.rupture_ratio);
+        ImGui::Text("  Entropy: %.3f", latest_signal_.entropy);
+        ImGui::Text("  Collapse Detected: %s", latest_signal_.quantum_collapse_detected ? "YES" : "NO");
+        
+        ImGui::Separator();
+        ImGui::Text("📊 Threshold Analysis:");
+        bool conf_pass = latest_signal_.confidence >= 0.6f;
+        bool coh_pass = latest_signal_.coherence >= 0.9f;
+        bool stab_pass = latest_signal_.stability >= 0.0f;
+        
+        ImGui::TextColored(conf_pass ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), 
+                          "Confidence: %s", conf_pass ? "PASS" : "FAIL");
+        ImGui::TextColored(coh_pass ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), 
+                          "Coherence: %s", coh_pass ? "PASS" : "FAIL");
+        ImGui::TextColored(stab_pass ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), 
+                          "Stability: %s", stab_pass ? "PASS" : "FAIL");
+    } else {
+        ImGui::Text("Waiting for quantum signal...");
+    }
+    
+    ImGui::End();
 }
 
 } // namespace sep::apps

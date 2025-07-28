@@ -8,23 +8,23 @@ add_subdirectory(connectors)
 add_subdirectory(audio)
 add_subdirectory(apps)
 
-# Standalone API server for headless engine operation
-add_executable(sep_api_server
-    api_main.cpp
-)
-
-target_include_directories(sep_api_server PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/src
-)
-
-target_link_libraries(sep_api_server PRIVATE
-    sep_api
-    sep_engine
-    sep_quantum
-    sep_memory
-    Threads::Threads
-)
+# Standalone API server for headless engine operation (temporarily disabled)
+# add_executable(sep_api_server
+#     api_main.cpp
+# )
+# 
+# target_include_directories(sep_api_server PRIVATE
+#     ${CMAKE_CURRENT_SOURCE_DIR}
+#     ${CMAKE_SOURCE_DIR}/src
+# )
+# 
+# target_link_libraries(sep_api_server PRIVATE
+#     sep_api
+#     sep_engine
+#     sep_quantum
+#     sep_memory
+#     Threads::Threads
+# )
 
 
 

@@ -1,6 +1,7 @@
 add_executable(oanda_trader
     main.cpp
     oanda_trader_app.cpp
+    quantum_signal_bridge.cpp
 )
 
 target_include_directories(oanda_trader PUBLIC
@@ -12,6 +13,7 @@ target_include_directories(oanda_trader PUBLIC
 target_link_libraries(oanda_trader PUBLIC
     sep_engine
     sep_connectors
+    sep_quantum
     imgui
     glad
     OpenGL::GL

@@ -188,6 +188,16 @@ void QuantumTrackerApp::connectToOanda() {
 }
 
 void QuantumTrackerApp::startMarketDataStream() {
+    // First, load 48 hours of historical data
+    std::cout << "[QuantumTracker] Loading 48 hours of historical EUR_USD data..." << std::endl;
+    if (!oanda_connector_->fetchHistoricalData("EUR_USD", "")) {
+        std::cerr << "[QuantumTracker] Failed to load historical data: " 
+                  << oanda_connector_->getLastError() << std::endl;
+        std::cerr << "[QuantumTracker] Continuing with live data only..." << std::endl;
+    } else {
+        std::cout << "[QuantumTracker] Historical data loaded successfully!" << std::endl;
+    }
+    
     // Set the price callback to feed quantum tracker
     oanda_connector_->setPriceCallback([this](const sep::connectors::MarketData& data) {
         // Feed data to quantum tracker
@@ -203,40 +213,22 @@ void QuantumTrackerApp::startMarketDataStream() {
         }
     });
 
-    // Start the price stream in a managed thread
-    streaming_active_ = true;
-    data_stream_thread_ = std::thread([this]() {
-        std::cout << "[QuantumTracker] Starting EUR_USD price stream..." << std::endl;
-        
-        while (streaming_active_) {
-            try {
-                if (!oanda_connector_->startPriceStream({"EUR_USD"})) {
-                    std::cerr << "[QuantumTracker] Price stream error: " 
-                              << oanda_connector_->getLastError() << std::endl;
-                    std::this_thread::sleep_for(std::chrono::seconds(5));
-                }
-            } catch (const std::exception& e) {
-                std::cerr << "[QuantumTracker] Stream exception: " << e.what() << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(5));
-            }
-        }
-    });
+    // Start the price stream once
+    std::cout << "[QuantumTracker] Starting EUR_USD price stream..." << std::endl;
+    if (!oanda_connector_->startPriceStream({"EUR_USD"})) {
+        std::cerr << "[QuantumTracker] Failed to start price stream: " 
+                  << oanda_connector_->getLastError() << std::endl;
+    } else {
+        std::cout << "[QuantumTracker] Price stream started successfully!" << std::endl;
+    }
 }
 
 void QuantumTrackerApp::shutdown() {
     std::cout << "[QuantumTracker] Shutting down..." << std::endl;
     
-    // Signal streaming thread to stop
-    streaming_active_ = false;
-    
     // Stop OANDA stream
     if (oanda_connector_) {
         oanda_connector_->stopPriceStream();
-    }
-    
-    // Wait for thread to finish
-    if (data_stream_thread_.joinable()) {
-        data_stream_thread_.join();
     }
     
     // Shutdown quantum tracker

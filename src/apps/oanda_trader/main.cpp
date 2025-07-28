@@ -1,7 +1,15 @@
 #include "oanda_trader_app.hpp"
 #include <iostream>
 #include <exception>
-#include <csignal>
+#include <signal.h>
+
+// Declare signal handling functions and constants
+extern "C" {
+    typedef void (*sighandler_t)(int);
+    sighandler_t signal(int signum, sighandler_t handler);
+}
+#define SIGINT 2
+#define SIGTERM 15
 
 // Global app instance for signal handling
 static sep::apps::OandaTraderApp* g_app = nullptr;
@@ -17,8 +25,8 @@ void signalHandler(int signal) {
 
 int main(int /*argc*/, char* /*argv*/[]) {
     // Install signal handlers
-    std::signal(SIGINT, signalHandler);
-    std::signal(SIGTERM, signalHandler);
+    (void)signal(SIGINT, signalHandler);
+    (void)signal(SIGTERM, signalHandler);
     
     std::cout << "=====================================\n";
     std::cout << "   SEP OANDA Trader - v1.0          \n";

@@ -16,7 +16,7 @@ namespace sep::apps {
 struct QuantumPrediction {
     std::chrono::steady_clock::time_point timestamp;
     std::string instrument;
-    sep::trading::QuantumTradingAction predicted_direction;
+    sep::trading::QuantumTradingSignal::Action predicted_direction;
     double prediction_price;
     double confidence;
     double coherence;
@@ -27,6 +27,37 @@ struct QuantumPrediction {
     bool correct{false};
     double actual_price_after_period{0.0};
     std::chrono::seconds evaluation_period{60}; // 1 minute default
+};
+
+// Pips tracking for 48-hour window (from GUI.md)
+struct PipsTracker {
+    std::deque<double> pip_history_;    // 48h of pip changes
+    std::deque<double> price_history_;  // 48h of prices
+    double total_pips_48h_{0.0};
+    double current_price_{0.0};
+    double start_price_48h_{0.0};
+    
+    void updatePips(double new_price) {
+        if (!price_history_.empty()) {
+            double pip_change = (new_price - current_price_) * 10000; // Convert to pips
+            pip_history_.push_back(pip_change);
+            
+            // Maintain 48h window (assuming 1-minute data = 2880 points)
+            if (pip_history_.size() > 2880) {
+                pip_history_.pop_front();
+                price_history_.pop_front();
+            }
+        }
+        
+        price_history_.push_back(new_price);
+        current_price_ = new_price;
+        
+        // Calculate 48h total
+        if (!price_history_.empty()) {
+            start_price_48h_ = price_history_.front();
+            total_pips_48h_ = (current_price_ - start_price_48h_) * 10000;
+        }
+    }
 };
 
 // Live quantum signal tracking stats
@@ -99,6 +130,9 @@ private:
     void evaluatePendingPredictions(const sep::connectors::MarketData& current_data);
     void updateStatistics();
     
+    // Pips tracker (from GUI.md)
+    PipsTracker pips_tracker_;
+    
     // UI rendering helpers
     void renderPredictionStats();
     void renderLatestSignal();
@@ -106,10 +140,14 @@ private:
     void renderConfidenceBuckets();
     void renderRecentPredictions();
     
+    // New GUI.md requirements
+    void renderPipsDisplay();
+    void renderQuantumDiagnostics();
+    
     // Utility functions
     double calculateDirectionalAccuracy(const QuantumPrediction& pred, double actual_price) const;
     std::string formatDuration(std::chrono::steady_clock::time_point start) const;
-    const char* actionToString(sep::trading::QuantumTradingAction action) const;
+    const char* actionToString(sep::trading::QuantumTradingSignal::Action action) const;
 };
 
 } // namespace sep::apps

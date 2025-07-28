@@ -11,11 +11,6 @@
 #    include <unistd.h>
 #endif
 
-char sep::quantum::pattern_id[sep::compat::PatternData::MAX_ID_LENGTH];
-float sep::quantum::coherence = 0.0f;
-float sep::quantum::stability = 0.0f;
-float sep::quantum::entropy = 0.0f;
-std::vector<sep::quantum::PatternRelationship> sep::quantum::relationships;
 #include "quantum/quantum_processor_cuda.h"
 
 namespace sep::quantum {

@@ -64,8 +64,23 @@ fi
 echo "Updating package lists..."
 sudo apt-get update -y
 
+# Some Java-based packages require this directory to exist to avoid dpkg errors
+sudo mkdir -p /etc/ssl/certs/java
+
+sudo apt-get install -y ca-certificates-java >/dev/null 2>&1 || true
+
 echo "Installing base packages..."
 sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
+
+if [ "$SEP_HAS_CUDA" -eq 1 ]; then
+  echo "Installing CUDA toolkit..."
+  if ! sudo apt-get install -y --no-install-recommends \
+      cuda-toolkit-12-5 cuda-cudart-dev-12-5 \
+      | tee -a "$LOG_DIR/apt.log"; then
+    echo "CUDA toolkit installation failed; continuing without CUDA support" | tee -a "$LOG_DIR/apt.log"
+    export SEP_HAS_CUDA=0
+  fi
+fi
 
 # Install Docker and Docker Compose
 echo "Installing Docker..."

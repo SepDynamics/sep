@@ -250,11 +250,12 @@ namespace sep::quantum
             m.pattern_id[sizeof(m.pattern_id) - 1] = '\0';
             m.length = p.data.size();
 
+            float sum_squares = 0.0f;
+
             if (!p.data.empty())
             {
                 // Calculate coherence based on pattern self-similarity and consistency
-            float sum_squares = 0.0f;
-            float mean = 0.0f;
+                float mean = 0.0f;
 
                 // Calculate mean
                 for (float val : p.data)

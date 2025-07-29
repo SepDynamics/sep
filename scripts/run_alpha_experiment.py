@@ -9,6 +9,7 @@ from performance_metrics import sharpe_ratio
 from pathlib import Path
 import shutil
 import tempfile
+from _sep.testbed.json_utils import parse_first_json
 
 # Removed parse_metrics_from_stream function - now using direct JSON parsing
 
@@ -57,7 +58,7 @@ def analyze_chunks_statefully(chunk_list, temp_dir):
     cmd = [str(executable_path), str(combined_file), "--json"]
     
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    return json.loads(result.stdout)
+    return parse_first_json(result.stdout)
 
 def run_backtest(metrics_data):
     """Runs the financial_backtest.py script on a list of metrics."""

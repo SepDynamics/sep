@@ -105,8 +105,8 @@ def simulate_sep_metrics(df):
                         ], capture_output=True, text=True, timeout=5)
                         
                         if result.returncode == 0 and result.stdout:
-                            import json
-                            sep_output = json.loads(result.stdout)
+                            from _sep.testbed.json_utils import parse_first_json
+                            sep_output = parse_first_json(result.stdout)
                             coherence = sep_output.get('coherence', 0.5)
                             stability = sep_output.get('stability', 0.5)
                             entropy = sep_output.get('entropy', 0.5)

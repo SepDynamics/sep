@@ -23,15 +23,35 @@ def parse_metrics_files(files: List[Path]) -> List[Dict[str, float]]:
 
 
 def average_metrics(metrics: List[Dict[str, float]]) -> Dict[str, float]:
+    """Return the average metrics across all parsed files."""
     if not metrics:
-        return {"coherence": 0.0, "stability": 0.0, "entropy": 0.0}
-    total = {"coherence": 0.0, "stability": 0.0, "entropy": 0.0}
+        return {
+            "coherence": 0.0,
+            "stability": 0.0,
+            "entropy": 0.0,
+            "pattern_count": 0.0,
+        }
+
+    total = {
+        "coherence": 0.0,
+        "stability": 0.0,
+        "entropy": 0.0,
+        "pattern_count": 0.0,
+    }
+
     for m in metrics:
-        total["coherence"] += m["coherence"]
-        total["stability"] += m["stability"]
-        total["entropy"] += m["entropy"]
+        total["coherence"] += m.get("coherence", 0.0)
+        total["stability"] += m.get("stability", 0.0)
+        total["entropy"] += m.get("entropy", 0.0)
+        total["pattern_count"] += m.get("pattern_count", 0)
+
     n = len(metrics)
-    return {k: v / n for k, v in total.items()}
+    return {
+        "coherence": total["coherence"] / n,
+        "stability": total["stability"] / n,
+        "entropy": total["entropy"] / n,
+        "pattern_count": total["pattern_count"] / n,
+    }
 
 
 if __name__ == "__main__":

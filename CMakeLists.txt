@@ -103,6 +103,7 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/oneapi-src/oneTBB.git
   GIT_TAG v2021.10.0
 )
+set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 FetchContent_MakeAvailable(tbb)
 
 # Create imgui library manually since imgui doesn't provide CMakeLists.txt

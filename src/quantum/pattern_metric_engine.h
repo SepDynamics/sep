@@ -236,7 +236,6 @@ private:
 
     // Preallocated scratch space to avoid frequent allocations
     std::vector<uint32_t> scratch_pattern_bits_;
-    std::vector<float> scratch_diffs_;
 
     // Thread safety and streaming
     std::mutex engine_mutex_;

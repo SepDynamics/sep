@@ -49,6 +49,15 @@ namespace sep::quantum
         PatternMetrics() { pattern_id[0] = '\0'; }
     };
 
+    /// @brief Aggregated metrics across all current patterns.
+    struct AggregateMetrics
+    {
+        float average_coherence{0.0f};
+        float average_stability{0.0f};
+        float average_entropy{0.0f};
+        float average_energy{0.0f};
+    };
+
     /// @brief Calculate Shannon entropy of a sequence of values.
     /// @param values Input data sequence.
     /// @return Normalized entropy in the range [0,1].
@@ -186,6 +195,9 @@ namespace sep::quantum
         /// @brief Computes metrics for the currently identified patterns.
         /// @return A vector of PatternMetrics structs.
         const std::vector<PatternMetrics>& computeMetrics() const;
+
+        /// @brief Compute aggregate metrics across all current patterns.
+        AggregateMetrics computeAggregateMetrics() const;
 
         /// @brief Sets the thresholds for signal generation.
         void setSignalThresholds(const SignalThresholds& thresholds);

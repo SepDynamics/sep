@@ -234,7 +234,7 @@ namespace sep::quantum
 
     const std::vector<Signal>& PatternMetricEngine::getSignals() const { return current_signals_; }
 
-    const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
+    const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics() const
     {
         std::lock_guard<std::mutex> lock(engine_mutex_);
 

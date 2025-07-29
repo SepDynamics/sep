@@ -185,7 +185,7 @@ namespace sep::quantum
 
         /// @brief Computes metrics for the currently identified patterns.
         /// @return A vector of PatternMetrics structs.
-        const std::vector<PatternMetrics>& computeMetrics();
+        const std::vector<PatternMetrics>& computeMetrics() const;
 
         /// @brief Sets the thresholds for signal generation.
         void setSignalThresholds(const SignalThresholds& thresholds);
@@ -235,16 +235,16 @@ namespace sep::quantum
         std::deque<compat::PatternData> current_patterns_;
         mutable std::vector<compat::PatternData> pattern_cache_;
         mutable bool cache_dirty_{false};
-        std::vector<PatternMetrics> current_metrics_;
+        mutable std::vector<PatternMetrics> current_metrics_;
         SignalThresholds signal_thresholds_;
         std::vector<Signal> current_signals_;
 
         // Preallocated scratch space to avoid frequent allocations
         std::vector<uint32_t> scratch_pattern_bits_;
-        std::vector<float> scratch_diffs_;
+        mutable std::vector<float> scratch_diffs_;
 
         // Thread safety and streaming
-        std::mutex engine_mutex_;
+        mutable std::mutex engine_mutex_;
         std::vector<uint8_t> stream_buffer_;
     };
 

@@ -575,7 +575,7 @@ std::map<std::string, double> Engine::getMetrics() const {
     }
     
     // Add pattern metric engine metrics if available
-    const auto& pattern_metrics = const_cast<sep::quantum::PatternMetricEngine&>(pattern_metric_engine_).computeMetrics();
+    const auto& pattern_metrics = pattern_metric_engine_.computeMetrics();
     for (size_t i = 0; i < pattern_metrics.size(); ++i) {
         const auto& pm = pattern_metrics[i];
         metrics["pattern_" + std::string(pm.pattern_id) + "_coherence"] = pm.coherence;

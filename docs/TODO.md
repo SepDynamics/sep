@@ -290,7 +290,7 @@ python3 prepare_experiment_data.py            # Expand dataset
 
 **Sprint 2: Strategy Optimization**
 - Implement parameter grid search in `run_alpha_experiment.py`
-- Add Sharpe ratio calculation to `financial_backtest.py`
+- ~~Add Sharpe ratio calculation to `financial_backtest.py`~~ ✅ Done
 - Create strategy comparison framework
 
 **Sprint 3: Risk Management**

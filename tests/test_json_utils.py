@@ -13,6 +13,11 @@ def test_parse_first_json_simple():
     assert parse_first_json(text) == {"a": 1}
 
 
+def test_parse_first_json_extra_data():
+    text = "noise {\"a\": 1} trailing {\"b\":2}"
+    assert parse_first_json(text) == {"a": 1}
+
+
 def test_parse_first_json_missing():
     with pytest.raises(ValueError):
         parse_first_json("no json here")

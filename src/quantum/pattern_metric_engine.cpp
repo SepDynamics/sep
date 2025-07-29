@@ -207,13 +207,8 @@ const std::vector<Signal>& PatternMetricEngine::getSignals() const {
 const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
 {
     std::lock_guard<std::mutex> lock(engine_mutex_);
-    
-
-    
     current_metrics_.clear();
     current_metrics_.reserve(current_patterns_.size());
-
-    scratch_diffs_.clear();
 
     for (const auto& p : current_patterns_) {
         PatternMetrics m;
@@ -221,24 +216,19 @@ const std::vector<PatternMetrics>& PatternMetricEngine::computeMetrics()
         m.pattern_id[sizeof(m.pattern_id) - 1] = '\0';
 
         if (!p.data.empty()) {
-            // Calculate coherence based on pattern self-similarity and consistency
-            float sum_squares = 0.0f;
+            // Single-pass mean and variance using Welford's algorithm
             float mean = 0.0f;
-            
-            // Calculate mean
+            float m2 = 0.0f;
+            float sum_squares = 0.0f;
+            size_t count = 0;
             for (float val : p.data) {
-                mean += val;
-            }
-            mean /= p.data.size();
-            
-            // Calculate variance and coherence
-            float variance = 0.0f;
-            for (float val : p.data) {
-                float diff = val - mean;
-                variance += diff * diff;
+                count++;
+                float delta = val - mean;
+                mean += delta / static_cast<float>(count);
+                m2 += delta * (val - mean);
                 sum_squares += val * val;
             }
-            variance /= p.data.size();
+            float variance = count > 1 ? m2 / static_cast<float>(count) : 0.0f;
             
             // Coherence is high when variance is low relative to signal strength
             // Use coefficient of variation (inverse) as coherence measure

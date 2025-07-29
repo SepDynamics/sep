@@ -8,6 +8,12 @@ import sys
 from pathlib import Path
 import pytest
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from _sep.testbed.json_utils import parse_first_json
+
 BIN_PATH = Path("./examples/pattern_metric_example")
 if not BIN_PATH.exists():
     pytest.skip("pattern_metric_example binary not built", allow_module_level=True)
@@ -20,7 +26,7 @@ def test_single_file_processing():
     
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=30)
-        metrics = json.loads(result.stdout)
+        metrics = parse_first_json(result.stdout)
         
         print(f"Successfully processed file with {len(metrics)} pattern results")
         if metrics:

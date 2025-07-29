@@ -21,6 +21,7 @@ def parse_metrics_files(files: List[Path]) -> List[Dict[str, float]]:
                 "coherence": float(metrics.get("coherence", 0.0)),
                 "stability": float(metrics.get("stability", 0.0)),
                 "entropy": float(metrics.get("entropy", 0.0)),
+                "energy": float(metrics.get("energy", 0.0)),
                 "pattern_count": int(data.get("pattern_count", 0)),
             })
         except Exception as exc:
@@ -35,6 +36,7 @@ def average_metrics(metrics: List[Dict[str, float]]) -> Dict[str, float]:
             "coherence": 0.0,
             "stability": 0.0,
             "entropy": 0.0,
+            "energy": 0.0,
             "pattern_count": 0.0,
         }
 
@@ -42,6 +44,7 @@ def average_metrics(metrics: List[Dict[str, float]]) -> Dict[str, float]:
         "coherence": 0.0,
         "stability": 0.0,
         "entropy": 0.0,
+        "energy": 0.0,
         "pattern_count": 0.0,
     }
 
@@ -49,6 +52,7 @@ def average_metrics(metrics: List[Dict[str, float]]) -> Dict[str, float]:
         total["coherence"] += m.get("coherence", 0.0)
         total["stability"] += m.get("stability", 0.0)
         total["entropy"] += m.get("entropy", 0.0)
+        total["energy"] += m.get("energy", 0.0)
         total["pattern_count"] += m.get("pattern_count", 0)
 
     n = len(metrics)
@@ -56,6 +60,7 @@ def average_metrics(metrics: List[Dict[str, float]]) -> Dict[str, float]:
         "coherence": total["coherence"] / n,
         "stability": total["stability"] / n,
         "entropy": total["entropy"] / n,
+        "energy": total["energy"] / n,
         "pattern_count": total["pattern_count"] / n,
     }
 
@@ -75,5 +80,6 @@ if __name__ == "__main__":
     avg = average_metrics(rows)
     print(
         f"Average coherence={avg['coherence']:.4f} "
-        f"stability={avg['stability']:.4f} entropy={avg['entropy']:.4f}"
+        f"stability={avg['stability']:.4f} entropy={avg['entropy']:.4f} "
+        f"energy={avg['energy']:.4f}"
     )

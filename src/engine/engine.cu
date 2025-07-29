@@ -581,6 +581,7 @@ std::map<std::string, double> Engine::getMetrics() const {
         metrics["pattern_" + std::string(pm.pattern_id) + "_coherence"] = pm.coherence;
         metrics["pattern_" + std::string(pm.pattern_id) + "_stability"] = pm.stability;
         metrics["pattern_" + std::string(pm.pattern_id) + "_entropy"] = pm.entropy;
+        metrics["pattern_" + std::string(pm.pattern_id) + "_energy"] = pm.energy;
     }
     
     return metrics;

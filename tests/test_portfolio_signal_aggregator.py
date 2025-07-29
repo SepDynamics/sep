@@ -1,4 +1,13 @@
+import os
+import sys
 import unittest
+
+# Ensure the project root is on the path so _sep can be imported when running
+# tests directly via `pytest` without manually setting PYTHONPATH.
+ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
 from _sep.testbed.portfolio_signal_aggregator import aggregate_signals
 
 

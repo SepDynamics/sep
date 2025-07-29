@@ -206,7 +206,8 @@ QuantumIdentifiers QuantumSignalBridge::calculateIdentifiersWithConvergence(
 
 QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
     const sep::connectors::MarketData& current_data,
-    const std::vector<sep::connectors::MarketData>& history) {
+    const std::vector<sep::connectors::MarketData>& history,
+    const std::vector<ForwardWindowResult>& forward_window_results) {
     
     std::lock_guard<std::mutex> lock(analysis_mutex_);
     
@@ -288,11 +289,16 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
         auto qbsa_result = qbsa_processor_->analyze(probe_values, expectations);
         last_qbsa_result_ = qbsa_result;
         
-        // For now, use legacy calculation until convergence is implemented
-        // TODO: Replace with calculateConvergedIdentifiers() using forward window
-        signal.identifiers.confidence = calculateConfidence(qfh_result, qbsa_result);
-        signal.identifiers.coherence = calculateCoherence(qfh_result); 
-        signal.identifiers.stability = calculateStability(history);
+        if (!forward_window_results.empty()) {
+            const auto& last_result = forward_window_results.back();
+            signal.identifiers.confidence = last_result.confidence;
+            signal.identifiers.coherence = last_result.coherence;
+            signal.identifiers.stability = last_result.stability;
+        } else {
+            signal.identifiers.confidence = 0.0f;
+            signal.identifiers.coherence = 0.0f;
+            signal.identifiers.stability = 0.0f;
+        }
         
         // Store debug metrics in identifiers
         signal.identifiers.entropy = qfh_result.entropy;
@@ -416,74 +422,7 @@ std::vector<uint8_t> QuantumSignalBridge::convertPriceToBits(
     return bits;
 }
 
-float QuantumSignalBridge::calculateConfidence(const sep::quantum::QFHResult& qfh_result, 
-                                              const sep::quantum::QBSAResult& qbsa_result) {
-    // Confidence based on QBSA correction_ratio (per documentation)
-    // "The QBSA algorithm calculates a correction_ratio that measures pattern stability"
-    // "This is represented as signal_confidence in the data"
-    
-    std::cout << "[DEBUG] QFH input: entropy=" << qfh_result.entropy 
-              << " flip_ratio=" << qfh_result.flip_ratio 
-              << " rupture_ratio=" << qfh_result.rupture_ratio 
-              << " coherence=" << qfh_result.coherence
-              << " QBSA correction_ratio=" << qbsa_result.correction_ratio << std::endl;
-    
-    // Primary confidence is inverse of correction ratio
-    // High correction ratio = low confidence (more corrections needed)
-    // Low correction ratio = high confidence (fewer corrections needed)
-    float confidence = 1.0f - qbsa_result.correction_ratio;
-    
-    std::cout << "[DEBUG] Confidence calc: correction_ratio=" << qbsa_result.correction_ratio 
-              << " -> confidence=" << confidence << std::endl;
 
-    return std::clamp(confidence, 0.0f, 1.0f);
-}
-
-float QuantumSignalBridge::calculateCoherence(const sep::quantum::QFHResult& qfh_result) {
-    // Use the QFH coherence directly (per documentation)
-    // QFH already calculates coherence properly in the pattern analysis
-    float coherence = qfh_result.coherence;
-    
-    std::cout << "[DEBUG] Coherence calc: using QFH coherence directly=" << coherence << std::endl;
-    
-    return std::clamp(coherence, 0.0f, 1.0f);
-}
-
-float QuantumSignalBridge::calculateStability(const std::vector<sep::connectors::MarketData>& history) {
-    if (history.size() < 10) {
-        return 0.5f; // Neutral if insufficient history
-    }
-
-    size_t window = std::min<size_t>(30, history.size());
-    size_t start = history.size() - window;
-
-    std::vector<double> diffs;
-    diffs.reserve(window - 1);
-    double prev = history[start].mid;
-    double sum = 0.0;
-    for (size_t i = start + 1; i < history.size(); ++i) {
-        double diff = history[i].mid - prev;
-        diffs.push_back(diff);
-        sum += diff;
-        prev = history[i].mid;
-    }
-
-    double mean = sum / diffs.size();
-    double var = 0.0;
-    for (double d : diffs) {
-        double delta = d - mean;
-        var += delta * delta;
-    }
-    var /= diffs.size();
-    double stddev = std::sqrt(var);
-    if (!std::isfinite(stddev)) {
-        return 0.5f;
-    }
-
-    double score = std::tanh(std::abs(mean) / (stddev + 1e-6));
-    double normalized = mean >= 0.0 ? 0.5 + score * 0.5 : 0.5 - score * 0.5;
-    return static_cast<float>(normalized);
-}
 
 QuantumTradingSignal::Action QuantumSignalBridge::determineDirection(
     const sep::quantum::QFHResult& qfh,

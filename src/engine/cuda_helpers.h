@@ -2,13 +2,7 @@
 
 #include <cstdio>
 
-#ifdef __CUDACC__
 #include <cuda_runtime.h>
-#else
-// Forward declarations when not compiling with CUDA
-typedef int cudaError_t;
-const int cudaSuccess = 0;
-#endif
 
 // Comprehensive CUDA helper utilities - consolidated from multiple files
 namespace sep {

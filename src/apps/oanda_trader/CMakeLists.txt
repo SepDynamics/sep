@@ -38,6 +38,7 @@ add_executable(quantum_tracker
     tick_data_manager.cpp
     rolling_window_chart.cpp
     tick_cuda_kernels.cu
+    forward_window_kernels.cu
 )
 
 target_include_directories(quantum_tracker PUBLIC

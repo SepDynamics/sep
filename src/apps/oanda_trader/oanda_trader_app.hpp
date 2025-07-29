@@ -11,10 +11,12 @@
 #include <vector>
 
 #include "connectors/oanda_connector.h"
+#include "forward_window_kernels.cuh"
 #include "engine/engine.h"
 #include "imgui.h"
 #include "util/managed_thread.hpp"
 #include "quantum_signal_bridge.hpp"
+#include "forward_window_kernels.cuh"
 
 namespace sep::apps {
 
@@ -72,8 +74,10 @@ private:
     std::unique_ptr<sep::trading::QuantumSignalBridge> quantum_bridge_;
     sep::trading::QuantumTradingSignal last_signal_;
     std::mutex signal_mutex_;
+    std::vector<sep::apps::cuda::ForwardWindowResult> forward_window_results_;
     std::vector<nlohmann::json> open_positions_;
     std::mutex positions_mutex_;
+    sep::apps::cuda::CudaContext context;
     std::vector<nlohmann::json> order_history_;
     std::mutex history_mutex_;
     

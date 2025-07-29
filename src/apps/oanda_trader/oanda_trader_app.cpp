@@ -112,7 +112,22 @@ void OandaTraderApp::setupImGui() {
 }
 
 void OandaTraderApp::run() {
+    sep::apps::cuda::initializeCudaDevice(context);
+
     while (!glfwWindowShouldClose(window_)) {
+        // Perform forward-looking window calculations
+        if (oanda_connected_ && !market_history_.empty()) {
+            std::vector<sep::apps::cuda::TickData> ticks;
+            {
+                std::lock_guard<std::mutex> lock(market_history_mutex_);
+                ticks.reserve(market_history_.size());
+                for (const auto& md : market_history_) {
+                    ticks.push_back({md.mid, md.bid, md.ask, md.timestamp, md.volume});
+                }
+            }
+            const uint64_t window_size_ns = 24ULL * 3600ULL * 1000000000ULL; // 24 hours
+            calculateForwardWindowsCuda(context, ticks, forward_window_results_, window_size_ns);
+        }
         glfwPollEvents();
         
         // Start the Dear ImGui frame
@@ -459,7 +474,7 @@ void OandaTraderApp::connectToOanda() {
                 history_copy.assign(market_history_.begin(), market_history_.end());
             }
 
-            auto signal = quantum_bridge_->analyzeMarketData(data, history_copy);
+            auto signal = quantum_bridge_->analyzeMarketData(data, history_copy, forward_window_results_);
             {
                 std::lock_guard<std::mutex> lock(signal_mutex_);
                 last_signal_ = signal;
@@ -512,6 +527,7 @@ void OandaTraderApp::refreshAccountInfo() {
 }
 
 void OandaTraderApp::shutdown() {
+    sep::apps::cuda::cleanupCudaDevice(context);
     if (oanda_connector_) {
         oanda_connector_->stopPriceStream();
     }

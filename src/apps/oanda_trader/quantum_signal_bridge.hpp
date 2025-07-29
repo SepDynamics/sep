@@ -85,7 +85,8 @@ public:
     // Main analysis function - converts market data to trading signals
     QuantumTradingSignal analyzeMarketData(
         const sep::connectors::MarketData& current_data,
-        const std::vector<sep::connectors::MarketData>& history
+        const std::vector<sep::connectors::MarketData>& history,
+        const std::vector<ForwardWindowResult>& forward_window_results
     );
     
     // Per-candle forward window analysis - calculates converged identifiers

@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "core.h"
+#include "engine/core.h"
 #include "engine/standard_includes.h"
 #include "error_handler.h"
 

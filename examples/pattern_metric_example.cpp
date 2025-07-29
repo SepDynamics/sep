@@ -22,8 +22,9 @@ namespace fs = std::filesystem;
 
 struct AnalysisResult {
     double coherence = 0.0;
-    double stability = 0.0; 
+    double stability = 0.0;
     double entropy = 0.0;
+    double energy = 0.0;
     size_t pattern_count = 0;
     std::string timestamp;
 };
@@ -64,15 +65,17 @@ public:
         
         // Calculate aggregate metrics from all patterns
         if (!metrics.empty()) {
-            double total_coherence = 0.0, total_stability = 0.0, total_entropy = 0.0;
+            double total_coherence = 0.0, total_stability = 0.0, total_entropy = 0.0, total_energy = 0.0;
             for (const auto& metric : metrics) {
                 total_coherence += metric.coherence;
                 total_stability += metric.stability;
                 total_entropy += metric.entropy;
+                total_energy += metric.energy;
             }
             result.coherence = total_coherence / metrics.size();
             result.stability = total_stability / metrics.size();
             result.entropy = total_entropy / metrics.size();
+            result.energy = total_energy / metrics.size();
         }
         result.pattern_count = metrics.size();
         
@@ -122,6 +125,7 @@ public:
             output["metrics"]["coherence"] = result.coherence;
             output["metrics"]["stability"] = result.stability;
             output["metrics"]["entropy"] = result.entropy;
+            output["metrics"]["energy"] = result.energy;
             output["pattern_count"] = result.pattern_count;
             
             std::cout << output.dump(2) << std::endl;
@@ -131,6 +135,7 @@ public:
             std::cout << "Coherence: " << std::fixed << std::setprecision(6) << result.coherence << std::endl;
             std::cout << "Stability: " << std::fixed << std::setprecision(6) << result.stability << std::endl;
             std::cout << "Entropy: " << std::fixed << std::setprecision(6) << result.entropy << std::endl;
+            std::cout << "Energy: " << std::fixed << std::setprecision(6) << result.energy << std::endl;
             std::cout << "Pattern Count: " << result.pattern_count << std::endl;
         }
     }

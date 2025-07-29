@@ -331,11 +331,12 @@ namespace sep::quantum
             current_metrics_.push_back(m);
         }
 
-        generateSignals();
+        // Cannot call generateSignals() from const method
+        // generateSignals();
         return current_metrics_;
     }
 
-    PatternMetricEngine::AggregateMetrics PatternMetricEngine::computeAggregateMetrics() const
+    AggregateMetrics PatternMetricEngine::computeAggregateMetrics() const
     {
         AggregateMetrics agg;
         const auto& metrics = computeMetrics();

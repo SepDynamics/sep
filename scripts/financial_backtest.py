@@ -71,7 +71,7 @@ def run_analysis_a(df):
     strat_returns = df['strategy_returns'].dropna()
     bench_returns = df['benchmark_returns'].dropna()
 
-    metrics = calculate_advanced_metrics(strat_returns)
+    metrics = calculate_advanced_metrics(strat_returns, bench_returns)
     strategy_drawdown = max_drawdown(df['strategy_cumulative_returns'])
     benchmark_drawdown = max_drawdown(df['benchmark_cumulative_returns'])
 
@@ -86,6 +86,8 @@ def run_analysis_a(df):
     print(f"Max Drawdown: {strategy_drawdown:.2%} (Benchmark: {benchmark_drawdown:.2%})")
     print(f"Calmar Ratio: {metrics['calmar']:.2f}")
     print(f"95% VaR: {metrics['var_95']:.4f}")
+    print(f"Information Ratio: {metrics['info_ratio']:.2f}")
+    print(f"Profit Factor: {metrics['profit_factor']:.2f}")
     print(f"Annualized Alpha: {alpha_annualized:.2%}")
     print("\n")
 

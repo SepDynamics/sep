@@ -50,3 +50,21 @@ TEST(PatternMetrics, EnergyComputation)
     ASSERT_EQ(metrics.size(), 1u);
     EXPECT_NEAR(metrics[0].energy, 14.0f, 1e-5f); // 1^2 + 2^2 + 3^2
 }
+
+TEST(PatternMetrics, EmptyPatternMetrics)
+{
+    PatternMetricEngine engine;
+    engine.clear();
+
+    sep::compat::PatternData p;
+    std::strncpy(p.id, "empty", sizeof(p.id) - 1);
+
+    engine.addPattern(p);
+    const auto& metrics = engine.computeMetrics();
+
+    ASSERT_EQ(metrics.size(), 1u);
+    EXPECT_EQ(metrics[0].energy, 0.0f);
+    EXPECT_EQ(metrics[0].coherence, 0.0f);
+    EXPECT_EQ(metrics[0].stability, 0.0f);
+    EXPECT_NEAR(metrics[0].entropy, 0.5f, 1e-5f);
+}

@@ -11,7 +11,8 @@ include_directories(
 
 # Pattern Metric Example
 add_executable(pattern_metric_example
-    pattern_metric_example.cpp
+#    pattern_metric_example.cpp
+    test_forward_window_metrics.cpp
 )
 
 target_link_libraries(pattern_metric_example

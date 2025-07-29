@@ -43,6 +43,7 @@ namespace sep::quantum
         float coherence{0.0f};  ///< Measure of the pattern's internal consistency.
         float stability{0.0f};  ///< Measure of how resistant the pattern is to change.
         float entropy{0.0f};    ///< Measure of the pattern's complexity and randomness.
+        float energy{0.0f};     ///< Sum of squared values representing pattern energy.
         std::vector<PatternRelationship> relationships;  ///< Relationships to other patterns.
 
         PatternMetrics() { pattern_id[0] = '\0'; }

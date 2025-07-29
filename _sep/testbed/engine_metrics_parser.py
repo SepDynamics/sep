@@ -8,7 +8,13 @@ def parse_metrics_files(files: List[Path]) -> List[Dict[str, float]]:
     results = []
     for fp in files:
         try:
-            data = json.loads(fp.read_text())
+            text = fp.read_text()
+            try:
+                data = json.loads(text)
+            except json.JSONDecodeError:
+                # Handle files that contain extra text before/after JSON
+                from .json_utils import parse_first_json
+                data = parse_first_json(text)
             metrics = data.get("metrics", {})
             results.append({
                 "file": fp.name,

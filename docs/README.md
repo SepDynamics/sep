@@ -107,11 +107,16 @@ The system implements algorithms covered by our patent disclosures:
 - 📋 Strategy backtesting automation
 - 📋 Performance reporting and analytics
 
+## Testbed Prototypes
+
+Experimental Python tools in [`_sep/testbed`](../_sep/testbed/README.md) provide a safe environment for testing new algorithms. Scripts include backtesting utilities, threshold optimizers and a multi-stream data pipeline for multiple currency pairs.
+
 ## Key Documentation
 
 - **[GUI.md](GUI.md)**: Complete GUI interface specification and features
 - **[DATA.md](DATA.md)**: Real-time data processing architecture
 - **[TODO.md](TODO.md)**: Current development priorities and next steps
+- **[_sep/testbed/README.md](_sep/testbed/README.md)**: Experimental scripts and validation tools
 - **[strategy/alpha_analysis_report.md](strategy/alpha_analysis_report.md)**: Detailed alpha generation analysis
 - **[patent/](patent/)**: Complete patent disclosure documentation
 

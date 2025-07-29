@@ -141,6 +141,7 @@
   - [x] **README.md**: ✅ Updated to reflect current state
   - [x] **GUI.md**: ✅ Updated with current interface features
   - [x] **TODO.md**: ✅ Updated with current roadmap
+  - [x] **_sep/testbed/README.md**: Documented experimental scripts
   - [ ] **DATA.md**: Update with current data processing architecture
 
 ### Build System
@@ -154,7 +155,7 @@
 - [x] **Consolidate UI helpers** (moved to `src/ui`)
 - [ ] **Merge memory helpers with engine**
 - [ ] **Group quantum algorithms into a single library**
-- [ ] **Add READMEs for each source subdirectory**
+- [x] **Add READMEs for each source subdirectory**
 
 ## 🎯 **Success Metrics**
 

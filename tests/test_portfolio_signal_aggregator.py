@@ -1,4 +1,12 @@
 import unittest
+import sys
+from pathlib import Path
+
+# Ensure _sep package is discoverable when tests run directly
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from _sep.testbed.portfolio_signal_aggregator import aggregate_signals
 
 

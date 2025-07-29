@@ -4,12 +4,18 @@ import json
 import sys
 from pathlib import Path
 from datetime import datetime
+import pytest
 
-def test_sample_data_loading():
-    """Test that the sample data can be loaded and processed correctly"""
+SAMPLE_FILE = Path("Testing/OANDA/sample_48h.json")
+if not SAMPLE_FILE.exists():
+    pytest.skip("Sample data not available", allow_module_level=True)
+
+@pytest.fixture
+def data():
+    """Load sample data for integration tests"""
     
-    sample_file = Path("Testing/OANDA/sample_48h.json")
-    
+    sample_file = SAMPLE_FILE
+
     if not sample_file.exists():
         raise FileNotFoundError(f"Sample data file not found: {sample_file}")
     
@@ -19,7 +25,8 @@ def test_sample_data_loading():
     
     return data
 
-def test_candle_processing(data):
+@pytest.fixture
+def processed_candles(data):
     """Test processing candles as they would be used in the engine"""
     
     candles = data['candles']
@@ -55,7 +62,8 @@ def test_candle_processing(data):
     
     return processed_candles
 
-def test_metrics_calculation(processed_candles):
+@pytest.fixture
+def metrics(processed_candles):
     """Test basic metrics calculation on the processed data"""
     
     print("Calculating basic metrics...")

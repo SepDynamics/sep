@@ -6,6 +6,11 @@ import subprocess
 import json
 import sys
 from pathlib import Path
+import pytest
+
+BIN_PATH = Path("./examples/pattern_metric_example")
+if not BIN_PATH.exists():
+    pytest.skip("pattern_metric_example binary not built", allow_module_level=True)
 
 def test_single_file_processing():
     """Test processing a single file and extracting metrics"""

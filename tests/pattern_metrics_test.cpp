@@ -68,3 +68,31 @@ TEST(PatternMetrics, EmptyPatternMetrics)
     EXPECT_EQ(metrics[0].stability, 0.0f);
     EXPECT_NEAR(metrics[0].entropy, 0.5f, 1e-5f);
 }
+
+TEST(PatternMetrics, AggregateMetrics)
+{
+    PatternMetricEngine engine;
+    engine.clear();
+
+    sep::compat::PatternData p1;
+    std::strncpy(p1.id, "p1", sizeof(p1.id) - 1);
+    p1.data = {1.0f, 1.0f};
+
+    sep::compat::PatternData p2;
+    std::strncpy(p2.id, "p2", sizeof(p2.id) - 1);
+    p2.data = {2.0f, 2.0f};
+
+    engine.addPattern(p1);
+    engine.addPattern(p2);
+
+    const auto& metrics = engine.computeMetrics();
+    auto agg = engine.computeAggregateMetrics();
+
+    float avg_coh = (metrics[0].coherence + metrics[1].coherence) / 2.0f;
+    float avg_stab = (metrics[0].stability + metrics[1].stability) / 2.0f;
+    float avg_ent = (metrics[0].entropy + metrics[1].entropy) / 2.0f;
+
+    EXPECT_NEAR(agg.average_coherence, avg_coh, 1e-5f);
+    EXPECT_NEAR(agg.average_stability, avg_stab, 1e-5f);
+    EXPECT_NEAR(agg.average_entropy, avg_ent, 1e-5f);
+}

@@ -335,6 +335,32 @@ namespace sep::quantum
         return current_metrics_;
     }
 
+    PatternMetricEngine::AggregateMetrics PatternMetricEngine::computeAggregateMetrics() const
+    {
+        AggregateMetrics agg;
+        const auto& metrics = computeMetrics();
+        if (metrics.empty())
+        {
+            return agg;
+        }
+
+        for (const auto& m : metrics)
+        {
+            agg.average_coherence += m.coherence;
+            agg.average_stability += m.stability;
+            agg.average_entropy += m.entropy;
+            agg.average_energy += m.energy;
+        }
+
+        float n = static_cast<float>(metrics.size());
+        agg.average_coherence /= n;
+        agg.average_stability /= n;
+        agg.average_entropy /= n;
+        agg.average_energy /= n;
+
+        return agg;
+    }
+
     const std::vector<sep::compat::PatternData>& PatternMetricEngine::getPatterns() const
     {
         if (cache_dirty_)

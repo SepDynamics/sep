@@ -425,25 +425,19 @@ nlohmann::json SepEngine::getHealthStatus()
         return result;
     }
     auto now    = std::chrono::steady_clock::now();
-    auto uptime = std::chrono::duration_cast<std::chrono::seconds>(now - metrics.startTime).count();
-    
-        json metrics_json;
-        metrics_json["total_requests"]        = metrics.totalRequests.load();
-        metrics_json["successful_requests"]   = metrics.successfulRequests.load();
-        metrics_json["failed_requests"]       = metrics.failedRequests.load();
-        metrics_json["timeout_requests"]      = metrics.timeoutRequests.load();
-        metrics_json["rate_limited_requests"] = metrics.rateLimitedCount.load();
-        metrics_json["average_response_time"] = metrics.averageResponseTime.load();
-        metrics_json["last_response_time"]    = metrics.lastResponseTime.count();
-        metrics_json["last_error_code"]       = metrics.lastErrorCode;
+    auto uptime =
+        std::chrono::duration_cast<std::chrono::seconds>(now - impl_->health_metrics.startTime)
+            .count();
 
-        json result;
-        result["success"]        = true;
-        result["status"]         = "healthy";
-        result["uptime_seconds"] = uptime;
-        result["initialized"]    = impl_->initialized;
-        result["metrics"]        = metrics_json;
-        return result;
+    const auto metrics_json = getMetrics(impl_->health_metrics);
+
+    json result;
+    result["success"]        = true;
+    result["status"]         = "healthy";
+    result["uptime_seconds"] = uptime;
+    result["initialized"]    = impl_->initialized;
+    result["metrics"]        = metrics_json;
+    return result;
 }
 
 nlohmann::json SepEngine::getMemoryMetrics()

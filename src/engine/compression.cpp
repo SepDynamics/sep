@@ -1,6 +1,9 @@
 #include "compression.h"
 
 #include "engine/standard_includes.h"
+#include <algorithm>
+#include <cmath>
+#include <unordered_map>
 
 namespace sep {
 namespace core {
@@ -84,10 +87,38 @@ sep::memory::CompressionMethod CompressionFactory::analyzeData(const void* /*dat
     return sep::memory::CompressionMethod::None;
 }
 
-float CompressionFactory::estimateCompressionRatio(const void* /*data*/, size_t /*size*/,
-                                                   sep::memory::CompressionMethod /*method*/)
+float CompressionFactory::estimateCompressionRatio(const void* data, size_t size,
+                                                   sep::memory::CompressionMethod method)
 {
-    return 1.0f;
+    if (!data || size == 0) {
+        return 0.0f;
+    }
+    
+    // Simple entropy-based compression estimate
+    const uint8_t* bytes = static_cast<const uint8_t*>(data);
+    std::unordered_map<uint8_t, size_t> byte_counts;
+    
+    // Count byte frequencies
+    for (size_t i = 0; i < size; ++i) {
+        byte_counts[bytes[i]]++;
+    }
+    
+    // Calculate Shannon entropy
+    double entropy = 0.0;
+    
+    for (const auto& pair : byte_counts) {
+        double frequency = static_cast<double>(pair.second) / size;
+        entropy -= frequency * std::log2(frequency);
+    }
+    
+    // Normalize entropy (0 = perfectly compressible, 1 = random)
+    double normalized_entropy = entropy / 8.0; // 8 bits per byte
+    
+    // Estimate compression ratio based on entropy
+    // Lower entropy = better compression
+    double compression_ratio = 0.1 + (normalized_entropy * 0.9);
+    
+    return static_cast<float>(std::clamp(compression_ratio, 0.1, 1.0));
 }
 
 // Utility functions implementation

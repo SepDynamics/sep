@@ -249,8 +249,8 @@ void OandaTraderApp::renderMarketData() {
                                       last_signal_.action == sep::trading::QuantumTradingSignal::SELL ? "SELL" : "HOLD";
             ImGui::Separator();
             ImGui::Text("Quantum Signal: %s", action_str);
-            ImGui::Text("Conf: %.2f Coh: %.2f Stab: %.2f", last_signal_.confidence,
-                        last_signal_.coherence, last_signal_.stability);
+            ImGui::Text("Conf: %.2f Coh: %.2f Stab: %.2f", last_signal_.identifiers.confidence,
+                        last_signal_.identifiers.coherence, last_signal_.identifiers.stability);
         }
     }
 
@@ -466,7 +466,7 @@ void OandaTraderApp::connectToOanda() {
             }
             if (signal.should_execute) {
                 std::cout << "[Signal] " << (signal.action == sep::trading::QuantumTradingSignal::BUY ? "BUY" : "SELL")
-                          << " confidence:" << signal.confidence << " size:" << signal.suggested_position_size << std::endl;
+                          << " confidence:" << signal.identifiers.confidence << " size:" << signal.suggested_position_size << std::endl;
             }
         }
     });

@@ -8,7 +8,6 @@
 #include <implot.h>
 
 #include <chrono>
-#include <condition_variable>
 #include <cstdlib>
 #include <iostream>
 #include <mutex>
@@ -138,8 +137,20 @@ void QuantumTrackerApp::setupImGui() {
 void QuantumTrackerApp::run() {
     std::cout << "[QuantumTracker] Starting quantum signal tracking..." << std::endl;
     
+    // Set up GLFW error callback
+    glfwSetErrorCallback([](int error, const char* description) {
+        std::cerr << "[GLFW Error] " << error << ": " << description << std::endl;
+    });
+    
     while (!glfwWindowShouldClose(window_)) {
-        glfwPollEvents();
+        // Poll events with timeout to prevent infinite blocking
+        glfwWaitEventsTimeout(0.016); // ~60 FPS equivalent
+        
+        // Check if window should close due to external signals
+        if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            glfwSetWindowShouldClose(window_, GLFW_TRUE);
+            break;
+        }
         
         // Start ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -182,7 +193,16 @@ void QuantumTrackerApp::run() {
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
+        // Check for OpenGL errors
+        GLenum gl_error = glGetError();
+        if (gl_error != GL_NO_ERROR) {
+            std::cerr << "[OpenGL Error] " << gl_error << std::endl;
+        }
+        
         glfwSwapBuffers(window_);
+        
+        // Small sleep to prevent excessive CPU usage
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 }
 

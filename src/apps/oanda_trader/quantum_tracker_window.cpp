@@ -72,9 +72,9 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
             has_latest_signal_ = true;
             
             // Update metric history for plotting
-            confidence_history_.push_back(signal.confidence);
-            coherence_history_.push_back(signal.coherence);
-            stability_history_.push_back(signal.stability);
+            confidence_history_.push_back(signal.identifiers.confidence);
+            coherence_history_.push_back(signal.identifiers.coherence);
+            stability_history_.push_back(signal.identifiers.stability);
             price_history_plot_.push_back(static_cast<float>(data.mid));
             timestamp_history_.push_back(std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::system_clock::now().time_since_epoch()).count());
@@ -90,7 +90,7 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
             
             // Make prediction for ANY directional signal (to track performance)
             if (signal.action != sep::trading::QuantumTradingSignal::HOLD && 
-                signal.confidence >= 0.1f) {  // Very low threshold for tracking
+                signal.identifiers.confidence >= 0.1f) {  // Very low threshold for tracking
                 makePrediction(signal, data);
             }
             
@@ -143,9 +143,9 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
             has_latest_signal_ = true;
             
             // Update metric history for plotting
-            confidence_history_.push_back(signal.confidence);
-            coherence_history_.push_back(signal.coherence);
-            stability_history_.push_back(signal.stability);
+            confidence_history_.push_back(signal.identifiers.confidence);
+            coherence_history_.push_back(signal.identifiers.coherence);
+            stability_history_.push_back(signal.identifiers.stability);
             price_history_plot_.push_back(static_cast<float>(data.mid));
             timestamp_history_.push_back(std::chrono::duration_cast<std::chrono::milliseconds>(
                 historical_time.time_since_epoch()).count());
@@ -161,7 +161,7 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
             
             // Make prediction for ANY directional signal (to track performance) WITH historical timestamp
             if (signal.action != sep::trading::QuantumTradingSignal::HOLD && 
-                signal.confidence >= 0.1f) {  // Very low threshold for tracking
+                signal.identifiers.confidence >= 0.1f) {  // Very low threshold for tracking
                 makePrediction(signal, data, historical_time);
             }
             
@@ -184,9 +184,9 @@ void QuantumTrackerWindow::makePrediction(const sep::trading::QuantumTradingSign
     pred.instrument = signal.instrument;
     pred.predicted_direction = signal.action;
     pred.prediction_price = current_data.mid;
-    pred.confidence = signal.confidence;
-    pred.coherence = signal.coherence;
-    pred.stability = signal.stability;
+    pred.confidence = signal.identifiers.confidence;
+    pred.coherence = signal.identifiers.coherence;
+    pred.stability = signal.identifiers.stability;
     pred.evaluation_period = std::chrono::seconds(60); // 1 minute
     
     predictions_.push_back(pred);
@@ -198,7 +198,7 @@ void QuantumTrackerWindow::makePrediction(const sep::trading::QuantumTradingSign
     
     std::cout << "[QuantumTracker] New prediction: " << actionToString(signal.action)
               << " " << signal.instrument << " @ " << current_data.mid
-              << " (confidence: " << signal.confidence << ")" << std::endl;
+              << " (confidence: " << signal.identifiers.confidence << ")" << std::endl;
 }
 
 void QuantumTrackerWindow::updatePredictions(const sep::connectors::MarketData& current_data) {
@@ -445,17 +445,17 @@ void QuantumTrackerWindow::renderLatestSignal() {
     ImGui::Text("(%s)", latest_signal_.instrument.c_str());
     
     // Quantum metrics with progress bars
-    ImGui::Text("Confidence: %.3f", latest_signal_.confidence);
+    ImGui::Text("Confidence: %.3f", latest_signal_.identifiers.confidence);
     ImGui::SameLine(150);
-    ImGui::ProgressBar(latest_signal_.confidence, ImVec2(200, 0));
+    ImGui::ProgressBar(latest_signal_.identifiers.confidence, ImVec2(200, 0));
     
-    ImGui::Text("Coherence:  %.3f", latest_signal_.coherence);
+    ImGui::Text("Coherence:  %.3f", latest_signal_.identifiers.coherence);
     ImGui::SameLine(150);
-    ImGui::ProgressBar(latest_signal_.coherence, ImVec2(200, 0));
+    ImGui::ProgressBar(latest_signal_.identifiers.coherence, ImVec2(200, 0));
     
-    ImGui::Text("Stability:  %.3f", latest_signal_.stability);
+    ImGui::Text("Stability:  %.3f", latest_signal_.identifiers.stability);
     ImGui::SameLine(150);
-    ImGui::ProgressBar(std::max(0.0f, latest_signal_.stability), ImVec2(200, 0));
+    ImGui::ProgressBar(std::max(0.0f, latest_signal_.identifiers.stability), ImVec2(200, 0));
     
     // Execute signal status
     if (latest_signal_.should_execute) {
@@ -646,22 +646,22 @@ void QuantumTrackerWindow::renderQuantumDiagnostics() {
     
     if (has_latest_signal_) {
         ImGui::Text("🔍 Raw Quantum Metrics:");
-        ImGui::Text("  Confidence: %.3f (threshold: %.1f)", latest_signal_.confidence, 0.6f);
-        ImGui::Text("  Coherence: %.3f (threshold: %.1f)", latest_signal_.coherence, 0.4f);
-        ImGui::Text("  Stability: %.3f (threshold: %.1f)", latest_signal_.stability, 0.0f);
+        ImGui::Text("  Confidence: %.3f (threshold: %.1f)", latest_signal_.identifiers.confidence, 0.6f);
+        ImGui::Text("  Coherence: %.3f (threshold: %.1f)", latest_signal_.identifiers.coherence, 0.4f);
+        ImGui::Text("  Stability: %.3f (threshold: %.1f)", latest_signal_.identifiers.stability, 0.0f);
         
         ImGui::Separator();
         ImGui::Text("🧬 QFH Analysis:");
-        ImGui::Text("  Flip Ratio: %.3f", latest_signal_.flip_ratio);
-        ImGui::Text("  Rupture Ratio: %.3f", latest_signal_.rupture_ratio);
-        ImGui::Text("  Entropy: %.3f", latest_signal_.entropy);
-        ImGui::Text("  Collapse Detected: %s", latest_signal_.quantum_collapse_detected ? "YES" : "NO");
+        ImGui::Text("  Flip Ratio: %.3f", latest_signal_.identifiers.flip_ratio);
+        ImGui::Text("  Rupture Ratio: %.3f", latest_signal_.identifiers.rupture_ratio);
+        ImGui::Text("  Entropy: %.3f", latest_signal_.identifiers.entropy);
+        ImGui::Text("  Collapse Detected: %s", latest_signal_.identifiers.quantum_collapse_detected ? "YES" : "NO");
         
         ImGui::Separator();
         ImGui::Text("📊 Threshold Analysis:");
-        bool conf_pass = latest_signal_.confidence >= 0.6f;
-        bool coh_pass = latest_signal_.coherence >= 0.4f;
-        bool stab_pass = latest_signal_.stability >= 0.0f;
+        bool conf_pass = latest_signal_.identifiers.confidence >= 0.6f;
+        bool coh_pass = latest_signal_.identifiers.coherence >= 0.4f;
+        bool stab_pass = latest_signal_.identifiers.stability >= 0.0f;
         
         ImGui::TextColored(conf_pass ? ImVec4(0,1,0,1) : ImVec4(1,0,0,1), 
                           "Confidence: %s", conf_pass ? "PASS" : "FAIL");
@@ -708,7 +708,7 @@ void QuantumTrackerWindow::renderMetricPlots() {
         first_timestamp_set = true;
     }
     for (size_t i = 0; i < timestamp_history_.size(); ++i) {
-        time_axis.push_back(static_cast<float>((timestamp_history_[i] - first_timestamp) / 1000.0)); // Convert to seconds
+        time_axis.push_back(static_cast<float>((timestamp_history_[i] - first_timestamp) / 1e9)); // Convert nanoseconds to seconds
     }
     
     if (ImPlot::BeginPlot("Quantum Metrics Over Time", ImVec2(-1, 300))) {

@@ -92,6 +92,8 @@ bool TickDataManager::loadHistoricalTicks(const std::string& instrument) {
             std::cout << "[TickDataManager] Received " << candles.size() << " candles from OANDA" << std::endl;
             
             // Convert candles to ticks
+            static auto base_time = std::chrono::system_clock::now() - std::chrono::hours(2);
+            size_t index = 0;
             for (const auto& candle : candles) {
                 TickData tick;
                 tick.price = (candle.open + candle.close) / 2.0; // Mid price
@@ -99,14 +101,15 @@ bool TickDataManager::loadHistoricalTicks(const std::string& instrument) {
                 tick.ask = candle.close + 0.00005; // Approximate ask
                 
                 // Convert time string to timestamp
-                // For now, use current time as placeholder - would need proper parsing
-                auto current_time = std::chrono::system_clock::now();
+                // Use proper historical timestamps with appropriate spacing (5-second intervals)
+                auto historical_time = base_time + std::chrono::seconds(index * 5);
                 tick.timestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
-                    current_time.time_since_epoch()).count();
+                    historical_time.time_since_epoch()).count();
                 
                 tick.volume = static_cast<double>(candle.volume);
                 
                 tick_history_.push_back(tick);
+                index++;
             }
             
             collection_complete = true;

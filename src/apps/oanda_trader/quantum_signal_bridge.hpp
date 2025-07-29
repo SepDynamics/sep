@@ -15,7 +15,29 @@
 namespace sep::trading {
 
 /**
- * Trading signal generated from quantum analysis
+ * Converged quantum identifiers for each OANDA package
+ * Based on forward window analysis and patent-backed algorithms
+ */
+struct QuantumIdentifiers {
+    // Core identifiers (converged values from forward window)
+    float confidence = 0.0f;        // QBSA convergence value
+    float coherence = 0.0f;         // QFH convergence value  
+    float stability = 0.0f;         // Stability convergence value
+    
+    // Convergence metadata
+    bool converged = false;         // Whether values stabilized
+    int iterations = 0;             // Iterations to convergence
+    float convergence_threshold = 1e-6f;  // Convergence tolerance
+    
+    // Raw metrics (for debugging)
+    float entropy = 0.0f;
+    float flip_ratio = 0.0f;
+    float rupture_ratio = 0.0f;
+    bool quantum_collapse_detected = false;
+};
+
+/**
+ * Trading signal generated from quantum identifiers
  * Based on QFH/QBSA patent-backed algorithms
  */
 struct QuantumTradingSignal {
@@ -25,24 +47,17 @@ struct QuantumTradingSignal {
     Action action = HOLD;
     bool should_execute = false;
     
-    // Quantum metrics (from patent analysis)
-    float confidence = 0.0f;        // QBSA correction_ratio
-    float coherence = 0.0f;         // Calculated from QFH
-    float stability = 0.0f;         // Pattern stability
-    float entropy = 0.0f;           // QFH entropy
-    
-    // QFH specific metrics
-    float flip_ratio = 0.0f;
-    float rupture_ratio = 0.0f;
-    bool quantum_collapse_detected = false;
+    // Quantum identifiers (converged from forward analysis)
+    QuantumIdentifiers identifiers;
     
     // Trading parameters
     double suggested_position_size = 0.0;
     double stop_loss_distance = 0.0;
     double take_profit_distance = 0.0;
     
-    // Timing
+    // Timing and source data
     uint64_t timestamp = 0;
+    uint64_t source_candle_timestamp = 0;  // Original OANDA package timestamp
 };
 
 struct ManagedPosition {
@@ -73,6 +88,12 @@ public:
         const std::vector<sep::connectors::MarketData>& history
     );
     
+    // Per-candle forward window analysis - calculates converged identifiers
+    QuantumIdentifiers calculateConvergedIdentifiers(
+        const std::vector<sep::connectors::MarketData>& forward_window,
+        size_t window_size = 50
+    );
+    
     // Strategy threshold configuration (from alpha analysis)
     void setConfidenceThreshold(float threshold) { confidence_threshold_ = threshold; }
     void setCoherenceThreshold(float threshold) { coherence_threshold_ = threshold; }
@@ -96,13 +117,19 @@ private:
     std::unique_ptr<sep::quantum::QFHBasedProcessor> qfh_processor_;
     std::unique_ptr<sep::quantum::QBSAProcessor> qbsa_processor_;
     
-    // Strategy thresholds (updated for improved accuracy)
-    // Higher thresholds for better signal quality
-    std::atomic<float> confidence_threshold_{0.8f};
-    std::atomic<float> coherence_threshold_{0.7f};
+    // Strategy thresholds (dynamically determined from convergence patterns)
+    std::atomic<float> confidence_threshold_{0.6f};
+    std::atomic<float> coherence_threshold_{0.9f};
     std::atomic<float> stability_threshold_{0.05f};
     
-    // Data processing
+    // Convergence calculation core
+    QuantumIdentifiers calculateIdentifiersWithConvergence(
+        const std::vector<uint8_t>& forward_bits,
+        int max_iterations = 1000,
+        float convergence_threshold = 1e-6f
+    );
+    
+    // Data processing (legacy - will be replaced with convergence)
     std::vector<uint8_t> convertPriceToBits(const std::vector<sep::connectors::MarketData>& history);
     float calculateConfidence(const sep::quantum::QFHResult& qfh_result, const sep::quantum::QBSAResult& qbsa_result);
     float calculateCoherence(const sep::quantum::QFHResult& qfh_result);

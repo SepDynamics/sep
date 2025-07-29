@@ -131,5 +131,9 @@ The project uses a simple shell script to configure and run the build process.
 
 A testbed executable is provided to analyze financial data and generate signals.
 
+The engine now records an additional **energy** metric for each pattern, which
+captures the overall signal strength (sum of squared values). This metric is
+included in JSON output and can be used for advanced strategy tuning.
+
 ```bash
 ./build/examples/pme_testbed assets/test_data/eur_usd_m1_48h.json

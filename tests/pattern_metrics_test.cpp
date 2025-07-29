@@ -34,3 +34,19 @@ TEST(PatternMetrics, LengthIsRecorded)
     ASSERT_EQ(metrics.size(), 1u);
     EXPECT_EQ(metrics[0].length, 4u);
 }
+
+TEST(PatternMetrics, EnergyComputation)
+{
+    PatternMetricEngine engine;
+    engine.clear();
+
+    sep::compat::PatternData p;
+    std::strncpy(p.id, "p2", sizeof(p.id) - 1);
+    p.data = {1.0f, 2.0f, 3.0f};
+
+    engine.addPattern(p);
+    const auto& metrics = engine.computeMetrics();
+
+    ASSERT_EQ(metrics.size(), 1u);
+    EXPECT_NEAR(metrics[0].energy, 14.0f, 1e-5f); // 1^2 + 2^2 + 3^2
+}

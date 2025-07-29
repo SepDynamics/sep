@@ -253,8 +253,8 @@ namespace sep::quantum
             if (!p.data.empty())
             {
                 // Calculate coherence based on pattern self-similarity and consistency
-                float sum_squares = 0.0f;
-                float mean = 0.0f;
+            float sum_squares = 0.0f;
+            float mean = 0.0f;
 
                 // Calculate mean
                 for (float val : p.data)
@@ -265,12 +265,12 @@ namespace sep::quantum
 
                 // Calculate variance and coherence
                 float variance = 0.0f;
-                for (float val : p.data)
-                {
-                    float diff = val - mean;
-                    variance += diff * diff;
-                    sum_squares += val * val;
-                }
+            for (float val : p.data)
+            {
+                float diff = val - mean;
+                variance += diff * diff;
+                sum_squares += val * val;
+            }
                 variance /= p.data.size();
 
                 // Coherence is high when variance is low relative to signal strength
@@ -307,6 +307,8 @@ namespace sep::quantum
             {
                 m.coherence = 0.0f;
             }
+
+            m.energy = sum_squares;
 
             if (!p.data.empty())
             {

@@ -28,7 +28,6 @@ add_sep_library(sep_quantum
     fmt::fmt
     spdlog::spdlog
     nlohmann_json::nlohmann_json
-    sep_engine
     CUDA::cudart
     CUDA::cuda_driver
 )

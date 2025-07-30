@@ -261,11 +261,17 @@ __device__ void calculateWindowStats(
 }
 
 // Host function implementations
-cudaError_t initializeCudaDevice(CudaContext& context) {
+cudaError_t initializeCudaDevice(CudaContext& context, int device_id) {
     cudaError_t error = cudaSuccess;
+
+    error = cudaSetDevice(device_id);
+    if (error != cudaSuccess) {
+        std::cerr << "[CUDA] Error setting device: " << cudaGetErrorString(error) << std::endl;
+        return error;
+    }
     
     // Get device properties
-    error = cudaGetDeviceProperties(&context.device_props, 0);
+    error = cudaGetDeviceProperties(&context.device_props, device_id);
     if (error != cudaSuccess) {
         std::cerr << "[CUDA] Error getting device properties: " << cudaGetErrorString(error) << std::endl;
         return error;

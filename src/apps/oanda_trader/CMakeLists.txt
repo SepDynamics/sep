@@ -1,7 +1,35 @@
+enable_language(CUDA)
+find_package(CUDA REQUIRED)
+
+add_library(sep_trader_cuda
+    tick_cuda_kernels.cu
+    forward_window_kernels.cu
+)
+
+target_include_directories(sep_trader_cuda PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+set_target_properties(sep_trader_cuda PROPERTIES
+    CUDA_STANDARD 17
+    CUDA_STANDARD_REQUIRED ON
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_ARCHITECTURES "61;75;86;89"
+)
+
+target_link_libraries(sep_trader_cuda PRIVATE CUDA::cudart)
+
+add_library(sep_trader_logic
+    quantum_signal_bridge.cpp
+)
+
+target_include_directories(sep_trader_logic PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
+)
+
 add_executable(oanda_trader
     main.cpp
     oanda_trader_app.cpp
-    quantum_signal_bridge.cpp
 )
 
 target_include_directories(oanda_trader PUBLIC
@@ -11,6 +39,8 @@ target_include_directories(oanda_trader PUBLIC
 )
 
 target_link_libraries(oanda_trader PUBLIC
+    sep_trader_logic
+    sep_trader_cuda
     sep_engine
     sep_connectors
     sep_quantum
@@ -33,12 +63,9 @@ add_executable(quantum_tracker
     quantum_tracker_main.cpp
     quantum_tracker_app.cpp
     quantum_tracker_window.cpp
-    quantum_signal_bridge.cpp
     data_cache_manager.cpp
     tick_data_manager.cpp
     rolling_window_chart.cpp
-    tick_cuda_kernels.cu
-    forward_window_kernels.cu
 )
 
 target_include_directories(quantum_tracker PUBLIC
@@ -49,6 +76,8 @@ target_include_directories(quantum_tracker PUBLIC
 )
 
 target_link_libraries(quantum_tracker PUBLIC
+    sep_trader_logic
+    sep_trader_cuda
     sep_engine
     sep_connectors
     sep_quantum
@@ -60,18 +89,11 @@ target_link_libraries(quantum_tracker PUBLIC
     glfw
     Threads::Threads
     ${CMAKE_DL_LIBS}
-    $<$<BOOL:${SEP_USE_CUDA}>:CUDA::cudart>
-    $<$<BOOL:${SEP_USE_CUDA}>:CUDA::cuda_driver>
 )
 
 set_target_properties(quantum_tracker PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
-    CUDA_STANDARD 17
-    CUDA_STANDARD_REQUIRED ON
 )
-
-# CUDA separable compilation for better linking
-set_property(TARGET quantum_tracker PROPERTY CUDA_SEPARABLE_COMPILATION ON)
 
 install(TARGETS oanda_trader quantum_tracker DESTINATION bin)

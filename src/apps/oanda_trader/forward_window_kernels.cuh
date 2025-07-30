@@ -3,21 +3,9 @@
 #include <cuda_runtime.h>
 #include <vector>
 #include <cstdint>
-
-#include "tick_cuda_kernels.cuh"
+#include "cuda_types.cuh"
 
 namespace sep::apps::cuda {
-
-// Data structure for forward-looking window results
-struct ForwardWindowResult {
-    double mean_price;
-    float coherence;
-    float stability;
-    float confidence;
-    float entropy;
-    int rupture_count;
-    int flip_count;
-};
 
 // CUDA kernel declaration
 __global__ void forwardWindowKernel(

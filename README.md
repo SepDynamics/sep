@@ -103,6 +103,8 @@ The capabilities of the SEP Engine have been rigorously validated through a seri
 
 *   **POC 6: Predictive Backtesting:** Demonstrated the engine's end-to-end capability to process real financial time-series data, generate pattern-based trading signals, and produce a quantifiable (though unoptimized) alpha. This test validated the entire CUDA-accelerated pipeline and established a solid framework for future strategy refinement.
     *   **Document:** [`poc_6_predictive_backtest.md`](docs/proofs/poc_6_predictive_backtest.md)
+*   **CUDA Verification**: A suite of tests to verify the CUDA build and runtime configuration, as well as the end-to-end signal generation pipeline.
+    *   **Document:** [`cuda_verification.md`](docs/cuda_verification.md)
 
 ## 5. Proven Financial Performance
 

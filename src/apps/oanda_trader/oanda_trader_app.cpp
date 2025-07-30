@@ -1,4 +1,5 @@
 #include "oanda_trader_app.hpp"
+#include "tick_cuda_kernels.cuh"
 
 #include <GL/gl.h>
 #include <imgui_impl_glfw.h>

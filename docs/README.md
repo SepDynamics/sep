@@ -119,6 +119,7 @@ Experimental Python tools in [`_sep/testbed`](../_sep/testbed/README.md) provide
 - **[_sep/testbed/README.md](_sep/testbed/README.md)**: Experimental scripts and validation tools
 - **[strategy/alpha_analysis_report.md](strategy/alpha_analysis_report.md)**: Detailed alpha generation analysis
 - **[patent/](patent/)**: Complete patent disclosure documentation
+- **[cuda_verification.md](cuda_verification.md)**: CUDA build and runtime verification
 
 ## Success Metrics Achieved
 

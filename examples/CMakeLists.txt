@@ -12,8 +12,6 @@ include_directories(
 # Pattern Metric Example
 add_executable(pattern_metric_example
     pattern_metric_example.cpp
-    test_forward_window_metrics.cpp
-    ../src/apps/oanda_trader/forward_window_kernels.cu
 )
 
 target_link_libraries(pattern_metric_example

@@ -32,6 +32,7 @@ add_sep_library(sep_engine
         sep_common
         sep_connectors
         sep_memory
+        sep_quantum
         CUDA::cudart
         CUDA::cuda_driver
 )

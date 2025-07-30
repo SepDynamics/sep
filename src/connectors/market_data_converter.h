@@ -29,28 +29,7 @@ public:
      */
     static std::vector<uint8_t> candlesToByteStream(const std::vector<OandaCandle>& candles);
     
-    /**
-     * @brief Convert real-time market data to byte stream
-     * 
-     * Converts bid/ask/spread data into bytes for real-time pattern detection.
-     * Includes timestamp encoding to preserve temporal patterns.
-     * 
-     * @param market_data Real-time market data from OANDA
-     * @return Byte stream representation
-     */
-    static std::vector<uint8_t> marketDataToByteStream(const MarketData& market_data);
-    
-    /**
-     * @brief Convert price series to byte stream with normalization
-     * 
-     * Normalizes price data to enhance pattern detection while preserving
-     * relative movements and volatility characteristics.
-     * 
-     * @param prices Vector of price values
-     * @param normalize Whether to normalize the data (recommended)
-     * @return Byte stream representation
-     */
-    static std::vector<uint8_t> pricesToByteStream(const std::vector<double>& prices, bool normalize = true);
+
     
     /**
      * @brief Convert order book data to byte stream

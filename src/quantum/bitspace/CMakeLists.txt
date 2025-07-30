@@ -2,6 +2,7 @@ add_sep_library(sep_quantum_bitspace
     SOURCES
         qbsa.cpp
         qfh.cpp
+    pattern_processor.cpp
     DEPENDENCIES
         sep_common
         fmt::fmt

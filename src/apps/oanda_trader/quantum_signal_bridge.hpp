@@ -10,6 +10,7 @@
 #include "quantum/bitspace/qfh.h"
 #include "quantum/bitspace/qbsa.h"
 #include "quantum/pattern_evolution_bridge.h"
+#include "quantum/bitspace/pattern_processor.h"
 #include "quantum/types.h"
 #include "apps/oanda_trader/forward_window_kernels.cuh"
 
@@ -116,8 +117,7 @@ public:
 
 private:
     // Quantum processors (patent-backed)
-    std::unique_ptr<sep::quantum::QFHBasedProcessor> qfh_processor_;
-    std::unique_ptr<sep::quantum::QBSAProcessor> qbsa_processor_;
+    std::unique_ptr<sep::quantum::bitspace::PatternProcessor> pattern_processor_;
     
     // Strategy thresholds (dynamically determined from convergence patterns)
     std::atomic<float> confidence_threshold_{0.6f};

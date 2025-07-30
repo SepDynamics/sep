@@ -32,70 +32,7 @@ std::vector<uint8_t> MarketDataConverter::candlesToByteStream(const std::vector<
     return stream;
 }
 
-std::vector<uint8_t> MarketDataConverter::marketDataToByteStream(const MarketData& market_data) {
-    std::vector<uint8_t> stream;
-    
-    // Encode instrument identifier (hash for pattern matching)
-    std::hash<std::string> hasher;
-    size_t instrument_hash = hasher(market_data.instrument);
-    appendUint64(stream, instrument_hash);
-    
-    // Encode timestamp
-    appendUint64(stream, market_data.timestamp);
-    
-    // Encode price data
-    appendDouble(stream, market_data.bid);
-    appendDouble(stream, market_data.ask);
-    appendDouble(stream, market_data.mid);
-    
-    // Encode spread as a ratio for pattern detection
-    double spread_ratio = (market_data.ask - market_data.bid) / market_data.mid;
-    appendDouble(stream, spread_ratio);
-    
-    // Encode volume
-    appendDouble(stream, market_data.volume);
-    
-    // Encode order book depth if available
-    for (const auto& bid : market_data.bid_book) {
-        appendDouble(stream, bid);
-    }
-    for (const auto& ask : market_data.ask_book) {
-        appendDouble(stream, ask);
-    }
-    
-    return stream;
-}
 
-std::vector<uint8_t> MarketDataConverter::pricesToByteStream(const std::vector<double>& prices, bool normalize) {
-    std::vector<uint8_t> stream;
-    
-    if (prices.empty()) return stream;
-    
-    std::vector<double> processed_prices = prices;
-    
-    if (normalize) {
-        auto [mean, std] = calculateMeanStd(prices);
-        
-        // Normalize prices to enhance pattern detection
-        for (auto& price : processed_prices) {
-            price = normalizeValue(price, mean, std);
-        }
-    }
-    
-    // Convert price changes to enhance pattern detection
-    appendDouble(stream, processed_prices[0]);
-    
-    for (size_t i = 1; i < processed_prices.size(); ++i) {
-        // Encode price change ratio for better pattern detection
-        double change_ratio = (processed_prices[i] - processed_prices[i-1]) / processed_prices[i-1];
-        appendDouble(stream, change_ratio);
-        
-        // Also encode absolute price for context
-        appendDouble(stream, processed_prices[i]);
-    }
-    
-    return stream;
-}
 
 std::vector<uint8_t> MarketDataConverter::orderBookToByteStream(
     const std::vector<std::pair<double, double>>& bid_book,
@@ -139,7 +76,7 @@ std::vector<uint8_t> MarketDataConverter::createCompositeStream(
     
     // Combine historical and real-time data
     auto candle_stream = candlesToByteStream(recent_candles);
-    auto market_stream = marketDataToByteStream(market_data);
+    auto market_stream = std::vector<uint8_t>();
     
     // Merge streams
     stream.insert(stream.end(), candle_stream.begin(), candle_stream.end());

@@ -113,7 +113,7 @@ public:
         }
         
         // Convert prices to byte stream for analysis
-        auto raw_data = sep::connectors::MarketDataConverter::pricesToByteStream(prices);
+        auto raw_data = std::vector<uint8_t>();
         
         return analyzeData(raw_data);
     }

@@ -8,6 +8,7 @@
 #include <nlohmann/json.hpp>
 
 #include "../../quantum/types_serialization.h"
+#include "../../quantum/bitspace/pattern_processor.h"
 
 namespace sep::trading {
 
@@ -25,15 +26,7 @@ bool QuantumSignalBridge::initialize() {
     
     try {
         // Initialize QFH processor with correct options
-        sep::quantum::QFHOptions qfh_opts;
-        qfh_opts.collapse_threshold = 0.3f;
-        qfh_opts.flip_threshold = 0.7f;
-        qfh_processor_ = std::make_unique<sep::quantum::QFHBasedProcessor>(qfh_opts);
-        
-        // Initialize QBSA processor  
-        sep::quantum::QBSAOptions qbsa_opts;
-        qbsa_opts.collapse_threshold = 0.6f;
-        qbsa_processor_ = std::make_unique<sep::quantum::QBSAProcessor>(qbsa_opts);
+        pattern_processor_ = std::make_unique<sep::quantum::bitspace::PatternProcessor>();
         
         // Initialize pattern evolution bridge
         sep::quantum::PatternEvolutionBridge::Config evo_cfg;
@@ -234,60 +227,17 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
             return signal;
         }
         
-        // Run QFH analysis (patent-backed quantum field harmonics)
-        auto qfh_result = qfh_processor_->analyze(bits);
-        last_qfh_result_ = qfh_result;
-        
-        // Run QBSA analysis (patent-backed quantum bit state analysis)
-        std::vector<uint32_t> probe_values;
-        std::vector<uint32_t> expectations;
-
-        // Generate probe values (every 4th bit for efficiency)
-        for (size_t i = 0; i < std::min(bits.size(), 64UL); i += 4) {
-            probe_values.push_back(bits[i]);
-            
-            // Create realistic expectations based on market pattern analysis
-            // QBSA compares probe_values[x] vs expectations[x] for same index
-            if (i >= 16) {  // Need enough history for meaningful prediction
-                // Look at recent actual bits around this position for trend
-                int recent_ones = 0;
-                size_t lookback_start = std::max(int(i) - 8, 0);  // Look back 8 bits
-                for (size_t j = lookback_start; j < i; ++j) {
-                    if (j < bits.size() && bits[j] == 1) recent_ones++;
-                }
-                
-                size_t lookback_count = i - lookback_start;
-                float trend_ratio = lookback_count > 0 ? float(recent_ones) / float(lookback_count) : 0.5f;
-                
-                // Trend-based prediction 
-                if (trend_ratio >= 0.7f) {
-                    expectations.push_back(1);  // Strong uptrend, expect continuation
-                } else if (trend_ratio <= 0.3f) {
-                    expectations.push_back(0);  // Strong downtrend, expect continuation  
-                } else {
-                    // Neutral - use simple momentum from nearest bit
-                    size_t nearest_bit = std::min(i - 1, bits.size() - 1);
-                    expectations.push_back(bits[nearest_bit]);  // Momentum continuation
-                }
-            } else {
-                // For early positions, use simple momentum
-                if (i > 0 && i < bits.size()) {
-                    expectations.push_back(bits[i - 1]);  // Previous bit momentum
-                } else {
-                    expectations.push_back(0);  // Default
-                }
-            }
+        std::vector<sep::quantum::bitspace::TrajectoryPoint> trajectory_points;
+        for(size_t i = 0; i < history.size(); ++i) {
+            trajectory_points.push_back({history[i].mid, history[i].timestamp});
         }
+        sep::quantum::bitspace::Trajectory trajectory(trajectory_points);
+        auto metrics = pattern_processor_->processTrajectory(trajectory);
 
-        // Debug: Show first few probe vs expectation pairs
-        if (probe_values.size() >= 3) {
-            std::cout << "[DEBUG] QBSA probe vs expect: (" << probe_values[0] << "vs" << expectations[0] 
-                      << ") (" << probe_values[1] << "vs" << expectations[1] 
-                      << ") (" << probe_values[2] << "vs" << expectations[2] << ")" << std::endl;
-        }
-        
-        auto qbsa_result = qbsa_processor_->analyze(probe_values, expectations);
-        last_qbsa_result_ = qbsa_result;
+        signal.identifiers.confidence = metrics.confidence;
+        signal.identifiers.coherence = metrics.coherence;
+        signal.identifiers.stability = metrics.stability;
+        signal.identifiers.entropy = metrics.entropy;
         
         if (!forward_window_results.empty()) {
             const auto& last_result = forward_window_results.back();
@@ -301,10 +251,7 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
         }
         
         // Store debug metrics in identifiers
-        signal.identifiers.entropy = qfh_result.entropy;
-        signal.identifiers.flip_ratio = qfh_result.flip_ratio;
-        signal.identifiers.rupture_ratio = qfh_result.rupture_ratio;
-        signal.identifiers.quantum_collapse_detected = qfh_result.collapse_detected;
+
 
         // Direction determination based on normalized stability [0, 1]:
         // < 0.45 = SELL (low stability = volatile conditions), > 0.55 = BUY (high stability =

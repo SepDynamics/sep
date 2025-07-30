@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "engine/types.h"
+#include "engine/internal/types.h"
 
 namespace sep::context {
 

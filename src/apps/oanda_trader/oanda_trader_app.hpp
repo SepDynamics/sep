@@ -2,21 +2,20 @@
 
 #include <GLFW/glfw3.h>
 
+#include <deque>
 #include <map>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
-#include <deque>
 #include <vector>
 
 #include "connectors/oanda_connector.h"
+#include "engine/internal/engine.h"
 #include "forward_window_kernels.cuh"
-#include "engine/engine.h"
 #include "imgui.h"
-#include "util/managed_thread.hpp"
 #include "quantum_signal_bridge.hpp"
-#include "forward_window_kernels.cuh"
+#include "util/managed_thread.hpp"
 
 namespace sep::apps {
 

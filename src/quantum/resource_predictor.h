@@ -5,7 +5,7 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 
-#include "engine/standard_includes.h"
+#include "engine/internal/standard_includes.h"
 
 // Minimal context types for compilation
 namespace sep::context {

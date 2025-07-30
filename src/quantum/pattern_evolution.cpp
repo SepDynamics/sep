@@ -4,15 +4,15 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <chrono>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <random>
-#include <chrono>
 #include <nlohmann/json.hpp>
+#include <random>
 
-#include "engine/types.h"  // For PatternData/PatternConfig
-#include "engine/types.h"
+#include "engine/internal/types.h"  // For PatternData/PatternConfig
+#include "engine/internal/types.h"
 #include "quantum/quantum_processor_qfh.h"
 
 // Standard Library Includes

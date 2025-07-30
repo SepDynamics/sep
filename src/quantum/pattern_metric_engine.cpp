@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "engine/logging.h"
+#include "engine/internal/logging.h"
 #ifdef _WIN32
 #include <windows.h>
 #else

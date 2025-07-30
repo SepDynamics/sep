@@ -1,18 +1,18 @@
 #ifndef SEP_API_CLIENT_H
 #define SEP_API_CLIENT_H
 
-#include "api/types.h"
-#include "curl/curl.h"
-#include "engine/common.h"
-
-#include <nlohmann/json.hpp>
+#include <chrono>
 #include <condition_variable>
 #include <functional>
 #include <map>
 #include <memory>
 #include <mutex>
-#include <chrono>
+#include <nlohmann/json.hpp>
 #include <string>
+
+#include "api/types.h"
+#include "curl/curl.h"
+#include "engine/internal/common.h"
 
 namespace sep {
 namespace api {

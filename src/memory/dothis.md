@@ -370,7 +370,7 @@ This is causing `std::string` to be treated as `int`, leading to cascading error
     *   `#include <vector>` (line 9)
     *   `#include <map>` (line 10)
     *   `#include <unordered_map>` (line 11)
-    *   `#include "engine/cuda.h"` (line 12 - error here)
+    *   `#include "engine/internal/cuda.h"` (line 12 - error here)
     *   ... and others after.
 3.  **Hypothesis:** A header included *before* `<string>` or `<vector>` is defining a macro or typedef that conflicts with `std::string` or its dependencies. The `compat/shim.h` header is a likely candidate for compatibility layer issues.
 4.  **Action:**
@@ -388,7 +388,7 @@ These are straightforward include path issues or missing physical files.
 1.  **`'compat/cuda.h' file not found` (in `/sep/include/core/types.h`, line 12):**
     *   Check the `compat` module's public include directory (`include/sep/compat`). Is `cuda.h` actually there?
     *   Refer to `include-compat.md`. The public headers are listed as `core.h`, `kernels.h`, `raii.h`, `memory.h`, `macros.h`, `cuda_common.h`. `cuda.h` is *not* listed as a public header.
-    *   **Action:** The include `#include "engine/cuda.h"` in `include/core/types.h` is likely incorrect. Determine what functionality from `compat` is needed in `core/types.h` and include the *correct* public header (e.g., `compat/core.h` if `CudaCore` types are needed, `compat/types.h` if basic `compat` types are needed). Replace `#include "engine/cuda.h"` with the appropriate one.
+    *   **Action:** The include `#include "engine/internal/cuda.h"` in `include/core/types.h` is likely incorrect. Determine what functionality from `compat` is needed in `core/types.h` and include the *correct* public header (e.g., `compat/core.h` if `CudaCore` types are needed, `compat/types.h` if basic `compat` types are needed). Replace `#include "engine/internal/cuda.h"` with the appropriate one.
 
 2.  **`'core/common.h' file not found` (in `/sep/include/memory/memory_tier_manager.hpp`, line 23 and `tests/memory/memory_tier_manager_test.cpp`, line 2):**
     *   The `memory` module and its tests need to include headers from `core`.

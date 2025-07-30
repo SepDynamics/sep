@@ -16,12 +16,12 @@
 #include <string>
 #include <vector>
 
-#include "engine/core.h"
-#include "engine/cuda.h"
-#include "engine/cuda_helpers.h"
-#include "engine/logging.h"
-#include "engine/memory.h"
-#include "engine/types.h"
+#include "engine/internal/core.h"
+#include "engine/internal/cuda.h"
+#include "engine/internal/cuda_helpers.h"
+#include "engine/internal/logging.h"
+#include "engine/internal/memory.h"
+#include "engine/internal/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"

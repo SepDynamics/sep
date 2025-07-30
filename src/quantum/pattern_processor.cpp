@@ -1,8 +1,8 @@
-#include "engine/common.h"
-#include "engine/cuda_helpers.h"
-#include "engine/cuda_sep.h"
-#include "engine/pattern_types.h"
-#include "engine/types.h"
+#include "engine/internal/common.h"
+#include "engine/internal/cuda_helpers.h"
+#include "engine/internal/cuda_sep.h"
+#include "engine/internal/pattern_types.h"
+#include "engine/internal/types.h"
 #include "memory/types.h"
 #include "quantum/config.h"
 #include "quantum/pattern_evolution_bridge.h"
@@ -131,8 +131,8 @@ sep::SEPResult PatternProcessor::init(quantum::GPUContext* ctx) {
         {
             return sep::SEPResult::INVALID_ARGUMENT;
         }
-        CUDA_CHECK(sep::cuda::SEP_cudaSetDevice(ctx->device_id));
-        CUDA_CHECK(sep::cuda::SEP_cudaStreamCreate(reinterpret_cast<sep::cuda::cudaStream_t*>(&ctx->default_stream)));
+        CUDA_CHECK(cudaSetDevice(ctx->device_id));
+        CUDA_CHECK(cudaStreamCreate(reinterpret_cast<cudaStream_t*>(&ctx->default_stream)));
         ctx->initialized = true;
     }
     return sep::SEPResult::SUCCESS;

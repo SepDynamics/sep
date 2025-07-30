@@ -2,7 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "engine/types.h"
+#include "engine/internal/types.h"
 
 // Forward declaration of PatternConfig
 namespace sep {

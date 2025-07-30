@@ -8,7 +8,7 @@
 #include <numeric>
 #include <stdexcept>
 
-#include "engine/string_operators.h"
+#include "engine/internal/string_operators.h"
 
 namespace sep::quantum {
 

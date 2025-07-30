@@ -1,7 +1,8 @@
 #pragma once
 
 // C++ Standard Library
-#include "engine/standard_includes.h"
+#include "core_types/result.h"
+#include "engine/internal/standard_includes.h"
 
 // Third-party headers
 #include <glm/vec3.hpp>
@@ -118,7 +119,7 @@ public:
   // Memory block management methods
   MemoryBlock *allocate(std::size_t size);
   void deallocate(MemoryBlock *block);
-  ::sep::SEPResult defragment();
+  sep::SEPResult defragment();
 
   float calculateFragmentation() const;
   float calculateUtilization() const;

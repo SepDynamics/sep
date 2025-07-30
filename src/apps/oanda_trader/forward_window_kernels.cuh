@@ -14,6 +14,9 @@ struct ForwardWindowResult {
     float coherence;
     float stability;
     float confidence;
+    float entropy;
+    int rupture_count;
+    int flip_count;
 };
 
 // CUDA kernel declaration

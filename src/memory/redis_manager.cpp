@@ -16,8 +16,8 @@
 #include <cstring>
 #include <mutex>
 
-#include "engine/logging.h"
-#include "engine/types.h"
+#include "engine/internal/logging.h"
+#include "engine/internal/types.h"
 #include "memory/redis_manager.h"
 #ifndef SEP_NO_REDIS
 #include <hiredis/hiredis.h>

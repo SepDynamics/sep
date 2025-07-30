@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "quantum/qbsa.h"
+#include "quantum/bitspace/qbsa.h"
 
 namespace sep::quantum {
 

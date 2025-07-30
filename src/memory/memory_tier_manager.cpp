@@ -12,8 +12,8 @@
 #include <string>
 #include <vector>
 
-#include "engine/common.h"
-#include "engine/types.h"
+#include "engine/internal/common.h"
+#include "engine/internal/types.h"
 #include "quantum/pattern_processor.hpp"
 #include "quantum/processor.h"
 

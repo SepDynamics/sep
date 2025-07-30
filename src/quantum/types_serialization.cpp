@@ -5,8 +5,8 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 
-#include "engine/pattern_types.h"
-#include "engine/standard_includes.h"
+#include "engine/internal/pattern_types.h"
+#include "engine/internal/standard_includes.h"
 #include "quantum/types.h"
 
 using namespace glm;

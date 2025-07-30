@@ -8,12 +8,12 @@
  */
 
 // Project includes
-#include "engine/common.h"
-#include "engine/dag_graph.h"
-#include "engine/pattern_types.h"
-#include "engine/system_hooks.h"
-#include "engine/standard_includes.h"
-#include "engine/types.h"
+#include "engine/internal/common.h"
+#include "engine/internal/dag_graph.h"
+#include "engine/internal/pattern_types.h"
+#include "engine/internal/standard_includes.h"
+#include "engine/internal/system_hooks.h"
+#include "engine/internal/types.h"
 #include "memory/memory_tier.hpp"
 #include "memory/persistent_pattern_data.hpp"
 #include "memory/types.h"

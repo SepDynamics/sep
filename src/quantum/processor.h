@@ -6,10 +6,10 @@
 #include <string>
 #include <vector>
 
-#include "engine/common.h"
-#include "engine/pattern_types.h"
-#include "engine/system_hooks.h"
-#include "engine/types.h"
+#include "engine/internal/common.h"
+#include "engine/internal/pattern_types.h"
+#include "engine/internal/system_hooks.h"
+#include "engine/internal/types.h"
 #include "quantum/gpu_context.h"
 #include "quantum/types.h"
 

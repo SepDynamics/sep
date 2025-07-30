@@ -65,7 +65,7 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
                 market_history_.begin(), market_history_.end());
             
             // Get quantum signal
-            auto signal = quantum_bridge_->analyzeMarketData(data, history_vector);
+            auto signal = quantum_bridge_->analyzeMarketData(data, history_vector, {});
             
             // Store latest signal
             latest_signal_ = signal;
@@ -136,7 +136,7 @@ void QuantumTrackerWindow::processNewMarketData(const sep::connectors::MarketDat
                 market_history_.begin(), market_history_.end());
             
             // Get quantum signal
-            auto signal = quantum_bridge_->analyzeMarketData(data, history_vector);
+            auto signal = quantum_bridge_->analyzeMarketData(data, history_vector, {});
             
             // Store latest signal
             latest_signal_ = signal;

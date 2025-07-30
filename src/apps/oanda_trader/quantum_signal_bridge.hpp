@@ -7,10 +7,11 @@
 #include <mutex>
 
 #include "connectors/oanda_connector.h"
-#include "quantum/qfh.h"
-#include "quantum/qbsa.h"
+#include "quantum/bitspace/qfh.h"
+#include "quantum/bitspace/qbsa.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/types.h"
+#include "apps/oanda_trader/forward_window_kernels.cuh"
 
 namespace sep::trading {
 
@@ -86,7 +87,7 @@ public:
     QuantumTradingSignal analyzeMarketData(
         const sep::connectors::MarketData& current_data,
         const std::vector<sep::connectors::MarketData>& history,
-        const std::vector<ForwardWindowResult>& forward_window_results
+        const std::vector<sep::apps::cuda::ForwardWindowResult>& forward_window_results
     );
     
     // Per-candle forward window analysis - calculates converged identifiers

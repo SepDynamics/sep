@@ -1,40 +1,45 @@
 add_sep_library(sep_engine
     SOURCES
-        allocation_metrics.cpp
-        compression.cpp
-        dag_graph.cpp
-        dag_graph_quant.cpp
-        data_parser.cpp
-        error_handler.cpp
-        file_system_watcher.cpp
-        logging.cpp
-        manager.cpp
-        metrics_collector.cpp
-        prometheus_exporter.cpp
-        socket_listener.cpp
-        tracing.cpp
+        facade/facade.cpp
+        internal/allocation_metrics.cpp
+        internal/compression.cpp
+        internal/dag_graph.cpp
+        internal/dag_graph_quant.cpp
+        internal/data_parser.cpp
+        internal/error_handler.cpp
+        internal/file_system_watcher.cpp
+        internal/logging.cpp
+        internal/manager.cpp
+        internal/metrics_collector.cpp
+        internal/prometheus_exporter.cpp
+        internal/socket_listener.cpp
+        internal/tracing.cpp
     CUDA_SOURCES
-        engine.cu
-        cuda_impl.cu
-        raii.cu
-        stream.cu
-        pattern_kernels.cu
-        cuda_api.cu
-        event.cu
-        utils.cu
-        kernels.cu
-        core.cu
-        quantum_kernels.cu
-        memory.cu
+        internal/engine.cu
+        internal/cuda_impl.cu
+        internal/raii.cu
+        internal/stream.cu
+        internal/pattern_kernels.cu
+        internal/cuda_api.cu
+        internal/event.cu
+        internal/utils.cu
+        internal/kernels.cu
+        internal/core.cu
+        internal/quantum_kernels.cu
+        internal/memory.cu
     DEPENDENCIES
+        sep_core_types
         sep_common
         sep_connectors
+        sep_memory
         CUDA::cudart
         CUDA::cuda_driver
 )
 
 target_include_directories(sep_engine PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/facade
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal
     ${CMAKE_SOURCE_DIR}/src/common
 )
 

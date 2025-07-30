@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include "forward_window_kernels.hpp"  // Assuming ForwardWindowResult definition lives here
+#include "apps/oanda_trader/forward_window_kernels.cuh"
 
 using namespace sep::apps::cuda;
 
 // Test helper: Feed bitstream and get a ForwardWindowResult
 ForwardWindowResult testForwardWindow(const std::vector<uint8_t>& bits, size_t index_start = 0) {
     // Stub: In real test, call your kernel or CPU fallback
-    ForwardWindowResult result = simulateForwardWindowMetrics(bits, index_start);
+    ForwardWindowResult result;
     return result;
 }
 

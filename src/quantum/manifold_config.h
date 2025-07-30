@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/config.h"
+#include "engine/internal/config.h"
 #include "memory/types.h"
 #include "quantum/config.h"
 

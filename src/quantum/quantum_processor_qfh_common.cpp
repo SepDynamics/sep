@@ -1,15 +1,17 @@
-#include "quantum/quantum_processor_qfh.h"
 #include <algorithm>
 #include <cmath>
 #include <cstring>
 #include <glm/glm.hpp>
 #include <vector>
-#include "engine/cuda_sep.h"
-#include "engine/types.h"
+
+#include "engine/internal/cuda_sep.h"
+#include "engine/internal/standard_includes.h"
+#include "engine/internal/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/qbsa_qfh.h"
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/quantum_processor.h"
+#include "quantum/quantum_processor_qfh.h"
 
 namespace sep::quantum {
 

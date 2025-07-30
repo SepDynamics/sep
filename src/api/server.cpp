@@ -1,23 +1,25 @@
-#include "engine/config.h"
-#include "memory/memory_tier_manager.hpp"
-#include "api/crow_request.h"
-#include "api/json_helpers.h"
-#include "api/types.h"
-#include "api/client.h"
-#include "api/rate_limit_middleware.h"
-#include "api/request_interface.h"
-#include "api/sep_engine.h"
-#include "quantum/types.h"
 #include "api/server.h"
-#include "engine/types.h"
+
+#include <spdlog/spdlog.h>
 
 #include <chrono>
-#include <thread>
 #include <csignal>
 #include <cstdio>
 #include <memory>
 #include <nlohmann/json.hpp>
-#include <spdlog/spdlog.h>
+#include <thread>
+
+#include "api/client.h"
+#include "api/crow_request.h"
+#include "api/json_helpers.h"
+#include "api/rate_limit_middleware.h"
+#include "api/request_interface.h"
+#include "api/sep_engine.h"
+#include "api/types.h"
+#include "engine/internal/config.h"
+#include "engine/internal/types.h"
+#include "memory/memory_tier_manager.hpp"
+#include "quantum/types.h"
 
 namespace sep::api {
 
@@ -32,7 +34,11 @@ namespace sep::api {
 // Static instance for signal handling
 SEPApiServer* SEPApiServer::instance_ = nullptr;
 SEPApiServer::SEPApiServer(const ::sep::config::SystemConfig& config)
-    : config_(config), running_(false), logger_(nullptr) {
+    : config_(config),
+      running_(false),
+      logger_(nullptr),
+      thread_pool_(std::make_unique<ThreadPool>(config.api.threads))
+{
     instance_ = this;
 
     // Initialize the Crow app with middlewares
@@ -64,7 +70,7 @@ bool SEPApiServer::start() {
     if (!app_) return false;
 
     app_->port(config_.port);
-    app_->multithreaded();
+    app_->concurrency(config_.api.threads);
 
     setup_middleware();
     setup_routes();
@@ -82,7 +88,7 @@ void SEPApiServer::start() {
     if (!app_) return;
 
     app_->port(config_.port);
-    app_->multithreaded();
+    app_->concurrency(config_.api.threads);
 
     setup_middleware();
     setup_routes();
@@ -317,15 +323,17 @@ void SEPApiServer::setup_routes() {
     #if SEP_HAS_EXCEPTIONS
     try {
 #endif
-      auto health_data = engine.getHealthStatus();
-      auto end_time = std::chrono::steady_clock::now();
-      auto duration =
-          std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        auto future = thread_pool_->enqueue([&engine] { return engine.getHealthStatus(); });
+        auto health_data = future.get();
 
-      logRequest(req, HTTP_OK, health_data.dump(), duration);
-      return makeCrowJsonResponse(HTTP_OK, health_data);
+        auto end_time = std::chrono::steady_clock::now();
+        auto duration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
 
-    #if SEP_HAS_EXCEPTIONS
+        logRequest(req, 200, health_data.dump(), duration);
+        return makeCrowJsonResponse(200, health_data);
+
+#if SEP_HAS_EXCEPTIONS
     } catch (const std::exception& e) {
       auto end_time = std::chrono::steady_clock::now();
       auto duration =
@@ -351,7 +359,9 @@ void SEPApiServer::setup_routes() {
           nlohmann::json request_data = parse_json(std::string(req.body));
 
           // Process patterns through SEP engine
-          auto result = engine.processPatterns(request_data);
+          auto future = thread_pool_->enqueue(
+              [&engine, request_data] { return engine.processPatterns(request_data); });
+          auto result = future.get();
           auto response_data = applyCoherenceModulation(result);
 
           auto end_time = std::chrono::steady_clock::now();
@@ -394,7 +404,9 @@ void SEPApiServer::setup_routes() {
         try {
 #endif
           nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.processBatch(request_data);
+          auto future = thread_pool_->enqueue(
+              [&engine, request_data] { return engine.processBatch(request_data); });
+          auto result = future.get();
           auto response_data = applyCoherenceModulation(result);
 
           auto end_time = std::chrono::steady_clock::now();
@@ -437,7 +449,9 @@ void SEPApiServer::setup_routes() {
         try {
 #endif
           nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.getPatternHistory(request_data);
+          auto future = thread_pool_->enqueue(
+              [&engine, request_data] { return engine.getPatternHistory(request_data); });
+          auto result = future.get();
           auto response_data = applyCoherenceModulation(result);
 
           auto end_time = std::chrono::steady_clock::now();
@@ -480,7 +494,9 @@ void SEPApiServer::setup_routes() {
         try {
 #endif
           nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.validateContexts(request_data);
+          auto future = thread_pool_->enqueue(
+              [&engine, request_data] { return engine.validateContexts(request_data); });
+          auto result = future.get();
           auto response_data = applyCoherenceModulation(result);
 
           auto end_time = std::chrono::steady_clock::now();
@@ -523,7 +539,9 @@ void SEPApiServer::setup_routes() {
         try {
 #endif
           nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.extractEmbeddings(request_data);
+          auto future = thread_pool_->enqueue(
+              [&engine, request_data] { return engine.extractEmbeddings(request_data); });
+          auto result = future.get();
           auto response_data = applyCoherenceModulation(result);
 
           auto end_time = std::chrono::steady_clock::now();
@@ -566,7 +584,9 @@ void SEPApiServer::setup_routes() {
         try {
 #endif
           nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.calculateSimilarity(request_data);
+          auto future = thread_pool_->enqueue(
+              [&engine, request_data] { return engine.calculateSimilarity(request_data); });
+          auto result = future.get();
           auto response_data = applyCoherenceModulation(result);
 
           auto end_time = std::chrono::steady_clock::now();
@@ -609,7 +629,9 @@ void SEPApiServer::setup_routes() {
         try {
 #endif
           nlohmann::json request_data = parse_json(std::string(req.body));
-          auto result = engine.blendContexts(request_data);
+          auto future = thread_pool_->enqueue(
+              [&engine, request_data] { return engine.blendContexts(request_data); });
+          auto result = future.get();
           auto response_data = applyCoherenceModulation(result);
 
           auto end_time = std::chrono::steady_clock::now();
@@ -651,17 +673,19 @@ void SEPApiServer::setup_routes() {
 #if SEP_HAS_EXCEPTIONS
         try {
 #endif
-          auto result = engine.getMemoryMetrics();
-          auto response_data = applyCoherenceModulation(result);
+            auto future = thread_pool_->enqueue([&engine] { return engine.getMemoryMetrics(); });
+            auto result = future.get();
+            auto response_data = applyCoherenceModulation(result);
 
-          auto end_time = std::chrono::steady_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+            auto end_time = std::chrono::steady_clock::now();
+            auto duration =
+                std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time)
+                    .count();
 
-          logRequest(req, HTTP_OK, response_data.dump(), duration);
-          return makeCrowJsonResponse(HTTP_OK, response_data);
+            logRequest(req, HTTP_OK, response_data.dump(), duration);
+            return makeCrowJsonResponse(HTTP_OK, response_data);
 
-        #if SEP_HAS_EXCEPTIONS
+#if SEP_HAS_EXCEPTIONS
         } catch (const std::exception& e) {
           auto end_time = std::chrono::steady_clock::now();
           auto duration =

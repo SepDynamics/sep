@@ -1,4 +1,5 @@
 # Add component subdirectories - core components needed for quant processing
+add_subdirectory(core_types)
 add_subdirectory(glad)
 add_subdirectory(common)
 add_subdirectory(engine)

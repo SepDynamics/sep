@@ -1,6 +1,6 @@
 #include "quantum/manifold_config.h"
 
-#include "engine/types.h"
+#include "engine/internal/types.h"
 
 namespace sep::quantum::manifold {
 

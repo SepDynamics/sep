@@ -11,18 +11,20 @@ include_directories(
 
 # Pattern Metric Example
 add_executable(pattern_metric_example
-#    pattern_metric_example.cpp
+    pattern_metric_example.cpp
     test_forward_window_metrics.cpp
+    ../src/apps/oanda_trader/forward_window_kernels.cu
 )
 
 target_link_libraries(pattern_metric_example
     sep_engine
-    sep_quantum  
+    sep_quantum
     sep_memory
     sep_connectors
     fmt::fmt
     ${CMAKE_THREAD_LIBS_INIT}
     nlohmann_json::nlohmann_json
+    CUDA::cudart
 )
 
 # Set output directory

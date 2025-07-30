@@ -1,5 +1,4 @@
 #include "oanda_trader_app.hpp"
-#include "engine/engine.h"
 
 #include <GL/gl.h>
 #include <imgui_impl_glfw.h>
@@ -9,10 +8,11 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
-#include <thread>
 #include <nlohmann/json.hpp>
+#include <thread>
 
 #include "connectors/market_data_converter.h"
+#include "engine/internal/engine.h"
 #include "imgui.h"
 
 namespace sep::apps {

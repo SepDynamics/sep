@@ -1,7 +1,8 @@
 #include <cuda_runtime.h>
+
 #include <cstdio>
 
-#include "engine/qbsa.cuh"
+#include "quantum/qbsa.cuh"
 
 namespace sep::quantum {
 

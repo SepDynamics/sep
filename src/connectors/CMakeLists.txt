@@ -25,7 +25,7 @@ target_link_libraries(sep_connectors PUBLIC
 target_compile_options(sep_connectors PRIVATE ${CURL_CFLAGS_OTHER})
 
 if(MSVC)
-    target_compile_options(sep_connectors PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+    target_compile_options(sep_connectors PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/internal/glm_config.h")
 else()
-    target_compile_options(sep_connectors PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+    target_compile_options(sep_connectors PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/internal/glm_config.h")
 endif()

@@ -5,7 +5,7 @@
 #include <cstring>
 #include <cstring>  // For std::memcpy (if needed implicitly for unified memory)
 
-#include "engine/cuda.h"
+#include "engine/internal/cuda.h"
 #include "engine/raii.h"
 #include "memory/types.h"
 

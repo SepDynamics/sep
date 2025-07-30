@@ -7,10 +7,10 @@
 #include <mutex>
 #include <vector>
 
-#include "engine/types.h"
+#include "engine/internal/types.h"
 #include "memory/types.h"
-#include "quantum/qbsa.h"
-#include "quantum/qfh.h"
+#include "quantum/bitspace/qbsa.h"
+#include "quantum/bitspace/qfh.h"
 
 namespace sep::quantum {
 

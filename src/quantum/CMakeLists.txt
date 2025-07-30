@@ -1,7 +1,8 @@
+add_subdirectory(bitspace)
+
 add_sep_library(sep_quantum
     SOURCES
         pattern_evolution_bridge.cpp
-        qbsa.cpp
         qbsa_qfh.cpp
         quantum_processor_qfh.cpp
         types_serialization.cpp
@@ -14,18 +15,20 @@ add_sep_library(sep_quantum
         pattern_metric_engine.cpp
         pattern_processor.cpp
         processor.cpp
-        qfh.cpp
         quantum_processor_qfh_common.cpp
         quantum_processor.cpp
     CUDA_SOURCES
         qbsa_cuda.cu
         quantum_processor_cuda.cu
     DEPENDENCIES
+    sep_core_types
+    sep_quantum_bitspace
     sep_memory
     sep_common
     fmt::fmt
     spdlog::spdlog
     nlohmann_json::nlohmann_json
+    sep_engine
     CUDA::cudart
     CUDA::cuda_driver
 )

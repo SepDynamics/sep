@@ -3,14 +3,20 @@
 #include <complex>
 #include <glm/glm.hpp>
 
-#include "engine/pattern_types.h"
-#include "engine/standard_includes.h"
+#include "engine/internal/pattern_types.h"
+#include "engine/internal/standard_includes.h"
 #include "memory/types.h"
 #include "quantum/config.h"
 
 // Forward declarations to avoid circular dependency
 namespace sep {
-    struct PinState;
+    struct PinState {
+        uint64_t pin_id;
+        double value;
+        float coherence;
+        uint64_t tick;
+        std::vector<uint32_t> bits;
+    };
 }
 
 namespace sep {

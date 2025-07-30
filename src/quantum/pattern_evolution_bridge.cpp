@@ -6,6 +6,7 @@
 #include <memory>
 #include <numeric>
 
+#include "engine/internal/standard_includes.h"
 #include "quantum/quantum_manifold_optimizer.h"
 
 namespace sep::quantum {

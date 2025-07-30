@@ -9,7 +9,7 @@
 
 #include "api/rate_limiter.h"
 #include "api/types.h"
-#include "engine/types.h"
+#include "engine/internal/types.h"
 
 namespace sep::api {
 

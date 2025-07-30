@@ -1,23 +1,22 @@
 #define BUILDING_SEP_BRIDGE
-#include "quantum/config.h"
-#include "quantum/types.h"
-#include "engine/config.h"
-#include "api/bridge.h"
-#include "api/bridge_internal.hpp"
-#include "engine/manager.h"
-#include "engine/cuda_helpers.h"
-#include "quantum/processor.h"
-
-#include "crow/socket_adaptors.h"
-#include <ios>
-#include <nlohmann/json.hpp>
 #include <cstdio>
 #include <cstring>
+#include <ios>
 #include <memory>
 #include <mutex>
+#include <nlohmann/json.hpp>
 #include <unordered_map>
 #include <vector>
 
+#include "api/bridge.h"
+#include "api/bridge_internal.hpp"
+#include "crow/socket_adaptors.h"
+#include "engine/internal/config.h"
+#include "engine/internal/cuda_helpers.h"
+#include "engine/internal/manager.h"
+#include "quantum/config.h"
+#include "quantum/processor.h"
+#include "quantum/types.h"
 
 extern "C" {
 

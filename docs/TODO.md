@@ -23,16 +23,14 @@ I've incorporated the example unit tests as a starting scaffold for validation. 
      - Action: Run example from `examples/pattern_metric_example.cpp` on a small OANDA JSON subset (e.g., 10 candles). Compare outputs to manual calculation of "damped value" (sum of future impacts decaying over time).
      - Reference: Your invention disclosures (e.g., QBSA for collapse detection, QFH for bit transitions as quantum events).
 
-   - [ ] **Restructure Documentation as Starting Point**
-     - Create a new `docs/metrics_pipeline.md` summarizing bitspace logic: "Each OANDA package -> bitstream -> independent CUDA kernel for QBSA/QFH -> integrate future trajectories -> damp to value -> store path history."
-     - Merge old TODO.md into this list; archive it.
-     - Add proofs folder references: Use `poc_6_predictive_backtest.md` for trajectory validation.
-     - Action: Organize source into sub-modules (e.g., move QBSA/QFH to `src/quantum/bitspace/`; add README.md per subdir as per old TODO).
+   - [x] **Restructure Documentation as Starting Point**
+   - Created new `docs/metrics_pipeline.md` summarizing bitspace logic.
+   - Merged old TODO.md into this list; archived it.
+   - Added proofs folder references to new documentation.
+   - Organized source into `src/quantum/bitspace/` and added a README.
 
-   - [ ] **Define Bitspace Value Model Formally**
-     - Document: Value = Sum(future_events * decay_factor), where decay = f(coherence, stability). Confidence = match_score to known historical paths.
-     - Action: Write a math spec in `docs/bitspace_math.md` using LaTeX (e.g., Value_i = \sum_{j=i+1}^n (price_j - price_i) * e^{-entropy * (j-i)} ).
-     - Reference: Closed-ended math explanation in response guidelines.
+   - [x] **Define Bitspace Value Model Formally**
+   - Documented the value model in `docs/bitspace_math.md` with formal LaTeX definitions for Damped Value, Decay Factor, and Confidence Score.
 
 ---
 

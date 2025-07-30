@@ -1,7 +1,7 @@
-#include "engine/common.h"  // defines sep::SEPResult
-#include "engine/core.h"
-#include "engine/logging.h"
-#include "engine/types.h"
+#include "engine/internal/common.h"  // defines sep::SEPResult
+#include "engine/internal/core.h"
+#include "engine/internal/logging.h"
+#include "engine/internal/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/processor.h"

@@ -29,9 +29,9 @@ function(add_sep_library target_name)
     )
 
     if(MSVC)
-        target_compile_options(${target_name} PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+        target_compile_options(${target_name} PRIVATE /FI"${CMAKE_SOURCE_DIR}/src/engine/internal/glm_config.h")
     else()
-        target_compile_options(${target_name} PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/glm_config.h")
+        target_compile_options(${target_name} PRIVATE -include "${CMAKE_SOURCE_DIR}/src/engine/internal/glm_config.h")
     endif()
 
     if(SEP_USE_CUDA AND SEP_LIB_CUDA_SOURCES)

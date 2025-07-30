@@ -1,25 +1,25 @@
 #pragma once
 
-#include "engine/config.h"
+#include "engine/internal/config.h"
 
 // Math constants are already defined in crow.h
 #ifdef CROW_DISABLE_RTTI
 
 #endif
 
-#include "api/rate_limit_middleware.h"
-#include "api/types.h"
-#include "api/auth_middleware.h"
+#include <spdlog/spdlog.h>
+
 #include <atomic>
 #include <memory>
 #include <mutex>
-#include <string>
-
 #include <nlohmann/json.hpp>
+#include <string>
 #include <thread>
-#include <spdlog/spdlog.h>
 
-
+#include "api/auth_middleware.h"
+#include "api/rate_limit_middleware.h"
+#include "api/thread_pool.h"
+#include "api/types.h"
 #include "crow.h"
 
 namespace sep::ollama {
@@ -200,6 +200,9 @@ class SEPApiServer : public Server {
 
   // Server thread
   std::unique_ptr<std::thread> server_thread_;
+
+  // Thread pool for processing
+  std::unique_ptr<ThreadPool> thread_pool_;
 
   // Running state
   std::atomic<bool> running_;

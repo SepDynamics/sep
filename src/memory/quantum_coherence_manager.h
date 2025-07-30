@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "engine/types.h"
+#include "engine/internal/types.h"
 #include "memory/types.h"
 #include "quantum/types.h"
 

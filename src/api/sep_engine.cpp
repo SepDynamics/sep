@@ -16,12 +16,9 @@
 
 // Project includes
 #include "api/types.h"
-#include "engine/types.h"
-#include "quantum/quantum_processor.h"
+#include "engine/internal/types.h"
 #include "memory/memory_tier_manager.hpp"
-
-
-
+#include "quantum/quantum_processor.h"
 
 using json = nlohmann::json;
 

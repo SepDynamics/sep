@@ -5,11 +5,12 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <mutex>
 #include <sstream>
 #include <thread>
-#include "engine/data_parser.h"
+
 #include "common/financial_data_types.h"
-#include <mutex>
+#include "engine/internal/data_parser.h"
 
 namespace sep {
 namespace connectors {

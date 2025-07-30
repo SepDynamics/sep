@@ -1,10 +1,10 @@
 #include "memory/quantum_coherence_manager.h"
 
-#include "engine/core.h"
-#include "engine/cuda_helpers.h"
-#include "engine/cuda_sep.h"
-#include "engine/memory.h"
-#include "engine/types.h"
+#include "engine/internal/core.h"
+#include "engine/internal/cuda_helpers.h"
+#include "engine/internal/cuda_sep.h"
+#include "engine/internal/memory.h"
+#include "engine/internal/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
@@ -18,8 +18,8 @@ using sep::memory::MemoryTierEnum;
 
 #include <glm/vec4.hpp>
 
-#include "engine/logging.h"
-#include "engine/standard_includes.h"
+#include "engine/internal/logging.h"
+#include "engine/internal/standard_includes.h"
 
 namespace sep::memory {
 

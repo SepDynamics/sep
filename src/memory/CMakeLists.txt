@@ -6,6 +6,7 @@ add_sep_library(sep_memory
         quantum_coherence_manager.cpp
         redis_manager.cpp
     DEPENDENCIES
+        sep_core_types
         sep_engine
         sep_common
         fmt::fmt

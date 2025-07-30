@@ -8,23 +8,19 @@
 
 #pragma once
 
-#include "api/types.h"
-#include "engine/types.h"
-#include "quantum/types.h"
-#include "quantum/processor.h"
-#include "quantum/relationship.h"
-#include "quantum/pattern_processor.hpp"
-#include "quantum/quantum_processor.h"
-#include "pattern/pattern_processor.hpp"
-
-
-
 #include <atomic>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
 
-
+#include "api/types.h"
+#include "engine/internal/types.h"
+#include "pattern/pattern_processor.hpp"
+#include "quantum/pattern_processor.hpp"
+#include "quantum/processor.h"
+#include "quantum/quantum_processor.h"
+#include "quantum/relationship.h"
+#include "quantum/types.h"
 
 namespace sep::api {
 

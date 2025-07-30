@@ -2,9 +2,9 @@
 
 #include <glm/glm.hpp>
 
-#include "engine/common.h"  // defines sep::SEPResult
-#include "engine/manager.h"
-#include "engine/types.h"
+#include "engine/internal/common.h"  // defines sep::SEPResult
+#include "engine/internal/manager.h"
+#include "engine/internal/types.h"
 #include "memory/types.h"
 #include "quantum/pattern_evolution_bridge.h"
 #include "quantum/quantum_processor_qfh.h"

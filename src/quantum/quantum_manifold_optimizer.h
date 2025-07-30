@@ -1,13 +1,13 @@
 // quantum_manifold_optimizer.h
 #pragma once
 
-#include "engine/config.h"
-#include "engine/cuda_api.hpp"
+#include "engine/internal/config.h"
+#include "engine/internal/cuda_api.hpp"
 #ifdef __CUDACC__
 #include "engine/cufft.h"
 #endif
-#include "engine/types.h"
-#include "engine/core.h"
+#include "engine/internal/core.h"
+#include "engine/internal/types.h"
 #include "memory/types.h"
 #include "quantum/config.h"
 #include "quantum/pattern_evolution_bridge.h"
@@ -41,13 +41,13 @@ namespace sep::cuda {
 #include <unordered_map>
 #include <vector>
 
-#include "engine/glm_cuda_compat.h"
-#include "engine/types.h"
+#include "engine/internal/glm_cuda_compat.h"
+#include "engine/internal/types.h"
 #include "memory/memory_tier_manager.hpp"
 #include "memory/types.h"
+#include "quantum/bitspace/qbsa.h"
+#include "quantum/bitspace/qfh.h"
 #include "quantum/pattern.h"
-#include "quantum/qbsa.h"
-#include "quantum/qfh.h"
 #include "quantum/quantum_processor_qfh.h"
 
 namespace sep::quantum { class PatternEvolutionBridge; }

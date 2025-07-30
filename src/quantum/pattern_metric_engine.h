@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "engine/types.h"
+#include "engine/internal/types.h"
 #include "quantum/processor.h"
 #include "quantum/quantum_processor_qfh.h"
 #include "quantum/signal.h"

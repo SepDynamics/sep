@@ -9,10 +9,10 @@
 #include <sstream>
 
 // SEP Engine includes
-#include "quantum/pattern_metric_engine.h"
-#include "quantum/config.h"
-#include "engine/standard_includes.h"
 #include "connectors/market_data_converter.h"
+#include "engine/internal/standard_includes.h"
+#include "quantum/config.h"
+#include "quantum/pattern_metric_engine.h"
 
 // JSON support
 #include <nlohmann/json.hpp>

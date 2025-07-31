@@ -44,7 +44,7 @@ async function fetchLiveData() {
 ### 3. **Enhanced Demo Section**
 ```javascript
 // WebSocket connection to live SEP Engine
-const ws = new WebSocket('wss://api.sepdynamics.co/live-feed');
+const ws = new WebSocket('wss://api.sepdynamics.com/live-feed');
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     updateLiveDemo(data.coherence, data.stability, data.entropy);

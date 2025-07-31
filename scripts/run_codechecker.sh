@@ -49,8 +49,8 @@ docker run --rm \
 
 echo "CodeChecker analysis complete. View the report at .codechecker/html/index.html"
 
-# Auto-update sepdynamics.co website
-echo "Updating sepdynamics.co website..."
+# Auto-update sepdynamics.com website
+echo "Updating sepdynamics.com website..."
 
 # Generate current project status
 generate_status_update() {
@@ -72,7 +72,7 @@ generate_status_update() {
 EOF
 }
 
-# Deploy to GitHub Pages (assumes sepdynamics.co points to GitHub Pages)
+# Deploy to GitHub Pages (assumes sepdynamics.com points to GitHub Pages)
 deploy_website() {
     # Generate status update
     generate_status_update
@@ -153,4 +153,4 @@ EOF
 # Run the deployment
 deploy_website
 
-echo "Website update complete. Check sepdynamics.co for live status."
+echo "Website update complete. Check sepdynamics.com for live status."

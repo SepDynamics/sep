@@ -4,12 +4,14 @@
 #include <vector>
 #include <cstdint>
 #include "quantum/bitspace/trajectory.h"
+#include "quantum/bitspace/forward_window_result.h"
 
 namespace sep::apps::cuda {
 
-// Alias the types from the quantum::bitspace namespace for convenience
-using TrajectoryPoint = ::sep::quantum::bitspace::TrajectoryPoint;
-using DampedValue = ::sep::quantum::bitspace::DampedValue;
+// Use full namespace paths to avoid CUDA compilation issues
+// using TrajectoryPoint = ::sep::quantum::bitspace::TrajectoryPoint;
+// using DampedValue = ::sep::quantum::bitspace::DampedValue;
+// using ForwardWindowResult = ::sep::quantum::bitspace::ForwardWindowResult;
 
 // Device-side equivalent of TrajectoryPoint
 struct TrajectoryPointDevice {

@@ -128,7 +128,7 @@ void OandaTraderApp::run() {
                 }
             }
             const uint64_t window_size_ns = 24ULL * 3600ULL * 1000000000ULL; // 24 hours
-            calculateForwardWindowsCuda(cuda_context_, ticks, forward_window_results_, window_size_ns);
+            sep::apps::cuda::calculateForwardWindowsCuda(cuda_context_, ticks, forward_window_results_, window_size_ns);
         }
         glfwPollEvents();
         

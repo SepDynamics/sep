@@ -10,6 +10,7 @@
 #include <thread>
 #include <vector>
 
+#include "quantum/bitspace/forward_window_result.h"
 #include "connectors/oanda_connector.h"
 #include "engine/internal/engine.h"
 #include "imgui.h"

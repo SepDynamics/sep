@@ -200,7 +200,7 @@ QuantumIdentifiers QuantumSignalBridge::calculateIdentifiersWithConvergence(
 QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
     const sep::connectors::MarketData& current_data,
     const std::vector<sep::connectors::MarketData>& history,
-    const std::vector<sep::quantum::bitspace::ForwardWindowResult>& forward_window_results) {
+    const std::vector<sep::apps::cuda::ForwardWindowResult>& forward_window_results) {
     std::lock_guard<std::mutex> lock(analysis_mutex_);
 
         QuantumTradingSignal signal;

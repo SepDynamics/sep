@@ -20,7 +20,7 @@ struct Signal {
     double stability;
 };
 
-struct ForwardWindowResult {
+struct QuantumSignalResult {
     double mean_price;
     float coherence;
     float stability;

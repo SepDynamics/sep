@@ -69,7 +69,7 @@ cudaError_t calculateWindowsCuda(
 cudaError_t calculateForwardWindowsCuda(
     CudaContext& context,
     const std::vector<TickData>& ticks,
-    std::vector<sep::quantum::bitspace::ForwardWindowResult>& results,
+    std::vector<::sep::quantum::bitspace::ForwardWindowResult>& results,
     uint64_t window_size_ns);
 
 } // namespace sep::apps::cuda

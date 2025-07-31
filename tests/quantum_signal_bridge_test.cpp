@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "quantum/bitspace/forward_window_result.h"
 #include "apps/oanda_trader/quantum_signal_bridge.hpp"
 
 TEST(QuantumSignalBridgeTest, Initialization) {

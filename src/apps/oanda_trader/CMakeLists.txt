@@ -8,6 +8,7 @@ add_library(sep_trader_cuda
 
 target_include_directories(sep_trader_cuda PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
 )
 set_target_properties(sep_trader_cuda PROPERTIES
     CUDA_STANDARD 17

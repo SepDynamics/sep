@@ -29,6 +29,17 @@ public:
      */
     static std::vector<uint8_t> candlesToByteStream(const std::vector<OandaCandle>& candles);
     
+    /**
+     * @brief Convert price vector to bit stream
+     * 
+     * Converts a vector of double prices into a normalized bit stream
+     * for quantum pattern analysis.
+     * 
+     * @param prices Vector of price values
+     * @return Bit stream representation of price movements
+     */
+    static std::vector<uint8_t> convertToBitstream(const std::vector<double>& prices);
+    
 
     
     /**

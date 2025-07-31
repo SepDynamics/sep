@@ -1,155 +1,83 @@
-# SEP Engine Development Status: Complete Mathematical Validation Achieved
+# SEP Engine - Development Roadmap
 
-## ✅ COMPLETED: Complete Test Suite Validation (7/7 Passing)
-
-**Critical Achievement**: All mathematical foundations and system components have been verified and are operational.
-
-### ✅ Mathematical Foundation Validated
-- **Forward Window Metrics**: Core pattern classification algorithms confirmed operational (5 critical tests)
-- **Shannon Entropy**: Information theory calculations working correctly
-- **Coherence Scoring**: Predictability algorithms validated against test expectations
-- **Stability Measurement**: Temporal consistency analysis verified
-- **Literature Translation**: Mathematical theory correctly implemented in production code
-
-### ✅ Complete System Integration
-- **CUDA Acceleration**: GPU processing operational with Toolkit v12.9 (73ms test execution)
-- **Signal Generation**: End-to-end BUY/SELL/HOLD decision pipeline confirmed
-- **Financial Validation**: 47.24% prediction accuracy on real OANDA EUR/USD data
-- **GUI Integration**: ImPlot context management fixed, plotting pipeline operational
-- **Production Ready**: Docker hermetic builds eliminating environment dependencies
-
-### ✅ All Core Tests Passing
-1. **`trajectory_metrics_test`** ✅ - CUDA/CPU parity validation (4 tests)
-2. **`quantum_signal_bridge_test`** ✅ - Signal generation pipeline (2 tests)
-3. **`pattern_metrics_test`** ✅ - Core algorithm verification (8 tests)
-4. **`quantum_tracker --test`** ✅ - End-to-end headless validation
-5. **`pme_testbed`** ✅ - Real financial data backtesting
-6. **`test_forward_window_metrics`** ✅ - **Critical foundation algorithms** (5 tests)
-7. **System Integration** ✅ - GUI, CUDA, and data pipeline integration
-
-## Production Deployment Status
-
-**System Status**: Ready for production alpha generation deployment
-
-### Verified Production Capabilities
-- **Mathematical Accuracy**: All core algorithms validated against literature specifications
-- **CUDA Performance**: GPU acceleration confirmed operational across all components
-- **Real-time Processing**: Tick-level financial data processing validated
-- **Financial Backtesting**: Measurable prediction accuracy on real market data
-- **Build System**: Hermetic Docker builds eliminating deployment dependencies
-
-### Current Development Priorities
-
-#### **Phase 1: Alpha Strategy Optimization** ✅ COMPLETED
-   **Goal:** Mathematical foundation verification and test validation
-   
-   - [x] **Complete Test Suite Validation** 
-     - All 7 critical test suites passing with 100% coverage
-     - Forward Window Metrics validates mathematical core
-     - CUDA/CPU parity confirmed across all algorithms
-     - Real financial data backtesting operational
-   
-   - [x] **Mathematical Foundation Verification**
-     - Pattern classification algorithms working correctly
-     - Shannon entropy calculations confirmed
-     - Coherence and stability measurements validated
-     - Literature theory correctly translated to production code
-
-   - [x] **System Integration Validation**
-     - GUI plotting pipeline operational (ImPlot context management fixed)
-     - CUDA acceleration verified (Toolkit v12.9)
-     - Docker hermetic builds eliminating environment dependencies
-     - Production deployment readiness confirmed
+This document outlines the development roadmap for the SEP Engine, from core metric refinement to advanced performance optimization.
 
 ---
 
-#### **Phase 2: Core Metrics Fix (2-3 days)**
-   **Goal:** Fix coherence/stability/entropy calculations on CPU first (no CUDA yet) to ensure "damping" via future integration. This addresses "metrics not right" by implementing trajectory-based damping.
+## Phase 1: Core Metrics Refinement (In Progress)
 
-   - [ ] **Implement Bitstream to Damped Value Conversion**
-     - In `src/quantum/qfh.cpp`: Add `integrateFutureTrajectories` function: For each bit position i, compute value as sum of future bits weighted by decay (e.g., coherence decay = e^{-distance}).
-     - Handle flux: Loop until stability > threshold (e.g., variance < epsilon).
-     - Action: Modify `processPatternBits` to store path history (vector of intermediate values) until damped.
-     - Reference: Your insight: "Integrates future metrics until stabilizes."
+**Goal:** Implement trajectory-based damping for core metrics (coherence, stability, entropy) to improve signal accuracy and stability. This phase is critical for establishing a robust foundation for future performance enhancements.
 
-   - [ ] **Enhance QBSA for Collapse Detection in Flux**
-     - In `src/quantum/qbsa.cpp`: Add duplication logic – create independent instances per data package.
-     - Combine metrics: Entropy = avg(flux_values); if flux, measure combination (e.g., weighted sum).
-     - Action: Implement `duplicateForPackage` returning QBSAResult with damped value.
+### Sub-phase 1.1: CPU Implementation & Validation (Completed)
+- [x] **Implement CPU Fallback for Metrics**: Implement `simulateForwardWindowMetrics` as a CPU version of the kernel for testing and validation.
 
-   - [ ] **Add Trajectory Matching for Confidence**
-     - New function in `src/quantum/pattern_processor.cpp`: `matchKnownPaths` – store historical damped paths in a map; confidence = cosine_similarity(current_path, historical_path).
-     - Action: On stabilization, store path in persistent storage (e.g., Redis via `src/memory/redis_manager.cpp`).
+### Sub-phase 1.2: Core Damping Logic (Current)
+- [ ] **Implement Bitstream to Damped Value Conversion**
+  - In `src/quantum/qfh.cpp`: Add `integrateFutureTrajectories` function.
+  - Handle signal flux by looping until stability is achieved.
+  - Store trajectory path history for confidence analysis.
+- [ ] **Enhance QBSA for Collapse Detection in Flux**
+  - In `src/quantum/qbsa.cpp`: Add logic to handle multiple independent data packages.
+  - Combine metrics from flux states to produce a single, coherent output.
+- [ ] **Add Trajectory Matching for Confidence Scoring**
+  - In `src/quantum/pattern_processor.cpp`: Implement `matchKnownPaths` to compare current trajectories against historical data.
+  - Integrate with a persistent storage solution (e.g., Redis) to manage historical paths.
 
-   - [ ] **CPU Fallback for Metrics**
-     - Implement `simulateForwardWindowMetrics` as per example unit tests (CPU version of kernel).
-     - Action: Add to `src/apps/oanda_trader/forward_window_kernels.cu` (host function).
+### Sub-phase 1.3: CUDA Kernel Implementation
+- [ ] **Implement QFH Kernel for Bit Transitions**
+  - In `src/engine/kernels.cu`: Create `qfhKernel` to process bit packages in parallel.
+  - Integrate future bits for damping and output damped metrics.
+- [ ] **Implement QBSA Kernel for Collapse Detection**
+  - Create `qbsaKernel` for parallel probe/expectation analysis.
+  - Combine with QFH output for a comprehensive entropy calculation.
+- [ ] **Integrate Trajectory Storage in Kernel**
+  - Use device memory for path history and copy back damped values and confidence scores.
 
----
-
-#### **Phase 3: CUDA Kernel Implementation (3-5 days)**
-   **Goal:** Parallelize QBSA/QFH for independent processing per data package. Fix "harder than thought" by starting small (one kernel per metric) and using your existing CUDA setup.
-
-   - [ ] **Setup CUDA Environment Properly**
-     - Fix build issues from last prompt: Replace sep::cuda wrappers with native (e.g., cudaSetDevice -> ::cudaSetDevice in `src/engine/cuda_impl.cu`).
-     - Include `forward_window_kernels.cuh` everywhere needed (e.g., `quantum_signal_bridge.hpp`).
-     - Action: Run `./scripts/run_cmake_and_build.sh`; if fails, use web_search for "CUDA type redefinition errors" (tool: web_search, query: "CUDA driver_types.h redefinition errors site:stackoverflow.com").
-
-   - [ ] **Implement QFH Kernel for Bit Transitions**
-     - In `src/engine/kernels.cu`: New kernel `qfhKernel` – per thread: process bit package, compute transitions (NULL/FLIP/RUPTURE), integrate future bits for damping.
-     - Duplicate: Launch grid with one block per package.
-     - Action: Output damped coherence/stability to `ForwardWindowResult`.
-
-   - [ ] **Implement QBSA Kernel for Collapse**
-     - Similar: `qbsaKernel` – per thread: probe/expectation analysis on future window, loop until damped.
-     - Action: Combine with QFH output for entropy.
-
-   - [ ] **Integrate Trajectory Storage in Kernel**
-     - Use device memory for path history; copy back damped value + confidence.
-     - Action: Modify `OandaTraderApp::run()` to pass bitstreams to kernels via `quantum_signal_bridge`.
-
-   - [ ] **Handle Flux in Kernels**
-     - Kernel loop: While (!stabilized), integrate next future bit; measure combination if flux.
-     - Reference: Invention disclosure for QBSA predictive correction.
+### Sub-phase 1.4: Testing & Validation
+- [ ] **Implement & Run Unit Tests**
+  - Create `test_forward_window_metrics.cpp` to validate the output of the new kernels.
+  - Add tests for damping and flux handling.
+- [ ] **Backtest Validation**
+  - Enhance `examples/pme_testbed.cpp` with the new damped metrics.
+  - Target >70% accuracy in backtesting.
+- [ ] **Live Validation**
+  - In `src/apps/oanda_trader/quantum_tracker_window.cpp`: Display damped values for live monitoring.
 
 ---
 
-#### **Phase 4: Testing & Validation (2-3 days)**
-   **Goal:** Use example unit tests to validate "metrics are right." This builds confidence before live integration.
+## Phase 2: Pattern Recognition Optimization
 
-   - [ ] **Implement & Run Unit Tests**
-     - Create `test_forward_window_metrics.cpp` as provided.
-     - Add `simulateForwardWindowMetrics` CPU stub for initial testing.
-     - Action: Compile with gtest; run on bit patterns (e.g., AllFlip should have high coherence).
-     - Extend: Add tests for damping (e.g., undamped flux -> combined measurement).
+**Goal:** Increase prediction accuracy by enhancing pattern diversity and adding multi-timeframe analysis.
 
-   - [ ] **Backtest Validation**
-     - Use old TODO's Phase 3: Run on OANDA data; target >70% accuracy.
-     - Action: Enhance `examples/pme_testbed.cpp` with new damped metrics; compute Sharpe.
-
-   - [ ] **Live Validation**
-     - In `src/apps/oanda_trader/quantum_tracker_window.cpp`: Add damped value display.
-     - Action: Run live; compare to manual trajectory calculations.
+- [ ] **Advanced Forward Window Analysis**: Expand from 5 to 15+ pattern types.
+- [ ] **Multi-Timeframe Analysis**: Implement simultaneous analysis across M1, M5, M15, and H1 timeframes.
+- [ ] **Hierarchical Classification**: Develop a hierarchical model for pattern classification.
 
 ---
 
-#### **Phase 5: Integration & Optimization (Ongoing)**
-   **Goal:** Tie back to full system; optimize for production.
+## Phase 3: Machine Learning Integration
 
-   - [ ] **Full Pipeline Integration**
-     - Feed damped metrics to signal generation in `quantum_signal_bridge.cpp`.
-     - Action: Update `processQuantumMetrics` to use trajectory confidence.
+**Goal:** Integrate a quantum-enhanced neural ensemble to learn from historical data and improve predictive accuracy.
 
-   - [ ] **Optimization Loop**
-     - Use `run_alpha_experiment.py` for threshold tuning on damped values.
-     - Action: Target +0.0084 pips alpha with >65% accuracy.
-
-   - [ ] **Documentation Update**
-     - Update `README.md` and `TODO.md` with new bitspace logic.
-     - Action: Add "Bitspace Damping Guide" referencing proofs.
+- [ ] **Quantum-Enhanced Neural Networks**: Use quantum algorithms as feature extractors for a neural network ensemble.
+- [ ] **Adaptive Threshold Optimization**: Implement dynamic thresholds based on market conditions (volatility, trend strength, etc.).
+- [ ] **Explainability**: Maintain explainability through quantum feature attribution.
 
 ---
 
-**Next Immediate Action:** Start with Phase 1 audit – run `pattern_metric_example` on a sample OANDA file and log metric mismatches. Then, reply with results/output for Phase 2 guidance (e.g., we can generate code via code_execution tool if needed).
+## Phase 4: Multi-Asset Intelligence
 
-This structure uses your docs as foundation, focuses on your insights, and resolves the roadblock by isolating CPU fixes before CUDA. If you need tool calls (e.g., search for CUDA examples), specify!
+**Goal:** Expand the engine's capabilities beyond EUR/USD to include cross-asset correlation and fundamental data fusion.
+
+- [ ] **Cross-Asset Correlation Analysis**: Analyze correlated pairs (e.g., GBP/USD, AUD/USD) and asset classes.
+- [ ] **Economic Calendar Integration**: Incorporate fundamental analysis and news impact weighting.
+
+---
+
+## Phase 5: Real-Time Optimization & Deployment
+
+**Goal:** Implement a live performance feedback loop and advanced risk management for production deployment.
+
+- [ ] **Live Performance Feedback Loop**: Continuously update models based on live trading results.
+- [ ] **Advanced Risk Management**: Implement coherence-weighted Kelly Criterion for optimal position sizing.
+- [ ] **Deployment**: Achieve 70%+ accuracy target for client deployment.

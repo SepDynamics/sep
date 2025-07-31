@@ -32,7 +32,42 @@ std::vector<uint8_t> MarketDataConverter::candlesToByteStream(const std::vector<
     return stream;
 }
 
-
+std::vector<uint8_t> MarketDataConverter::convertToBitstream(const std::vector<double>& prices) {
+    std::vector<uint8_t> stream;
+    
+    if (prices.empty()) return stream;
+    
+    // Normalize prices to [0,1] range
+    auto minmax = std::minmax_element(prices.begin(), prices.end());
+    double min_price = *minmax.first;
+    double max_price = *minmax.second;
+    double range = max_price - min_price;
+    
+    if (range == 0.0) {
+        // All prices are the same, return zero stream
+        stream.resize((prices.size() + 7) / 8, 0);
+        return stream;
+    }
+    
+    // Convert each price to a normalized value and then to bits
+    for (size_t i = 0; i < prices.size(); ++i) {
+        double normalized = (prices[i] - min_price) / range;
+        
+        // Convert to 8-bit value
+        uint8_t byte_val = static_cast<uint8_t>(normalized * 255.0);
+        stream.push_back(byte_val);
+        
+        // Also add price movement direction as bit pattern
+        if (i > 0) {
+            bool up_move = prices[i] > prices[i-1];
+            if (stream.size() % 2 == 0) {
+                stream.push_back(up_move ? 0xFF : 0x00);
+            }
+        }
+    }
+    
+    return stream;
+}
 
 std::vector<uint8_t> MarketDataConverter::orderBookToByteStream(
     const std::vector<std::pair<double, double>>& bid_book,

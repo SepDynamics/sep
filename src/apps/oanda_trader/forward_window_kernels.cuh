@@ -3,8 +3,13 @@
 
 #include <vector>
 #include <cstdint>
+#include "quantum/bitspace/trajectory.h"
 
 namespace sep::apps::cuda {
+
+// Alias the types from the quantum::bitspace namespace for convenience
+using TrajectoryPoint = ::sep::quantum::bitspace::TrajectoryPoint;
+using DampedValue = ::sep::quantum::bitspace::DampedValue;
 
 // Device-side equivalent of TrajectoryPoint
 struct TrajectoryPointDevice {
@@ -24,6 +29,9 @@ void launchTrajectoryKernel(const TrajectoryPointDevice* trajectory_points,
                             DampedValueDevice* results,
                             int num_trajectories,
                             int trajectory_length);
+
+// CPU version for testing and fallback
+void simulateForwardWindowMetrics(const std::vector<::sep::quantum::bitspace::TrajectoryPoint>& trajectories, std::vector<::sep::quantum::bitspace::DampedValue>& results);
 
 } // namespace sep::apps::cuda
 

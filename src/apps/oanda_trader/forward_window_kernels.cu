@@ -37,7 +37,7 @@ __global__ void trajectoryKernel(const TrajectoryPointDevice* trajectories,
             next_value /= total_weight;
         }
 
-        if (abs(next_value - current_value) < convergence_threshold) {
+        if (fabs(next_value - current_value) < convergence_threshold) {
             converged = true;
             break;
         }
@@ -66,6 +66,33 @@ void launchTrajectoryKernel(const TrajectoryPointDevice* trajectory_points,
     if (err != cudaSuccess) {
         // In a real application, you would handle this error appropriately
     }
+}
+
+} // namespace sep::apps::cuda
+
+namespace sep::apps::cuda {
+
+void simulateForwardWindowMetrics(const std::vector<sep::quantum::bitspace::TrajectoryPoint>& trajectory_points, std::vector<sep::quantum::bitspace::DampedValue>& results) {
+    if (trajectory_points.empty()) {
+        results.clear();
+        return;
+    }
+
+    // This function simulates the kernel's behavior for a single trajectory.
+    // The input vector `trajectory_points` is treated as a single trajectory.
+    
+    // Create a Trajectory object from the input points.
+    sep::quantum::bitspace::Trajectory trajectory(trajectory_points);
+    
+    // Calculate the damped value.
+    // The parameters for decay_rate, convergence_threshold, and max_iterations
+    // are using the default values from the Trajectory class.
+    sep::quantum::bitspace::DampedValue damped_value = trajectory.calculateDampedValue();
+    
+    // The function is expected to return a vector of results, so we resize it to 1
+    // and place our single result in it.
+    results.resize(1);
+    results[0] = damped_value;
 }
 
 } // namespace sep::apps::cuda

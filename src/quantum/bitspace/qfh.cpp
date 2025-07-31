@@ -1,5 +1,6 @@
 #include "quantum/bitspace/qfh.h"
 #include "engine/internal/standard_includes.h"
+#include "quantum/bitspace/trajectory.h"
 
 #include <cmath>
 #include <iostream>
@@ -78,6 +79,24 @@ void sep::quantum::QFHProcessor::reset() {
     prev_bit.reset();
 }
 
+bitspace::DampedValue QFHBasedProcessor::integrateFutureTrajectories(const std::vector<uint8_t>& bitstream, size_t current_index) {
+    bitspace::DampedValue damped_value;
+    double accumulated_value = 0.0;
+    double lambda = 0.1; // Decay constant, should be tuned
+
+    for (size_t i = current_index + 1; i < bitstream.size(); ++i) {
+        double future_bit = bitstream[i];
+        double current_bit = bitstream[current_index];
+        accumulated_value += (future_bit - current_bit) * std::exp(-lambda * (i - current_index));
+    }
+
+    damped_value.final_value = accumulated_value;
+    // In a real implementation, the path would be stored.
+    // damped_value.path = ...;
+
+    return damped_value;
+}
+
 // QFHBasedProcessor implementation
 sep::quantum::QFHBasedProcessor::QFHBasedProcessor(const QFHOptions& options) : options_(options) {}
 
@@ -153,6 +172,12 @@ sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const std::vect
         result.coherence = std::clamp(raw_coherence * raw_coherence * 1.1f, 0.0f, 1.0f);
     }
     
+    // Integrate future trajectories for damping
+    if (!bits.empty()) {
+        bitspace::DampedValue dv = integrateFutureTrajectories(bits, 0);
+        result.coherence = 1.0 - dv.final_value; // Example of using the damped value
+    }
+
     // Detect collapse
     result.collapse_detected = (result.rupture_ratio >= options_.collapse_threshold);
     

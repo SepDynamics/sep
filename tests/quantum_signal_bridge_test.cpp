@@ -22,10 +22,10 @@ TEST(QuantumSignalBridgeTest, SignalGeneration) {
         history.push_back(data);
     }
 
-    std::vector<sep::apps::cuda::ForwardWindowResult> forward_window_results;
+    std::vector<sep::quantum::bitspace::ForwardWindowResult> forward_window_results;
     // Populate with dummy data
     for (int i = 0; i < 100; ++i) {
-        sep::apps::cuda::ForwardWindowResult result;
+        sep::quantum::bitspace::ForwardWindowResult result;
         result.confidence = 0.8f;
         result.coherence = 0.8f;
         result.stability = 0.8f;

@@ -14,6 +14,7 @@
 #include "quantum/types.h"
 #include "apps/oanda_trader/cuda_types.cuh"
 #include "apps/oanda_trader/forward_window_kernels.cuh"
+#include "quantum/bitspace/forward_window_result.h"
 
 namespace sep::trading {
 

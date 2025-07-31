@@ -17,6 +17,7 @@ namespace sep::quantum {
         std::vector<uint32_t> corrections;
         float correction_ratio{0.0f};
         bool collapse_detected{false};
+        double damped_value{0.0};
     };
 
 struct QBSAOptions {
@@ -40,6 +41,9 @@ public:
 
     // Get options
     const QBSAOptions& getOptions() const;
+
+    // Duplication logic for flux analysis
+    virtual QBSAResult duplicateForPackage(const std::vector<uint8_t>& bitstream);
 
 private:
     QBSAOptions options_;

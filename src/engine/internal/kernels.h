@@ -1,8 +1,12 @@
 #ifndef SEP_CUDA_KERNELS_H
 #define SEP_CUDA_KERNELS_H
 
-#include <cstdint>
 #include <cuda_runtime.h>
+
+#include <cstdint>
+
+#include "quantum/bitspace/qfh.h"
+#include "quantum/bitspace/forward_window_result.h"
 
 // Forward declarations of kernel launch functions
 cudaError_t launchQBSAKernel(const std::uint32_t *d_probe_indices,
@@ -15,6 +19,11 @@ cudaError_t launchQSHKernel(const std::uint64_t *d_chunks,
                             std::uint32_t *d_collapse_indices,
                             std::uint32_t *d_collapse_counts,
                             cudaStream_t stream);
+
+cudaError_t launchQFHBitTransitionsKernel(const uint8_t *d_bit_packages, int num_packages,
+                                          int package_size,
+                                          sep::quantum::bitspace::ForwardWindowResult *d_results,
+                                          cudaStream_t stream);
 
 cudaError_t launchSimilarityKernel(float *d_similarity, const float *d_emb_a,
                                    const float *d_emb_b,

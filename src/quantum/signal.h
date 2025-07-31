@@ -20,4 +20,16 @@ struct Signal {
     double stability;
 };
 
+struct ForwardWindowResult {
+    double mean_price;
+    float coherence;
+    float stability;
+    float confidence;
+    float entropy;
+    int rupture_count;
+    int flip_count;
+    float damped_coherence;
+    float damped_stability;
+};
+
 } // namespace sep::quantum

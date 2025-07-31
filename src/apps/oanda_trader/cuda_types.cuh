@@ -30,15 +30,11 @@ struct WindowResult {
     uint64_t window_end;
 };
 
-struct ForwardWindowResult {
-    double mean_price;
-    float coherence;
-    float stability;
-    float confidence;
-    float entropy;
-    int rupture_count;
-    int flip_count;
-};
+// ForwardWindowResult is now defined in src/quantum/bitspace/forward_window_result.h
+#include "quantum/bitspace/forward_window_result.h"
+
+// Using alias to maintain compatibility with existing code
+using ForwardWindowResult = sep::quantum::bitspace::ForwardWindowResult;
 
 // CUDA context for managing device memory and streams
 struct CudaContext {

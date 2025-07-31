@@ -439,7 +439,7 @@ cudaError_t calculateWindowsCuda(
 cudaError_t calculateForwardWindowsCuda(
     CudaContext& context,
     const std::vector<TickData>& ticks,
-    std::vector<ForwardWindowResult>& results,
+    std::vector<sep::quantum::bitspace::ForwardWindowResult>& results,
     uint64_t window_size_ns) {
     
     if (!context.initialized) {
@@ -453,7 +453,7 @@ cudaError_t calculateForwardWindowsCuda(
     
     // Calculate forward window metrics based on bitspace math
     for (size_t i = 0; i < num_windows && i < ticks.size(); ++i) {
-        ForwardWindowResult& result = results[i];
+        sep::quantum::bitspace::ForwardWindowResult& result = results[i];
         
         // Calculate coherence - measure of pattern consistency
         double price_variance = 0.0;

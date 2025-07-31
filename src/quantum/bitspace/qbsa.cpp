@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <vector>
+#include "quantum/bitspace/trajectory.h"
 
 namespace sep::quantum {
 
@@ -50,6 +51,23 @@ bool QBSAProcessor::detectCollapse(const QBSAResult& result, std::size_t total_b
 
 const QBSAOptions& QBSAProcessor::getOptions() const {
   return options_;
+}
+
+QBSAResult QBSAProcessor::duplicateForPackage(const std::vector<uint8_t>& bitstream) {
+    // This is a simplified implementation. A real implementation would involve
+    // creating a new QBSAProcessor instance for each package and processing it.
+    QBSAResult result;
+    double accumulated_value = 0.0;
+    double lambda = 0.1; // Decay constant, should be tuned
+
+    for (size_t i = 1; i < bitstream.size(); ++i) {
+        double future_bit = bitstream[i];
+        double current_bit = bitstream[0];
+        accumulated_value += (future_bit - current_bit) * std::exp(-lambda * i);
+    }
+
+    result.damped_value = accumulated_value;
+    return result;
 }
 
 }  // namespace sep::quantum

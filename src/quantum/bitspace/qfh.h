@@ -7,7 +7,7 @@
 #include <optional>
 #include <vector>
 
-#include "engine/internal/standard_includes.h"
+#include "quantum/bitspace/trajectory.h"
 
 namespace sep::quantum {
 
@@ -80,6 +80,8 @@ public:
 
     // Analyze bit pattern
     QFHResult analyze(const std::vector<uint8_t>& bits);
+    bitspace::DampedValue integrateFutureTrajectories(const std::vector<uint8_t>& bitstream,
+                                                      size_t current_index);
 
     // Detect collapse based on rupture ratio
     bool detectCollapse(const QFHResult& result) const;

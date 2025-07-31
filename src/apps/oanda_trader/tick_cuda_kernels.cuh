@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstdint>
 #include "cuda_types.cuh"
+#include "quantum/bitspace/forward_window_result.h"
 
 namespace sep::apps::cuda {
 
@@ -68,7 +69,7 @@ cudaError_t calculateWindowsCuda(
 cudaError_t calculateForwardWindowsCuda(
     CudaContext& context,
     const std::vector<TickData>& ticks,
-    std::vector<ForwardWindowResult>& results,
+    std::vector<sep::quantum::bitspace::ForwardWindowResult>& results,
     uint64_t window_size_ns);
 
 } // namespace sep::apps::cuda

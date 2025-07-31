@@ -75,7 +75,7 @@ private:
     std::unique_ptr<sep::trading::QuantumSignalBridge> quantum_bridge_;
     sep::trading::QuantumTradingSignal last_signal_;
     std::mutex signal_mutex_;
-    std::vector<sep::apps::cuda::ForwardWindowResult> forward_window_results_;
+    std::vector<sep::quantum::bitspace::ForwardWindowResult> forward_window_results_;
     std::vector<nlohmann::json> open_positions_;
     std::mutex positions_mutex_;
 

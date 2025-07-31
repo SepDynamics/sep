@@ -18,7 +18,7 @@ workspace/
 actions-runner/
 *build*/
 */build/
-Testing/OANDA/
+Testing/OANDA/sample_48h.json
 cmake-build-*/
 
 # Compiled Files

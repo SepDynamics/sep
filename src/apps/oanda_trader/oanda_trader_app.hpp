@@ -12,8 +12,10 @@
 
 #include "connectors/oanda_connector.h"
 #include "engine/internal/engine.h"
-#include "forward_window_kernels.cuh"
 #include "imgui.h"
+#include "apps/oanda_trader/cuda_types.cuh"
+#include "apps/oanda_trader/forward_window_kernels.cuh"
+#include "apps/oanda_trader/tick_cuda_kernels.cuh"
 #include "quantum_signal_bridge.hpp"
 #include "util/managed_thread.hpp"
 
@@ -21,7 +23,7 @@ namespace sep::apps {
 
 class OandaTraderApp {
 public:
-    OandaTraderApp() = default;
+    explicit OandaTraderApp(bool headless = false) : headless_mode_(headless) {}
     ~OandaTraderApp() = default;
 
     // Core lifecycle
@@ -73,7 +75,7 @@ private:
     std::unique_ptr<sep::trading::QuantumSignalBridge> quantum_bridge_;
     sep::trading::QuantumTradingSignal last_signal_;
     std::mutex signal_mutex_;
-    std::vector<sep::apps::cuda::DampedValueDevice> forward_window_results_;
+    std::vector<sep::apps::cuda::ForwardWindowResult> forward_window_results_;
     std::vector<nlohmann::json> open_positions_;
     std::mutex positions_mutex_;
 
@@ -82,6 +84,10 @@ private:
     
     // Error handling
     std::string last_error_;
+    sep::apps::cuda::CudaContext cuda_context_;
+    
+    // Runtime settings
+    bool headless_mode_ = false;
     
     // Window settings
     static constexpr int WINDOW_WIDTH = 1400;

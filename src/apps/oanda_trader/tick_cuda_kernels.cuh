@@ -65,7 +65,7 @@ cudaError_t calculateWindowsCuda(
     uint64_t hourly_window_ns,
     uint64_t daily_window_ns);
 
-__host__ __device__ cudaError_t calculateForwardWindowsCuda(
+cudaError_t calculateForwardWindowsCuda(
     CudaContext& context,
     const std::vector<TickData>& ticks,
     std::vector<ForwardWindowResult>& results,

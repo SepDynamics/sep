@@ -694,54 +694,92 @@ void QuantumTrackerWindow::renderThresholdControls() {
 }
 
 void QuantumTrackerWindow::renderMetricPlots() {
-    if (confidence_history_.empty()) {
+    if (confidence_history_.empty() || timestamp_history_.empty()) {
+        ImGui::Text("No data to plot yet...");
         return; // No data to plot yet
+    }
+    
+    // Ensure all data vectors are the same size
+    size_t min_size = std::min({
+        confidence_history_.size(),
+        coherence_history_.size(), 
+        stability_history_.size(),
+        price_history_plot_.size(),
+        timestamp_history_.size()
+    });
+    
+    if (min_size == 0) {
+        ImGui::Text("Waiting for data...");
+        return;
     }
     
     // Create time axis for plotting (use float to match metric data)
     std::vector<float> time_axis;
+    time_axis.reserve(min_size);
+    
     // Use first timestamp ever recorded, not rolling window, to prevent chart compression
     static double first_timestamp = 0.0;
     static bool first_timestamp_set = false;
-    if (!first_timestamp_set && !timestamp_history_.empty()) {
+    if (!first_timestamp_set) {
         first_timestamp = timestamp_history_.front();
         first_timestamp_set = true;
     }
-    for (size_t i = 0; i < timestamp_history_.size(); ++i) {
-        time_axis.push_back(static_cast<float>((timestamp_history_[i] - first_timestamp) / 1e9)); // Convert nanoseconds to seconds
+    
+    for (size_t i = 0; i < min_size; ++i) {
+        // Convert milliseconds to seconds (timestamp_history_ is in milliseconds)
+        time_axis.push_back(static_cast<float>((timestamp_history_[i] - first_timestamp) / 1000.0));
     }
     
     if (ImPlot::BeginPlot("Quantum Metrics Over Time", ImVec2(-1, 300))) {
         ImPlot::SetupAxes("Time (seconds)", "Value");
         ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 1.0, ImGuiCond_Always);
         
-        // Convert deques to vectors for plotting
-        std::vector<float> confidence_vec(confidence_history_.begin(), confidence_history_.end());
-        std::vector<float> coherence_vec(coherence_history_.begin(), coherence_history_.end());
-        std::vector<float> stability_vec(stability_history_.begin(), stability_history_.end());
+        // Convert deques to vectors for plotting with size limitation
+        std::vector<float> confidence_vec;
+        std::vector<float> coherence_vec;
+        std::vector<float> stability_vec;
         
-        // Plot confidence
-        ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), 2.0f); // Red
-        ImPlot::PlotLine("Confidence", time_axis.data(), confidence_vec.data(), static_cast<int>(confidence_vec.size()));
+        confidence_vec.reserve(min_size);
+        coherence_vec.reserve(min_size);
+        stability_vec.reserve(min_size);
         
-        // Plot coherence  
-        ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), 2.0f); // Green
-        ImPlot::PlotLine("Coherence", time_axis.data(), coherence_vec.data(), static_cast<int>(coherence_vec.size()));
+        auto conf_it = confidence_history_.begin();
+        auto coh_it = coherence_history_.begin();
+        auto stab_it = stability_history_.begin();
         
-        // Plot stability
-        ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), 2.0f); // Blue
-        ImPlot::PlotLine("Stability", time_axis.data(), stability_vec.data(), static_cast<int>(stability_vec.size()));
+        for (size_t i = 0; i < min_size; ++i) {
+            confidence_vec.push_back(*conf_it++);
+            coherence_vec.push_back(*coh_it++);
+            stability_vec.push_back(*stab_it++);
+        }
         
-        // Add threshold lines
-        ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 0.5f), 1.0f); // Red dashed
-        float conf_threshold = 0.8f;
-        std::vector<float> conf_thresh_line(time_axis.size(), conf_threshold);
-        ImPlot::PlotLine("Conf Threshold", time_axis.data(), conf_thresh_line.data(), static_cast<int>(conf_thresh_line.size()));
-        
-        ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 0.5f), 1.0f); // Green dashed
-        float coh_threshold = 0.7f;
-        std::vector<float> coh_thresh_line(time_axis.size(), coh_threshold);
-        ImPlot::PlotLine("Coh Threshold", time_axis.data(), coh_thresh_line.data(), static_cast<int>(coh_thresh_line.size()));
+        // Only plot if we have valid data
+        if (!confidence_vec.empty() && confidence_vec.size() == time_axis.size()) {
+            // Plot confidence
+            ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), 2.0f); // Red
+            ImPlot::PlotLine("Confidence", time_axis.data(), confidence_vec.data(), static_cast<int>(min_size));
+            
+            // Plot coherence  
+            ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), 2.0f); // Green
+            ImPlot::PlotLine("Coherence", time_axis.data(), coherence_vec.data(), static_cast<int>(min_size));
+            
+            // Plot stability
+            ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), 2.0f); // Blue
+            ImPlot::PlotLine("Stability", time_axis.data(), stability_vec.data(), static_cast<int>(min_size));
+            
+            // Add threshold lines only if we have data
+            if (time_axis.size() >= 2) {
+                ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 0.5f), 1.0f); // Red dashed
+                float conf_threshold = 0.8f;
+                std::vector<float> conf_thresh_line(time_axis.size(), conf_threshold);
+                ImPlot::PlotLine("Conf Threshold", time_axis.data(), conf_thresh_line.data(), static_cast<int>(time_axis.size()));
+                
+                ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 0.5f), 1.0f); // Green dashed
+                float coh_threshold = 0.7f;
+                std::vector<float> coh_thresh_line(time_axis.size(), coh_threshold);
+                ImPlot::PlotLine("Coh Threshold", time_axis.data(), coh_thresh_line.data(), static_cast<int>(time_axis.size()));
+            }
+        }
         
         ImPlot::EndPlot();
     }
@@ -750,10 +788,20 @@ void QuantumTrackerWindow::renderMetricPlots() {
     if (ImPlot::BeginPlot("Price Movement", ImVec2(-1, 200))) {
         ImPlot::SetupAxes("Time (seconds)", "Price");
         
-        std::vector<float> price_vec(price_history_plot_.begin(), price_history_plot_.end());
-        
-        ImPlot::SetNextLineStyle(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), 2.0f); // Yellow
-        ImPlot::PlotLine("EUR/USD", time_axis.data(), price_vec.data(), static_cast<int>(price_vec.size()));
+        if (min_size > 0 && time_axis.size() == min_size) {
+            std::vector<float> price_vec;
+            price_vec.reserve(min_size);
+            
+            auto price_it = price_history_plot_.begin();
+            for (size_t i = 0; i < min_size; ++i) {
+                price_vec.push_back(*price_it++);
+            }
+            
+            if (!price_vec.empty()) {
+                ImPlot::SetNextLineStyle(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), 2.0f); // Yellow
+                ImPlot::PlotLine("EUR/USD", time_axis.data(), price_vec.data(), static_cast<int>(min_size));
+            }
+        }
         
         ImPlot::EndPlot();
     }

@@ -22,6 +22,8 @@ function(add_sep_library target_name)
         )
     endif()
 
+
+
     set_target_properties(${target_name} PROPERTIES
         POSITION_INDEPENDENT_CODE ON
         CXX_STANDARD 17

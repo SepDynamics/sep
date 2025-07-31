@@ -1,5 +1,4 @@
 #include "oanda_trader_app.hpp"
-#include "tick_cuda_kernels.cuh"
 
 #include <GL/gl.h>
 #include <imgui_impl_glfw.h>
@@ -19,12 +18,14 @@
 namespace sep::apps {
 
 bool OandaTraderApp::initialize() {
-    if (!initializeGraphics()) {
-        last_error_ = "Failed to initialize graphics";
-        return false;
+    if (!headless_mode_) {
+        if (!initializeGraphics()) {
+            last_error_ = "Failed to initialize graphics";
+            return false;
+        }
+        
+        setupImGui();
     }
-    
-    setupImGui();
     
     // Initialize OANDA connector
     const char* api_key = std::getenv("OANDA_API_KEY");
@@ -113,7 +114,7 @@ void OandaTraderApp::setupImGui() {
 }
 
 void OandaTraderApp::run() {
-    sep::apps::cuda::initializeCudaDevice(context);
+    sep::apps::cuda::initializeCudaDevice(cuda_context_);
 
     while (!glfwWindowShouldClose(window_)) {
         // Perform forward-looking window calculations
@@ -127,7 +128,7 @@ void OandaTraderApp::run() {
                 }
             }
             const uint64_t window_size_ns = 24ULL * 3600ULL * 1000000000ULL; // 24 hours
-            calculateForwardWindowsCuda(context, ticks, forward_window_results_, window_size_ns);
+            calculateForwardWindowsCuda(cuda_context_, ticks, forward_window_results_, window_size_ns);
         }
         glfwPollEvents();
         
@@ -528,7 +529,7 @@ void OandaTraderApp::refreshAccountInfo() {
 }
 
 void OandaTraderApp::shutdown() {
-    sep::apps::cuda::cleanupCudaDevice(context);
+    sep::apps::cuda::cleanupCudaDevice(cuda_context_);
     if (oanda_connector_) {
         oanda_connector_->stopPriceStream();
     }

@@ -22,17 +22,13 @@ TEST(QuantumSignalBridgeTest, SignalGeneration) {
         history.push_back(data);
     }
 
-    std::vector<sep::apps::cuda::DampedValueDevice> forward_window_results;
+    std::vector<sep::apps::cuda::ForwardWindowResult> forward_window_results;
     // Populate with dummy data
     for (int i = 0; i < 100; ++i) {
-        sep::apps::cuda::DampedValueDevice result;
-        result.mean_price = 1.0;
-        result.coherence = 0.9f;
-        result.stability = 0.05f;
+        sep::apps::cuda::ForwardWindowResult result;
         result.confidence = 0.8f;
-        result.entropy = 0.1f;
-        result.rupture_count = 0;
-        result.flip_count = 0;
+        result.coherence = 0.8f;
+        result.stability = 0.8f;
         forward_window_results.push_back(result);
     }
 

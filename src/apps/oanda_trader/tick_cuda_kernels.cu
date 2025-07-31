@@ -436,4 +436,92 @@ cudaError_t calculateWindowsCuda(
     return cudaSuccess;
 }
 
+cudaError_t calculateForwardWindowsCuda(
+    CudaContext& context,
+    const std::vector<TickData>& ticks,
+    std::vector<ForwardWindowResult>& results,
+    uint64_t window_size_ns) {
+    
+    if (!context.initialized) {
+        return cudaErrorNotReady;
+    }
+    
+    // Clear and resize results based on tick data windows
+    results.clear();
+    size_t num_windows = std::max(1UL, ticks.size() / 100); // Create windows from tick data
+    results.resize(num_windows);
+    
+    // Calculate forward window metrics based on bitspace math
+    for (size_t i = 0; i < num_windows && i < ticks.size(); ++i) {
+        ForwardWindowResult& result = results[i];
+        
+        // Calculate coherence - measure of pattern consistency
+        double price_variance = 0.0;
+        double mean_price = 0.0;
+        size_t window_end = std::min(i + 100, ticks.size());
+        size_t window_size = window_end - i;
+        
+        if (window_size > 1) {
+            // Calculate mean price in window
+            for (size_t j = i; j < window_end; ++j) {
+                mean_price += ticks[j].price;
+            }
+            mean_price /= window_size;
+            
+            // Calculate variance for coherence
+            for (size_t j = i; j < window_end; ++j) {
+                double diff = ticks[j].price - mean_price;
+                price_variance += diff * diff;
+            }
+            price_variance /= window_size;
+            
+            // Coherence: inverse of normalized variance (higher coherence = lower variance)
+            result.coherence = 1.0f / (1.0f + static_cast<float>(price_variance * 10000.0));
+            
+            // Stability: based on price change consistency
+            double total_change = 0.0;
+            int direction_changes = 0;
+            for (size_t j = i + 1; j < window_end; ++j) {
+                double change = ticks[j].price - ticks[j-1].price;
+                total_change += std::abs(change);
+                if (j > i + 1) {
+                    double prev_change = ticks[j-1].price - ticks[j-2].price;
+                    if ((change > 0 && prev_change < 0) || (change < 0 && prev_change > 0)) {
+                        direction_changes++;
+                    }
+                }
+            }
+            result.stability = 1.0f - (static_cast<float>(direction_changes) / static_cast<float>(window_size - 1));
+            
+            // Entropy: measure of randomness in price movements
+            result.entropy = static_cast<float>(total_change / (window_size * mean_price));
+            
+            // Confidence: based on trajectory similarity (simplified)
+            result.confidence = result.coherence * result.stability * (1.0f - result.entropy);
+            
+            // Count ruptures and flips based on price movements
+            result.rupture_count = 0;
+            result.flip_count = direction_changes;
+            
+            // Check for significant price ruptures (>2% moves)
+            for (size_t j = i + 1; j < window_end; ++j) {
+                double price_change = std::abs((ticks[j].price - ticks[j-1].price) / ticks[j-1].price);
+                if (price_change > 0.02) { // 2% threshold
+                    result.rupture_count++;
+                }
+            }
+        } else {
+            // Default values for insufficient data
+            result.coherence = 0.5f;
+            result.stability = 0.5f;
+            result.entropy = 0.1f;
+            result.confidence = 0.25f;
+            result.rupture_count = 0;
+            result.flip_count = 0;
+        }
+    }
+    
+    return cudaSuccess;
+}
+
 } // namespace sep::apps::cuda

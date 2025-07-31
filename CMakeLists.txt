@@ -22,7 +22,7 @@ if(SEP_USE_CUDA)
     # Set CUDA paths before enabling language
     set(CMAKE_CUDA_COMPILER "$ENV{CUDA_HOME}/bin/nvcc")
     set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/clang++-15")
-    set(CMAKE_CUDA_ARCHITECTURES 75)
+    set(CMAKE_CUDA_ARCHITECTURES 61;75;86;89)
     
     # Now enable CUDA language
     enable_language(CUDA)
@@ -103,6 +103,7 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/oneapi-src/oneTBB.git
   GIT_TAG v2021.10.0
 )
+set(TBB_BUILD_SHARED ON CACHE BOOL "" FORCE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 FetchContent_MakeAvailable(tbb)
 

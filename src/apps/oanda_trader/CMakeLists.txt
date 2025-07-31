@@ -13,6 +13,7 @@ set_target_properties(sep_trader_cuda PROPERTIES
     CUDA_STANDARD 17
     CUDA_STANDARD_REQUIRED ON
     CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
     CUDA_ARCHITECTURES "61;75;86;89"
 )
 
@@ -20,16 +21,32 @@ target_link_libraries(sep_trader_cuda PRIVATE CUDA::cudart)
 
 add_library(sep_trader_logic
     quantum_signal_bridge.cpp
+    forward_window_kernels.cpp
 )
+
+target_link_libraries(sep_trader_logic PUBLIC sep_trader_cuda)
 
 target_include_directories(sep_trader_logic PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
 )
 
+add_library(oanda_trader_app_lib
+    oanda_trader_app.cpp
+)
+target_include_directories(oanda_trader_app_lib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/third_party/imgui
+)
+
+target_link_libraries(oanda_trader_app_lib PUBLIC
+    imgui
+    sep_trader_cuda
+)
+
 add_executable(oanda_trader
     main.cpp
-    oanda_trader_app.cpp
 )
 
 target_include_directories(oanda_trader PUBLIC
@@ -39,6 +56,7 @@ target_include_directories(oanda_trader PUBLIC
 )
 
 target_link_libraries(oanda_trader PUBLIC
+    oanda_trader_app_lib
     sep_trader_logic
     sep_trader_cuda
     sep_engine
@@ -50,7 +68,9 @@ target_link_libraries(oanda_trader PUBLIC
     OpenGL::GL
     glfw
     Threads::Threads
+    TBB::tbb
     ${CMAKE_DL_LIBS}
+    CUDA::cudart
 )
 
 set_target_properties(oanda_trader PROPERTIES
@@ -74,7 +94,6 @@ target_include_directories(quantum_tracker PUBLIC
     ${CMAKE_SOURCE_DIR}/third_party/imgui
     ${implot_SOURCE_DIR}
 )
-
 target_link_libraries(quantum_tracker PUBLIC
     sep_trader_logic
     sep_trader_cuda
@@ -88,7 +107,9 @@ target_link_libraries(quantum_tracker PUBLIC
     OpenGL::GL
     glfw
     Threads::Threads
+    TBB::tbb
     ${CMAKE_DL_LIBS}
+    CUDA::cudart
 )
 
 set_target_properties(quantum_tracker PROPERTIES

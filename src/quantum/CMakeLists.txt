@@ -30,7 +30,10 @@ add_sep_library(sep_quantum
     nlohmann_json::nlohmann_json
     CUDA::cudart
     CUDA::cuda_driver
+    tbb
 )
+
+add_dependencies(sep_quantum sep_memory)
 
 target_include_directories(sep_quantum PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}

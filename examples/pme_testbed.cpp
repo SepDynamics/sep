@@ -21,11 +21,28 @@ struct Candle {
 
 void from_json(const json& j, Candle& c) {
     j.at("time").get_to(c.time);
-    j.at("open").get_to(c.open);
-    j.at("high").get_to(c.high);
-    j.at("low").get_to(c.low);
-    j.at("close").get_to(c.close);
     j.at("volume").get_to(c.volume);
+    
+    // Handle OANDA format with nested "mid" object
+    if (j.contains("mid")) {
+        auto mid = j["mid"];
+        std::string open_str, high_str, low_str, close_str;
+        mid.at("o").get_to(open_str);
+        mid.at("h").get_to(high_str);
+        mid.at("l").get_to(low_str);
+        mid.at("c").get_to(close_str);
+        
+        c.open = std::stod(open_str);
+        c.high = std::stod(high_str);
+        c.low = std::stod(low_str);
+        c.close = std::stod(close_str);
+    } else {
+        // Handle simple format
+        j.at("open").get_to(c.open);
+        j.at("high").get_to(c.high);
+        j.at("low").get_to(c.low);
+        j.at("close").get_to(c.close);
+    }
 }
 
 int main(int argc, char** argv) {
@@ -45,7 +62,17 @@ int main(int argc, char** argv) {
     json j;
     data_stream >> j;
 
-    auto candles = j.get<std::vector<Candle>>();
+    std::vector<Candle> candles;
+    
+    // Handle both array format and OANDA object format
+    if (j.is_array()) {
+        candles = j.get<std::vector<Candle>>();
+    } else if (j.contains("candles") && j["candles"].is_array()) {
+        candles = j["candles"].get<std::vector<Candle>>();
+    } else {
+        std::cerr << "Invalid JSON format. Expected array of candles or object with 'candles' array." << std::endl;
+        return 1;
+    }
 
     // Instantiate the full SEP Engine
     sep::quantum::manifold::QuantumManifoldOptimizationEngine engine;

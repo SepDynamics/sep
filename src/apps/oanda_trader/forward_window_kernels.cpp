@@ -2,6 +2,79 @@
 #include <algorithm>
 #include <cmath>
 
+// Enhanced Pattern Detection Functions - Phase 2 Pattern Vocabulary
+namespace {
+
+// TrendAcceleration Pattern: Increasing frequency of changes towards the end
+bool detectTrendAcceleration(const std::vector<uint8_t>& window) {
+    if (window.size() < 6) return false;
+    
+    size_t half_size = window.size() / 2;
+    int first_half_flips = 0, second_half_flips = 0;
+    
+    // Count flips in first half
+    for (size_t i = 1; i < half_size; ++i) {
+        if (window[i] != window[i-1]) first_half_flips++;
+    }
+    
+    // Count flips in second half
+    for (size_t i = half_size + 1; i < window.size(); ++i) {
+        if (window[i] != window[i-1]) second_half_flips++;
+    }
+    
+    // Trend acceleration: second half has significantly more flips
+    return second_half_flips >= first_half_flips * 2;
+}
+
+// MeanReversion Pattern: High-low-high or low-high-low oscillation
+bool detectMeanReversion(const std::vector<uint8_t>& window) {
+    if (window.size() < 4) return false;
+    
+    // Look for patterns like 0-1-0-1-0 or 1-0-1-0-1 (mean reverting)
+    int peaks = 0, valleys = 0;
+    
+    for (size_t i = 1; i < window.size() - 1; ++i) {
+        // Peak: 1 surrounded by 0s
+        if (window[i] == 1 && window[i-1] == 0 && window[i+1] == 0) peaks++;
+        // Valley: 0 surrounded by 1s  
+        if (window[i] == 0 && window[i-1] == 1 && window[i+1] == 1) valleys++;
+    }
+    
+    // Mean reversion pattern: significant number of peaks/valleys
+    return (peaks + valleys) >= static_cast<int>(window.size()) / 3;
+}
+
+// VolatilityBreakout Pattern: Quiet period followed by sudden activity
+bool detectVolatilityBreakout(const std::vector<uint8_t>& window) {
+    if (window.size() < 6) return false;
+    
+    size_t quiet_threshold = window.size() / 3;
+    size_t active_threshold = window.size() / 3;
+    
+    // Find the longest quiet period (consecutive same values)
+    size_t max_quiet_length = 0, current_quiet = 1;
+    for (size_t i = 1; i < window.size(); ++i) {
+        if (window[i] == window[i-1]) {
+            current_quiet++;
+        } else {
+            max_quiet_length = std::max(max_quiet_length, current_quiet);
+            current_quiet = 1;
+        }
+    }
+    max_quiet_length = std::max(max_quiet_length, current_quiet);
+    
+    // Count total flips (activity)
+    int total_flips = 0;
+    for (size_t i = 1; i < window.size(); ++i) {
+        if (window[i] != window[i-1]) total_flips++;
+    }
+    
+    // Volatility breakout: long quiet period AND significant activity
+    return max_quiet_length >= quiet_threshold && total_flips >= static_cast<int>(active_threshold);
+}
+
+} // anonymous namespace
+
 namespace sep::apps::cuda {
 
 ForwardWindowResult simulateForwardWindowMetrics(const std::vector<uint8_t>& bits, size_t index_start) {
@@ -50,6 +123,19 @@ ForwardWindowResult simulateForwardWindowMetrics(const std::vector<uint8_t>& bit
         else if (result.flip_count == window.size() - 1) {
             result.coherence = 0.9f; // High coherence for alternating
         }
+        // Enhanced Pattern Vocabulary - Phase 2 Implementation
+        // TrendAcceleration Pattern: Increasing frequency of flips towards end
+        else if (detectTrendAcceleration(window)) {
+            result.coherence = 0.85f; // High coherence for trend acceleration
+        }
+        // MeanReversion Pattern: High-low-high or low-high-low pattern
+        else if (detectMeanReversion(window)) {
+            result.coherence = 0.75f; // Good coherence for mean reversion
+        }
+        // VolatilityBreakout Pattern: Sudden burst of activity after quiet period
+        else if (detectVolatilityBreakout(window)) {
+            result.coherence = 0.8f; // High coherence for volatility breakout
+        }
         // Distinguish between block patterns and random patterns
         else {
             // Count consecutive runs to detect block patterns
@@ -82,6 +168,19 @@ ForwardWindowResult simulateForwardWindowMetrics(const std::vector<uint8_t>& bit
         // Perfect alternating = high stability
         else if (result.flip_count == window.size() - 1) {
             result.stability = 0.95f;
+        }
+        // Enhanced Pattern Vocabulary - Phase 2 Stability Implementation
+        // TrendAcceleration Pattern: High stability due to directional momentum
+        else if (detectTrendAcceleration(window)) {
+            result.stability = 0.88f; // High stability for trend acceleration
+        }
+        // MeanReversion Pattern: Moderate stability (oscillating but predictable)
+        else if (detectMeanReversion(window)) {
+            result.stability = 0.7f; // Moderate stability for mean reversion
+        }
+        // VolatilityBreakout Pattern: Good stability after breakout
+        else if (detectVolatilityBreakout(window)) {
+            result.stability = 0.82f; // Good stability for volatility breakout
         }
         // Distinguish between block patterns and random patterns for stability
         else {

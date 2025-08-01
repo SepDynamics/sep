@@ -81,6 +81,7 @@ target_link_libraries(pme_testbed_phase2
     sep_quantum
     sep_memory
     sep_connectors
+    sep_trader_logic
     fmt::fmt
     ${CMAKE_THREAD_LIBS_INIT}
     nlohmann_json::nlohmann_json

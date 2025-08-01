@@ -81,10 +81,16 @@ public:
     // Analyze bit pattern
     QFHResult analyze(const std::vector<uint8_t>& bits);
     bitspace::DampedValue integrateFutureTrajectories(const std::vector<uint8_t>& bitstream,
-                                                      size_t current_index);
+    size_t current_index);
+    
+    // Match current trajectory against known historical paths for confidence scoring
+    double matchKnownPaths(const std::vector<double>& current_path);
 
     // Detect collapse based on rupture ratio
     bool detectCollapse(const QFHResult& result) const;
+    
+    // Helper function for trajectory similarity calculation
+    double calculateCosineSimilarity(const std::vector<double>& a, const std::vector<double>& b);
 
     // Convert uint32_t vector to bit vector
     static std::vector<uint8_t> convertToBits(const std::vector<uint32_t>& values);

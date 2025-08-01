@@ -9,6 +9,8 @@
 
 #include "quantum/quantum_manifold_optimizer.h"
 #include "quantum/signal.h"
+#include "quantum/bitspace/qfh.h"
+#include "apps/oanda_trader/forward_window_kernels.hpp"
 
 using json = nlohmann::json;
 
@@ -182,112 +184,88 @@ int main(int argc, char** argv) {
     sep::quantum::manifold::QuantumManifoldOptimizationEngine engine;
     engine.initialize();
 
-    // PHASE 2: Enhanced pattern analysis with market regime detection
-    std::vector<sep::quantum::manifold::QuantumPattern> quantum_patterns;
-    // EXPERIMENT 005: Market states disabled
-    // std::vector<AdvancedMarketAnalyzer::MarketState> market_states;
-    std::vector<double> close_prices;
+    // =================================================================
+    // EXPERIMENT 024: THE GREAT UNIFICATION 
+    // Switch from legacy QuantumManifoldOptimizationEngine to enhanced QFHBasedProcessor
+    // This connects Phase 2 trajectory damping and pattern vocabulary to main testbed
+    // Goal: Use trajectory-based damping and enhanced patterns for real accuracy improvement
+    // =================================================================
     
-    // Build price array for autocorrelation
+    // Initialize enhanced QFH processor with trajectory damping
+    sep::quantum::QFHOptions qfh_options;
+    qfh_options.collapse_threshold = 0.3f;  // Rupture ratio threshold
+    qfh_options.flip_threshold = 0.7f;      // Flip ratio threshold
+    sep::quantum::QFHBasedProcessor qfh_processor(qfh_options);
+    
+    // Convert candle data to bitstreams for QFH analysis
+    std::vector<double> close_prices;
     for (const auto& candle : candles) {
         close_prices.push_back(candle.close);
     }
     
+    // Generate bitstream from price movements
+    std::vector<uint8_t> price_bitstream;
+    for (size_t i = 1; i < close_prices.size(); ++i) {
+        // Convert price movement to bit: 1 = up, 0 = down
+        price_bitstream.push_back(close_prices[i] > close_prices[i-1] ? 1 : 0);
+    }
+    
+    std::cout << "Generated bitstream of " << price_bitstream.size() << " bits from " 
+              << close_prices.size() << " price points" << std::endl;
+    
+    std::vector<sep::quantum::manifold::QuantumPattern> quantum_patterns;
+    
+    // Process patterns using enhanced QFH with trajectory damping
     for (size_t i = 0; i < candles.size(); ++i) {
         const auto& candle = candles[i];
-        
-        // =================================================================
-        // EXPERIMENT 022: Dynamic threshold adaptation based on market conditions
-        // Target: 48%+ by adapting thresholds based on real-time market volatility and trend strength
-        // Based on: Return to proven Experiment 011 foundation with dynamic adaptive thresholds
-        // =================================================================
         
         sep::quantum::manifold::QuantumPattern q_p;
         q_p.id = "pattern_" + candle.time;
         
-        // EXPERIMENT 022: Exact Experiment 011 autocorrelation (no modifications)
-        // Return to proven autocorrelation calculation from successful Experiment 011
-        
-        if (i >= 5 && close_prices.size() > 5) {
-            double autocorr = 0.0, variance = 0.0;
-            int lag = 3;
-            double mean = 0.0;
-            int window = std::min(10, (int)i);
+        // Extract bitstream window for this candle
+        if (i < price_bitstream.size() && i >= 10) {
+            size_t window_start = std::max(0, (int)i - 10);
+            size_t window_end = std::min(price_bitstream.size(), i + 1);
+            std::vector<uint8_t> window_bits(price_bitstream.begin() + window_start, 
+            price_bitstream.begin() + window_end);
             
-            for (int j = 0; j < window; ++j) {
-                mean += close_prices[i - j];
-            }
-            mean /= window;
-            
-            for (int j = lag; j < window; ++j) {
-                double x = close_prices[i - j] - mean;
-                double y = close_prices[i - j + lag] - mean;
-                autocorr += x * y;
-                variance += x * x;
+            if (window_bits.size() < 2) {
+                // Too small for transitions - use fallback
+                continue;  // Skip to next iteration
             }
             
-            q_p.coherence = variance > 0 ? 
-                std::min(1.0, std::max(0.0, 0.5 + 0.5 * (autocorr / variance))) : 0.5;
+            // Use ENHANCED QFH processor with trajectory damping
+            sep::quantum::QFHResult qfh_result = qfh_processor.analyze(window_bits);
+            
+            // Apply trajectory-based damping using Phase 2 enhancements
+            auto damped_trajectory = qfh_processor.integrateFutureTrajectories(window_bits, window_bits.size()/2);
+            
+            // Extract enhanced metrics from QFH analysis
+            q_p.coherence = qfh_result.coherence;
+            q_p.stability = 1.0f - qfh_result.rupture_ratio; // Stability inversely related to ruptures
+            q_p.phase = qfh_result.entropy / 2.0f; // Normalize entropy to [0,1]
+            
+            // Apply trajectory damping to coherence (Phase 2 enhancement)
+            double trajectory_confidence = qfh_processor.matchKnownPaths({damped_trajectory.final_value});
+            q_p.coherence = 0.7 * q_p.coherence + 0.3 * trajectory_confidence;
+            
         } else {
-            q_p.coherence = 0.5;
-        }
-        
-        // Exact market regime-adjusted stability from successful Experiment 011
-        if (i >= 10) {
-            double short_trend = 0.0, medium_trend = 0.0;
-            
-            for (int j = 1; j <= 3; ++j) {
-                short_trend += candles[i].close - candles[i - j].close;
-            }
-            
-            for (int j = 1; j <= 10; ++j) {
-                medium_trend += candles[i].close - candles[i - j].close;
-            }
-            
-            bool trends_align = (short_trend * medium_trend) > 0;
-            double trend_ratio = std::abs(short_trend) / std::max(0.0001, std::abs(medium_trend));
-            
-            // Original Experiment 011 stability calculation
-            double volatility_factor = (candles[i].high - candles[i].low) / candles[i].close;
-            
-            q_p.stability = trends_align ? 
-                std::min(1.0, 0.5 + 0.3 * trend_ratio + 0.2 * volatility_factor) :
-                std::max(0.0, 0.5 - 0.2 * trend_ratio);
-        } else {
-            q_p.stability = 0.5;
-        }
-        
-        // Exact entropy calculation from successful Experiment 011
-        if (i >= 10) {
-            std::vector<int> bins(5, 0);
-            
-            for (int j = 1; j <= 10; ++j) {
-                double change = candles[i - j + 1].close - candles[i - j].close;
-                double range = candles[i - j].high - candles[i - j].low;
+            // Fallback to legacy forward window metrics for edge cases
+            if (i > 0 && i <= price_bitstream.size()) {
+                size_t window_start = std::max(0, (int)i - 5);
+                size_t window_end = std::min(price_bitstream.size(), i);
+                std::vector<uint8_t> window_bits(price_bitstream.begin() + window_start,
+                                               price_bitstream.begin() + window_end);
                 
-                if (range > 0) {
-                    double norm_change = change / range;
-                    if (norm_change < -0.5) bins[0]++;
-                    else if (norm_change < -0.1) bins[1]++;
-                    else if (norm_change < 0.1) bins[2]++;
-                    else if (norm_change < 0.5) bins[3]++;
-                    else bins[4]++;
-                } else {
-                    bins[2]++;
-                }
+                auto fw_result = sep::apps::cuda::simulateForwardWindowMetrics(window_bits, 0);
+                q_p.coherence = fw_result.coherence;
+                q_p.stability = fw_result.stability;
+                q_p.phase = fw_result.entropy / 2.0f;
+            } else {
+                q_p.coherence = 0.5;
+                q_p.stability = 0.5;
+                q_p.phase = 0.5;
             }
-            
-            double entropy = 0.0;
-            for (int count : bins) {
-                if (count > 0) {
-                    double p = count / 10.0;
-                    entropy -= p * std::log2(p);
-                }
-            }
-            
-            q_p.phase = entropy / std::log2(5.0);
-        } else {
-            q_p.phase = 0.5;
         }
         
         quantum_patterns.push_back(q_p);
@@ -393,56 +371,19 @@ int main(int argc, char** argv) {
         double buy_score = base_buy_score * volume_factor * temporal_coherence;
         double sell_score = base_sell_score * volume_factor * temporal_coherence;
         
-        // EXPERIMENT 022: Dynamic market-adaptive thresholds
-        // Calculate real-time market conditions for threshold adaptation
-        double market_trend_strength = 0.0;
-        double market_volatility = 0.0;
+        // EXPERIMENT 023: Phase 1 Simple Volatility Adaptation
+        // Use Phase 1's proven simple volatility multiplier without complex regime analysis
+        // Based on phase_comparison.md: "Simple volatility adaptation outperformed complex regime logic"
         
-        if (pattern_idx >= 20) {
-            // Calculate recent trend strength
-            double recent_price_change = 0.0;
-            for (int j = 1; j <= 10; ++j) {
-                recent_price_change += std::abs(metrics[pattern_idx-j].coherence - metrics[pattern_idx-j-1].coherence);
-            }
-            market_trend_strength = recent_price_change / 10.0;
-            
-            // Calculate market volatility from stability variance
-            double stability_sum = 0.0, stability_variance = 0.0;
-            for (int j = 1; j <= 15; ++j) {
-                stability_sum += metrics[pattern_idx-j].stability;
-            }
-            double avg_stability = stability_sum / 15.0;
-            
-            for (int j = 1; j <= 15; ++j) {
-                double diff = metrics[pattern_idx-j].stability - avg_stability;
-                stability_variance += diff * diff;
-            }
-            market_volatility = std::sqrt(stability_variance / 15.0);
-        }
-        
-        // Dynamic threshold adaptation based on market conditions
-        double adaptive_multiplier = volatility_multiplier;
-        
-        // Lower thresholds in trending markets (high coherence consistency)
-        if (market_trend_strength < 0.1) {
-            adaptive_multiplier *= 0.92; // 8% easier to trigger in stable trending markets
-        }
-        
-        // Raise thresholds in highly volatile markets (erratic stability)
-        if (market_volatility > 0.15) {
-            adaptive_multiplier *= 1.12; // 12% harder to trigger in volatile markets
-        }
-        
-        // Apply dynamic adaptive thresholds
-        double buy_threshold = base_buy_threshold * adaptive_multiplier;
-        double sell_threshold = base_sell_threshold * adaptive_multiplier;
+        // Phase 1's direct volatility adaptation - simple and effective
+        double buy_threshold = base_buy_threshold * volatility_multiplier;
+        double sell_threshold = base_sell_threshold * volatility_multiplier;
 
-        // DEBUG: Dynamic threshold adaptation analysis (first 5 patterns)
+        // DEBUG: Phase 1 volatility adaptation analysis (first 5 patterns)
         static int debug_count = 0;
         if (debug_count < 5) {
-            std::cout << "PHASE2 ADAPTIVE_022[" << debug_count << "]: buy_score=" << buy_score 
-                      << " sell_score=" << sell_score << " adaptive_mult=" << adaptive_multiplier
-                      << " trend_str=" << market_trend_strength << " volatility=" << market_volatility
+            std::cout << "PHASE2 EXPERIMENT_023[" << debug_count << "]: buy_score=" << buy_score 
+                      << " sell_score=" << sell_score << " vol_mult=" << volatility_multiplier
                       << " buy_thresh=" << buy_threshold << " sell_thresh=" << sell_threshold << std::endl;
             debug_count++;
         }

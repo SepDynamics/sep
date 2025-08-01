@@ -7,6 +7,10 @@
 #include <numeric>
 #include <vector>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 namespace sep::quantum {
 
 bool QFHEvent::operator==(const QFHEvent& other) const {
@@ -81,21 +85,143 @@ void sep::quantum::QFHProcessor::reset() {
 
 bitspace::DampedValue QFHBasedProcessor::integrateFutureTrajectories(const std::vector<uint8_t>& bitstream, size_t current_index) {
     bitspace::DampedValue damped_value;
-    double accumulated_value = 0.0;
-    double lambda = 0.1; // Decay constant, should be tuned
-
-    for (size_t i = current_index + 1; i < bitstream.size(); ++i) {
-        double future_bit = bitstream[i];
-        double current_bit = bitstream[current_index];
-        accumulated_value += (future_bit - current_bit) * std::exp(-lambda * (i - current_index));
+    
+    if (current_index >= bitstream.size()) {
+        damped_value.final_value = 0.0;
+        damped_value.confidence = 0.0;
+        return damped_value;
     }
-
+    
+    // Step 1: Calculate dynamic decay factor λ based on local entropy and coherence
+    // Analyze local pattern around current_index for entropy calculation
+    size_t window_size = std::min(static_cast<size_t>(20), bitstream.size() - current_index);
+    std::vector<uint8_t> local_window(bitstream.begin() + current_index, 
+                                      bitstream.begin() + current_index + window_size);
+    
+    QFHResult local_analysis = analyze(local_window);
+    
+    // Apply mathematical formula from bitspace_math.md:
+    // λ = k1 * Entropy + k2 * (1 - Coherence)
+    const double k1 = 0.3;  // Entropy weight
+    const double k2 = 0.2;  // Coherence weight
+    double lambda = k1 * local_analysis.entropy + k2 * (1.0 - local_analysis.coherence);
+    lambda = std::clamp(lambda, 0.01, 1.0);  // Constrain to reasonable range
+    
+    // Step 2: Integrate future trajectories with exponential damping
+    // Formula: V_i = Σ(p_j - p_i) * e^(-λ(j-i))
+    double accumulated_value = 0.0;
+    double current_bit = static_cast<double>(bitstream[current_index]);
+    
+    // Store trajectory path for confidence analysis
+    damped_value.path.clear();
+    damped_value.path.reserve(bitstream.size() - current_index);
+    damped_value.path.push_back(current_bit);
+    
+    for (size_t j = current_index + 1; j < bitstream.size(); ++j) {
+        double future_bit = static_cast<double>(bitstream[j]);
+        double time_difference = static_cast<double>(j - current_index);
+        double weight = std::exp(-lambda * time_difference);
+        
+        // Apply the damped value formula
+        double contribution = (future_bit - current_bit) * weight;
+        accumulated_value += contribution;
+        
+        // Store intermediate trajectory points
+        damped_value.path.push_back(accumulated_value);
+    }
+    
     damped_value.final_value = accumulated_value;
-    // In a real implementation, the path would be stored.
-    // damped_value.path = ...;
-
+    
+    // Step 3: Calculate preliminary confidence based on trajectory consistency
+    // Higher consistency in trajectory indicates more predictable behavior
+    if (damped_value.path.size() > 2) {
+        double trajectory_variance = 0.0;
+        double mean_trajectory = 0.0;
+        
+        // Calculate mean of trajectory
+        for (double val : damped_value.path) {
+            mean_trajectory += val;
+        }
+        mean_trajectory /= damped_value.path.size();
+        
+        // Calculate variance
+        for (double val : damped_value.path) {
+            trajectory_variance += std::pow(val - mean_trajectory, 2);
+        }
+        trajectory_variance /= damped_value.path.size();
+        
+        // Convert variance to confidence (lower variance = higher confidence)
+        double stability_score = 1.0 / (1.0 + trajectory_variance);
+        damped_value.confidence = std::clamp(stability_score, 0.0, 1.0);
+    } else {
+        damped_value.confidence = 0.5;  // Default confidence for insufficient data
+    }
+    
+    // Mark as converged if trajectory shows stability
+    damped_value.converged = (damped_value.confidence > 0.7);
+    
     return damped_value;
 }
+
+double QFHBasedProcessor::matchKnownPaths(const std::vector<double>& current_path) {
+    // For now, implement a simple pattern matching against common trajectory shapes
+    // In a full implementation, this would query a historical database (e.g., Redis)
+    
+    if (current_path.size() < 3) {
+        return 0.5;  // Default confidence for insufficient data
+    }
+    
+    // Define some common trajectory patterns for pattern matching
+    // Pattern 1: Exponential decay (common in stable signals)
+    // Pattern 2: Linear trend (common in trending markets)
+    // Pattern 3: Oscillating pattern (common in ranging markets)
+    
+    double best_similarity = 0.0;
+    
+    // Pattern 1: Exponential decay similarity
+    std::vector<double> exponential_pattern;
+    exponential_pattern.reserve(current_path.size());
+    double initial_value = current_path[0];
+    for (size_t i = 0; i < current_path.size(); ++i) {
+        double expected_value = initial_value * std::exp(-0.1 * static_cast<double>(i));
+        exponential_pattern.push_back(expected_value);
+    }
+    
+    double exp_similarity = calculateCosineSimilarity(current_path, exponential_pattern);
+    best_similarity = std::max(best_similarity, exp_similarity);
+    
+    // Pattern 2: Linear trend similarity
+    if (current_path.size() >= 2) {
+        std::vector<double> linear_pattern;
+        linear_pattern.reserve(current_path.size());
+        double slope = (current_path.back() - current_path.front()) / (current_path.size() - 1);
+        for (size_t i = 0; i < current_path.size(); ++i) {
+            double expected_value = current_path[0] + slope * static_cast<double>(i);
+            linear_pattern.push_back(expected_value);
+        }
+        
+        double linear_similarity = calculateCosineSimilarity(current_path, linear_pattern);
+        best_similarity = std::max(best_similarity, linear_similarity);
+    }
+    
+    // Pattern 3: Oscillating pattern similarity (sine wave approximation)
+    std::vector<double> oscillating_pattern;
+    oscillating_pattern.reserve(current_path.size());
+    double amplitude = (current_path.back() - current_path.front()) / 2.0;
+    double mean_value = (current_path.back() + current_path.front()) / 2.0;
+    for (size_t i = 0; i < current_path.size(); ++i) {
+        double expected_value = mean_value + amplitude * std::sin(2.0 * M_PI * i / current_path.size());
+        oscillating_pattern.push_back(expected_value);
+    }
+    
+    double osc_similarity = calculateCosineSimilarity(current_path, oscillating_pattern);
+    best_similarity = std::max(best_similarity, osc_similarity);
+    
+    // Return the highest similarity score found
+    return std::clamp(best_similarity, 0.0, 1.0);
+}
+
+
 
 // QFHBasedProcessor implementation
 sep::quantum::QFHBasedProcessor::QFHBasedProcessor(const QFHOptions& options) : options_(options) {}
@@ -172,10 +298,31 @@ sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const std::vect
         result.coherence = std::clamp(raw_coherence * raw_coherence * 1.1f, 0.0f, 1.0f);
     }
     
-    // Integrate future trajectories for damping
-    if (!bits.empty()) {
+    // Integrate future trajectories for damping - this is the core enhancement
+    if (!bits.empty() && bits.size() > 10) {  // Only apply enhancement for significant data
         bitspace::DampedValue dv = integrateFutureTrajectories(bits, 0);
-        result.coherence = 1.0 - dv.final_value; // Example of using the damped value
+        
+        // Use trajectory-based confidence for coherence calculation
+        double trajectory_confidence = matchKnownPaths(dv.path);
+        
+        // Blend the pattern-based coherence with trajectory-based confidence
+        // This creates more stable and reliable coherence values
+        float pattern_coherence = result.coherence;  // Pattern-based from above
+        float trajectory_coherence = static_cast<float>(trajectory_confidence);
+        
+        // Conservative weighted combination: 30% trajectory-based, 70% pattern-based
+        // This preserves existing behavior while adding trajectory enhancement
+        result.coherence = 0.3f * trajectory_coherence + 0.7f * pattern_coherence;
+        
+        // Apply the damped final value to influence the coherence stability (more conservatively)
+        // Smaller damped values indicate more stable futures, higher coherence
+        if (std::abs(dv.final_value) < 2.0) {  // Only apply if damped value is reasonable
+            float stability_factor = 1.0f / (1.0f + 0.1f * std::abs(static_cast<float>(dv.final_value)));
+            result.coherence = result.coherence * stability_factor;
+        }
+        
+        // Ensure coherence stays within valid range
+        result.coherence = std::clamp(result.coherence, 0.0f, 1.0f);
     }
 
     // Detect collapse
@@ -200,6 +347,32 @@ std::vector<uint8_t> sep::quantum::QFHBasedProcessor::convertToBits(const std::v
     }
     
     return bits;
+}
+
+// Helper function to calculate cosine similarity between two vectors
+double QFHBasedProcessor::calculateCosineSimilarity(const std::vector<double>& a, const std::vector<double>& b) {
+    if (a.size() != b.size() || a.empty()) {
+        return 0.0;
+    }
+    
+    double dot_product = 0.0;
+    double norm_a = 0.0;
+    double norm_b = 0.0;
+    
+    for (size_t i = 0; i < a.size(); ++i) {
+        dot_product += a[i] * b[i];
+        norm_a += a[i] * a[i];
+        norm_b += b[i] * b[i];
+    }
+    
+    norm_a = std::sqrt(norm_a);
+    norm_b = std::sqrt(norm_b);
+    
+    if (norm_a == 0.0 || norm_b == 0.0) {
+        return 0.0;
+    }
+    
+    return dot_product / (norm_a * norm_b);
 }
 
 } // namespace sep::quantum

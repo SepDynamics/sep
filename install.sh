@@ -66,6 +66,7 @@ MIN_PACKAGES=(
   libcurl4-openssl-dev curl python3 python3-pip gdb
   libpipewire-0.3-dev libspa-0.2-dev libtbb-dev
   valgrind nodejs npm
+  wget
 )
 
 FULL_PACKAGES=(

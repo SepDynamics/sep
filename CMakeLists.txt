@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 
+# Set the module path to include our custom cmake modules
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+
 # Enable compile commands database generation for IDE support and static analysis
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
@@ -41,9 +45,6 @@ if(SEP_USE_CUDA)
     include_directories("$ENV{CUDA_HOME}/include")
     link_directories("$ENV{CUDA_HOME}/lib64")
 endif()
-
-# Add our cmake modules to the module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Include the template
 include(cmake/template.cmake)

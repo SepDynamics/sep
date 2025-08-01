@@ -1,0 +1,16 @@
+k1=0.2 k2=0.1 accuracy=41.35%
+k1=0.2 k2=0.2 accuracy=41.35%
+k1=0.2 k2=0.3 accuracy=41.35%
+k1=0.2 k2=0.4 accuracy=41.35%
+k1=0.3 k2=0.1 accuracy=41.35%
+k1=0.3 k2=0.2 accuracy=41.35%
+k1=0.3 k2=0.3 accuracy=41.35%
+k1=0.3 k2=0.4 accuracy=41.35%
+k1=0.4 k2=0.1 accuracy=41.35%
+k1=0.4 k2=0.2 accuracy=41.35%
+k1=0.4 k2=0.3 accuracy=41.35%
+k1=0.4 k2=0.4 accuracy=41.35%
+k1=0.5 k2=0.1 accuracy=41.35%
+k1=0.5 k2=0.2 accuracy=41.35%
+k1=0.5 k2=0.3 accuracy=41.35%
+k1=0.5 k2=0.4 accuracy=41.35%

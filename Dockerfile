@@ -64,6 +64,9 @@ RUN ls -la /usr/local/cuda/bin/nvcc && \
 # Install Python packages for analysis
 RUN pip3 install pandas numpy matplotlib
 
+# Install PyTorch with CUDA support
+RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
 # Install CodeChecker for static analysis
 RUN pip3 install codechecker
 

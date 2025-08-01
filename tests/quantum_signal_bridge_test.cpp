@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "quantum/bitspace/forward_window_result.h"
 #include "apps/oanda_trader/quantum_signal_bridge.hpp"
+#include <torch/torch.h>
 
 TEST(QuantumSignalBridgeTest, Initialization) {
     sep::trading::QuantumSignalBridge bridge;
@@ -44,4 +45,29 @@ TEST(QuantumSignalBridgeTest, SignalGeneration) {
     sep::trading::QuantumTradingSignal signal = bridge.analyzeMarketData(current_data, history, forward_window_results);
 
     ASSERT_NE(signal.action, sep::trading::QuantumTradingSignal::Action::HOLD);
+}
+
+TEST(QuantumSignalBridgeTest, NeuralEnsemble) {
+    // Create a simple neural network
+    struct Net : torch::nn::Module {
+        Net() {
+            fc1 = register_module("fc1", torch::nn::Linear(3, 16));
+            fc2 = register_module("fc2", torch::nn::Linear(16, 3));
+        }
+
+        torch::Tensor forward(torch::Tensor x) {
+            x = torch::relu(fc1->forward(x));
+            x = torch::log_softmax(fc2->forward(x), 1);
+            return x;
+        }
+
+        torch::nn::Linear fc1{nullptr}, fc2{nullptr};
+    };
+
+    auto net = std::make_shared<Net>();
+    torch::Tensor input = torch::randn({1, 3});
+    torch::Tensor output = net->forward(input);
+
+    ASSERT_EQ(output.size(0), 1);
+    ASSERT_EQ(output.size(1), 3);
 }

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 project(pattern_metrics_tests)
 
 find_package(GTest REQUIRED)
+find_package(Torch REQUIRED)
 add_executable(pattern_metrics_test
     pattern_metrics_test.cpp
     quantum_processor_test.cpp)
@@ -14,7 +15,10 @@ add_executable(quantum_signal_bridge_test
 add_executable(trajectory_metrics_test
     trajectory_metrics_test.cpp)
 target_include_directories(quantum_signal_bridge_test PRIVATE ../src)
-target_link_libraries(quantum_signal_bridge_test GTest::gtest GTest::gtest_main sep_quantum sep_trader_cuda sep_trader_logic TBB::tbb)
+target_include_directories(quantum_signal_bridge_test SYSTEM PRIVATE 
+    /usr/local/lib/python3.10/dist-packages/torch/include/torch/csrc/api/include
+    /usr/local/lib/python3.10/dist-packages/torch/include)
+target_link_libraries(quantum_signal_bridge_test GTest::gtest GTest::gtest_main sep_quantum sep_trader_cuda sep_trader_logic TBB::tbb Torch::torch)
 
 target_include_directories(trajectory_metrics_test PRIVATE ../src)
 target_link_libraries(trajectory_metrics_test GTest::gtest GTest::gtest_main sep_quantum sep_quantum_bitspace sep_trader_cuda CUDA::cudart TBB::tbb)

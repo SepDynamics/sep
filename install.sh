@@ -144,3 +144,13 @@ for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
   fi
 done
 
+# Build Docker image used by build.sh if Docker is available
+if $SUDO docker info >/dev/null 2>&1; then
+  if ! $SUDO docker image inspect sep-engine-builder >/dev/null 2>&1; then
+    echo "Building sep-engine-builder Docker image..."
+    $SUDO docker build -t sep-engine-builder .
+  fi
+else
+  echo "Warning: Docker is not running, skipping image build" >&2
+fi
+

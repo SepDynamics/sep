@@ -208,10 +208,11 @@ dependencies and `--minimal` for a lightweight install.
 
 ```bash
 ./install.sh --minimal
+```
 
 The script installs Python packages system-wide using `--break-system-packages`
-to satisfy Ubuntu 24.04's managed environment restrictions.
-```
+to satisfy Ubuntu 24.04's managed environment restrictions. It also builds the
+`sep-engine-builder` Docker image so `./build.sh` can run immediately.
 
 ### Build & Test
 

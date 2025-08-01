@@ -21,7 +21,8 @@ cd /sep
 USE_CUDA=1
 USE_MINIMAL=0
 USE_LOCAL_CUDA=0
-# track whether the NVIDIA repository is available
+SKIP_DOCKER=0
+# Track whether the NVIDIA repository is available
 USE_CUDA_REPO=1
 for arg in "$@"; do
   case "$arg" in
@@ -35,6 +36,10 @@ for arg in "$@"; do
       ;;
     --local)
       USE_LOCAL_CUDA=1
+      shift
+      ;;
+    --no-docker)
+      SKIP_DOCKER=1
       shift
       ;;
   esac
@@ -102,35 +107,51 @@ echo "Updating package lists..."
 $SUDO apt-get update -y
 $SUDO dpkg --configure -a >/dev/null 2>&1 || true
 
+# Prevent ca-certificates-java errors on minimal systems
+$SUDO mkdir -p /lib/security /etc/ssl/certs/java
+$SUDO touch /lib/security/cacerts
+$SUDO ln -sf /lib/security/cacerts /etc/ssl/certs/java/cacerts
+
 echo "Installing base packages..."
-$SUDO apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
+$SUDO apt-get install -y --no-install-recommends "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
+$SUDO dpkg --configure -a >> "$LOG_DIR/apt.log" 2>&1 || true
+$SUDO apt-get purge -y ca-certificates-java >> "$LOG_DIR/apt.log" 2>&1 || true
 
 # Install CUDA toolkit when enabled and nvcc missing (only for repo-based installs)
 if [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 0 ]; then
   if ! command -v nvcc >/dev/null 2>&1; then
     echo "Installing CUDA toolkit..."
     if [ "$USE_CUDA_REPO" -eq 1 ]; then
-      $SUDO apt-get install -y cuda-toolkit-12-9 cuda-nvcc-12-9 >> "$LOG_DIR/apt.log"
+      $SUDO apt-get install -y --no-install-recommends cuda-toolkit-12-9 cuda-nvcc-12-9 >> "$LOG_DIR/apt.log"
     else
       # pre-create java keystore path to avoid post-install errors
       $SUDO mkdir -p /lib/security /etc/ssl/certs/java
       $SUDO touch /lib/security/cacerts
       $SUDO ln -sf /lib/security/cacerts /etc/ssl/certs/java/cacerts
       set +e
-      $SUDO apt-get install -y nvidia-cuda-toolkit >> "$LOG_DIR/apt.log"
+      $SUDO apt-get install -y --no-install-recommends nvidia-cuda-toolkit >> "$LOG_DIR/apt.log"
       $SUDO dpkg --configure -a >> "$LOG_DIR/apt.log" 2>&1
       $SUDO apt-get purge -y ca-certificates-java >> "$LOG_DIR/apt.log" 2>&1
       set -e
+    fi
+    # Create standard CUDA symlink when using distro toolkit
+    if command -v nvcc >/dev/null 2>&1 && [ ! -d /usr/local/cuda ]; then
+      $SUDO ln -s /usr/lib/nvidia-cuda-toolkit /usr/local/cuda
+      export PATH=/usr/local/cuda/bin:$PATH
     fi
   fi
 fi
 
 # Install Docker and Docker Compose
-echo "Installing Docker..."
-$SUDO apt-get install -y docker.io docker-compose-v2 >> "$LOG_DIR/apt.log"
-$SUDO systemctl enable --now docker >/dev/null 2>&1 || true
-if [ "${EUID:-$(id -u)}" -ne 0 ]; then
-  $SUDO usermod -aG docker "$USER" || true
+if [ "$SKIP_DOCKER" -eq 0 ]; then
+  echo "Installing Docker..."
+  $SUDO apt-get install -y docker.io docker-compose-v2 >> "$LOG_DIR/apt.log"
+  $SUDO systemctl enable --now docker >/dev/null 2>&1 || true
+  if [ "${EUID:-$(id -u)}" -ne 0 ]; then
+    $SUDO usermod -aG docker "$USER" || true
+  fi
+else
+  echo "Skipping Docker installation (--no-docker)"
 fi
 
 # Build and install GoogleTest as the packaged version only ships sources
@@ -177,7 +198,11 @@ python3 --version || true
 if [ "$USE_CUDA" -eq 1 ]; then
   nvcc --version || { echo "NVCC not installed" >&2; exit 1; }
 fi
-for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
+EXTRA_PKGS=()
+if [ "$SKIP_DOCKER" -eq 0 ]; then
+  EXTRA_PKGS+=(docker.io docker-compose-v2)
+fi
+for pkg in "${PACKAGES[@]}" "${EXTRA_PKGS[@]}"; do
   if dpkg -s "$pkg" >/dev/null 2>&1; then
     echo "$pkg installed"
   else
@@ -186,12 +211,16 @@ for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
 done
 
 # Build Docker image used by build.sh if Docker is available
-if $SUDO docker info >/dev/null 2>&1; then
-  if ! $SUDO docker image inspect sep-engine-builder >/dev/null 2>&1; then
-    echo "Building sep-engine-builder Docker image..."
-    $SUDO docker build -t sep-engine-builder .
+if [ "$SKIP_DOCKER" -eq 0 ]; then
+  if $SUDO docker info >/dev/null 2>&1; then
+    if ! $SUDO docker image inspect sep-engine-builder >/dev/null 2>&1; then
+      echo "Building sep-engine-builder Docker image..."
+      $SUDO docker build -t sep-engine-builder .
+    fi
+  else
+    echo "Warning: Docker is not running, skipping image build" >&2
   fi
 else
-  echo "Warning: Docker is not running, skipping image build" >&2
+  echo "Skipping Docker image build (--no-docker)"
 fi
 

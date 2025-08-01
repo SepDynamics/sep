@@ -4,6 +4,8 @@ This document outlines the development roadmap for the SEP Engine, from core met
 
 ---
 
+- [ ] **Unify `pme_testbed_phase2` to use `QFHBasedProcessor` instead of `simulateForwardWindowMetrics`**
+
 ## Phase 1: Core Metrics Refinement (In Progress)
 
 **Goal:** Implement trajectory-based damping for core metrics (coherence, stability, entropy) to improve signal accuracy and stability. This phase is critical for establishing a robust foundation for future performance enhancements.

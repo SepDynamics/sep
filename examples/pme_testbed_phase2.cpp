@@ -229,24 +229,23 @@ int main(int argc, char** argv) {
                                          price_bitstream.begin() + window_end);
 
         if (window_bits.size() < 2) {
-            q_p.coherence = 0.5;
-            q_p.stability = 0.5;
-            q_p.phase = 0.5;
-        } else {
-            // Use enhanced QFH processor with trajectory damping
-            sep::quantum::QFHResult qfh_result = qfh_processor.analyze(window_bits);
-
-            auto damped_trajectory =
-                qfh_processor.integrateFutureTrajectories(window_bits, window_bits.size() / 2);
-
-            q_p.coherence = qfh_result.coherence;
-            q_p.stability = 1.0f - qfh_result.rupture_ratio; // Stability inversely related to ruptures
-            q_p.phase = qfh_result.entropy / 2.0f;           // Normalize entropy to [0,1]
-
-            double trajectory_confidence =
-                qfh_processor.matchKnownPaths({damped_trajectory.final_value});
-            q_p.coherence = 0.7 * q_p.coherence + 0.3 * trajectory_confidence;
+            // Too small for transitions - skip analysis for this candle
+            continue;
         }
+
+        // Use enhanced QFH processor with trajectory damping
+        sep::quantum::QFHResult qfh_result = qfh_processor.analyze(window_bits);
+
+        auto damped_trajectory =
+            qfh_processor.integrateFutureTrajectories(window_bits, window_bits.size() / 2);
+
+        q_p.coherence = qfh_result.coherence;
+        q_p.stability = 1.0f - qfh_result.rupture_ratio; // Stability inversely related to ruptures
+        q_p.phase = qfh_result.entropy / 2.0f;           // Normalize entropy to [0,1]
+
+        double trajectory_confidence =
+            qfh_processor.matchKnownPaths({damped_trajectory.final_value});
+        q_p.coherence = 0.7 * q_p.coherence + 0.3 * trajectory_confidence;
         
         quantum_patterns.push_back(q_p);
     }

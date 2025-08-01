@@ -123,6 +123,16 @@ if [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 0 ]; then
       set -e
     fi
   fi
+  # Fallback to local installer if nvcc is still missing
+  if ! command -v nvcc >/dev/null 2>&1; then
+    if [ -f "cuda_12.9.0_550.54.15_linux.run" ]; then
+      echo "nvcc not found, using local CUDA installer..."
+      chmod +x cuda_12.9.0_550.54.15_linux.run
+      $SUDO ./cuda_12.9.0_550.54.15_linux.run --silent --toolkit --no-opengl-libs
+    else
+      echo "Warning: nvcc still missing and no local installer found" >&2
+    fi
+  fi
 fi
 
 # Install Docker and Docker Compose

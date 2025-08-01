@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # SEP Engine dependency installer
 set -uo pipefail
+export DEBIAN_FRONTEND=noninteractive
 sudo ln -sf /workspace/sep /sep
 cd /sep
 
@@ -8,9 +9,14 @@ cd /sep
 # Pinned Python version used for all installs  
 PYTHON_VERSION="3.13.*"
 
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
-sudo dpkg -i cuda-keyring_1.1-1_all.deb
-sudo apt-get update
+CUDA_KEY_DEB="cuda-keyring_1.1-1_all.deb"
+CUDA_URL="https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/${CUDA_KEY_DEB}"
+if wget -q "$CUDA_URL" -O "$CUDA_KEY_DEB"; then
+  sudo dpkg -i "$CUDA_KEY_DEB" && rm -f "$CUDA_KEY_DEB"
+  sudo apt-get update
+else
+  echo "Warning: Unable to retrieve CUDA keyring from $CUDA_URL" >&2
+fi
 
 # Optional argument parsing
 USE_CUDA=1

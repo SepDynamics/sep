@@ -199,7 +199,16 @@ The capabilities of the SEP Engine have been rigorously validated through a seri
 - **CUDA acceleration** verified and operational with Toolkit v12.9
 - **Real-time processing** validated at tick-level scale (1000+ datapoints)
 - **Financial backtesting** producing measurable alpha generation
-- **Docker hermetic builds** eliminating environment dependencies
+ - **Docker hermetic builds** eliminating environment dependencies
+
+### Local Installation
+
+Run `install.sh` to set up all required packages. Use `--no-cuda` to skip CUDA
+dependencies and `--minimal` for a lightweight install.
+
+```bash
+./install.sh --minimal
+```
 
 ### Build & Test
 

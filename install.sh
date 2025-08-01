@@ -123,7 +123,9 @@ if ! command -v pip3 >/dev/null; then
 fi
 
 # Install Python packages for analysis
-pip3 install pandas numpy matplotlib codechecker
+# Install Python packages for analysis. Use --break-system-packages to
+# allow pip to modify system-managed environments in Ubuntu 24.04.
+python3 -m pip install --break-system-packages pandas numpy matplotlib codechecker
 
 # Set up clang tool symlinks
 $SUDO ln -sf /usr/bin/clang-tidy-15 /usr/bin/clang-tidy

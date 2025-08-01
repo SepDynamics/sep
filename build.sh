@@ -42,7 +42,10 @@ if ! "$DOCKER_BIN" info >/dev/null 2>&1; then
 fi
 
 # Build and setup development environment
-CUDA_PREFIX=/usr/local/cuda
+CUDA_PREFIX="$(dirname "$(command -v nvcc 2>/dev/null)" 2>/dev/null | sed 's#/bin$##')"
+if [ -z "$CUDA_PREFIX" ] || [ ! -d "$CUDA_PREFIX" ]; then
+    CUDA_PREFIX=/usr/local/cuda
+fi
 if [ ! -d "$CUDA_PREFIX" ]; then
     CUDA_PREFIX=/usr
 fi

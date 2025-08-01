@@ -133,10 +133,11 @@ if [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 0 ]; then
       echo "Warning: nvcc still missing and no local installer found" >&2
     fi
   fi
-  # Create CUDA compatibility symlink when using distro toolkit
+  # Create CUDA compatibility symlinks when using the distro toolkit
   if [ -d /usr/lib/nvidia-cuda-toolkit ]; then
-    echo "Creating /usr/local/cuda symlink for distro toolkit"
+    echo "Creating /usr/local/cuda symlinks for distro toolkit"
     $SUDO ln -sf /usr/lib/nvidia-cuda-toolkit /usr/local/cuda
+    $SUDO ln -sf /usr/lib/nvidia-cuda-toolkit/bin /usr/local/cuda/bin
     $SUDO ln -sf /usr/lib/x86_64-linux-gnu /usr/local/cuda/lib64
   fi
 fi
@@ -200,6 +201,11 @@ for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
     echo "$pkg missing" >&2
   fi
 done
+
+# Ensure CUDA in PATH when installed via distro packages
+if [ -d /usr/local/cuda/bin ] && ! echo "$PATH" | grep -q "/usr/local/cuda/bin"; then
+  export PATH=/usr/local/cuda/bin:$PATH
+fi
 
 # Build Docker image used by build.sh if Docker is available
 if $SUDO docker info >/dev/null 2>&1; then

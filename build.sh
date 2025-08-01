@@ -52,6 +52,7 @@ fi
     -e CUDA_TOOLKIT_ROOT_DIR=$CUDA_PREFIX \
     -e CUDA_BIN_PATH=$CUDA_PREFIX/bin \
     -e CMAKE_CUDA_COMPILER=$CUDA_PREFIX/bin/nvcc \
+    -e CUDAToolkit_ROOT=$CUDA_PREFIX \
     -e PATH=$CUDA_PREFIX/bin:${PATH} \
     -e LD_LIBRARY_PATH=$CUDA_PREFIX/lib64:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH-} \
     sep-engine-builder bash -c '
@@ -76,6 +77,7 @@ fi
         -DCMAKE_CXX_COMPILER=clang++-15 \
         -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS:-}" \
         -DCMAKE_CUDA_FLAGS="${CMAKE_CUDA_FLAGS} ${EXTRA_CUDA_FLAGS:-}" \
+        -DCUDAToolkit_ROOT=$CUDA_PREFIX \
         -DSEP_USE_CUDA=ON
     
     # Build with logging

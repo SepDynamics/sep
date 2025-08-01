@@ -15,9 +15,7 @@ fi
 $SUDO ln -sf /workspace/sep /sep
 cd /sep
 
-# Python version used for all installs. 3.13 is not yet available
-# in Ubuntu repositories so we install the system default if missing.
-PYTHON_VERSION="3"
+# Python is required for tooling. Use the system default version.
 
 # Optional argument parsing must occur before any package operations
 USE_CUDA=1
@@ -79,6 +77,13 @@ if [ "$USE_MINIMAL" -eq 1 ]; then
   PACKAGES=("${MIN_PACKAGES[@]}")
 else
   PACKAGES=("${FULL_PACKAGES[@]}")
+fi
+
+# Always include the CUDA toolkit when USE_CUDA is enabled so nvcc is
+# available for native builds. Installing the meta-package pulls in
+# the minimal set of CUDA compiler components.
+if [ "$USE_CUDA" -eq 1 ]; then
+  PACKAGES+=(cuda-toolkit-12-9)
 fi
 
 echo "Updating package lists..."
@@ -143,6 +148,13 @@ for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
     echo "$pkg missing" >&2
   fi
 done
+
+# Display nvcc version when CUDA support is enabled
+if [ "$USE_CUDA" -eq 1 ]; then
+  # Ensure nvcc is on the PATH for subsequent commands
+  export PATH=/usr/local/cuda/bin:${PATH}
+  nvcc --version || echo "nvcc not found"
+fi
 
 # Build Docker image used by build.sh if Docker is available
 if $SUDO docker info >/dev/null 2>&1; then

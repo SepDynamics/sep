@@ -42,14 +42,18 @@ if ! "$DOCKER_BIN" info >/dev/null 2>&1; then
 fi
 
 # Build and setup development environment
+CUDA_PREFIX=/usr/local/cuda
+if [ ! -d "$CUDA_PREFIX" ]; then
+    CUDA_PREFIX=/usr
+fi
 "${DOCKER_BIN}" run --gpus all --rm \
     -v $(pwd):/sep \
-    -e CUDA_HOME=/usr/local/cuda \
-    -e CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda \
-    -e CUDA_BIN_PATH=/usr/local/cuda/bin \
-    -e CMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc \
-    -e PATH=/usr/local/cuda/bin:${PATH} \
-    -e LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH-} \
+    -e CUDA_HOME=$CUDA_PREFIX \
+    -e CUDA_TOOLKIT_ROOT_DIR=$CUDA_PREFIX \
+    -e CUDA_BIN_PATH=$CUDA_PREFIX/bin \
+    -e CMAKE_CUDA_COMPILER=$CUDA_PREFIX/bin/nvcc \
+    -e PATH=$CUDA_PREFIX/bin:${PATH} \
+    -e LD_LIBRARY_PATH=$CUDA_PREFIX/lib64:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH-} \
     sep-engine-builder bash -c '
     # Verify CUDA environment
     echo "Verifying CUDA environment..."

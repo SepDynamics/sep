@@ -203,8 +203,10 @@ The capabilities of the SEP Engine have been rigorously validated through a seri
 
 ### Local Installation
 
-Run `install.sh` to set up all required packages. Use `--no-cuda` to skip CUDA
-dependencies and `--minimal` for a lightweight install.
+Run `install.sh` to set up all required packages. When CUDA support is
+enabled (default) the script now installs `cuda-toolkit-12-9` so `nvcc` is
+available for native builds. Use `--no-cuda` to skip CUDA dependencies and
+`--minimal` for a lightweight install.
 
 ```bash
 ./install.sh --minimal

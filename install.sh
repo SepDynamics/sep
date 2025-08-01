@@ -15,9 +15,7 @@ fi
 $SUDO ln -sf /workspace/sep /sep
 cd /sep
 
-# Python version used for all installs. 3.13 is not yet available
-# in Ubuntu repositories so we install the system default if missing.
-PYTHON_VERSION="3"
+# Reserved for future Python version selection if needed
 
 # Optional argument parsing must occur before any package operations
 USE_CUDA=1
@@ -87,12 +85,11 @@ $SUDO apt-get update -y
 echo "Installing base packages..."
 $SUDO apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 
+# Install CUDA toolkit when enabled and nvcc missing
 if [ "$USE_CUDA" -eq 1 ]; then
-  echo "Installing CUDA toolkit..."
-  $SUDO apt-get install -y cuda-toolkit-12-9 >> "$LOG_DIR/apt.log"
-  # Ensure nvcc is on PATH
-  if [ -x /usr/local/cuda/bin/nvcc ]; then
-    $SUDO ln -sf /usr/local/cuda/bin/nvcc /usr/bin/nvcc
+  if ! command -v nvcc >/dev/null 2>&1; then
+    echo "Installing CUDA toolkit..."
+    $SUDO apt-get install -y cuda-toolkit-12-9 cuda-nvcc-12-9 >> "$LOG_DIR/apt.log"
   fi
 fi
 
@@ -145,6 +142,9 @@ echo "Verifying installations..."
 docker --version || { echo "Docker not installed"; exit 1; }
 docker compose version || true
 python3 --version || true
+if [ "$USE_CUDA" -eq 1 ]; then
+  nvcc --version || { echo "NVCC not installed" >&2; exit 1; }
+fi
 for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
   if dpkg -s "$pkg" >/dev/null 2>&1; then
     echo "$pkg installed"

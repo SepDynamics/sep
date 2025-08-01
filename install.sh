@@ -112,10 +112,24 @@ $SUDO mkdir -p /lib/security /etc/ssl/certs/java
 $SUDO touch /lib/security/cacerts
 $SUDO ln -sf /lib/security/cacerts /etc/ssl/certs/java/cacerts
 
+# Pre-emptively hold ca-certificates-java to prevent installation conflicts
+$SUDO apt-mark hold ca-certificates-java >> "$LOG_DIR/apt.log" 2>&1 || true
+
 echo "Installing base packages..."
-$SUDO apt-get install -y --no-install-recommends "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
+# Install packages one by one to isolate ca-certificates-java issues
+for pkg in "${PACKAGES[@]}"; do
+    if [[ "$pkg" == *"java"* ]]; then
+        echo "Skipping Java-related package: $pkg"
+        continue
+    fi
+    $SUDO apt-get install -y --no-install-recommends "$pkg" >> "$LOG_DIR/apt.log" 2>&1 || {
+        echo "Warning: Failed to install $pkg, continuing..." >&2
+    }
+done
+
 $SUDO dpkg --configure -a >> "$LOG_DIR/apt.log" 2>&1 || true
 $SUDO apt-get purge -y ca-certificates-java >> "$LOG_DIR/apt.log" 2>&1 || true
+$SUDO apt-mark unhold ca-certificates-java >> "$LOG_DIR/apt.log" 2>&1 || true
 
 # Install CUDA toolkit when enabled and nvcc missing (only for repo-based installs)
 if [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 0 ]; then

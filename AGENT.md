@@ -4,21 +4,25 @@
 **SEP Engine** is a production-ready financial modeling system using CUDA-accelerated pattern analysis on forex data. **All mathematical foundations have been validated** with complete test coverage, confirming readiness for alpha generation deployment.
 
 ## Primary Working Directory
-**alpha/** - This is the main focus area for strategy development and iterative testing. All current development work centers on improving trading signal accuracy through systematic experimentation.
+**alpha/** - This is the main focus area for strategy development and iterative testing. All current development work centers on improving trading signal accuracy through systematic experimentation. **Unless explicitly told otherwise, all work should be conducted in the alpha/ directory.**
 
 ## Installation and Setup
 
 ### CUDA Environment Setup
 ```bash
-# Option 1: Standard network-based install
+# Option 1: Standard network-based install (Ubuntu/Codex)
+./install.sh --minimal --no-docker
+./build.sh --no-docker
+
+# Option 2: Full Docker-based install (production)
 ./install.sh
 ./build.sh
 
-# Option 2: Local CUDA installer (for network-blocked environments)
+# Option 3: Local CUDA installer (for network-blocked environments)
 # Download cuda_12.9.0_550.54.15_linux.run from NVIDIA CUDA Downloads
 # Place in /sep directory, then run:
-./install.sh --local
-./build.sh
+./install.sh --local --no-docker
+./build.sh --no-docker
 ```
 
 ## Build System

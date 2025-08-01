@@ -7,9 +7,17 @@ DOCKER_BIN=${DOCKER_BIN:-docker}
 set -uo pipefail
 
 REBUILD=false
-if [ "${1:-}" == "--rebuild" ]; then
-    REBUILD=true
-fi
+SKIP_DOCKER=false
+for arg in "$@"; do
+    case "$arg" in
+        --rebuild)
+            REBUILD=true
+            ;;
+        --no-docker)
+            SKIP_DOCKER=true
+            ;;
+    esac
+done
 
 echo "Building SEP Engine..."
 
@@ -30,14 +38,32 @@ mkdir -p build
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
-# Fallback to native build if container runtime is unavailable
-if ! "$DOCKER_BIN" info >/dev/null 2>&1; then
-    echo "Container runtime $DOCKER_BIN not available. Building natively..."
+# Use native build if --no-docker or container runtime unavailable
+if [ "$SKIP_DOCKER" = true ] || ! "$DOCKER_BIN" info >/dev/null 2>&1; then
+    if [ "$SKIP_DOCKER" = true ]; then
+        echo "Building natively (--no-docker)..."
+    else
+        echo "Container runtime $DOCKER_BIN not available. Building natively..."
+    fi
     cd build
-    cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DSEP_USE_CUDA=OFF \
-        -DCMAKE_CXX_COMPILER=clang++-15 -DCMAKE_C_COMPILER=clang-15
+    
+    # Detect CUDA availability for native builds
+    CUDA_FLAGS=""
+    if command -v nvcc >/dev/null 2>&1; then
+        echo "CUDA detected, enabling CUDA support..."
+        CUDA_FLAGS="-DSEP_USE_CUDA=ON"
+    else
+        echo "CUDA not detected, building without CUDA support..."
+        CUDA_FLAGS="-DSEP_USE_CUDA=OFF"
+    fi
+    
+    cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release $CUDA_FLAGS \
+        -DCMAKE_CXX_COMPILER=clang++-15 -DCMAKE_C_COMPILER=clang-15 \
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE
     ninja -k 0 2>&1 | tee ../output/build_log.txt
-    cd ..
+    
+    # Copy compile_commands.json for IDE integration
+    cp compile_commands.json ../ && cd ..
     exit 0
 fi
 

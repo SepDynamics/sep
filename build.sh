@@ -84,7 +84,7 @@ fi
     -e CUDAToolkit_ROOT=$CUDA_PREFIX \
     -e PATH=$CUDA_PREFIX/bin:${PATH} \
     -e LD_LIBRARY_PATH=$CUDA_PREFIX/lib64:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH-} \
-    sep-engine-builder bash -c '
+    sep_build_env bash -c '
     # Verify CUDA environment
     echo "Verifying CUDA environment..."
     echo "CUDA_HOME: $CUDA_HOME"

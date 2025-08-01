@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
 # SEP Engine dependency installer
-set -uo pipefail
+set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-sudo ln -sf /workspace/sep /sep
+SUDO=""
+if [ "${EUID:-$(id -u)}" -ne 0 ]; then
+  if command -v sudo >/dev/null 2>&1; then
+    SUDO="sudo"
+  else
+    echo "This script requires root privileges or sudo." >&2
+    exit 1
+  fi
+fi
+
+$SUDO ln -sf /workspace/sep /sep
 cd /sep
 
 # Python version used for all installs. 3.13 is not yet available
@@ -27,9 +37,9 @@ done
 
 if [ "$USE_CUDA" -eq 1 ]; then
   if wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb; then
-    sudo dpkg -i cuda-keyring_1.1-1_all.deb
+    $SUDO dpkg -i cuda-keyring_1.1-1_all.deb
     rm cuda-keyring_1.1-1_all.deb
-    sudo apt-get update
+    $SUDO apt-get update
   else
     echo "Warning: Unable to download CUDA keyring, proceeding without CUDA repo"
     USE_CUDA=0
@@ -72,27 +82,27 @@ else
 fi
 
 echo "Updating package lists..."
-sudo apt-get update -y
+$SUDO apt-get update -y
 
 echo "Installing base packages..."
-sudo apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
+$SUDO apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 
 # Install Docker and Docker Compose
 echo "Installing Docker..."
-sudo apt-get install -y docker.io docker-compose-v2 >> "$LOG_DIR/apt.log"
-sudo systemctl enable --now docker >/dev/null 2>&1 || true
-if [ "$EUID" -ne 0 ]; then
-  sudo usermod -aG docker "$USER" || true
+$SUDO apt-get install -y docker.io docker-compose-v2 >> "$LOG_DIR/apt.log"
+$SUDO systemctl enable --now docker >/dev/null 2>&1 || true
+if [ "${EUID:-$(id -u)}" -ne 0 ]; then
+  $SUDO usermod -aG docker "$USER" || true
 fi
 
 # Build and install GoogleTest as the packaged version only ships sources
 if [ -d /usr/src/googletest ]; then
   echo "Building GoogleTest..."
-  sudo cmake /usr/src/googletest -B /usr/src/googletest/build \
+  $SUDO cmake /usr/src/googletest -B /usr/src/googletest/build \
     >> "$LOG_DIR/gtest.log" 2>&1
-  sudo cmake --build /usr/src/googletest/build --target install \
+  $SUDO cmake --build /usr/src/googletest/build --target install \
     >> "$LOG_DIR/gtest.log" 2>&1
-  sudo ldconfig
+  $SUDO ldconfig
 fi
 
 # Fetch header-only dependencies if missing
@@ -106,18 +116,18 @@ fi
 # Ensure Python and pip are available
 if ! command -v python3 >/dev/null; then
   echo "Installing system Python..."
-  sudo apt-get install -y python3 python3-dev | tee -a "$LOG_DIR/apt.log"
+  $SUDO apt-get install -y python3 python3-dev | tee -a "$LOG_DIR/apt.log"
 fi
 if ! command -v pip3 >/dev/null; then
-  sudo apt-get install -y python3-pip | tee -a "$LOG_DIR/apt.log"
+  $SUDO apt-get install -y python3-pip | tee -a "$LOG_DIR/apt.log"
 fi
 
 # Install Python packages for analysis
 pip3 install pandas numpy matplotlib codechecker
 
 # Set up clang tool symlinks
-sudo ln -sf /usr/bin/clang-tidy-15 /usr/bin/clang-tidy
-sudo ln -sf /usr/bin/clang-format-15 /usr/bin/clang-format
+$SUDO ln -sf /usr/bin/clang-tidy-15 /usr/bin/clang-tidy
+$SUDO ln -sf /usr/bin/clang-format-15 /usr/bin/clang-format
 
 # Verify installed packages
 echo "Verifying installations..."

@@ -20,6 +20,7 @@ cd /sep
 # Optional argument parsing must occur before any package operations
 USE_CUDA=1
 USE_MINIMAL=0
+USE_LOCAL_CUDA=0
 for arg in "$@"; do
   case "$arg" in
     --no-cuda)
@@ -30,16 +31,32 @@ for arg in "$@"; do
       USE_MINIMAL=1
       shift
       ;;
+    --local)
+      USE_LOCAL_CUDA=1
+      shift
+      ;;
   esac
 done
 
-if [ "$USE_CUDA" -eq 1 ]; then
+if [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 0 ]; then
   if wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb; then
     $SUDO dpkg -i cuda-keyring_1.1-1_all.deb
     rm cuda-keyring_1.1-1_all.deb
     $SUDO apt-get update
   else
     echo "Warning: Unable to download CUDA keyring, proceeding without CUDA repo"
+    USE_CUDA=0
+  fi
+elif [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 1 ]; then
+  echo "Using local CUDA installer method"
+  # Check for local CUDA installer
+  if [ -f "cuda_12.9.0_550.54.15_linux.run" ]; then
+    echo "Installing CUDA from local .run file..."
+    chmod +x cuda_12.9.0_550.54.15_linux.run
+    $SUDO ./cuda_12.9.0_550.54.15_linux.run --silent --toolkit --no-opengl-libs
+  else
+    echo "Error: Local CUDA installer 'cuda_12.9.0_550.54.15_linux.run' not found"
+    echo "Please download it from NVIDIA CUDA Downloads and place it in this directory"
     USE_CUDA=0
   fi
 fi
@@ -85,8 +102,8 @@ $SUDO apt-get update -y
 echo "Installing base packages..."
 $SUDO apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 
-# Install CUDA toolkit when enabled and nvcc missing
-if [ "$USE_CUDA" -eq 1 ]; then
+# Install CUDA toolkit when enabled and nvcc missing (only for repo-based installs)
+if [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 0 ]; then
   if ! command -v nvcc >/dev/null 2>&1; then
     echo "Installing CUDA toolkit..."
     $SUDO apt-get install -y cuda-toolkit-12-9 cuda-nvcc-12-9 >> "$LOG_DIR/apt.log"

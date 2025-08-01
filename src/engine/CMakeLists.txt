@@ -14,8 +14,8 @@ add_sep_library(sep_engine
         internal/prometheus_exporter.cpp
         internal/socket_listener.cpp
         internal/tracing.cpp
+        internal/engine.cpp
     CUDA_SOURCES
-        internal/engine.cu
         internal/cuda_impl.cu
         internal/raii.cu
         internal/stream.cu

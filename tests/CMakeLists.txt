@@ -15,21 +15,25 @@ add_executable(quantum_signal_bridge_test
 add_executable(trajectory_metrics_test
     trajectory_metrics_test.cpp)
 target_include_directories(quantum_signal_bridge_test PRIVATE ../src)
-# PyTorch includes - use the API include path first
 target_include_directories(quantum_signal_bridge_test PRIVATE ${TORCH_INCLUDE_DIRS})
 target_link_libraries(quantum_signal_bridge_test
+    GTest::gtest
+    GTest::gtest_main
     ${TORCH_LIBRARIES}
     /usr/local/lib/python3.10/dist-packages/torch/lib/libtorch_cpu.so
     sep_quantum
     sep_trader_cuda
     sep_trader_logic
     TBB::tbb
-    GTest::gtest
-    GTest::gtest_main
-    Threads::Threads
+    -Wl,--no-as-needed
 )
-# Ensure C++17 standard for PyTorch compatibility
-set_target_properties(quantum_signal_bridge_test PROPERTIES CXX_STANDARD 17)
+# Include GoogleTest headers
+target_include_directories(quantum_signal_bridge_test PRIVATE /sep/third_party)
+set_target_properties(quantum_signal_bridge_test PROPERTIES 
+    CXX_STANDARD 17
+    BUILD_RPATH "/usr/local/lib/python3.10/dist-packages/torch/lib"
+    INSTALL_RPATH "/usr/local/lib/python3.10/dist-packages/torch/lib"
+)
 target_compile_definitions(quantum_signal_bridge_test PRIVATE -D_GLIBCXX_USE_CXX11_ABI=0)
 target_compile_features(quantum_signal_bridge_test PRIVATE cxx_std_17)
 
@@ -39,6 +43,8 @@ target_link_libraries(trajectory_metrics_test GTest::gtest GTest::gtest_main sep
 enable_testing()
 include(GoogleTest)
 gtest_discover_tests(pattern_metrics_test)
+gtest_discover_tests(quantum_signal_bridge_test)
+gtest_discover_tests(trajectory_metrics_test)
 
 add_executable(oanda_trader_test
     oanda_trader_test.cpp)

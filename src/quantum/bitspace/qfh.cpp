@@ -127,8 +127,8 @@ bitspace::DampedValue QFHBasedProcessor::integrateFutureTrajectories(const std::
     
     // Apply mathematical formula from bitspace_math.md:
     // λ = k1 * Entropy + k2 * (1 - Coherence)
-    const double k1 = 0.5;  // Entropy weight
-    const double k2 = 0.2;  // Coherence weight
+    const double k1 = 0.30;  // Entropy weight
+    const double k2 = 0.20;  // Coherence weight
     double lambda = k1 * local_entropy + k2 * (1.0 - local_coherence);
     lambda = std::fmax(0.01, std::fmin(1.0, lambda));  // Constrain to reasonable range
     

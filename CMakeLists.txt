@@ -51,6 +51,7 @@ include(cmake/template.cmake)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # GLM configuration is included per-target in cmake template
@@ -63,6 +64,7 @@ find_package(Threads REQUIRED)
 # TBB built via FetchContent to avoid system dependencies
 find_package(benchmark REQUIRED)
 find_package(nlohmann_json REQUIRED)
+include(cmake/gtest.cmake)
 # spdlog built via FetchContent to use our fmt
 find_package(glm REQUIRED)
 find_package(OpenGL REQUIRED)

@@ -87,7 +87,7 @@
 - **Financial Validation**: Real market data backtesting operational
 - **Build System**: Docker hermetic builds eliminating dependencies
 
-## 🚀 Iterative Testing Results (Experiments 011-017)
+## 🚀 Iterative Testing Results (Experiments 011-022)
 
 ### **Systematic Performance Optimization**
 We conducted systematic iterative testing to improve accuracy beyond the baseline:
@@ -98,16 +98,23 @@ We conducted systematic iterative testing to improve accuracy beyond the baselin
 | 012 | 40.79% | Enhanced pattern diversity | ❌ Too complex |
 | 013 | 40.51% | Refined pattern ensemble | ❌ Still complex |
 | 014 | 38.78% | Enhanced timeframe correlation | ❌ Penalty too aggressive |
-| 015 | 37.12% | Bidirectional signal system | 🔄 Concept promising |
+| 015 | 37.12% | Bidirectional signal system | ❌ Over-engineered |
 | 016 | 35.08% | Calibrated bidirectional | ❌ Over-engineered |
-| 017 | 39.26% (46.18% high-conf) | Volume-weighted enhancement | 🔄 Threshold tuning needed |
+| 017 | 39.26% (46.18% high-conf) | Volume-weighted enhancement | ❌ Lower overall |
+| 018 | 39.40% | Optimized thresholds for Exp 017 | ❌ Minimal improvement |
+| 019 | 38.22% | Simplified bidirectional signals | ❌ Significantly lower |
+| 020 | 40.79% | Enhanced multi-timeframe weighting | ❌ Lower than baseline |
+| 021 | 38.71% (46.59% high-conf) | Hybrid Exp 011 + selective volume | ❌ Lower overall |
+| 022 | 40.17% (46.59% high-conf) | Dynamic threshold adaptation | 🔄 Minor improvement
 
 ### **Key Insights from Testing**
-- ✅ **Multi-timeframe analysis** is the most effective approach
+- ✅ **Multi-timeframe analysis** (Experiment 011) is the most effective approach
 - ❌ **Complex ensemble methods** consistently reduced performance
-- 🔄 **Bidirectional divergence signals** show promise but need simpler implementation
-- ✅ **Volume-weighted approaches** produce high-quality signals
+- ❌ **Bidirectional divergence signals** perform worse than baseline approaches
+- ❌ **Volume-weighted approaches** reduced overall accuracy despite producing high-quality signals
 - 🎯 **Simpler approaches** consistently outperform complex ones
+- 🔄 **Dynamic threshold adaptation** shows minor promise for improvement
+- ✅ **Experiment 011 remains unbeaten** after 11 additional optimization attempts
 
 ### **Current Testing Commands**
 ```bash

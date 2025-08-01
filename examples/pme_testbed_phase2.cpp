@@ -197,16 +197,16 @@ int main(int argc, char** argv) {
         const auto& candle = candles[i];
         
         // =================================================================
-        // EXPERIMENT 017: Enhanced Exp 011 + Volume-Weighted Coherence
-        // Target: 47%+ by adding volume confirmation to successful Exp 011 base
-        // Based on: Return to proven 46.59% foundation with focused improvement
+        // EXPERIMENT 022: Dynamic threshold adaptation based on market conditions
+        // Target: 48%+ by adapting thresholds based on real-time market volatility and trend strength
+        // Based on: Return to proven Experiment 011 foundation with dynamic adaptive thresholds
         // =================================================================
         
         sep::quantum::manifold::QuantumPattern q_p;
         q_p.id = "pattern_" + candle.time;
         
-        // EXPERIMENT 017: Enhanced Exp 011 with Volume-Weighted Coherence
-        // Return to proven autocorrelation base + add volume confirmation
+        // EXPERIMENT 022: Exact Experiment 011 autocorrelation (no modifications)
+        // Return to proven autocorrelation calculation from successful Experiment 011
         
         if (i >= 5 && close_prices.size() > 5) {
             double autocorr = 0.0, variance = 0.0;
@@ -226,24 +226,13 @@ int main(int argc, char** argv) {
                 variance += x * x;
             }
             
-            // Volume-weighted coherence enhancement
-            double volume_factor = 1.0;
-            if (candle.volume > 0) {
-                // Calculate volume relative to recent average
-                double avg_volume = 150.0; // Baseline from data analysis
-                double volume_ratio = candle.volume / avg_volume;
-                
-                // Volume confirmation: higher volume = higher confidence
-                volume_factor = 0.8 + 0.4 * std::min(2.0, volume_ratio); // Range: 0.8-1.6
-            }
-            
             q_p.coherence = variance > 0 ? 
-                std::min(1.0, std::max(0.0, (0.5 + 0.5 * (autocorr / variance)) * volume_factor)) : 0.5;
+                std::min(1.0, std::max(0.0, 0.5 + 0.5 * (autocorr / variance))) : 0.5;
         } else {
             q_p.coherence = 0.5;
         }
         
-        // Market regime-adjusted stability calculation
+        // Exact market regime-adjusted stability from successful Experiment 011
         if (i >= 10) {
             double short_trend = 0.0, medium_trend = 0.0;
             
@@ -258,7 +247,7 @@ int main(int argc, char** argv) {
             bool trends_align = (short_trend * medium_trend) > 0;
             double trend_ratio = std::abs(short_trend) / std::max(0.0001, std::abs(medium_trend));
             
-            // EXPERIMENT 005: Pure Phase 1 stability (no market regime)
+            // Original Experiment 011 stability calculation
             double volatility_factor = (candles[i].high - candles[i].low) / candles[i].close;
             
             q_p.stability = trends_align ? 
@@ -268,7 +257,7 @@ int main(int argc, char** argv) {
             q_p.stability = 0.5;
         }
         
-        // Enhanced entropy calculation (from Phase 1)
+        // Exact entropy calculation from successful Experiment 011
         if (i >= 10) {
             std::vector<int> bins(5, 0);
             
@@ -364,7 +353,7 @@ int main(int argc, char** argv) {
             volume_factor = std::max(0.7, std::min(1.4, volume_factor));
         }
         
-        // EXPERIMENT 017: Return to proven Exp 011 scoring with volume enhancement
+        // EXPERIMENT 022: Proven Experiment 011 with dynamic adaptive thresholds
         double base_buy_score = (metric.stability * stability_w) + 
                                (metric.coherence * coherence_w) + 
                                ((1.0 - metric.phase) * entropy_w);
@@ -373,7 +362,7 @@ int main(int argc, char** argv) {
                                 ((1.0 - metric.coherence) * coherence_w) + 
                                 (metric.phase * entropy_w);
         
-        // Multi-timeframe coherence boost
+        // Exact multi-timeframe coherence boost from successful Experiment 011
         double temporal_coherence = 1.0;
         if (pattern_idx >= 15) { // Need enough history for timeframe analysis
             // Calculate 5-minute and 15-minute pattern coherence
@@ -392,7 +381,7 @@ int main(int argc, char** argv) {
             }
             tf15_coherence /= tf15_window;
             
-            // Temporal alignment bonus
+            // Temporal alignment bonus (exact from Experiment 011)
             if (std::abs(metric.coherence - tf5_coherence) < 0.1 && 
                 std::abs(tf5_coherence - tf15_coherence) < 0.1) {
                 temporal_coherence = 1.15; // 15% boost for temporal alignment
@@ -404,15 +393,56 @@ int main(int argc, char** argv) {
         double buy_score = base_buy_score * volume_factor * temporal_coherence;
         double sell_score = base_sell_score * volume_factor * temporal_coherence;
         
-        // Apply dynamic thresholds with volatility adjustment
-        double buy_threshold = base_buy_threshold * volatility_multiplier;
-        double sell_threshold = base_sell_threshold * volatility_multiplier;
+        // EXPERIMENT 022: Dynamic market-adaptive thresholds
+        // Calculate real-time market conditions for threshold adaptation
+        double market_trend_strength = 0.0;
+        double market_volatility = 0.0;
+        
+        if (pattern_idx >= 20) {
+            // Calculate recent trend strength
+            double recent_price_change = 0.0;
+            for (int j = 1; j <= 10; ++j) {
+                recent_price_change += std::abs(metrics[pattern_idx-j].coherence - metrics[pattern_idx-j-1].coherence);
+            }
+            market_trend_strength = recent_price_change / 10.0;
+            
+            // Calculate market volatility from stability variance
+            double stability_sum = 0.0, stability_variance = 0.0;
+            for (int j = 1; j <= 15; ++j) {
+                stability_sum += metrics[pattern_idx-j].stability;
+            }
+            double avg_stability = stability_sum / 15.0;
+            
+            for (int j = 1; j <= 15; ++j) {
+                double diff = metrics[pattern_idx-j].stability - avg_stability;
+                stability_variance += diff * diff;
+            }
+            market_volatility = std::sqrt(stability_variance / 15.0);
+        }
+        
+        // Dynamic threshold adaptation based on market conditions
+        double adaptive_multiplier = volatility_multiplier;
+        
+        // Lower thresholds in trending markets (high coherence consistency)
+        if (market_trend_strength < 0.1) {
+            adaptive_multiplier *= 0.92; // 8% easier to trigger in stable trending markets
+        }
+        
+        // Raise thresholds in highly volatile markets (erratic stability)
+        if (market_volatility > 0.15) {
+            adaptive_multiplier *= 1.12; // 12% harder to trigger in volatile markets
+        }
+        
+        // Apply dynamic adaptive thresholds
+        double buy_threshold = base_buy_threshold * adaptive_multiplier;
+        double sell_threshold = base_sell_threshold * adaptive_multiplier;
 
-        // DEBUG: Multi-timeframe analysis (first 5 patterns)
+        // DEBUG: Dynamic threshold adaptation analysis (first 5 patterns)
         static int debug_count = 0;
         if (debug_count < 5) {
-            std::cout << "PHASE2 MTF_DEBUG[" << debug_count << "]: buy_score=" << buy_score 
-                      << " sell_score=" << sell_score << " temporal_coherence=" << temporal_coherence
+            std::cout << "PHASE2 ADAPTIVE_022[" << debug_count << "]: buy_score=" << buy_score 
+                      << " sell_score=" << sell_score << " adaptive_mult=" << adaptive_multiplier
+                      << " trend_str=" << market_trend_strength << " volatility=" << market_volatility
                       << " buy_thresh=" << buy_threshold << " sell_thresh=" << sell_threshold << std::endl;
             debug_count++;
         }

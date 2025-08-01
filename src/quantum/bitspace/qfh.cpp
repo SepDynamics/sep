@@ -98,14 +98,39 @@ bitspace::DampedValue QFHBasedProcessor::integrateFutureTrajectories(const std::
     std::vector<uint8_t> local_window(bitstream.begin() + current_index, 
                                       bitstream.begin() + current_index + window_size);
     
-    QFHResult local_analysis = analyze(local_window);
+    // Calculate local entropy and coherence directly to avoid recursion
+    auto local_events = transform_rich(local_window);
+    double local_entropy = 0.5; // Default entropy
+    double local_coherence = 0.5; // Default coherence
+    
+    if (!local_events.empty()) {
+        // Simple entropy calculation without recursion
+        int null_count = 0, flip_count = 0, rupture_count = 0;
+        for (const auto& event : local_events) {
+            switch (event.state) {
+                case QFHState::NULL_STATE: null_count++; break;
+                case QFHState::FLIP: flip_count++; break;
+                case QFHState::RUPTURE: rupture_count++; break;
+            }
+        }
+        
+        float total = static_cast<float>(local_events.size());
+        float null_ratio = null_count / total;
+        float flip_ratio = flip_count / total;
+        float rupture_ratio = rupture_count / total;
+        
+        auto safe_log2 = [](float x) -> float { return (x > 0.0f) ? std::log2(x) : 0.0f; };
+        local_entropy = -(null_ratio * safe_log2(null_ratio) + flip_ratio * safe_log2(flip_ratio) + rupture_ratio * safe_log2(rupture_ratio));
+        local_entropy = std::fmax(0.05, std::fmin(1.0, local_entropy / 1.585));
+        local_coherence = 1.0 - local_entropy;
+    }
     
     // Apply mathematical formula from bitspace_math.md:
     // λ = k1 * Entropy + k2 * (1 - Coherence)
     const double k1 = 0.3;  // Entropy weight
     const double k2 = 0.2;  // Coherence weight
-    double lambda = k1 * local_analysis.entropy + k2 * (1.0 - local_analysis.coherence);
-    lambda = std::clamp(lambda, 0.01, 1.0);  // Constrain to reasonable range
+    double lambda = k1 * local_entropy + k2 * (1.0 - local_coherence);
+    lambda = std::fmax(0.01, std::fmin(1.0, lambda));  // Constrain to reasonable range
     
     // Step 2: Integrate future trajectories with exponential damping
     // Formula: V_i = Σ(p_j - p_i) * e^(-λ(j-i))
@@ -152,7 +177,7 @@ bitspace::DampedValue QFHBasedProcessor::integrateFutureTrajectories(const std::
         
         // Convert variance to confidence (lower variance = higher confidence)
         double stability_score = 1.0 / (1.0 + trajectory_variance);
-        damped_value.confidence = std::clamp(stability_score, 0.0, 1.0);
+        damped_value.confidence = std::fmax(0.0, std::fmin(1.0, stability_score));
     } else {
         damped_value.confidence = 0.5;  // Default confidence for insufficient data
     }
@@ -218,7 +243,7 @@ double QFHBasedProcessor::matchKnownPaths(const std::vector<double>& current_pat
     best_similarity = std::max(best_similarity, osc_similarity);
     
     // Return the highest similarity score found
-    return std::clamp(best_similarity, 0.0, 1.0);
+    return std::fmax(0.0, std::fmin(1.0, best_similarity));
 }
 
 
@@ -283,7 +308,7 @@ sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const std::vect
                           rupture_ratio * safe_log2(rupture_ratio));
         
         // Normalize entropy to [0,1] (max entropy for 3 states is log2(3) ≈ 1.585)
-        result.entropy = std::clamp(result.entropy / 1.585f, 0.05f, 1.0f);  // Minimum 0.05 entropy
+        result.entropy = std::fmax(0.05f, std::fmin(1.0f, result.entropy / 1.585f));  // Minimum 0.05 entropy
         
         // Coherence calculation - needs to reach trading threshold ≥0.9
         // Use more aggressive scaling to achieve higher coherence for good patterns
@@ -295,7 +320,7 @@ sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const std::vect
         float raw_coherence = pattern_coherence * 0.5f + stability_coherence * 0.3f + flip_coherence * 0.2f;
         
         // Apply sigmoid-like scaling to push good patterns above 0.9 threshold
-        result.coherence = std::clamp(raw_coherence * raw_coherence * 1.1f, 0.0f, 1.0f);
+        result.coherence = std::fmax(0.0f, std::fmin(1.0f, raw_coherence * raw_coherence * 1.1f));
     }
     
     // Integrate future trajectories for damping - this is the core enhancement
@@ -322,7 +347,7 @@ sep::quantum::QFHResult sep::quantum::QFHBasedProcessor::analyze(const std::vect
         }
         
         // Ensure coherence stays within valid range
-        result.coherence = std::clamp(result.coherence, 0.0f, 1.0f);
+        result.coherence = std::fmax(0.0f, std::fmin(1.0f, result.coherence));
     }
 
     // Detect collapse

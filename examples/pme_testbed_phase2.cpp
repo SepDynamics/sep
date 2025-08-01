@@ -228,24 +228,50 @@ int main(int argc, char** argv) {
         std::vector<uint8_t> window_bits(price_bitstream.begin() + window_start,
                                          price_bitstream.begin() + window_end);
 
+        std::cout << "analyze: events size: " << window_bits.size() << std::endl;
+        
         if (window_bits.size() < 2) {
             // Too small for transitions - skip analysis for this candle
+            std::cout << "Skipping window size " << window_bits.size() << " for candle " << i << std::endl;
             continue;
         }
 
-        // Use enhanced QFH processor with trajectory damping
-        sep::quantum::QFHResult qfh_result = qfh_processor.analyze(window_bits);
+        // Add comprehensive safety checks before QFH calls
+        try {
+            std::cout << "About to call qfh_processor.analyze with size " << window_bits.size() << std::endl;
+            
+            // Use enhanced QFH processor with trajectory damping  
+            sep::quantum::QFHResult qfh_result = qfh_processor.analyze(window_bits);
+            
+            std::cout << "analyze() succeeded, calling integrateFutureTrajectories" << std::endl;
+            
+            // Safe parameter for future trajectories - ensure it's not larger than window
+            size_t future_steps = std::min(static_cast<size_t>(3), window_bits.size() / 2);
+            auto damped_trajectory = qfh_processor.integrateFutureTrajectories(window_bits, future_steps);
+            
+            std::cout << "integrateFutureTrajectories() succeeded" << std::endl;
 
-        auto damped_trajectory =
-            qfh_processor.integrateFutureTrajectories(window_bits, window_bits.size() / 2);
+            q_p.coherence = qfh_result.coherence;
+            q_p.stability = 1.0f - qfh_result.rupture_ratio; // Stability inversely related to ruptures
+            q_p.phase = qfh_result.entropy / 2.0f;           // Normalize entropy to [0,1]
 
-        q_p.coherence = qfh_result.coherence;
-        q_p.stability = 1.0f - qfh_result.rupture_ratio; // Stability inversely related to ruptures
-        q_p.phase = qfh_result.entropy / 2.0f;           // Normalize entropy to [0,1]
-
-        double trajectory_confidence =
-            qfh_processor.matchKnownPaths({damped_trajectory.final_value});
-        q_p.coherence = 0.7 * q_p.coherence + 0.3 * trajectory_confidence;
+            double trajectory_confidence =
+                qfh_processor.matchKnownPaths({damped_trajectory.final_value});
+            q_p.coherence = 0.7 * q_p.coherence + 0.3 * trajectory_confidence;
+            
+        } catch (const std::exception& e) {
+            std::cerr << "QFH processing failed for candle " << i << ": " << e.what() << std::endl;
+            // Use fallback values to continue processing
+            q_p.coherence = 0.5;
+            q_p.stability = 0.5;
+            q_p.phase = 0.5;
+        } catch (...) {
+            std::cerr << "QFH processing failed for candle " << i << " with unknown error" << std::endl;
+            // Use fallback values to continue processing
+            q_p.coherence = 0.5;
+            q_p.stability = 0.5;
+            q_p.phase = 0.5;
+        }
         
         quantum_patterns.push_back(q_p);
     }

@@ -3,6 +3,9 @@
 #include <cuda_runtime.h>
 #include <cstdint>
 
+// Include forward window result outside any namespace
+#include "quantum/bitspace/forward_window_result.h"
+
 namespace sep::apps::cuda {
 
 // Data structures for CUDA kernels
@@ -30,10 +33,7 @@ struct WindowResult {
     uint64_t window_end;
 };
 
-// ForwardWindowResult is now defined in src/quantum/bitspace/forward_window_result.h
-#include "quantum/bitspace/forward_window_result.h"
-
-// Using alias to maintain compatibility with existing code
+// Using alias to maintain compatibility with existing code  
 using ForwardWindowResult = sep::quantum::bitspace::ForwardWindowResult;
 
 // CUDA context for managing device memory and streams

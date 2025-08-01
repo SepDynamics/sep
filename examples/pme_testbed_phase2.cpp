@@ -1,0 +1,522 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <nlohmann/json.hpp>
+#include <cmath>
+#include <algorithm>
+#include <iomanip>
+
+#include "quantum/quantum_manifold_optimizer.h"
+#include "quantum/signal.h"
+
+using json = nlohmann::json;
+
+struct Candle {
+    std::string time;
+    double open, high, low, close, volume;
+};
+
+void from_json(const json& j, Candle& c) {
+    j.at("time").get_to(c.time);
+    c.volume = j.contains("volume") ? j["volume"].get<double>() : 100.0;
+    
+    // Handle OANDA format with nested "mid" object
+    if (j.contains("mid")) {
+        auto mid = j["mid"];
+        std::string open_str, high_str, low_str, close_str;
+        mid.at("o").get_to(open_str);
+        mid.at("h").get_to(high_str);
+        mid.at("l").get_to(low_str);
+        mid.at("c").get_to(close_str);
+        
+        c.open = std::stod(open_str);
+        c.high = std::stod(high_str);
+        c.low = std::stod(low_str);
+        c.close = std::stod(close_str);
+    } else {
+        // Handle simple format
+        j.at("open").get_to(c.open);
+        j.at("high").get_to(c.high);
+        j.at("low").get_to(c.low);
+        j.at("close").get_to(c.close);
+    }
+}
+
+// Phase 2: Advanced Market Analysis
+class AdvancedMarketAnalyzer {
+public:
+    enum MarketRegime {
+        TRENDING_UP,
+        TRENDING_DOWN,
+        RANGING,
+        HIGH_VOLATILITY,
+        LOW_VOLATILITY
+    };
+    
+    struct MarketState {
+        MarketRegime regime;
+        double confidence;
+        double volatility_level;
+        double trend_strength;
+        bool is_liquid_session;
+    };
+    
+    static MarketState analyzeMarketRegime(const std::vector<Candle>& candles, size_t index) {
+        MarketState state;
+        
+        if (index < 20) {
+            state.regime = RANGING;
+            state.confidence = 0.5;
+            state.volatility_level = 0.5;
+            state.trend_strength = 0.0;
+            state.is_liquid_session = true;
+            return state;
+        }
+        
+        // Calculate trend strength over 20 periods
+        double trend_sum = 0.0;
+        double volatility_sum = 0.0;
+        
+        for (int i = 1; i <= 20; ++i) {
+            double price_change = candles[index - i + 1].close - candles[index - i].close;
+            double range = candles[index - i].high - candles[index - i].low;
+            
+            trend_sum += price_change;
+            volatility_sum += range;
+        }
+        
+        double avg_change = trend_sum / 20.0;
+        double avg_volatility = volatility_sum / 20.0;
+        
+        // Normalize for forex (EUR/USD typical values)
+        state.trend_strength = std::abs(avg_change) * 10000; // Convert to pips
+        state.volatility_level = avg_volatility * 10000;
+        
+        // Market regime classification
+        if (state.trend_strength > 15.0) { // Strong trend > 15 pips
+            state.regime = avg_change > 0 ? TRENDING_UP : TRENDING_DOWN;
+            state.confidence = std::min(1.0, state.trend_strength / 30.0);
+        } else if (state.volatility_level > 20.0) { // High volatility > 20 pips
+            state.regime = HIGH_VOLATILITY;
+            state.confidence = std::min(1.0, state.volatility_level / 40.0);
+        } else if (state.volatility_level < 8.0) { // Low volatility < 8 pips
+            state.regime = LOW_VOLATILITY;
+            state.confidence = std::min(1.0, (8.0 - state.volatility_level) / 8.0);
+        } else {
+            state.regime = RANGING;
+            state.confidence = 1.0 - (state.trend_strength / 15.0);
+        }
+        
+        // Check for liquid trading session (simplified)
+        state.is_liquid_session = true; // Assume all data is from liquid sessions
+        
+        return state;
+    }
+    
+    static double calculateSignalQuality(const sep::quantum::manifold::QuantumPattern& pattern, 
+                                       const MarketState& market_state) {
+        double quality = 0.5; // Base quality
+        
+        // Pattern coherence quality
+        if (pattern.coherence > 0.7) quality += 0.2;
+        else if (pattern.coherence < 0.3) quality -= 0.2;
+        
+        // Stability quality based on market regime
+        switch (market_state.regime) {
+            case TRENDING_UP:
+            case TRENDING_DOWN:
+                if (pattern.stability > 0.6) quality += 0.15;
+                break;
+            case RANGING:
+                if (pattern.stability > 0.4 && pattern.stability < 0.6) quality += 0.1;
+                break;
+            case HIGH_VOLATILITY:
+                quality -= 0.1; // Reduce quality in high volatility
+                break;
+            case LOW_VOLATILITY:
+                if (pattern.coherence > 0.6) quality += 0.1;
+                break;
+        }
+        
+        // Entropy quality (complexity measure)
+        double entropy_factor = 1.0 - std::abs(pattern.phase - 0.5) * 2.0; // Prefer moderate entropy
+        quality += entropy_factor * 0.1;
+        
+        return std::min(1.0, std::max(0.0, quality));
+    }
+};
+
+int main(int argc, char** argv) {
+    if (argc != 2 && argc != 7) {
+        std::cerr << "Usage: " << argv[0] << " <path_to_data_file> [stability_w] [coherence_w] [entropy_w] [buy_threshold] [sell_threshold]" << std::endl;
+        return 1;
+    }
+
+    std::string data_file_path = argv[1];
+
+    std::ifstream data_stream(data_file_path);
+    if (!data_stream) {
+        std::cerr << "Failed to open data file: " << data_file_path << std::endl;
+        return 1;
+    }
+
+    json j;
+    data_stream >> j;
+
+    std::vector<Candle> candles;
+    if (j.contains("candles")) {
+        candles = j["candles"].get<std::vector<Candle>>();
+    } else if (j.is_array()) {
+        candles = j.get<std::vector<Candle>>();
+    }
+
+    if (candles.empty()) {
+        std::cerr << "Error: No candle data found" << std::endl;
+        return 1;
+    }
+
+    std::cout << "Loaded " << candles.size() << " candles for Phase 2 Enhanced Analysis" << std::endl;
+
+    // Initialize quantum pattern engine
+    sep::quantum::manifold::QuantumManifoldOptimizationEngine engine;
+    engine.initialize();
+
+    // PHASE 2: Enhanced pattern analysis with market regime detection
+    std::vector<sep::quantum::manifold::QuantumPattern> quantum_patterns;
+    // EXPERIMENT 005: Market states disabled
+    // std::vector<AdvancedMarketAnalyzer::MarketState> market_states;
+    std::vector<double> close_prices;
+    
+    // Build price array for autocorrelation
+    for (const auto& candle : candles) {
+        close_prices.push_back(candle.close);
+    }
+    
+    for (size_t i = 0; i < candles.size(); ++i) {
+        const auto& candle = candles[i];
+        
+        // EXPERIMENT 005: Remove market regime analysis from pattern creation
+        // auto market_state = AdvancedMarketAnalyzer::analyzeMarketRegime(candles, i);
+        // market_states.push_back(market_state);
+        
+        sep::quantum::manifold::QuantumPattern q_p;
+        q_p.id = "pattern_" + candle.time;
+        
+        // Enhanced pattern calculations (from Phase 1)
+        if (i >= 5 && close_prices.size() > 5) {
+            double autocorr = 0.0, variance = 0.0;
+            int lag = 3;
+            double mean = 0.0;
+            int window = std::min(10, (int)i);
+            
+            for (int j = 0; j < window; ++j) {
+                mean += close_prices[i - j];
+            }
+            mean /= window;
+            
+            for (int j = lag; j < window; ++j) {
+                double x = close_prices[i - j] - mean;
+                double y = close_prices[i - j + lag] - mean;
+                autocorr += x * y;
+                variance += x * x;
+            }
+            
+            q_p.coherence = variance > 0 ? 
+                std::min(1.0, std::max(0.0, 0.5 + 0.5 * (autocorr / variance))) : 0.5;
+        } else {
+            q_p.coherence = 0.5;
+        }
+        
+        // Market regime-adjusted stability calculation
+        if (i >= 10) {
+            double short_trend = 0.0, medium_trend = 0.0;
+            
+            for (int j = 1; j <= 3; ++j) {
+                short_trend += candles[i].close - candles[i - j].close;
+            }
+            
+            for (int j = 1; j <= 10; ++j) {
+                medium_trend += candles[i].close - candles[i - j].close;
+            }
+            
+            bool trends_align = (short_trend * medium_trend) > 0;
+            double trend_ratio = std::abs(short_trend) / std::max(0.0001, std::abs(medium_trend));
+            
+            // EXPERIMENT 005: Pure Phase 1 stability (no market regime)
+            double volatility_factor = (candles[i].high - candles[i].low) / candles[i].close;
+            
+            q_p.stability = trends_align ? 
+                std::min(1.0, 0.5 + 0.3 * trend_ratio + 0.2 * volatility_factor) :
+                std::max(0.0, 0.5 - 0.2 * trend_ratio);
+        } else {
+            q_p.stability = 0.5;
+        }
+        
+        // Enhanced entropy calculation (from Phase 1)
+        if (i >= 10) {
+            std::vector<int> bins(5, 0);
+            
+            for (int j = 1; j <= 10; ++j) {
+                double change = candles[i - j + 1].close - candles[i - j].close;
+                double range = candles[i - j].high - candles[i - j].low;
+                
+                if (range > 0) {
+                    double norm_change = change / range;
+                    if (norm_change < -0.5) bins[0]++;
+                    else if (norm_change < -0.1) bins[1]++;
+                    else if (norm_change < 0.1) bins[2]++;
+                    else if (norm_change < 0.5) bins[3]++;
+                    else bins[4]++;
+                } else {
+                    bins[2]++;
+                }
+            }
+            
+            double entropy = 0.0;
+            for (int count : bins) {
+                if (count > 0) {
+                    double p = count / 10.0;
+                    entropy -= p * std::log2(p);
+                }
+            }
+            
+            q_p.phase = entropy / std::log2(5.0);
+        } else {
+            q_p.phase = 0.5;
+        }
+        
+        quantum_patterns.push_back(q_p);
+    }
+
+    // DEBUG: Pattern count analysis
+    std::cout << "DEBUG: Created " << quantum_patterns.size() << " patterns from " 
+              << candles.size() << " candles" << std::endl;
+    
+    // Process patterns through engine
+    engine.processPatterns(quantum_patterns);
+    auto metrics = engine.getMetrics();
+    
+    std::vector<sep::quantum::Signal> signals;
+
+    // EXPERIMENT 001: Phase 1 parameters in Phase 2 framework
+    double stability_w = 0.4;     // Phase 1 proven weight
+    double coherence_w = 0.4;     // Phase 1 proven weight
+    double entropy_w = 0.2;       // Phase 1 proven weight
+    double base_buy_threshold = 0.50;   // Phase 1 proven threshold
+    double base_sell_threshold = 0.52;  // Phase 1 asymmetric threshold
+    
+    // Quality filtering parameters
+    double min_signal_quality = 0.45; // Balanced threshold for quality vs quantity
+    
+    // Volatility-adaptive thresholds (from Phase 1)
+    double avg_volatility = 0.0;
+    int vol_window = std::min(100, (int)candles.size());
+    for (int i = 0; i < vol_window; ++i) {
+        int idx = candles.size() - 1 - i;
+        avg_volatility += candles[idx].high - candles[idx].low;
+    }
+    avg_volatility /= vol_window;
+    double volatility_multiplier = 1.0 + (avg_volatility * 10000 - 10) * 0.02;
+    volatility_multiplier = std::max(0.8, std::min(1.5, volatility_multiplier));
+    
+    if (argc == 7) {
+        stability_w = std::stod(argv[2]);
+        coherence_w = std::stod(argv[3]);
+        entropy_w = std::stod(argv[4]);
+        base_buy_threshold = std::stod(argv[5]);
+        base_sell_threshold = std::stod(argv[6]);
+    }
+
+    // EXPERIMENT 005: Pure Phase 1 signal generation (no market states)
+    for (const auto& metric : metrics) {
+        sep::quantum::Signal signal;
+        signal.pattern_id = metric.id;
+        
+        const Candle* candle = nullptr;
+        for (const auto& c : candles) {
+            if ("pattern_" + c.time == signal.pattern_id) {
+                candle = &c;
+            }
+        }
+
+        // Phase 1's volume confirmation factor
+        double volume_factor = 1.0;
+        if (candle && candle->volume > 0) {
+            double avg_volume = 150.0; // Approximate average from data
+            volume_factor = 0.85 + 0.3 * (candle->volume / avg_volume);
+            volume_factor = std::max(0.7, std::min(1.4, volume_factor));
+        }
+        
+        // Phase 1's exact scoring logic
+        double buy_score = (metric.stability * stability_w) + 
+                          (metric.coherence * coherence_w) + 
+                          ((1.0 - metric.phase) * entropy_w);
+        buy_score *= volume_factor;
+        
+        double sell_score = ((1.0 - metric.stability) * stability_w) + 
+                           ((1.0 - metric.coherence) * coherence_w) + 
+                           (metric.phase * entropy_w);
+        sell_score *= volume_factor;
+        
+        // Apply dynamic thresholds with volatility adjustment
+        double buy_threshold = base_buy_threshold * volatility_multiplier;
+        double sell_threshold = base_sell_threshold * volatility_multiplier;
+
+        // DEBUG: Score analysis (first 5 patterns)
+        static int debug_count = 0;
+        if (debug_count < 5) {
+            std::cout << "PHASE2 DEBUG[" << debug_count << "]: buy_score=" << buy_score 
+                      << " sell_score=" << sell_score << " buy_thresh=" << buy_threshold 
+                      << " sell_thresh=" << sell_threshold << " vol_mult=" << volatility_multiplier << std::endl;
+            debug_count++;
+        }
+
+        if (buy_score > buy_threshold) {
+            signal.type = sep::quantum::SignalType::BUY;
+            signal.confidence = buy_score;
+        } else if (sell_score > sell_threshold) {
+            signal.type = sep::quantum::SignalType::SELL;
+            signal.confidence = sell_score;
+        } else {
+            signal.type = sep::quantum::SignalType::HOLD;
+            signal.confidence = 0.0;
+        }
+        
+        signals.push_back(signal);
+    }
+
+    // EXPERIMENT 005: Simplified output without market regime
+    std::cout << "timestamp,open,high,low,close,volume,pattern_id,coherence,stability,entropy,signal,signal_confidence" << std::endl;
+
+    for (size_t i = 0; i < metrics.size() && i < candles.size(); ++i) {
+        const auto& metric = metrics[i];
+        const auto& candle = candles[i];
+        
+        std::cout << candle.time << "," << std::fixed << std::setprecision(5)
+                  << candle.open << "," << candle.high << "," << candle.low << "," << candle.close 
+                  << "," << candle.volume << "," << metric.id << ","
+                  << metric.coherence << "," << metric.stability << "," << metric.phase;
+                  
+        if (i < signals.size()) {
+            const auto& signal = signals[i];
+            switch (signal.type) {
+                case sep::quantum::SignalType::BUY:
+                    std::cout << ",BUY";
+                    break;
+                case sep::quantum::SignalType::SELL:
+                    std::cout << ",SELL";
+                    break;
+                default:
+                    std::cout << ",HOLD";
+                    break;
+            }
+            std::cout << "," << signal.confidence;
+        } else {
+            std::cout << ",HOLD,0.0";
+        }
+        std::cout << std::endl;
+    }
+
+    // EXPERIMENT 007: Threshold calibration with signal distribution analysis
+    int correct_predictions = 0;
+    int total_predictions = 0;
+    int high_confidence_correct = 0;
+    int high_confidence_total = 0;
+
+    // Signal distribution tracking
+    double min_confidence = 1.0, max_confidence = 0.0, sum_confidence = 0.0;
+    double min_coherence = 1.0, max_coherence = 0.0, sum_coherence = 0.0;
+    double min_stability = 1.0, max_stability = 0.0, sum_stability = 0.0;
+    int signal_count = 0;
+
+    // EXPERIMENT 009: Higher selectivity for 45%+ accuracy target  
+    double confidence_threshold = 0.65; // Well above average (0.566)
+    double coherence_threshold = 0.55;  // Well above average (0.460)
+    double stability_threshold = 0.0;
+
+    for (size_t i = 0; i < candles.size() - 1 && i < signals.size() && i < metrics.size(); ++i) {
+        const auto& current_candle = candles[i];
+        const auto& next_candle = candles[i + 1];
+        const auto& metric = metrics[i];
+
+        if (signals[i].type != sep::quantum::SignalType::HOLD) {
+            total_predictions++;
+            signal_count++;
+            
+            // Track signal distribution
+            min_confidence = std::min(min_confidence, signals[i].confidence);
+            max_confidence = std::max(max_confidence, signals[i].confidence);
+            sum_confidence += signals[i].confidence;
+            
+            min_coherence = std::min(min_coherence, metric.coherence);
+            max_coherence = std::max(max_coherence, metric.coherence);
+            sum_coherence += metric.coherence;
+            
+            min_stability = std::min(min_stability, metric.stability);
+            max_stability = std::max(max_stability, metric.stability);
+            sum_stability += metric.stability;
+            
+            // Check if signal meets calibrated criteria
+            bool high_confidence = (signals[i].confidence >= confidence_threshold &&
+                                   metric.coherence >= coherence_threshold &&
+                                   metric.stability >= stability_threshold);
+            
+            if (high_confidence) {
+                high_confidence_total++;
+            }
+            
+            bool correct = false;
+            double pip_change = (next_candle.close - current_candle.close) * 10000;
+            
+            if (signals[i].type == sep::quantum::SignalType::BUY && pip_change > 0.5) {
+                correct = true;
+            } else if (signals[i].type == sep::quantum::SignalType::SELL && pip_change < -0.5) {
+                correct = true;
+            }
+            
+            if (correct) {
+                correct_predictions++;
+                if (high_confidence) {
+                    high_confidence_correct++;
+                }
+            }
+        }
+    }
+
+    // Display signal distribution analysis
+    std::cerr << "\n--- Signal Distribution Analysis ---" << std::endl;
+    if (signal_count > 0) {
+        std::cerr << "Confidence: min=" << std::fixed << std::setprecision(3) << min_confidence 
+                  << " max=" << max_confidence << " avg=" << (sum_confidence/signal_count) << std::endl;
+        std::cerr << "Coherence:  min=" << min_coherence 
+                  << " max=" << max_coherence << " avg=" << (sum_coherence/signal_count) << std::endl;
+        std::cerr << "Stability:  min=" << min_stability 
+                  << " max=" << max_stability << " avg=" << (sum_stability/signal_count) << std::endl;
+    }
+
+    std::cerr << "\n--- Phase 2 High Selectivity Results ---" << std::endl;
+    if (total_predictions > 0) {
+        double accuracy = static_cast<double>(correct_predictions) / total_predictions * 100.0;
+        std::cerr << "Overall Accuracy: " << std::fixed << std::setprecision(2) << accuracy << "%" << std::endl;
+        std::cerr << "Correct Predictions: " << correct_predictions << std::endl;
+        std::cerr << "Total Predictions: " << total_predictions << std::endl;
+        
+        std::cerr << "Thresholds: confidence≥" << confidence_threshold 
+                  << " coherence≥" << coherence_threshold 
+                  << " stability≥" << stability_threshold << std::endl;
+        
+        if (high_confidence_total > 0) {
+            double hc_accuracy = static_cast<double>(high_confidence_correct) / high_confidence_total * 100.0;
+            std::cerr << "High Confidence Accuracy: " << std::fixed << std::setprecision(2) << hc_accuracy << "%" << std::endl;
+            std::cerr << "High Confidence Signals: " << high_confidence_total << " (" 
+                      << std::fixed << std::setprecision(1) << (100.0 * high_confidence_total / total_predictions) << "%)" << std::endl;
+        } else {
+            std::cerr << "No high confidence signals found with current thresholds" << std::endl;
+        }
+    } else {
+        std::cerr << "No predictions made" << std::endl;
+    }
+
+    return 0;
+}

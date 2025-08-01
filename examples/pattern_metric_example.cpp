@@ -49,7 +49,7 @@ public:
     void setJsonOutput(bool enable) { json_output_ = enable; }
     void setClearState(bool clear) { clear_state_ = clear; }
     
-    AnalysisResult analyzeData(const std::vector<uint8_t>& data) {
+    AnalysisResult analyzeData(const std::vector<uint8_t>& data, double confidence_threshold = 0.0) {
         if (clear_state_) {
             engine_->clear();
         }
@@ -63,21 +63,33 @@ public:
         
         AnalysisResult result;
         
-        // Calculate aggregate metrics from all patterns
-        if (!metrics.empty()) {
-            double total_coherence = 0.0, total_stability = 0.0, total_entropy = 0.0, total_energy = 0.0;
+        // Filter metrics by confidence
+        std::vector<sep::quantum::PatternMetrics> filtered_metrics;
+        if (confidence_threshold > 0.0) {
             for (const auto& metric : metrics) {
+                if (metric.coherence >= confidence_threshold) {
+                    filtered_metrics.push_back(metric);
+                }
+            }
+        } else {
+            filtered_metrics = metrics;
+        }
+
+        // Calculate aggregate metrics from all patterns
+        if (!filtered_metrics.empty()) {
+            double total_coherence = 0.0, total_stability = 0.0, total_entropy = 0.0, total_energy = 0.0;
+            for (const auto& metric : filtered_metrics) {
                 total_coherence += metric.coherence;
                 total_stability += metric.stability;
                 total_entropy += metric.entropy;
                 total_energy += metric.energy;
             }
-            result.coherence = total_coherence / metrics.size();
-            result.stability = total_stability / metrics.size();
-            result.entropy = total_entropy / metrics.size();
-            result.energy = total_energy / metrics.size();
+            result.coherence = total_coherence / filtered_metrics.size();
+            result.stability = total_stability / filtered_metrics.size();
+            result.entropy = total_entropy / filtered_metrics.size();
+            result.energy = total_energy / filtered_metrics.size();
         }
-        result.pattern_count = metrics.size();
+        result.pattern_count = filtered_metrics.size();
         
         // Get current timestamp
         auto now = std::chrono::system_clock::now();
@@ -93,7 +105,7 @@ public:
         return result;
     }
     
-    AnalysisResult analyzeOandaFile(const std::string& filepath) {
+    AnalysisResult analyzeOandaFile(const std::string& filepath, double confidence_threshold = 0.0) {
         std::ifstream file(filepath);
         if (!file.is_open()) {
             throw std::runtime_error("Could not open file: " + filepath);
@@ -115,7 +127,7 @@ public:
         // Convert prices to byte stream for analysis
         auto raw_data = sep::connectors::MarketDataConverter::convertToBitstream(prices);
         
-        return analyzeData(raw_data);
+        return analyzeData(raw_data, confidence_threshold);
     }
     
     void outputResult(const AnalysisResult& result) {
@@ -146,6 +158,7 @@ void printUsage(const char* program_name) {
     std::cout << "Options:" << std::endl;
     std::cout << "  --json        Output results in JSON format" << std::endl;
     std::cout << "  --no-clear    Don't clear state between analyses (for stateful processing)" << std::endl;
+    std::cout << "  --confidence  Minimum confidence threshold (e.g., 0.7)" << std::endl;
     std::cout << "  --help        Show this help message" << std::endl;
     std::cout << std::endl;
     std::cout << "Examples:" << std::endl;
@@ -169,6 +182,7 @@ int main(int argc, char* argv[]) {
         // Parse options
         bool json_output = false;
         bool no_clear = false;
+        double confidence_threshold = 0.0;
         std::string input_path;
         
         for (size_t i = 0; i < args.size(); ++i) {
@@ -176,6 +190,10 @@ int main(int argc, char* argv[]) {
                 json_output = true;
             } else if (args[i] == "--no-clear") {
                 no_clear = true;
+            } else if (args[i] == "--confidence") {
+                if (i + 1 < args.size()) {
+                    confidence_threshold = std::stod(args[++i]);
+                }
             } else if (args[i][0] != '-') {
                 input_path = args[i];
             }
@@ -194,7 +212,7 @@ int main(int argc, char* argv[]) {
         
         if (fs::is_regular_file(path)) {
             // Analyze single file
-            auto result = analyzer.analyzeOandaFile(input_path);
+            auto result = analyzer.analyzeOandaFile(input_path, confidence_threshold);
             analyzer.outputResult(result);
         } else if (fs::is_directory(path)) {
             // Analyze all JSON files in directory
@@ -218,7 +236,7 @@ int main(int argc, char* argv[]) {
                     std::cout << "\n--- Analyzing: " << file.filename() << " ---" << std::endl;
                 }
                 
-                auto result = analyzer.analyzeOandaFile(file.string());
+                auto result = analyzer.analyzeOandaFile(file.string(), confidence_threshold);
                 analyzer.outputResult(result);
             }
         } else {

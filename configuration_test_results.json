@@ -1,0 +1,125 @@
+{
+  "timestamp": "2025-07-31T12:17:42.451515",
+  "baseline_accuracy": 50.94,
+  "best_accuracy": 51.22,
+  "improvement": 0.28000000000000114,
+  "best_config": {
+    "description": "Asymmetric Bull",
+    "accuracy": 51.22,
+    "predictions": 1439,
+    "improvement": 0.28000000000000114,
+    "config": {
+      "stability_w": 0.45,
+      "coherence_w": 0.35,
+      "entropy_w": 0.2,
+      "buy_threshold": 0.47,
+      "sell_threshold": 0.55
+    }
+  },
+  "all_results": [
+    {
+      "description": "Coherence Focus",
+      "accuracy": 51.01,
+      "predictions": 1439,
+      "improvement": 0.07000000000000028,
+      "config": {
+        "stability_w": 0.3,
+        "coherence_w": 0.5,
+        "entropy_w": 0.2,
+        "buy_threshold": 0.48,
+        "sell_threshold": 0.5
+      }
+    },
+    {
+      "description": "Stability Focus",
+      "accuracy": 50.45,
+      "predictions": 1439,
+      "improvement": -0.4899999999999949,
+      "config": {
+        "stability_w": 0.5,
+        "coherence_w": 0.3,
+        "entropy_w": 0.2,
+        "buy_threshold": 0.52,
+        "sell_threshold": 0.54
+      }
+    },
+    {
+      "description": "Entropy Balance",
+      "accuracy": 50.52,
+      "predictions": 1439,
+      "improvement": -0.4199999999999946,
+      "config": {
+        "stability_w": 0.35,
+        "coherence_w": 0.35,
+        "entropy_w": 0.3,
+        "buy_threshold": 0.49,
+        "sell_threshold": 0.51
+      }
+    },
+    {
+      "description": "Aggressive Trade",
+      "accuracy": 51.08,
+      "predictions": 1439,
+      "improvement": 0.14000000000000057,
+      "config": {
+        "stability_w": 0.4,
+        "coherence_w": 0.4,
+        "entropy_w": 0.2,
+        "buy_threshold": 0.45,
+        "sell_threshold": 0.47
+      }
+    },
+    {
+      "description": "Conservative",
+      "accuracy": 50.31,
+      "predictions": 1433,
+      "improvement": -0.6299999999999955,
+      "config": {
+        "stability_w": 0.4,
+        "coherence_w": 0.4,
+        "entropy_w": 0.2,
+        "buy_threshold": 0.55,
+        "sell_threshold": 0.57
+      }
+    },
+    {
+      "description": "Asymmetric Bull",
+      "accuracy": 51.22,
+      "predictions": 1439,
+      "improvement": 0.28000000000000114,
+      "config": {
+        "stability_w": 0.45,
+        "coherence_w": 0.35,
+        "entropy_w": 0.2,
+        "buy_threshold": 0.47,
+        "sell_threshold": 0.55
+      }
+    },
+    {
+      "description": "Asymmetric Bear",
+      "accuracy": 50.03,
+      "predictions": 1439,
+      "improvement": -0.9099999999999966,
+      "config": {
+        "stability_w": 0.35,
+        "coherence_w": 0.45,
+        "entropy_w": 0.2,
+        "buy_threshold": 0.53,
+        "sell_threshold": 0.48
+      }
+    },
+    {
+      "description": "High Entropy",
+      "accuracy": 49.27,
+      "predictions": 1439,
+      "improvement": -1.6699999999999946,
+      "config": {
+        "stability_w": 0.3,
+        "coherence_w": 0.3,
+        "entropy_w": 0.4,
+        "buy_threshold": 0.5,
+        "sell_threshold": 0.52
+      }
+    }
+  ]
+}

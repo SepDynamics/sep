@@ -18,14 +18,21 @@ set_target_properties(sep_trader_cuda PROPERTIES
     CUDA_ARCHITECTURES "61;75;86;89"
 )
 
-target_link_libraries(sep_trader_cuda PRIVATE CUDA::cudart)
+target_link_libraries(sep_trader_cuda PUBLIC 
+    CUDA::cudart
+    sep_quantum
+    sep_engine
+)
 
 add_library(sep_trader_logic
     quantum_signal_bridge.cpp
     forward_window_kernels.cpp
 )
 
-target_link_libraries(sep_trader_logic PUBLIC sep_trader_cuda)
+target_link_libraries(sep_trader_logic PUBLIC 
+    sep_trader_cuda
+    sep_quantum
+)
 
 target_include_directories(sep_trader_logic PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}

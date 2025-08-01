@@ -1,0 +1,36 @@
+{
+  "trading": {
+    "enabled": true,
+    "mode": "demo",
+    "api_key": "9e406b9a85efc53a6e055f7a30136e8e-3ef8b49b63d878ee273e8efa201e1536",
+    "account_id": "101-001-31229774-001",
+    "sandbox": true,
+    "base_url": "https://api-fxpractice.oanda.com"
+  },
+  "risk_management": {
+    "max_position_size": 1000,
+    "max_daily_trades": 50,
+    "stop_loss_pips": 20,
+    "take_profit_pips": 30,
+    "max_drawdown_percent": 5.0
+  },
+  "instruments": {
+    "primary": "EUR_USD",
+    "timeframe": "M1",
+    "spread_threshold": 3.0
+  },
+  "enhanced_parameters": {
+    "stability_weight": 0.45,
+    "coherence_weight": 0.35,
+    "entropy_weight": 0.2,
+    "buy_threshold": 0.47,
+    "sell_threshold": 0.55,
+    "volatility_adjustment": true,
+    "volume_confirmation": true
+  },
+  "validation": {
+    "min_confidence": 0.6,
+    "pip_validation_threshold": 0.5,
+    "accuracy_tracking_window": 100
+  }
+}

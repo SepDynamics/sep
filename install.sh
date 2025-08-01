@@ -4,15 +4,11 @@ set -uo pipefail
 sudo ln -sf /workspace/sep /sep
 cd /sep
 
+# Python version used for all installs. 3.13 is not yet available
+# in Ubuntu repositories so we install the system default if missing.
+PYTHON_VERSION="3"
 
-# Pinned Python version used for all installs  
-PYTHON_VERSION="3.13.*"
-
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
-sudo dpkg -i cuda-keyring_1.1-1_all.deb
-sudo apt-get update
-
-# Optional argument parsing
+# Optional argument parsing must occur before any package operations
 USE_CUDA=1
 USE_MINIMAL=0
 for arg in "$@"; do
@@ -28,8 +24,19 @@ for arg in "$@"; do
   esac
 done
 
+if [ "$USE_CUDA" -eq 1 ]; then
+  if wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb; then
+    sudo dpkg -i cuda-keyring_1.1-1_all.deb
+    rm cuda-keyring_1.1-1_all.deb
+    sudo apt-get update
+  else
+    echo "Warning: Unable to download CUDA keyring, proceeding without CUDA repo"
+    USE_CUDA=0
+  fi
+fi
+
 if [ "$USE_CUDA" -eq 0 ]; then
-  echo "CUDA support disabled via --no-cuda"
+  echo "CUDA support disabled via --no-cuda or missing keyring"
   export SEP_HAS_CUDA=0
 else
   export SEP_HAS_CUDA=1
@@ -95,14 +102,13 @@ if [ ! -d "third_party/glm" ]; then
   git clone https://github.com/g-truc/glm.git third_party/glm
 fi
 
-# Install Python 3.13 from deadsnakes if not present
-if ! command -v python3.13 >/dev/null; then
-  echo "Installing Python 3.13..."
-  sudo add-apt-repository ppa:deadsnakes/ppa -y
-  sudo apt-get update -y
-  # Explicitly install the pinned version
-  sudo apt-get install -y "python3.13=${PYTHON_VERSION}" \
-    "python3.13-dev=${PYTHON_VERSION}" | tee -a "$LOG_DIR/apt.log"
+# Ensure Python and pip are available
+if ! command -v python3 >/dev/null; then
+  echo "Installing system Python..."
+  sudo apt-get install -y python3 python3-dev | tee -a "$LOG_DIR/apt.log"
+fi
+if ! command -v pip3 >/dev/null; then
+  sudo apt-get install -y python3-pip | tee -a "$LOG_DIR/apt.log"
 fi
 
 # Install Python packages for analysis
@@ -116,7 +122,7 @@ sudo ln -sf /usr/bin/clang-format-15 /usr/bin/clang-format
 echo "Verifying installations..."
 docker --version || { echo "Docker not installed"; exit 1; }
 docker compose version || true
-python3.13 --version || true
+python3 --version || true
 for pkg in "${PACKAGES[@]}" docker.io docker-compose-v2; do
   if dpkg -s "$pkg" >/dev/null 2>&1; then
     echo "$pkg installed"

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # SEP Engine dependency installer
 set -uo pipefail
+export DEBIAN_FRONTEND=noninteractive
 sudo ln -sf /workspace/sep /sep
 cd /sep
 

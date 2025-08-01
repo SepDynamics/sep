@@ -154,6 +154,14 @@ We conducted systematic iterative testing to improve accuracy beyond the baselin
 - **Foundation**: Enhanced signal generation engine ready for advanced optimizations
 - **Architecture**: Trajectory-based damping + enhanced patterns provide robust foundation
 
+### **Phase 3: Unification & Tuning (In Progress)**
+- **Discovery**: `pme_testbed_phase2` still relied on the legacy `simulateForwardWindowMetrics` path.
+- **Action**: Replace the call with `QFHBasedProcessor` so trajectory damping drives the main testbed.
+- **Next Steps**:
+  - Tune damping parameters exposed in `qfh.cpp`.
+  - Adjust pattern vocabulary weights in `forward_window_kernels.cpp`.
+  - Reintegrate Phase 1 volatility adaptation once unified metrics stabilize.
+
 ### **Testing Framework Status**
 - ✅ **Reproducible experiments**: Each experiment clearly documented in code
 - ✅ **Systematic approach**: Methodical testing with controlled variables

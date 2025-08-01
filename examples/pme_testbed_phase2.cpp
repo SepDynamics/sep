@@ -223,49 +223,29 @@ int main(int argc, char** argv) {
         q_p.id = "pattern_" + candle.time;
         
         // Extract bitstream window for this candle
-        if (i < price_bitstream.size() && i >= 10) {
-            size_t window_start = std::max(0, (int)i - 10);
-            size_t window_end = std::min(price_bitstream.size(), i + 1);
-            std::vector<uint8_t> window_bits(price_bitstream.begin() + window_start, 
-            price_bitstream.begin() + window_end);
-            
-            if (window_bits.size() < 2) {
-                // Too small for transitions - use fallback
-                continue;  // Skip to next iteration
-            }
-            
-            // Use ENHANCED QFH processor with trajectory damping
+        size_t window_start = (i >= 10) ? (i - 10) : 0;
+        size_t window_end = std::min(price_bitstream.size(), i + 1);
+        std::vector<uint8_t> window_bits(price_bitstream.begin() + window_start,
+                                         price_bitstream.begin() + window_end);
+
+        if (window_bits.size() < 2) {
+            q_p.coherence = 0.5;
+            q_p.stability = 0.5;
+            q_p.phase = 0.5;
+        } else {
+            // Use enhanced QFH processor with trajectory damping
             sep::quantum::QFHResult qfh_result = qfh_processor.analyze(window_bits);
-            
-            // Apply trajectory-based damping using Phase 2 enhancements
-            auto damped_trajectory = qfh_processor.integrateFutureTrajectories(window_bits, window_bits.size()/2);
-            
-            // Extract enhanced metrics from QFH analysis
+
+            auto damped_trajectory =
+                qfh_processor.integrateFutureTrajectories(window_bits, window_bits.size() / 2);
+
             q_p.coherence = qfh_result.coherence;
             q_p.stability = 1.0f - qfh_result.rupture_ratio; // Stability inversely related to ruptures
-            q_p.phase = qfh_result.entropy / 2.0f; // Normalize entropy to [0,1]
-            
-            // Apply trajectory damping to coherence (Phase 2 enhancement)
-            double trajectory_confidence = qfh_processor.matchKnownPaths({damped_trajectory.final_value});
+            q_p.phase = qfh_result.entropy / 2.0f;           // Normalize entropy to [0,1]
+
+            double trajectory_confidence =
+                qfh_processor.matchKnownPaths({damped_trajectory.final_value});
             q_p.coherence = 0.7 * q_p.coherence + 0.3 * trajectory_confidence;
-            
-        } else {
-            // Fallback to legacy forward window metrics for edge cases
-            if (i > 0 && i <= price_bitstream.size()) {
-                size_t window_start = std::max(0, (int)i - 5);
-                size_t window_end = std::min(price_bitstream.size(), i);
-                std::vector<uint8_t> window_bits(price_bitstream.begin() + window_start,
-                                               price_bitstream.begin() + window_end);
-                
-                auto fw_result = sep::apps::cuda::simulateForwardWindowMetrics(window_bits, 0);
-                q_p.coherence = fw_result.coherence;
-                q_p.stability = fw_result.stability;
-                q_p.phase = fw_result.entropy / 2.0f;
-            } else {
-                q_p.coherence = 0.5;
-                q_p.stability = 0.5;
-                q_p.phase = 0.5;
-            }
         }
         
         quantum_patterns.push_back(q_p);

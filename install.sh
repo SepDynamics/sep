@@ -87,6 +87,15 @@ $SUDO apt-get update -y
 echo "Installing base packages..."
 $SUDO apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 
+if [ "$USE_CUDA" -eq 1 ]; then
+  echo "Installing CUDA toolkit..."
+  $SUDO apt-get install -y cuda-toolkit-12-9 >> "$LOG_DIR/apt.log"
+  # Ensure nvcc is on PATH
+  if [ -x /usr/local/cuda/bin/nvcc ]; then
+    $SUDO ln -sf /usr/local/cuda/bin/nvcc /usr/bin/nvcc
+  fi
+fi
+
 # Install Docker and Docker Compose
 echo "Installing Docker..."
 $SUDO apt-get install -y docker.io docker-compose-v2 >> "$LOG_DIR/apt.log"

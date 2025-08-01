@@ -21,6 +21,8 @@ cd /sep
 USE_CUDA=1
 USE_MINIMAL=0
 USE_LOCAL_CUDA=0
+# track whether the NVIDIA repository is available
+USE_CUDA_REPO=1
 for arg in "$@"; do
   case "$arg" in
     --no-cuda)
@@ -44,8 +46,8 @@ if [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 0 ]; then
     rm cuda-keyring_1.1-1_all.deb
     $SUDO apt-get update
   else
-    echo "Warning: Unable to download CUDA keyring, proceeding without CUDA repo"
-    USE_CUDA=0
+    echo "Warning: Unable to download CUDA keyring, falling back to distro packages"
+    USE_CUDA_REPO=0
   fi
 elif [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 1 ]; then
   echo "Using local CUDA installer method"
@@ -98,6 +100,7 @@ fi
 
 echo "Updating package lists..."
 $SUDO apt-get update -y
+$SUDO dpkg --configure -a >/dev/null 2>&1 || true
 
 echo "Installing base packages..."
 $SUDO apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
@@ -106,7 +109,19 @@ $SUDO apt-get install -y "${PACKAGES[@]}" | tee "$LOG_DIR/apt.log"
 if [ "$USE_CUDA" -eq 1 ] && [ "$USE_LOCAL_CUDA" -eq 0 ]; then
   if ! command -v nvcc >/dev/null 2>&1; then
     echo "Installing CUDA toolkit..."
-    $SUDO apt-get install -y cuda-toolkit-12-9 cuda-nvcc-12-9 >> "$LOG_DIR/apt.log"
+    if [ "$USE_CUDA_REPO" -eq 1 ]; then
+      $SUDO apt-get install -y cuda-toolkit-12-9 cuda-nvcc-12-9 >> "$LOG_DIR/apt.log"
+    else
+      # pre-create java keystore path to avoid post-install errors
+      $SUDO mkdir -p /lib/security /etc/ssl/certs/java
+      $SUDO touch /lib/security/cacerts
+      $SUDO ln -sf /lib/security/cacerts /etc/ssl/certs/java/cacerts
+      set +e
+      $SUDO apt-get install -y nvidia-cuda-toolkit >> "$LOG_DIR/apt.log"
+      $SUDO dpkg --configure -a >> "$LOG_DIR/apt.log" 2>&1
+      $SUDO apt-get purge -y ca-certificates-java >> "$LOG_DIR/apt.log" 2>&1
+      set -e
+    fi
   fi
 fi
 

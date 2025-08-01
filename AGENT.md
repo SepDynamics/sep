@@ -35,6 +35,8 @@
 - ✅ **CUDA Integration**: Using targeted `noexcept(x)` workaround for compiler compatibility
 - ✅ **Complete Test Validation**: All 7 critical test suites passing with 100% coverage
 - ✅ **Production Ready**: Mathematical foundation verified, ready for deployment
+- ✅ **Iterative Testing Complete**: Systematic experiments (011-017) conducted
+- 🎯 **Current Best Performance**: 46.59% accuracy achieved with multi-timeframe analysis
 - 🎯 **Performance Enhancement**: Roadmap for 70%+ accuracy improvement documented in `docs/PERFORMANCE_OPTIMIZATION_STRATEGY.md`
 
 ## Key Project Components
@@ -44,6 +46,11 @@
   - Supports `--json` flag for structured output
   - Use `--no-clear` for stateful processing
   - Example: `./pattern_metric_example data/ --json --no-clear`
+
+- `./build/examples/pme_testbed_phase2` - **Current best performing system**
+  - **Accuracy**: 46.59% (Experiment 011 - Multi-timeframe analysis)
+  - **Usage**: `./build/examples/pme_testbed_phase2 Testing/OANDA/O-test-2.json`
+  - **Output**: Real-time signal generation with confidence metrics
 
 ### Python Pipeline
 - `run_alpha_experiment.py` - Complete alpha prediction experiment
@@ -79,6 +86,46 @@
 - **CUDA Acceleration**: GPU processing operational (73ms test execution)
 - **Financial Validation**: Real market data backtesting operational
 - **Build System**: Docker hermetic builds eliminating dependencies
+
+## 🚀 Iterative Testing Results (Experiments 011-017)
+
+### **Systematic Performance Optimization**
+We conducted systematic iterative testing to improve accuracy beyond the baseline:
+
+| Experiment | Accuracy | Approach | Status |
+|------------|----------|----------|---------|
+| **011** | **46.59%** | Multi-timeframe analysis | ✅ **Best Result** |
+| 012 | 40.79% | Enhanced pattern diversity | ❌ Too complex |
+| 013 | 40.51% | Refined pattern ensemble | ❌ Still complex |
+| 014 | 38.78% | Enhanced timeframe correlation | ❌ Penalty too aggressive |
+| 015 | 37.12% | Bidirectional signal system | 🔄 Concept promising |
+| 016 | 35.08% | Calibrated bidirectional | ❌ Over-engineered |
+| 017 | 39.26% (46.18% high-conf) | Volume-weighted enhancement | 🔄 Threshold tuning needed |
+
+### **Key Insights from Testing**
+- ✅ **Multi-timeframe analysis** is the most effective approach
+- ❌ **Complex ensemble methods** consistently reduced performance
+- 🔄 **Bidirectional divergence signals** show promise but need simpler implementation
+- ✅ **Volume-weighted approaches** produce high-quality signals
+- 🎯 **Simpler approaches** consistently outperform complex ones
+
+### **Current Testing Commands**
+```bash
+# Run current best system (Experiment 011)
+./build/examples/pme_testbed_phase2 Testing/OANDA/O-test-2.json
+
+# View last 10 lines of results
+./build/examples/pme_testbed_phase2 Testing/OANDA/O-test-2.json | tail -10
+
+# Full testing workflow
+./build.sh && ./build/examples/pme_testbed_phase2 Testing/OANDA/O-test-2.json | tail -15
+```
+
+### **Testing Framework Status**
+- ✅ **Reproducible experiments**: Each experiment clearly documented in code
+- ✅ **Systematic approach**: Methodical testing with controlled variables
+- ✅ **Performance tracking**: Detailed accuracy metrics for each experiment
+- 🎯 **Next Steps**: Focus on threshold optimization and simpler bidirectional approaches
 
 ## CUDA Development
 

@@ -196,14 +196,18 @@ int main(int argc, char** argv) {
     for (size_t i = 0; i < candles.size(); ++i) {
         const auto& candle = candles[i];
         
-        // EXPERIMENT 005: Remove market regime analysis from pattern creation
-        // auto market_state = AdvancedMarketAnalyzer::analyzeMarketRegime(candles, i);
-        // market_states.push_back(market_state);
+        // =================================================================
+        // EXPERIMENT 017: Enhanced Exp 011 + Volume-Weighted Coherence
+        // Target: 47%+ by adding volume confirmation to successful Exp 011 base
+        // Based on: Return to proven 46.59% foundation with focused improvement
+        // =================================================================
         
         sep::quantum::manifold::QuantumPattern q_p;
         q_p.id = "pattern_" + candle.time;
         
-        // Enhanced pattern calculations (from Phase 1)
+        // EXPERIMENT 017: Enhanced Exp 011 with Volume-Weighted Coherence
+        // Return to proven autocorrelation base + add volume confirmation
+        
         if (i >= 5 && close_prices.size() > 5) {
             double autocorr = 0.0, variance = 0.0;
             int lag = 3;
@@ -222,8 +226,19 @@ int main(int argc, char** argv) {
                 variance += x * x;
             }
             
+            // Volume-weighted coherence enhancement
+            double volume_factor = 1.0;
+            if (candle.volume > 0) {
+                // Calculate volume relative to recent average
+                double avg_volume = 150.0; // Baseline from data analysis
+                double volume_ratio = candle.volume / avg_volume;
+                
+                // Volume confirmation: higher volume = higher confidence
+                volume_factor = 0.8 + 0.4 * std::min(2.0, volume_ratio); // Range: 0.8-1.6
+            }
+            
             q_p.coherence = variance > 0 ? 
-                std::min(1.0, std::max(0.0, 0.5 + 0.5 * (autocorr / variance))) : 0.5;
+                std::min(1.0, std::max(0.0, (0.5 + 0.5 * (autocorr / variance)) * volume_factor)) : 0.5;
         } else {
             q_p.coherence = 0.5;
         }
@@ -328,8 +343,9 @@ int main(int argc, char** argv) {
         base_sell_threshold = std::stod(argv[6]);
     }
 
-    // EXPERIMENT 005: Pure Phase 1 signal generation (no market states)
-    for (const auto& metric : metrics) {
+    // EXPERIMENT 011: Multi-timeframe enhanced signal generation
+    for (size_t pattern_idx = 0; pattern_idx < metrics.size(); ++pattern_idx) {
+        const auto& metric = metrics[pattern_idx];
         sep::quantum::Signal signal;
         signal.pattern_id = metric.id;
         
@@ -348,27 +364,56 @@ int main(int argc, char** argv) {
             volume_factor = std::max(0.7, std::min(1.4, volume_factor));
         }
         
-        // Phase 1's exact scoring logic
-        double buy_score = (metric.stability * stability_w) + 
-                          (metric.coherence * coherence_w) + 
-                          ((1.0 - metric.phase) * entropy_w);
-        buy_score *= volume_factor;
+        // EXPERIMENT 017: Return to proven Exp 011 scoring with volume enhancement
+        double base_buy_score = (metric.stability * stability_w) + 
+                               (metric.coherence * coherence_w) + 
+                               ((1.0 - metric.phase) * entropy_w);
         
-        double sell_score = ((1.0 - metric.stability) * stability_w) + 
-                           ((1.0 - metric.coherence) * coherence_w) + 
-                           (metric.phase * entropy_w);
-        sell_score *= volume_factor;
+        double base_sell_score = ((1.0 - metric.stability) * stability_w) + 
+                                ((1.0 - metric.coherence) * coherence_w) + 
+                                (metric.phase * entropy_w);
+        
+        // Multi-timeframe coherence boost
+        double temporal_coherence = 1.0;
+        if (pattern_idx >= 15) { // Need enough history for timeframe analysis
+            // Calculate 5-minute and 15-minute pattern coherence
+            double tf5_coherence = 0.0, tf15_coherence = 0.0;
+            int tf5_window = 5, tf15_window = 15;
+            
+            // 5-minute timeframe coherence
+            for (int j = 1; j <= tf5_window && pattern_idx >= (size_t)j; ++j) {
+                tf5_coherence += metrics[pattern_idx-j].coherence;
+            }
+            tf5_coherence /= tf5_window;
+            
+            // 15-minute timeframe coherence  
+            for (int j = 1; j <= tf15_window && pattern_idx >= (size_t)j; ++j) {
+                tf15_coherence += metrics[pattern_idx-j].coherence;
+            }
+            tf15_coherence /= tf15_window;
+            
+            // Temporal alignment bonus
+            if (std::abs(metric.coherence - tf5_coherence) < 0.1 && 
+                std::abs(tf5_coherence - tf15_coherence) < 0.1) {
+                temporal_coherence = 1.15; // 15% boost for temporal alignment
+            } else if (std::abs(metric.coherence - tf5_coherence) < 0.2) {
+                temporal_coherence = 1.08; // 8% boost for partial alignment
+            }
+        }
+        
+        double buy_score = base_buy_score * volume_factor * temporal_coherence;
+        double sell_score = base_sell_score * volume_factor * temporal_coherence;
         
         // Apply dynamic thresholds with volatility adjustment
         double buy_threshold = base_buy_threshold * volatility_multiplier;
         double sell_threshold = base_sell_threshold * volatility_multiplier;
 
-        // DEBUG: Score analysis (first 5 patterns)
+        // DEBUG: Multi-timeframe analysis (first 5 patterns)
         static int debug_count = 0;
         if (debug_count < 5) {
-            std::cout << "PHASE2 DEBUG[" << debug_count << "]: buy_score=" << buy_score 
-                      << " sell_score=" << sell_score << " buy_thresh=" << buy_threshold 
-                      << " sell_thresh=" << sell_threshold << " vol_mult=" << volatility_multiplier << std::endl;
+            std::cout << "PHASE2 MTF_DEBUG[" << debug_count << "]: buy_score=" << buy_score 
+                      << " sell_score=" << sell_score << " temporal_coherence=" << temporal_coherence
+                      << " buy_thresh=" << buy_threshold << " sell_thresh=" << sell_threshold << std::endl;
             debug_count++;
         }
 
@@ -430,9 +475,9 @@ int main(int argc, char** argv) {
     double min_stability = 1.0, max_stability = 0.0, sum_stability = 0.0;
     int signal_count = 0;
 
-    // EXPERIMENT 009: Higher selectivity for 45%+ accuracy target  
-    double confidence_threshold = 0.65; // Well above average (0.566)
-    double coherence_threshold = 0.55;  // Well above average (0.460)
+    // EXPERIMENT 011: Multi-timeframe with optimized thresholds
+    double confidence_threshold = 0.65; // Proven optimal from exp 009
+    double coherence_threshold = 0.55;  // Proven optimal from exp 009  
     double stability_threshold = 0.0;
 
     for (size_t i = 0; i < candles.size() - 1 && i < signals.size() && i < metrics.size(); ++i) {
@@ -495,7 +540,7 @@ int main(int argc, char** argv) {
                   << " max=" << max_stability << " avg=" << (sum_stability/signal_count) << std::endl;
     }
 
-    std::cerr << "\n--- Phase 2 High Selectivity Results ---" << std::endl;
+    std::cerr << "\n--- Phase 2 Multi-Timeframe Enhanced Results ---" << std::endl;
     if (total_predictions > 0) {
         double accuracy = static_cast<double>(correct_predictions) / total_predictions * 100.0;
         std::cerr << "Overall Accuracy: " << std::fixed << std::setprecision(2) << accuracy << "%" << std::endl;

@@ -81,45 +81,44 @@ bool TickDataManager::loadHistoricalTicks(const std::string& instrument) {
     std::cout << "[TickDataManager] Requesting data from " << from_str << " to " << to_str << std::endl;
     
     // Use getHistoricalData with S5 granularity (5-second candles for tick-like data)
-    oanda_connector_->getHistoricalData(
+    auto candles = oanda_connector_->getHistoricalData(
         instrument,
         "S5", // 5-second candles for high frequency
         from_str,
-        to_str,
-        [&](const std::vector<sep::connectors::OandaCandle>& candles) {
-            std::lock_guard<std::mutex> lock(collection_mutex);
-            
-            std::cout << "[TickDataManager] Received " << candles.size() << " candles from OANDA" << std::endl;
-            
-            // Convert candles to ticks
-            static auto base_time = std::chrono::system_clock::now() - std::chrono::hours(2);
-            size_t index = 0;
-            for (const auto& candle : candles) {
-                TickData tick;
-                tick.price = (candle.open + candle.close) / 2.0; // Mid price
-                tick.bid = candle.close - 0.00005; // Approximate bid
-                tick.ask = candle.close + 0.00005; // Approximate ask
-                
-                // Convert time string to timestamp
-                // Use proper historical timestamps with appropriate spacing (5-second intervals)
-                auto historical_time = base_time + std::chrono::seconds(index * 5);
-                tick.timestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
-                    historical_time.time_since_epoch()).count();
-                
-                tick.volume = static_cast<double>(candle.volume);
-                
-                tick_history_.push_back(tick);
-                index++;
-            }
-            
-            collection_complete = true;
-            collection_done.notify_one();
-        }
+        to_str
     );
+
+    std::lock_guard<std::mutex> lock(collection_mutex);
+    
+    std::cout << "[TickDataManager] Received " << candles.size() << " candles from OANDA" << std::endl;
+    
+    // Convert candles to ticks
+    static auto base_time = std::chrono::system_clock::now() - std::chrono::hours(2);
+    size_t index = 0;
+    for (const auto& candle : candles) {
+        TickData tick;
+        tick.price = (candle.open + candle.close) / 2.0; // Mid price
+        tick.bid = candle.close - 0.00005; // Approximate bid
+        tick.ask = candle.close + 0.00005; // Approximate ask
+        
+        // Convert time string to timestamp
+        // Use proper historical timestamps with appropriate spacing (5-second intervals)
+        auto historical_time = base_time + std::chrono::seconds(index * 5);
+        tick.timestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
+            historical_time.time_since_epoch()).count();
+        
+        tick.volume = static_cast<double>(candle.volume);
+        
+        tick_history_.push_back(tick);
+        index++;
+    }
+    
+    collection_complete = true;
+    collection_done.notify_one();
     
     // Wait for historical data to arrive
-    std::unique_lock<std::mutex> lock(collection_mutex);
-    if (!collection_done.wait_for(lock, std::chrono::seconds(30), [&]{ return collection_complete; })) {
+    std::unique_lock<std::mutex> ulock(collection_mutex);
+    if (!collection_done.wait_for(ulock, std::chrono::seconds(30), [&]{ return collection_complete; })) {
         std::cerr << "[TickDataManager] Timeout fetching historical data" << std::endl;
         return false;
     }
@@ -161,7 +160,7 @@ void TickDataManager::processNewTick(const sep::connectors::MarketData& market_d
     static size_t tick_count = 0;
     if (++tick_count % 100 == 0) {
         std::cout << "[TickDataManager] Processed " << tick_count 
-                  << " ticks, hourly calcs: " << hourly_calculations_.size()
+                  << ", hourly calcs: " << hourly_calculations_.size()
                   << ", daily calcs: " << daily_calculations_.size() << std::endl;
     }
 }

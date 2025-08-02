@@ -210,21 +210,18 @@ bool EnhancedMarketModelCache::fetchAssetData(const std::string& instrument, std
     
     // Fallback: fetch directly from OANDA
     bool data_fetched = false;
-    oanda_connector_->getHistoricalData(
-        instrument, "M1", "", "",
-        [&](const std::vector<sep::connectors::OandaCandle>& oanda_candles) {
-            for (const auto& o_candle : oanda_candles) {
-                Candle c;
-                c.time = o_candle.time;
-                c.open = o_candle.open;
-                c.high = o_candle.high;
-                c.low = o_candle.low;
-                c.close = o_candle.close;
-                c.volume = static_cast<double>(o_candle.volume);
-                out_candles.push_back(c);
-            }
-            data_fetched = true;
-        });
+    auto oanda_candles = oanda_connector_->getHistoricalData(instrument, "M1", "", "");
+    for (const auto& o_candle : oanda_candles) {
+        Candle c;
+        c.time = o_candle.time;
+        c.open = o_candle.open;
+        c.high = o_candle.high;
+        c.low = o_candle.low;
+        c.close = o_candle.close;
+        c.volume = static_cast<double>(o_candle.volume);
+        out_candles.push_back(c);
+    }
+    data_fetched = true;
     
     // Wait for data with timeout
     int timeout_seconds = 10;

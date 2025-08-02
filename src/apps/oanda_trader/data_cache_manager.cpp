@@ -78,14 +78,9 @@ bool DataCacheManager::refreshCache(const std::string& instrument) {
     bool request_success = false;
     
     try {
-        oanda_connector_->getHistoricalData(
-            instrument, "M1", "", "", // Empty from/to to use count parameter for recent data
-            [&](const std::vector<sep::connectors::OandaCandle>& fetched_candles) {
-                std::lock_guard<std::mutex> lock(data_mutex);
-                candles = fetched_candles;
-                data_received = true;
-                data_ready.notify_one();
-            });
+        candles = oanda_connector_->getHistoricalData(instrument, "M1", "", "");
+        data_received = true;
+        data_ready.notify_one();
         
         request_success = true;
         

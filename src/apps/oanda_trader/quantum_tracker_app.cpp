@@ -175,29 +175,26 @@ bool QuantumTrackerApp::initialize() {
     
     std::cout << "[Bootstrap] Requesting M1 data from " << from_str << " to " << to_str << std::endl;
 
-    oanda_connector_->getHistoricalData(
-        "EUR_USD", "M1", from_str, to_str,
-        [&](const std::vector<sep::connectors::OandaCandle>& oanda_candles) {
-            std::lock_guard<std::mutex> lock(mtx);
-            // Convert OandaCandle to the local Candle struct
-            for (const auto& o_candle : oanda_candles) {
-                Candle c;
-                c.time = o_candle.time;
-                c.timestamp = parseTimestamp(o_candle.time);
-                c.open = o_candle.open;
-                c.high = o_candle.high;
-                c.low = o_candle.low;
-                c.close = o_candle.close;
-                c.volume = static_cast<double>(o_candle.volume);
-                historical_m1_candles.push_back(c);
-            }
-            data_fetched = true;
-            cv.notify_one();
-        });
+    auto oanda_candles = oanda_connector_->getHistoricalData("EUR_USD", "M1", from_str, to_str);
+    std::lock_guard<std::mutex> lock(mtx);
+    // Convert OandaCandle to the local Candle struct
+    for (const auto& o_candle : oanda_candles) {
+        Candle c;
+        c.time = o_candle.time;
+        c.timestamp = parseTimestamp(o_candle.time);
+        c.open = o_candle.open;
+        c.high = o_candle.high;
+        c.low = o_candle.low;
+        c.close = o_candle.close;
+        c.volume = static_cast<double>(o_candle.volume);
+        historical_m1_candles.push_back(c);
+    }
+    data_fetched = true;
+    cv.notify_one();
 
     // Wait for the asynchronous fetch to complete
-    std::unique_lock<std::mutex> lock(mtx);
-    if (!cv.wait_for(lock, std::chrono::seconds(30), [&]{ return data_fetched; })) {
+    std::unique_lock<std::mutex> ulock(mtx);
+    if (!cv.wait_for(ulock, std::chrono::seconds(30), [&]{ return data_fetched; })) {
         std::cout << "[Bootstrap] API fetch timeout. Falling back to static test data for development..." << std::endl;
         
         // Fallback to static file initialization for development/testing
@@ -722,29 +719,26 @@ void QuantumTrackerApp::runSimulation() {
     std::condition_variable cv;
     bool data_fetched = false;
     
-    oanda_connector_->getHistoricalData(
-        "EUR_USD", "M1", from_str, to_str,
-        [&](const std::vector<sep::connectors::OandaCandle>& oanda_candles) {
-            std::lock_guard<std::mutex> lock(mtx);
-            // Convert OandaCandle to local Candle struct
-            for (const auto& o_candle : oanda_candles) {
-                Candle c;
-                c.time = o_candle.time;
-                c.timestamp = parseTimestamp(o_candle.time);
-                c.open = o_candle.open;
-                c.high = o_candle.high;
-                c.low = o_candle.low;
-                c.close = o_candle.close;
-                c.volume = static_cast<double>(o_candle.volume);
-                simulation_candles.push_back(c);
-            }
-            data_fetched = true;
-            cv.notify_one();
-        });
+    auto oanda_candles = oanda_connector_->getHistoricalData("EUR_USD", "M1", from_str, to_str);
+    std::lock_guard<std::mutex> lock(mtx);
+    // Convert OandaCandle to local Candle struct
+    for (const auto& o_candle : oanda_candles) {
+        Candle c;
+        c.time = o_candle.time;
+        c.timestamp = parseTimestamp(o_candle.time);
+        c.open = o_candle.open;
+        c.high = o_candle.high;
+        c.low = o_candle.low;
+        c.close = o_candle.close;
+        c.volume = static_cast<double>(o_candle.volume);
+        simulation_candles.push_back(c);
+    }
+    data_fetched = true;
+    cv.notify_one();
     
     // 4. Wait for data fetch
-    std::unique_lock<std::mutex> lock(mtx);
-    if (!cv.wait_for(lock, std::chrono::seconds(30), [&]{ return data_fetched; })) {
+    std::unique_lock<std::mutex> ulock(mtx);
+    if (!cv.wait_for(ulock, std::chrono::seconds(30), [&]{ return data_fetched; })) {
         std::cerr << "[SIMULATION] Data fetch timeout!" << std::endl;
         return;
     }
@@ -840,7 +834,7 @@ void QuantumTrackerApp::logSimulatedTrade(const sep::trading::QuantumTradingSign
             << " Stability=" << signal.identifiers.stability
             << " Entropy=" << signal.identifiers.entropy
             << " StopLoss=" << std::setprecision(5) << signal.stop_loss_distance
-            << " TakeProfit=" << signal.take_profit_distance
+            << " TakeProfit=" << std::setprecision(5) << signal.take_profit_distance
             << std::endl;
     
     // Also log to console

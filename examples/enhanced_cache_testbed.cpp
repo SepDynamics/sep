@@ -1,10 +1,50 @@
 #include <iostream>
 #include <memory>
+#include <string>
+#include <cstring>
 #include "connectors/oanda_connector.h"
 #include "apps/oanda_trader/enhanced_market_model_cache.hpp"
 #include "apps/oanda_trader/market_model_cache.hpp"
 
-int main() {
+void printUsage() {
+    std::cout << "Usage: enhanced_cache_testbed [options]" << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << "  --instrument <PAIR>   Specific instrument to cache (default: EUR_USD)" << std::endl;
+    std::cout << "  --timeframe <TF>      Timeframe (M1, M5, M15, H1) (default: M1)" << std::endl;
+    std::cout << "  --hours <N>           Hours of data to cache (default: 168)" << std::endl;
+    std::cout << "  --help                Show this help message" << std::endl;
+}
+
+struct CacheConfig {
+    std::string instrument = "EUR_USD";
+    std::string timeframe = "M1";
+    int hours = 168;  // 1 week default
+};
+
+CacheConfig parseArguments(int argc, char* argv[]) {
+    CacheConfig config;
+    
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--help") == 0) {
+            printUsage();
+            exit(0);
+        }
+        else if (strcmp(argv[i], "--instrument") == 0 && i + 1 < argc) {
+            config.instrument = argv[++i];
+        }
+        else if (strcmp(argv[i], "--timeframe") == 0 && i + 1 < argc) {
+            config.timeframe = argv[++i];
+        }
+        else if (strcmp(argv[i], "--hours") == 0 && i + 1 < argc) {
+            config.hours = std::stoi(argv[++i]);
+        }
+    }
+    
+    return config;
+}
+
+int main(int argc, char* argv[]) {
+    CacheConfig config = parseArguments(argc, argv);
     std::cout << "🚀 Enhanced Market Model Cache Testbed - Phase 1 Implementation" << std::endl;
     std::cout << "=================================================================" << std::endl;
     
@@ -32,12 +72,13 @@ int main() {
         auto enhanced_cache = std::make_shared<sep::cache::EnhancedMarketModelCache>(
             oanda_connector, base_cache);
         
-        std::cout << "\n📊 Testing Enhanced Cache for EUR_USD..." << std::endl;
+        std::cout << "\n📊 Testing Enhanced Cache for " << config.instrument << "..." << std::endl;
+        std::cout << "📅 Caching " << config.hours << " hours of " << config.timeframe << " data" << std::endl;
         
-        // Test enhanced caching for EUR_USD
-        bool success = enhanced_cache->ensureEnhancedCacheForInstrument("EUR_USD");
+        // Test enhanced caching for specified instrument
+        bool success = enhanced_cache->ensureEnhancedCacheForInstrument(config.instrument);
         if (!success) {
-            std::cerr << "❌ Failed to build enhanced cache for EUR_USD" << std::endl;
+            std::cerr << "❌ Failed to build enhanced cache for " << config.instrument << std::endl;
             return 1;
         }
         
@@ -60,7 +101,7 @@ int main() {
         std::cout << "\n🎯 Testing Signal Generation with Correlation Enhancement..." << std::endl;
         
         // Test correlation-enhanced signal generation
-        auto enhanced_signals = enhanced_cache->getCorrelationEnhancedSignals("EUR_USD");
+        auto enhanced_signals = enhanced_cache->getCorrelationEnhancedSignals(config.instrument);
         if (!enhanced_signals.empty()) {
             std::cout << "  • Generated " << enhanced_signals.size() << " enhanced signals" << std::endl;
             

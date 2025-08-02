@@ -136,4 +136,23 @@ set_target_properties(phase2_fusion_testbed
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
 )
 
+# OANDA Historical Data Fetcher
+add_executable(oanda_historical_fetcher
+    ../oanda_historical_fetcher.cpp
+)
+
+target_link_libraries(oanda_historical_fetcher
+    sep_engine
+    sep_memory
+    sep_connectors
+    fmt::fmt
+    ${CMAKE_THREAD_LIBS_INIT}
+    nlohmann_json::nlohmann_json
+)
+
+set_target_properties(oanda_historical_fetcher
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
+)
+
 

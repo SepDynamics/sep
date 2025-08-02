@@ -65,12 +65,11 @@ public:
     void shutdown();
 
     // Historical data
-    void getHistoricalData(
+    std::vector<OandaCandle> getHistoricalData(
         const std::string& instrument,
         const std::string& granularity,
         const std::string& from,
-        const std::string& to,
-        std::function<void(const std::vector<OandaCandle>&)> callback
+        const std::string& to
     );
 
     // Real-time streaming
@@ -114,6 +113,7 @@ private:
     std::string base_url_;
     std::string stream_url_;
     bool sandbox_;
+    std::string cache_path_ = "./cache/oanda";
     
     CURL* curl_handle_;
     std::string last_error_;
@@ -139,6 +139,11 @@ private:
     CurlResponse makeRequest(const std::string& endpoint, const std::string& method = "GET", const std::string& data = "");
     void processStreamData(const std::string& data);
     void updateCandleBuilder(const MarketData& md);
+
+    // Cache helpers
+    std::string getCacheFilename(const std::string& instrument, const std::string& granularity, const std::string& from, const std::string& to);
+    std::vector<OandaCandle> loadFromCache(const std::string& filename);
+    void saveToCache(const std::string& filename, const std::vector<OandaCandle>& candles);
 
     // Data conversion and validation
     MarketData parseMarketData(const nlohmann::json& price_data);

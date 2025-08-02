@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <cstring>
 #include <spdlog/spdlog.h>
 #include <nlohmann/json.hpp>
 #include "apps/oanda_trader/multi_asset_signal_fusion.hpp"
@@ -13,12 +14,50 @@
 using namespace sep;
 using json = nlohmann::json;
 
+void printUsage() {
+    std::cout << "Usage: phase2_fusion_testbed [options]" << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << "  --primary-asset <PAIR>     Primary asset for analysis (default: EUR_USD)" << std::endl;
+    std::cout << "  --enable-regime-adaptation Enable regime adaptation (default: true)" << std::endl;
+    std::cout << "  --verbose-logging          Enable verbose logging" << std::endl;
+    std::cout << "  --output-json              Output results as JSON" << std::endl;
+    std::cout << "  --help                     Show this help message" << std::endl;
+}
+
 // Test configuration
 struct TestConfig {
     std::string primary_asset = "EUR_USD";
     std::vector<std::string> test_assets = {"EUR_USD", "GBP_USD", "USD_JPY", "USD_CHF"};
     bool enable_regime_adaptation = true;
-    bool verbose_logging = true;
+    bool verbose_logging = false;
+    bool output_json = false;
+    
+    static TestConfig parseArguments(int argc, char* argv[]) {
+        TestConfig config;
+        
+        for (int i = 1; i < argc; i++) {
+            if (strcmp(argv[i], "--help") == 0) {
+                printUsage();
+                exit(0);
+            }
+            else if (strcmp(argv[i], "--primary-asset") == 0 && i + 1 < argc) {
+                config.primary_asset = argv[++i];
+                // Update test assets to include the primary asset
+                config.test_assets[0] = config.primary_asset;
+            }
+            else if (strcmp(argv[i], "--enable-regime-adaptation") == 0) {
+                config.enable_regime_adaptation = true;
+            }
+            else if (strcmp(argv[i], "--verbose-logging") == 0) {
+                config.verbose_logging = true;
+            }
+            else if (strcmp(argv[i], "--output-json") == 0) {
+                config.output_json = true;
+            }
+        }
+        
+        return config;
+    }
 };
 
 class Phase2TestBed {
@@ -37,6 +76,8 @@ public:
         // Initialize logging
         if (config_.verbose_logging) {
             spdlog::set_level(spdlog::level::debug);
+        } else {
+            spdlog::set_level(spdlog::level::info);
         }
         
         // Initialize components
@@ -211,34 +252,41 @@ public:
         
         spdlog::info("🏁 Phase 2 Testing Complete");
     }
+    
+    const json& getResults() const {
+        return results_;
+    }
 };
 
 int main(int argc, char* argv[]) {
-    spdlog::info("🚀 Phase 2 Fusion & Regime Adaptive Testbed");
+    TestConfig config = TestConfig::parseArguments(argc, argv);
     
-    TestConfig config;
-    
-    // Parse command line arguments
-    for (int i = 1; i < argc; ++i) {
-        std::string arg = argv[i];
-        if (arg == "--asset" && i + 1 < argc) {
-            config.primary_asset = argv[++i];
-        } else if (arg == "--quiet") {
-            config.verbose_logging = false;
-        } else if (arg == "--no-regime") {
-            config.enable_regime_adaptation = false;
-        }
+    if (!config.output_json) {
+        spdlog::info("🚀 Phase 2 Fusion & Regime Adaptive Testbed");
+        spdlog::info("📊 Primary Asset: {}", config.primary_asset);
+        spdlog::info("🎛️ Regime Adaptation: {}", config.enable_regime_adaptation ? "ENABLED" : "DISABLED");
     }
     
     try {
         Phase2TestBed testbed(config);
         testbed.runAllTests();
         
-        spdlog::info("✅ Phase 2 testbed completed successfully");
+        if (config.output_json) {
+            // Output JSON results for Python integration
+            auto results = testbed.getResults();
+            std::cout << results.dump(2) << std::endl;
+        } else {
+            spdlog::info("✅ Phase 2 testbed completed successfully");
+        }
         return 0;
         
     } catch (const std::exception& e) {
-        spdlog::error("❌ Phase 2 testbed failed: {}", e.what());
+        if (config.output_json) {
+            json error_result = {{"status", "error"}, {"message", e.what()}};
+            std::cout << error_result.dump(2) << std::endl;
+        } else {
+            spdlog::error("❌ Phase 2 testbed failed: {}", e.what());
+        }
         return 1;
     }
 }

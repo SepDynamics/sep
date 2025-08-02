@@ -6,6 +6,7 @@ dist/
 bin/
 output/
 CMakeFiles/
+cache/
 Makefile
 _work/
 _diag/

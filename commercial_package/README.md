@@ -2,45 +2,56 @@
 
 ## 🎯 What You're Getting
 
-This package contains **breakthrough commercial-grade financial analytics technology** with revolutionary 60.73% accuracy and 204.94 profitability score. This represents patentable intellectual property with complete mathematical validation, ready for immediate commercial deployment.
+This package contains **breakthrough commercial-grade financial analytics technology** with revolutionary 60.73% accuracy, 204.94 profitability score, and **Market Model Cache architecture**. This represents patentable intellectual property with complete mathematical validation and autonomous trading capabilities, ready for immediate commercial deployment.
 
 ### System Architecture
 
 ```mermaid
 graph TB
-    subgraph "Data Input"
-        A[OANDA Live Feed] --> B[EUR/USD Tick Data]
-        C[Historical Data] --> D[JSON Test Files]
+    subgraph "Live Data Sources"
+        A[OANDA Live API] --> B[Real-time M1 Ticks]
+        C[OANDA Historical] --> D[120hr M1 Backfill]
     end
     
-    subgraph "Core Engine"
-        B --> E[Price → Bitstream]
-        D --> E
-        E --> F[Pattern Recognition]
-        F --> G[CUDA Acceleration]
-        G --> H[Quantum Metrics]
-        H --> I[Signal Generation]
+    subgraph "Market Model Cache"
+        B --> E[Real-time Aggregator]
+        D --> F[Dynamic Bootstrap]
+        E --> G[M5/M15 Candles]
+        F --> G
+        G --> H[JSON Cache Storage]
+        H --> I[Persistent Signals]
+    end
+    
+    subgraph "Quantum Analysis Engine" 
+        I --> J[QFH Trajectory Analysis]
+        J --> K[Pattern Recognition]
+        K --> L[CUDA Acceleration]
+        L --> M[Multi-timeframe Metrics]
+        M --> N[Signal Generation]
     end
     
     subgraph "Mathematical Foundation"
-        J[Shannon Entropy] --> H
-        K[Coherence Scoring] --> H
-        L[Stability Analysis] --> H
-        M[Damped Trajectories] --> H
+        O[Shannon Entropy] --> M
+        P[Coherence Scoring] --> M
+        Q[Stability Analysis] --> M
+        R[Damped Trajectories] --> M
     end
     
-    subgraph "Output & Trading"
-        I --> N[BUY/SELL/HOLD]
-        N --> O[Confidence Scoring]
-        O --> P[Position Sizing]
-        P --> Q[Risk Management]
+    subgraph "Trading Decision Engine"
+        N --> S[Triple Confirmation]
+        S --> T[Confidence Scoring]
+        T --> U[Position Sizing]
+        U --> V[Risk Management]
+        V --> W[Live Execution]
     end
     
-    classDef validated fill:#1e3a8a,stroke:#f0fdf4,color:#f0fdf4
-    classDef performance fill:#166534,stroke:#f0fdf4,color:#f0fdf4
+    classDef cache fill:#1e3a8a,stroke:#f0fdf4,color:#f0fdf4
+    classDef validated fill:#166534,stroke:#f0fdf4,color:#f0fdf4
+    classDef performance fill:#0f766e,stroke:#f0fdf4,color:#f0fdf4
     
-    class H,I,O validated
-    class N,P,Q performance
+    class E,F,G,H,I cache
+    class J,K,L,M,N validated
+    class S,T,U,V,W performance
 ```
 
 ## 📦 Package Contents

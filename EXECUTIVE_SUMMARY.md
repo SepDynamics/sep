@@ -2,15 +2,16 @@
 
 ## Investment Opportunity Overview
 
-**SEP Engine** is a **fully autonomous trading system** with **complete production deployment** achieved August 1, 2025. The system features live trade execution, dynamic bootstrapping, and 60.73% high-confidence accuracy through proprietary quantum pattern recognition algorithms.
+**SEP Engine** is a **fully autonomous trading system** with **complete production deployment** achieved August 1, 2025. The system features Market Model Cache architecture, live OANDA integration, persistent caching, and 60.73% high-confidence accuracy through proprietary quantum pattern recognition algorithms.
 
 ## Value Proposition
 
+- **Market Model Cache**: Persistent caching architecture for rapid analysis and simulations
 - **Autonomous Operation**: Zero manual intervention required - fully self-sufficient trading system
-- **Live Trade Execution**: Direct OANDA API integration with automatic order placement and risk management
+- **Live Data Integration**: Real-time OANDA API with persistent historical caching
 - **Dynamic Bootstrapping**: Real-time historical data fetching eliminates static file dependencies
 - **Breakthrough Performance**: 60.73% high-confidence accuracy with 19.1% signal rate - commercial-grade results
-- **Production Deployed**: Complete autonomous system operational as of August 1, 2025
+- **Production Deployed**: Complete investor-ready system operational as of August 1, 2025
 
 ## Core Technology
 

@@ -128,6 +128,21 @@ bool QuantumTrackerApp::initialize() {
     
     oanda_connector_ = std::make_unique<sep::connectors::OandaConnector>(api_key, account_id);
     
+    // Initialize market model cache - THE CORE NEW ARCHITECTURE
+    std::cout << "[CACHE] 🚀 Initializing Market Model Cache..." << std::endl;
+    std::shared_ptr<sep::connectors::OandaConnector> shared_connector(oanda_connector_.get(), [](sep::connectors::OandaConnector*){});
+    market_model_cache_ = std::make_unique<MarketModelCache>(shared_connector);
+    
+    // HYDRATE THE CACHE - THIS IS THE CORE NEW LOGIC
+    std::cout << "[CACHE] 🔄 Ensuring historical data for the last week is available..." << std::endl;
+    if (!market_model_cache_->ensureCacheForLastWeek("EUR_USD")) {
+        last_error_ = "Failed to build or load the market model cache.";
+        return false;
+    }
+    std::cout << "[CACHE] ✅ Market model is ready with " 
+              << market_model_cache_->getSignalMap().size() 
+              << " processed signals." << std::endl;
+    
     // Initialize cache manager with OANDA connector
     if (!cache_manager_->initialize(oanda_connector_.get())) {
         last_error_ = "Failed to initialize data cache manager";
@@ -906,87 +921,64 @@ void QuantumTrackerApp::runTestDataSimulation() {
 }
 
 void QuantumTrackerApp::runHistoricalSimulation() {
-    std::cout << "[HISTORICAL-SIM] Starting historical simulation with current market data..." << std::endl;
+    std::cout << "[HISTORICAL-SIM] 🚀 Starting simulation using Market Model Cache..." << std::endl;
     
     // Initialize market model cache with OANDA connector
     std::shared_ptr<sep::connectors::OandaConnector> shared_connector(oanda_connector_.get(), [](sep::connectors::OandaConnector*){});
     market_model_cache_ = std::make_unique<MarketModelCache>(shared_connector);
     
-    // Initialize with current week's data (from last Friday close)
-    if (!market_model_cache_->initializeWithCurrentWeek("EUR_USD")) {
-        std::cerr << "[HISTORICAL-SIM] ❌ Failed to initialize market model cache" << std::endl;
+    // Ensure cache is loaded with the last week's data
+    if (!market_model_cache_->ensureCacheForLastWeek("EUR_USD")) {
+        std::cerr << "[HISTORICAL-SIM] ❌ Failed to load market model cache" << std::endl;
         return;
     }
     
-    std::cout << "[HISTORICAL-SIM] ✅ Market data loaded and processed" << std::endl;
-    std::cout << market_model_cache_->getCacheStatus() << std::endl;
-    
-    // Get the processed data
-    const auto& current_session = market_model_cache_->getCurrentSession();
-    const auto& processed_metrics = market_model_cache_->getCurrentMetrics();
-    
-    if (current_session.raw_data.empty()) {
-        std::cerr << "[HISTORICAL-SIM] ❌ No historical data available" << std::endl;
+    const auto& signal_map = market_model_cache_->getSignalMap();
+    if (signal_map.empty()) {
+        std::cerr << "[HISTORICAL-SIM] ❌ Cache is empty, nothing to simulate." << std::endl;
         return;
     }
     
-    std::cout << "[HISTORICAL-SIM] Processing " << current_session.raw_data.size() 
-              << " candles through quantum signal pipeline..." << std::endl;
+    std::cout << "[HISTORICAL-SIM] ✅ Cache loaded with " << signal_map.size() << " pre-computed signals" << std::endl;
     
-    // Bootstrap quantum tracker with first 120 candles (2 hours)
-    size_t bootstrap_size = std::min((size_t)120, current_session.raw_data.size());
-    std::vector<Candle> bootstrap_data(current_session.raw_data.begin(), 
-                                       current_session.raw_data.begin() + bootstrap_size);
-    quantum_tracker_->getQuantumBridge()->bootstrap(bootstrap_data);
+    // Now simulate trading using the pre-computed signals - this is deterministic and fast!
+    int trade_count = 0;
+    int buy_signals = 0;
+    int sell_signals = 0;
     
-    std::cout << "[HISTORICAL-SIM] Bootstrap complete with " << bootstrap_size << " candles" << std::endl;
-    
-    // Process remaining candles as live stream
-    int signal_count = 0;
-    int execution_count = 0;
-    
-    for (size_t i = bootstrap_size; i < current_session.raw_data.size(); ++i) {
-        const auto& candle = current_session.raw_data[i];
-        
-        // Convert to MarketData for processing
-        sep::connectors::MarketData md;
-        md.timestamp = candle.timestamp;
-        md.bid = candle.close - 0.00001;
-        md.ask = candle.close + 0.00001;
-        md.mid = candle.close;
-        md.instrument = "EUR_USD";
-        
-        // Process through quantum tracker
-        quantum_tracker_->processNewMarketData(md);
-        
-        // Check for signals
-        if (quantum_tracker_->hasLatestSignal()) {
-            signal_count++;
-            const auto& signal = quantum_tracker_->getLatestSignal();
+    for (const auto& [timestamp, signal] : signal_map) {
+        if (signal.action != sep::trading::QuantumTradingSignal::HOLD) {
+            trade_count++;
             
-            if (signal.should_execute) {
-                execution_count++;
-                logHistoricalTrade(signal, candle, i);
+            if (signal.action == sep::trading::QuantumTradingSignal::BUY) {
+                buy_signals++;
+            } else {
+                sell_signals++;
             }
+            
+            // Log the trade (simplified version)
+            std::cout << "[HISTORICAL-SIM] 🎯 TRADE at " << timestamp << ": "
+                      << (signal.action == sep::trading::QuantumTradingSignal::BUY ? "BUY" : "SELL")
+                      << " (Confidence: " << std::fixed << std::setprecision(3) 
+                      << signal.identifiers.confidence << ")" << std::endl;
         }
         
-        // Progress reporting every 1000 candles
-        if (i % 1000 == 0) {
-            double progress = 100.0 * (i - bootstrap_size) / (current_session.raw_data.size() - bootstrap_size);
-            std::cout << "[HISTORICAL-SIM] Progress: " << std::fixed << std::setprecision(1) 
-                     << progress << "% (" << signal_count << " signals, " 
-                     << execution_count << " executions)" << std::endl;
+        // Progress indicator every 100 signals
+        if (trade_count % 100 == 0 && trade_count > 0) {
+            std::cout << "[HISTORICAL-SIM] 📊 Processed " << trade_count << " trades so far..." << std::endl;
         }
     }
     
-    std::cout << "[HISTORICAL-SIM] ✅ Historical simulation complete!" << std::endl;
-    std::cout << "[HISTORICAL-SIM] Results:" << std::endl;
-    std::cout << "  Total Candles Processed: " << (current_session.raw_data.size() - bootstrap_size) << std::endl;
-    std::cout << "  Total Signals Generated: " << signal_count << std::endl;
-    std::cout << "  Signal Rate: " << std::fixed << std::setprecision(1) 
-              << (100.0 * signal_count / (current_session.raw_data.size() - bootstrap_size)) << "%" << std::endl;
-    std::cout << "  Execution Rate: " << std::fixed << std::setprecision(1) 
-              << (100.0 * execution_count / std::max(1, signal_count)) << "%" << std::endl;
+    std::cout << "[HISTORICAL-SIM] ✅ Simulation complete!" << std::endl;
+    std::cout << "[HISTORICAL-SIM] 📈 Results:" << std::endl;
+    std::cout << "  Total Signals Processed: " << signal_map.size() << std::endl;
+    std::cout << "  Total Trades: " << trade_count << std::endl;
+    std::cout << "  Buy Signals: " << buy_signals << std::endl;
+    std::cout << "  Sell Signals: " << sell_signals << std::endl;
+    std::cout << "  Trade Rate: " << std::fixed << std::setprecision(1) 
+              << (100.0 * trade_count / signal_map.size()) << "%" << std::endl;
+    
+    std::cout << "[HISTORICAL-SIM] 💡 This simulation used pre-computed signals from real market data!" << std::endl;
     
     // Print quantum tracker stats
     if (quantum_tracker_) {

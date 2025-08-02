@@ -68,7 +68,7 @@ Our system analyzes market data as evolving patterns rather than static statisti
 - **Multi-Asset Expansion**: 5+ currency pairs with cross-asset correlation analysis
 - **Revenue Target**: $1M ARR through enhanced performance licensing agreements
 
-**Performance Enhancement Strategy**: Our validated 47.24% baseline provides the foundation for systematic improvement through enhanced pattern recognition, machine learning integration, and multi-asset intelligence. See [docs/PERFORMANCE_OPTIMIZATION_STRATEGY.md](docs/PERFORMANCE_OPTIMIZATION_STRATEGY.md) for detailed roadmap.
+**Performance Enhancement Strategy**: Our validated 47.24% baseline provides the foundation for systematic improvement through enhanced pattern recognition, machine learning integration, and multi-asset intelligence. See [docs/strategy/PERFORMANCE_OPTIMIZATION_STRATEGY.md](docs/strategy/PERFORMANCE_OPTIMIZATION_STRATEGY.md) for detailed roadmap.
 
 ## Investment Use of Funds
 

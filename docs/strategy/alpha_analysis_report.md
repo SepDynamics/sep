@@ -1,7 +1,7 @@
 # SEP Engine Alpha Generation Analysis
 
 **Project:** SEP Engine Performance Verification  
-**Date:** January 27, 2025  
+**Date:** July 27, 2025  
 **Author:** SepDynamics Analysis Team
 
 ---

@@ -60,7 +60,7 @@ Version history:
       bright: this affected both normal and alien sun scenarios. The
       coefficients of the solar radiance function were changed to fix this.
 
-1.3   January 21st, 2013 (not released to the public)
+1.3   July 21st, 2013 (not released to the public)
       Added support for solar discs that are not exactly the same size as
       the terrestrial sun. Also added support for suns with a different
       emission spectrum ("Alien World" functionality).

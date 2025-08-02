@@ -79,6 +79,6 @@ Best Score: 52.63 = (62.96 × 0.7) + (41.83 × 0.2) + (1.9 × 0.1)
 3. **Advanced Optimizations**: Explore regime-dependent logic and ML enhancements
 
 ---
-*Generated: January 8, 2025*
+*Generated: August 1, 2025*
 *Methodology: Automated grid search across 28 weight combinations*
 *Best Configuration: S:0.4, C:0.1, E:0.5 with Experiment #1 logic*

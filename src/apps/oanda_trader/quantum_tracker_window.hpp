@@ -119,6 +119,16 @@ struct QuantumTrackingStats {
     int medium_confidence_total{0};
     int low_confidence_correct{0};
     int low_confidence_total{0};
+    
+    // Live trading performance
+    double total_pnl{0.0};
+    int trades_executed{0};
+    int winning_trades{0};
+    int losing_trades{0};
+    double win_rate{0.0};
+    double max_drawdown{0.0};
+    double current_drawdown{0.0};
+    double peak_equity{0.0};
 };
 
 class QuantumTrackerWindow {
@@ -139,6 +149,13 @@ public:
     // Statistics and performance
     const QuantumTrackingStats& getStats() const { return stats_; }
     void resetStats();
+    
+    // Bridge access for initialization
+    sep::trading::QuantumSignalBridge* getQuantumBridge() const { return quantum_bridge_.get(); }
+    
+    // Latest signal access for trading decisions
+    const sep::trading::QuantumTradingSignal& getLatestSignal() const { return latest_signal_; }
+    bool hasLatestSignal() const { return has_latest_signal_; }
 
 private:
     // Quantum signal processing
@@ -191,6 +208,8 @@ private:
     void renderAccuracyMetrics();
     void renderConfidenceBuckets();
     void renderRecentPredictions();
+    void renderMultiTimeframeConfirmation();
+    void renderLiveTradingPerformance();
     
     // New GUI.md requirements
     void renderPipsDisplay();

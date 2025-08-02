@@ -50,6 +50,6 @@ This directory contains our systematic approach to improving SEP Engine's tradin
 - **Target**: 45%+ overall accuracy, 45%+ high-confidence accuracy
 
 ### 📋 Latest Documentation
-- `PROGRESS_SUMMARY_JAN8_2025.md` - Complete status and achievements
+- `PROGRESS_SUMMARY_AUG1_2025.md` - Complete status and achievements
 - `PHASE3_UNIFICATION_REPORT.md` - QFH integration details
 - `QFH_TUNING_PROTOCOL.md` - Parameter optimization methodology

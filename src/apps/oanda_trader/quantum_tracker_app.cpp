@@ -1,6 +1,7 @@
 #include "quantum_tracker_app.hpp"
 #include "data_cache_manager.hpp"
 #include "tick_data_manager.hpp"
+#include "candle_types.h"
 #include <GL/gl.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -12,6 +13,8 @@
 #include <iostream>
 #include <mutex>
 #include <thread>
+#include <condition_variable>
+#include <nlohmann/json.hpp>
 
 namespace sep::apps {
 
@@ -57,6 +60,80 @@ bool QuantumTrackerApp::initialize() {
         last_error_ = "Failed to initialize tick data manager";
         return false;
     }
+    
+    // --- DYNAMIC BOOTSTRAP SEQUENCE ---
+    std::cout << "[Bootstrap] Fetching 48 hours of historical M1 data to build M5/M15 signals..." << std::endl;
+
+    // 1. Fetch historical M1 data from OANDA
+    std::vector<Candle> historical_m1_candles;
+    std::mutex mtx;
+    std::condition_variable cv;
+    bool data_fetched = false;
+
+    // OANDA requires specific time formats - fetch from last 5 trading days to handle weekends
+    auto now = std::chrono::system_clock::now();
+    auto start_time = now - std::chrono::hours(120); // 5 days to ensure we get trading data
+    char from_str[32], to_str[32];
+    auto from_time_t = std::chrono::system_clock::to_time_t(start_time);
+    auto to_time_t = std::chrono::system_clock::to_time_t(now);
+    std::strftime(from_str, sizeof(from_str), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&from_time_t));
+    std::strftime(to_str, sizeof(to_str), "%Y-%m-%dT%H:%M:%SZ", std::gmtime(&to_time_t));
+    
+    std::cout << "[Bootstrap] Requesting M1 data from " << from_str << " to " << to_str << std::endl;
+
+    oanda_connector_->getHistoricalData(
+        "EUR_USD", "M1", from_str, to_str,
+        [&](const std::vector<sep::connectors::OandaCandle>& oanda_candles) {
+            std::lock_guard<std::mutex> lock(mtx);
+            // Convert OandaCandle to the local Candle struct
+            for (const auto& o_candle : oanda_candles) {
+                Candle c;
+                c.time = o_candle.time;
+                c.timestamp = parseTimestamp(o_candle.time);
+                c.open = o_candle.open;
+                c.high = o_candle.high;
+                c.low = o_candle.low;
+                c.close = o_candle.close;
+                c.volume = static_cast<double>(o_candle.volume);
+                historical_m1_candles.push_back(c);
+            }
+            data_fetched = true;
+            cv.notify_one();
+        });
+
+    // Wait for the asynchronous fetch to complete
+    std::unique_lock<std::mutex> lock(mtx);
+    if (!cv.wait_for(lock, std::chrono::seconds(30), [&]{ return data_fetched; })) {
+        std::cout << "[Bootstrap] API fetch timeout. Falling back to static test data for development..." << std::endl;
+        
+        // Fallback to static file initialization for development/testing
+        if (!quantum_tracker_->getQuantumBridge()->initializeMultiTimeframe(
+            "/sep/Testing/OANDA/O-test-M5.json",
+            "/sep/Testing/OANDA/O-test-M15.json")) {
+            last_error_ = "Failed to initialize with both dynamic and static data";
+            return false;
+        }
+        std::cout << "[Bootstrap] Static fallback completed successfully! System ready for live trading." << std::endl;
+    } else if (historical_m1_candles.empty()) {
+        std::cout << "[Bootstrap] API returned 0 candles (likely weekend/market closed). Using static test data..." << std::endl;
+        
+        // Fallback to static file initialization when no data available
+        if (!quantum_tracker_->getQuantumBridge()->initializeMultiTimeframe(
+            "/sep/Testing/OANDA/O-test-M5.json",
+            "/sep/Testing/OANDA/O-test-M15.json")) {
+            last_error_ = "Failed to initialize with static fallback data";
+            return false;
+        }
+        std::cout << "[Bootstrap] Static fallback completed successfully! System ready for live trading." << std::endl;
+    } else {
+        std::cout << "[Bootstrap] Fetched " << historical_m1_candles.size() << " M1 candles. Initializing multi-timeframe system..." << std::endl;
+
+        // 2. Bootstrap the QuantumSignalBridge with the historical data
+        quantum_tracker_->getQuantumBridge()->bootstrap(historical_m1_candles);
+
+        std::cout << "[Bootstrap] Dynamic bootstrap completed successfully! System ready for live trading." << std::endl;
+    }
+    // --- END OF DYNAMIC BOOTSTRAP ---
     
     // Auto-connect to OANDA
     connectToOanda();
@@ -299,6 +376,16 @@ void QuantumTrackerApp::startMarketDataStream() {
         // Feed data to quantum tracker for pattern analysis
         quantum_tracker_->processNewMarketData(data);
         
+        // Check for triple-confirmed signals and execute trades
+        if (quantum_tracker_ && quantum_tracker_->hasLatestSignal()) {
+            const auto& latest_signal = quantum_tracker_->getLatestSignal();
+            if (latest_signal.should_execute && 
+                latest_signal.mtf_confirmation.triple_confirmed &&
+                latest_signal.action != sep::trading::QuantumTradingSignal::HOLD) {
+                executeQuantumTrade(latest_signal);
+            }
+        }
+        
         // Log occasional data for debugging with tick info
         static int count = 0;
         if (++count % 100 == 0) {
@@ -319,6 +406,45 @@ void QuantumTrackerApp::startMarketDataStream() {
                   << oanda_connector_->getLastError() << std::endl;
     } else {
         std::cout << "[QuantumTracker] Price stream started successfully!" << std::endl;
+    }
+}
+
+void QuantumTrackerApp::executeQuantumTrade(const sep::trading::QuantumTradingSignal& signal) {
+    if (!oanda_connector_) {
+        std::cerr << "[QuantumTracker] Cannot execute trade - OANDA connector not initialized" << std::endl;
+        return;
+    }
+    
+    std::cout << "[QuantumTracker] 🚀 EXECUTING QUANTUM TRADE - "
+              << (signal.action == sep::trading::QuantumTradingSignal::BUY ? "BUY" : "SELL")
+              << " " << signal.suggested_position_size << " units of EUR_USD" << std::endl;
+              
+    // Create order JSON
+    nlohmann::json order_json = {
+        {"order", {
+            {"instrument", "EUR_USD"},
+            {"units", signal.action == sep::trading::QuantumTradingSignal::BUY ? 
+                     static_cast<int>(signal.suggested_position_size) : 
+                     -static_cast<int>(signal.suggested_position_size)},
+            {"type", "MARKET"},
+            {"timeInForce", "FOK"}, // Fill or Kill
+            {"stopLossOnFill", {
+                {"distance", std::to_string(signal.stop_loss_distance)}
+            }},
+            {"takeProfitOnFill", {
+                {"distance", std::to_string(signal.take_profit_distance)}
+            }}
+        }}
+    };
+    
+    // Execute the trade
+    if (oanda_connector_->placeOrder(order_json)) {
+        std::cout << "[QuantumTracker] ✅ Trade executed successfully!" << std::endl;
+        std::cout << "[QuantumTracker] Stop Loss: " << signal.stop_loss_distance 
+                  << " Take Profit: " << signal.take_profit_distance << std::endl;
+    } else {
+        std::cerr << "[QuantumTracker] ❌ Trade execution failed: " 
+                  << oanda_connector_->getLastError() << std::endl;
     }
 }
 

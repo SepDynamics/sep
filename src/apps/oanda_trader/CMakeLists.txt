@@ -27,6 +27,7 @@ target_link_libraries(sep_trader_cuda PUBLIC
 add_library(sep_trader_logic
     quantum_signal_bridge.cpp
     forward_window_kernels.cpp
+    realtime_aggregator.cpp
 )
 
 target_link_libraries(sep_trader_logic PUBLIC 

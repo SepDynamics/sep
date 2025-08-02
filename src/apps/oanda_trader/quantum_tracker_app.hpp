@@ -38,6 +38,7 @@ private:
     void connectToOanda();
     void loadHistoricalData();
     void startMarketDataStream();
+    void executeQuantumTrade(const sep::trading::QuantumTradingSignal& signal);
     
     // Core components
     GLFWwindow* window_ = nullptr;

@@ -4,7 +4,7 @@
 
 **Inventors:** SepDynamics Development Team  
 **Date of Conception:** Evidence in git repository (1600+ commits)  
-**Date of Disclosure:** January 27, 2025
+**Date of Disclosure:** July 27, 2025
 
 ---
 

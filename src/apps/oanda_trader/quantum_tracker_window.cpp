@@ -353,6 +353,12 @@ void QuantumTrackerWindow::render() {
     renderLatestSignal();
     ImGui::Separator();
     
+    renderMultiTimeframeConfirmation();
+    ImGui::Separator();
+    
+    renderLiveTradingPerformance();
+    ImGui::Separator();
+    
     renderAccuracyMetrics();
     ImGui::Separator();
     
@@ -805,6 +811,124 @@ void QuantumTrackerWindow::renderMetricPlots() {
         
         ImPlot::EndPlot();
     }
+}
+
+void QuantumTrackerWindow::renderMultiTimeframeConfirmation() {
+    ImGui::Begin("🕒 Multi-Timeframe Confirmation");
+
+    if (!has_latest_signal_) {
+        ImGui::Text("Waiting for signal...");
+        ImGui::End();
+        return;
+    }
+
+    auto render_signal_status = [](const char* label, sep::trading::QuantumTradingSignal::Action action) {
+        ImGui::Text("%s:", label);
+        ImGui::SameLine(50);
+        if (action == sep::trading::QuantumTradingSignal::BUY) {
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), "BUY");
+        } else if (action == sep::trading::QuantumTradingSignal::SELL) {
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "SELL");
+        } else {
+            ImGui::TextDisabled("HOLD");
+        }
+    };
+
+    // Display the timeframe statuses
+    render_signal_status("M1 ", latest_signal_.action);
+    render_signal_status("M5 ", latest_signal_.mtf_confirmation.m5_confirms ? latest_signal_.action : sep::trading::QuantumTradingSignal::HOLD);
+    render_signal_status("M15", latest_signal_.mtf_confirmation.m15_confirms ? latest_signal_.action : sep::trading::QuantumTradingSignal::HOLD);
+
+    ImGui::Separator();
+
+    // Display confirmation status
+    if (latest_signal_.mtf_confirmation.triple_confirmed) {
+        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.8f, 1.0f), "✅ TRIPLE CONFIRMED");
+    } else {
+        ImGui::TextDisabled("⏳ Awaiting Confirmation...");
+    }
+
+    // Display confidence levels
+    ImGui::Separator();
+    ImGui::Text("Confidence Levels:");
+    ImGui::Text("M5:  %.2f", latest_signal_.mtf_confirmation.m5_confidence);
+    ImGui::Text("M15: %.2f", latest_signal_.mtf_confirmation.m15_confidence);
+
+    ImGui::End();
+}
+
+void QuantumTrackerWindow::renderLiveTradingPerformance() {
+    ImGui::Begin("📈 Live Trading Performance");
+    
+    const auto& stats = getStats();
+    
+    // P/L Summary
+    ImGui::Text("💰 PROFIT & LOSS");
+    ImGui::Separator();
+    
+    // Total P/L with color coding
+    if (stats.total_pnl > 0) {
+        ImGui::TextColored(ImVec4(0, 1, 0, 1), "Total P/L: +$%.2f", stats.total_pnl);
+    } else if (stats.total_pnl < 0) {
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "Total P/L: -$%.2f", std::abs(stats.total_pnl));
+    } else {
+        ImGui::Text("Total P/L: $0.00");
+    }
+    
+    // Trade Statistics
+    ImGui::Spacing();
+    ImGui::Text("📊 TRADE STATISTICS");
+    ImGui::Separator();
+    
+    ImGui::Text("Total Trades: %d", stats.trades_executed);
+    ImGui::Text("Winning Trades: %d", stats.winning_trades);
+    ImGui::Text("Losing Trades: %d", stats.losing_trades);
+    
+    // Win Rate with color coding
+    if (stats.win_rate >= 60.0) {
+        ImGui::TextColored(ImVec4(0, 1, 0, 1), "Win Rate: %.1f%% ✅", stats.win_rate);
+    } else if (stats.win_rate >= 50.0) {
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "Win Rate: %.1f%% ⚠️", stats.win_rate);
+    } else {
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "Win Rate: %.1f%% ❌", stats.win_rate);
+    }
+    
+    // Risk Management
+    ImGui::Spacing();
+    ImGui::Text("⚠️ RISK MANAGEMENT");
+    ImGui::Separator();
+    
+    // Max Drawdown with warning colors
+    if (stats.max_drawdown > 0.15) { // 15% warning
+        ImGui::TextColored(ImVec4(1, 0, 0, 1), "Max Drawdown: %.1f%% ⚠️", stats.max_drawdown * 100);
+    } else if (stats.max_drawdown > 0.10) { // 10% caution
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "Max Drawdown: %.1f%%", stats.max_drawdown * 100);
+    } else {
+        ImGui::TextColored(ImVec4(0, 1, 0, 1), "Max Drawdown: %.1f%%", stats.max_drawdown * 100);
+    }
+    
+    ImGui::Text("Current Drawdown: %.1f%%", stats.current_drawdown * 100);
+    
+    // Performance vs Backtest
+    ImGui::Spacing();
+    ImGui::Text("🎯 VS BACKTEST TARGET");
+    ImGui::Separator();
+    
+    ImGui::Text("Target Win Rate: 60.0%%");
+    if (stats.trades_executed > 0) {
+        float performance_ratio = stats.win_rate / 60.0f;
+        if (performance_ratio >= 0.95f) {
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), "Performance: %.1f%% of target ✅", performance_ratio * 100);
+        } else if (performance_ratio >= 0.80f) {
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), "Performance: %.1f%% of target ⚠️", performance_ratio * 100);
+        } else {
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "Performance: %.1f%% of target ❌", performance_ratio * 100);
+        }
+    } else {
+        ImGui::TextDisabled("No trades executed yet");
+    }
+    
+    ImGui::End();
 }
 
 } // namespace sep::apps

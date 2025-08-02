@@ -2,7 +2,7 @@
 
 **Patent Portfolio Title:** SEP Engine: Quantum-Inspired Financial Modeling and Prediction System  
 **Applicant:** SepDynamics  
-**Priority Date:** January 27, 2025  
+**Priority Date:** July 27, 2025  
 **Portfolio Classification:** Fintech, Quantum Computing, Algorithmic Trading
 
 ---

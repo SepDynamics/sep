@@ -1,0 +1,2161 @@
+{
+  "cache_entries": {
+    "AUD_USD_M1": {
+      "access_count": 0,
+      "correlation": {
+        "correlated_pairs": [],
+        "optimal_lag_ms": 0,
+        "primary_pair": "AUD_USD",
+        "strength": 0.0
+      },
+      "instrument": "AUD_USD",
+      "signal_count": 214,
+      "signals": [
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7299376726150513,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8030486702919006,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.9489051103591919,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6570494174957275,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5109713077545166,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5111130475997925,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.9493347406387329,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6570878028869629,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.9492515325546265,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8030604124069214,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5111204981803894,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7300229072570801,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6569247245788574,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6570110321044922,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8029080033302307,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6568000912666321,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.9488496780395508,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6566946506500244,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5107102990150452,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.510799765586853,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.58364337682724,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6566658616065979,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5107625126838684,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5108445286750793,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6568672060966492,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5108668804168701,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8026970624923706,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.9487943053245544,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5837967395782471,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.583728551864624,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7297459244728088,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6568480134010315,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8028610944747925,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6569918394088745,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7300868630409241,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5109713077545166,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5110235214233398,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8759507536888123,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8761170506477356,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5841804146766663,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8031190037727356,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.657202959060669,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8761298656463623,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5841036438941956,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8762322068214417,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5111280083656311,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6570973992347717,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8760019540786743,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.876155436038971,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7300016283988953,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6569343209266663,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949029803276062,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5841292142868042,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5111727714538574,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.657471776008606,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5114267468452454,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5845133066177368,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5845816731452942,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5113968253135681,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6574525833129883,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8036471009254456,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7306523323059082,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5848124027252197,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5847440361976624,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5117482542991638,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7311972379684448,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5851032733917236,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8046111464500427,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8044816851615906,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5120252966880798,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5121002197265625,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6583278179168701,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7315396070480347,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6584434509277344,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5121901035308838,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8781044483184814,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5123175978660583,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6587036848068237,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7319893836975098,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5855229496955872,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6585879921913147,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5854886770248413,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8781558871269226,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7319251298904419,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.878490149974823,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.51249760389328,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8055539131164551,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        }
+      ],
+      "timeframe": "M1"
+    },
+    "EUR_USD_M1": {
+      "access_count": 0,
+      "correlation": {
+        "correlated_pairs": [],
+        "optimal_lag_ms": 0,
+        "primary_pair": "EUR_USD",
+        "strength": 0.0
+      },
+      "instrument": "EUR_USD",
+      "signal_count": 54,
+      "signals": [
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6476516127586365,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.690959632396698,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.561302900314331,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6479089856147766,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6910730600357056,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.518354058265686,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6046785116195679,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5614871382713318,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5182779431343079,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6912044286727905,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.518466055393219,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5184032917022705,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5183764696121216,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6912402510643005,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.561535656452179,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6479817628860474,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.518318235874176,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.518425703048706,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.518389880657196,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.691162645816803,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.691091001033783,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6914135217666626,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6048718094825745,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7775982618331909,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.561686098575592,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5184167623519897,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6048770546913147,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.561686098575592,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.648060142993927,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.604694128036499,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5616424083709717,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7345062494277954,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6049763560295105,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5617783069610596,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6481441259384155,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5185825228691101,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6913776397705078,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5184794664382935,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.648110568523407,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6914015412330627,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.518622875213623,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5185646414756775,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5619434714317322,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7347729206085205,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6051855683326721,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5187574028968811,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6053425669670105,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6485308408737183,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5189278721809387,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5190311670303345,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6487664580345154,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5192467570304871,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5625318884849548,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6490022540092468,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        }
+      ],
+      "timeframe": "M1"
+    },
+    "GBP_USD_M1": {
+      "access_count": 0,
+      "correlation": {
+        "correlated_pairs": [],
+        "optimal_lag_ms": 0,
+        "primary_pair": "GBP_USD",
+        "strength": 0.0
+      },
+      "instrument": "GBP_USD",
+      "signal_count": 27,
+      "signals": [
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5882814526557922,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5883506536483765,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5098438858985901,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5099399089813232,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5491833090782166,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5492608547210693,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5499037504196167,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.549834668636322,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5894048810005188,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5897060632705688,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.707719624042511,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5112635493278503,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5899333953857422,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.511352002620697,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5901329517364502,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5115089416503906,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5115572810173035,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5116498470306396,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6689489483833313,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5509164929389954,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5509555339813232,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.590337336063385,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5115653276443481,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7084382772445679,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5115773677825928,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6297228932380676,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5117505788803101,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        }
+      ],
+      "timeframe": "M1"
+    },
+    "USD_CHF_M1": {
+      "access_count": 0,
+      "correlation": {
+        "correlated_pairs": [],
+        "optimal_lag_ms": 0,
+        "primary_pair": "USD_CHF",
+        "strength": 0.0
+      },
+      "instrument": "USD_CHF",
+      "signal_count": 81,
+      "signals": [
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7648935914039612,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5464062690734863,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.9290632605552673,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7652531266212463,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7106776833534241,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6560245156288147,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.9295306205749512,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7655879259109497,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6562182307243347,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6015596985816956,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6562325954437256,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8203355669975281,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8748810887336731,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6015004515647888,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7657805681228638,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7109652757644653,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7107709050178528,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5467827320098877,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6014478206634521,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.71079421043396,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6562110185623169,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8201561570167542,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8202817440032959,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.949999988079071,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5469322800636292,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8204881548881531,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7110430598258972,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7110119462013245,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6565413475036621,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5472016334533691,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5471537113189697,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7659984230995178,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7111364006996155,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6565126180648804,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6019942164421082,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.8755130171775818,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7662163972854614,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.9303547143936157,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6020535230636597,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7663422226905823,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5474112629890442,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.602238118648529,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6569510698318481,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.9308030009269714,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5476451516151428,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.602475643157959,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6025152206420898,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6024690270423889,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7668879628181458,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5478551387786865,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7121414542198181,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5478491187095642,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5478131175041199,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5477890968322754,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.7120088338851929,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.711884081363678,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6572389602661133,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5477710962295532,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7121961116790771,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6027991771697998,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6029313206672668,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6578081846237183,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.8771929740905762,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.657779335975647,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5482335686683655,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5480293035507202,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.657555878162384,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6573829650878906,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.82182776927948,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5478131175041199,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5478131175041199,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5478611588478088,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.6575774550437927,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5480953454971313,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6576567888259888,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.9317927956581116,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.5480112433433533,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "SELL",
+          "coherence": 0.5,
+          "confidence": 0.7124146223068237,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.5480893850326538,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        },
+        {
+          "action": "BUY",
+          "coherence": 0.5,
+          "confidence": 0.6576135158538818,
+          "contributing_assets": [],
+          "correlation_boost": 0.0,
+          "stability": 0.6000000238418579
+        }
+      ],
+      "timeframe": "M1"
+    }
+  },
+  "metadata": {
+    "cache_entries": 4,
+    "created_at": 1754129179,
+    "version": "1.0"
+  }
+}

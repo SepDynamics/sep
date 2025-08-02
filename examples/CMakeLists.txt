@@ -92,4 +92,48 @@ set_target_properties(pme_testbed_phase2
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
 )
 
+# Enhanced Cache Testbed - Phase 1 Implementation
+add_executable(enhanced_cache_testbed
+    enhanced_cache_testbed.cpp
+)
+
+target_link_libraries(enhanced_cache_testbed
+    sep_engine
+    sep_quantum
+    sep_memory
+    sep_connectors
+    sep_trader_logic
+    fmt::fmt
+    ${CMAKE_THREAD_LIBS_INIT}
+    nlohmann_json::nlohmann_json
+)
+
+set_target_properties(enhanced_cache_testbed
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
+)
+
+# Phase 2 Fusion Testbed - Multi-Asset Signal Fusion + Market Regime Adaptation
+add_executable(phase2_fusion_testbed
+    phase2_fusion_testbed.cpp
+)
+
+target_link_libraries(phase2_fusion_testbed
+    sep_engine
+    sep_quantum
+    sep_memory
+    sep_connectors
+    sep_trader_logic
+    sep_trader_cuda
+    fmt::fmt
+    ${CMAKE_THREAD_LIBS_INIT}
+    nlohmann_json::nlohmann_json
+    CUDA::cudart
+)
+
+set_target_properties(phase2_fusion_testbed
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
+)
+
 

@@ -28,6 +28,10 @@ add_library(sep_trader_logic
     quantum_signal_bridge.cpp
     forward_window_kernels.cpp
     realtime_aggregator.cpp
+    market_model_cache.cpp
+    enhanced_market_model_cache.cpp
+    multi_asset_signal_fusion.cpp
+    market_regime_adaptive.cpp
 )
 
 target_link_libraries(sep_trader_logic PUBLIC 

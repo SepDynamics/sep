@@ -4,6 +4,8 @@
 
 **SEP Engine** is a **fully autonomous trading system** that achieved **production deployment on August 1, 2025** with breakthrough pattern recognition algorithms and Market Model Cache architecture. The system operates with **zero manual intervention**, processing live market data with **60.73% high-confidence accuracy** through dynamic multi-timeframe confirmation logic, persistent caching, and real-time OANDA integration.
 
+**Latest Achievement**: **Phase 2: Intelligent Signal Fusion** complete with multi-asset correlation analysis and market regime adaptive intelligence for enhanced signal quality.
+
 ### Key Value Proposition
 - **Market Model Cache**: Persistent caching architecture for rapid analysis and simulations
 - **Autonomous Operation**: Zero manual intervention - fully self-sufficient trading system  
@@ -241,7 +243,32 @@ to satisfy Ubuntu 24.04's managed environment restrictions. It also builds the
 
 # Financial backtesting
 ./build/examples/pme_testbed Testing/OANDA/O-test-2.json
+
+# Phase 2 Testing (Latest)
+source OANDA.env && ./build/examples/phase2_fusion_testbed
 ```
+
+## 📚 Documentation
+
+### Core Documentation Structure
+The project documentation has been consolidated into four focused documents:
+
+- **[docs/OVERVIEW.md](docs/OVERVIEW.md)** - Project overview, architecture, and current achievements
+- **[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)** - Development roadmap, phase status, and technical milestones  
+- **[docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md)** - Technical implementation guide, build system, testing framework
+- **[docs/THEORY.md](docs/THEORY.md)** - Mathematical foundations, quantum algorithms, theoretical principles
+
+### Specialized Documentation
+- **[docs/strategy/](docs/strategy/)** - Performance optimization strategies and multi-asset pipeline
+- **[docs/arch/](docs/arch/)** - Architecture specifications and bitspace mathematics
+- **[docs/patent/](docs/patent/)** - Patent disclosures and invention documentation
+- **[docs/proofs/](docs/proofs/)** - Mathematical proofs and validation studies
+
+### Quick Start Documentation
+1. **New to the project?** Start with [docs/OVERVIEW.md](docs/OVERVIEW.md)
+2. **Developer setup?** See [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md)  
+3. **Research focus?** Read [docs/THEORY.md](docs/THEORY.md)
+4. **Performance optimization?** Check [docs/strategy/PERFORMANCE_OPTIMIZATION_STRATEGY.md](docs/strategy/PERFORMANCE_OPTIMIZATION_STRATEGY.md)
 
 ### Production Deployment
 

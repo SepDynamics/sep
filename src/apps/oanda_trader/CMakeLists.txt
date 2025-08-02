@@ -95,6 +95,8 @@ add_executable(quantum_tracker
     data_cache_manager.cpp
     tick_data_manager.cpp
     rolling_window_chart.cpp
+    weekend_optimizer.cpp
+    market_model_cache.cpp
 )
 
 target_include_directories(quantum_tracker PUBLIC

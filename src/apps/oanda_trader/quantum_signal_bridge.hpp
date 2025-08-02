@@ -146,6 +146,9 @@ public:
     bool initialize();
     void shutdown();
     
+    // Load optimal configuration from weekend optimizer
+    void loadOptimalConfig();
+    
     // Main analysis function - converts market data to trading signals
     QuantumTradingSignal analyzeMarketData(
         const sep::connectors::MarketData& current_data,
@@ -192,8 +195,8 @@ private:
     std::unique_ptr<sep::quantum::bitspace::PatternProcessor> pattern_processor_;
     
     // Strategy thresholds (dynamically determined from convergence patterns)
-    std::atomic<float> confidence_threshold_{0.6f};
-    std::atomic<float> coherence_threshold_{0.9f};
+    std::atomic<float> confidence_threshold_{0.65f};
+    std::atomic<float> coherence_threshold_{0.30f};
     std::atomic<float> stability_threshold_{0.05f};
     
     // Convergence calculation core

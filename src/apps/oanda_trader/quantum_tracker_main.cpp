@@ -3,6 +3,28 @@
 #include <thread>
 #include <chrono>
 
+void runHeadlessService() {
+    std::cout << "🔮 SEP Quantum Tracker - HEADLESS SERVICE MODE" << std::endl;
+    std::cout << "===============================================" << std::endl;
+    std::cout << "24/7 Autonomous Trading Service (No GUI)" << std::endl;
+    std::cout << "Press Ctrl+C to shutdown gracefully" << std::endl;
+    std::cout << std::endl;
+
+    sep::apps::QuantumTrackerApp app;
+    if (!app.initialize()) {
+        std::cerr << "[ERROR] Failed to initialize: " << app.getLastError() << std::endl;
+        return;
+    }
+
+    std::cout << "✅ Quantum Tracker Service initialized successfully!" << std::endl;
+    std::cout << "📊 Live trading pipeline active, CUDA calculations enabled" << std::endl;
+    std::cout << "🌐 Autonomous mode: Trading during market hours, optimizing during weekends" << std::endl;
+    std::cout << std::endl;
+
+    // Run the core application logic without GUI
+    app.runHeadlessService();
+}
+
 void runHeadlessTest() {
     std::cout << "🔮 SEP Quantum Tracker - HEADLESS TEST MODE" << std::endl;
     std::cout << "===========================================" << std::endl;
@@ -49,16 +71,85 @@ void runHeadlessTest() {
 }
 
 int main(int argc, char* argv[]) {
-    // Check for headless test mode
-    bool headless = false;
+    // Check for command line arguments
+    bool headless_service = false;
+    bool headless_test = false;
+    bool historical_sim = false;
+    bool file_sim = false;
+    std::string simulate_start_time;
+    int simulate_duration_hours = 0;
+    
     for (int i = 1; i < argc; ++i) {
-        if (std::string(argv[i]) == "--test" || std::string(argv[i]) == "--headless") {
-            headless = true;
-            break;
+        std::string arg = argv[i];
+        if (arg == "--headless") {
+            headless_service = true;
+        } else if (arg == "--test") {
+            headless_test = true;
+        } else if (arg == "--simulate" && i + 1 < argc) {
+            simulate_start_time = argv[++i];
+        } else if (arg == "--duration" && i + 1 < argc) {
+            simulate_duration_hours = std::stoi(argv[++i]);
+        } else if (arg == "--historical-sim") {
+            historical_sim = true;
+        } else if (arg == "--file-sim") {
+            file_sim = true;
         }
     }
     
-    if (headless) {
+    // File Simulation Mode takes highest precedence for weekend development
+    if (file_sim) {
+        std::cout << "📁 SEP Quantum Tracker - FILE SIMULATION MODE" << std::endl;
+        std::cout << "===============================================" << std::endl;
+        std::cout << "Using local test files for rapid backtesting" << std::endl;
+        std::cout << "Perfect for weekend strategy optimization" << std::endl;
+        std::cout << std::endl;
+        
+        sep::apps::QuantumTrackerApp app(false, true); // historical_sim = false, file_sim = true
+        if (!app.initialize()) {
+            std::cerr << "[ERROR] Failed to initialize: " << app.getLastError() << std::endl;
+            return 1;
+        }
+        
+        return 0; // runFileSimulation() is called in initialize()
+    }
+    
+    // Historical Simulation Mode takes second precedence
+    if (historical_sim) {
+        std::cout << "📊 SEP Quantum Tracker - HISTORICAL SIMULATION MODE" << std::endl;
+        std::cout << "====================================================" << std::endl;
+        std::cout << "Using proven test data for deterministic backtesting" << std::endl;
+        std::cout << std::endl;
+        
+        sep::apps::QuantumTrackerApp app(true); // historical_sim = true
+        if (!app.initialize()) {
+            std::cerr << "[ERROR] Failed to initialize: " << app.getLastError() << std::endl;
+            return 1;
+        }
+        
+        return 0; // runHistoricalSimulation() is called in initialize()
+    }
+    
+    // Time Machine Mode takes precedence over normal modes
+    if (!simulate_start_time.empty() && simulate_duration_hours > 0) {
+        std::cout << "🕰️  SEP Quantum Tracker - TIME MACHINE MODE" << std::endl;
+        std::cout << "=============================================" << std::endl;
+        std::cout << "Simulating from: " << simulate_start_time << std::endl;
+        std::cout << "Duration: " << simulate_duration_hours << " hours" << std::endl;
+        std::cout << std::endl;
+        
+        sep::apps::QuantumTrackerApp app(simulate_start_time, simulate_duration_hours);
+        if (!app.initialize()) {
+            std::cerr << "[ERROR] Failed to initialize: " << app.getLastError() << std::endl;
+            return 1;
+        }
+        
+        return 0; // runSimulation() is called in initialize()
+    }
+    
+    if (headless_service) {
+        runHeadlessService();
+        return 0;
+    } else if (headless_test) {
         runHeadlessTest();
         return 0;
     }

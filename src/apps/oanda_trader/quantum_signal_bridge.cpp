@@ -82,6 +82,9 @@ bool QuantumSignalBridge::initialize() {
         // Load existing patterns
         loadPatterns();
         
+        // Load optimal configuration from weekend optimizer
+        loadOptimalConfig();
+        
         initialized_ = true;
         std::cout << "[QuantumSignalBridge] Initialized successfully" << std::endl;
         return true;
@@ -339,6 +342,24 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
             auto mtf_confirmation = getMultiTimeframeConfirmation(signal, timestamp_str);
             signal.mtf_confirmation = mtf_confirmation;  // Store for GUI access
             
+            // ENHANCED LOGGING FOR LIVE VALIDATION
+            auto now = std::chrono::system_clock::now();
+            auto time_t = std::chrono::system_clock::to_time_t(now);
+            std::stringstream log_entry;
+            log_entry << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S")
+                      << " [SIGNAL_GENERATED] " << current_data.instrument
+                      << " Action=" << (signal.action == QuantumTradingSignal::BUY ? "BUY" : "SELL")
+                      << " Confidence=" << std::fixed << std::setprecision(4) << signal.identifiers.confidence
+                      << " Coherence=" << signal.identifiers.coherence
+                      << " Stability=" << signal.identifiers.stability
+                      << " Entropy=" << signal.identifiers.entropy
+                      << " Price=" << current_data.mid
+                      << " M5_Confirm=" << (mtf_confirmation.m5_confirms ? "YES" : "NO")
+                      << " M15_Confirm=" << (mtf_confirmation.m15_confirms ? "YES" : "NO")
+                      << " Triple_Confirmed=" << (mtf_confirmation.triple_confirmed ? "YES" : "NO");
+            
+            std::cout << log_entry.str() << std::endl;
+            
             std::cout << "[QuantumSignal] Multi-timeframe check - M5: " 
                       << (mtf_confirmation.m5_confirms ? "CONFIRM" : "REJECT")
                       << " M15: " << (mtf_confirmation.m15_confirms ? "CONFIRM" : "REJECT")
@@ -355,6 +376,21 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
                 
                 signal.should_execute = true; // Enable live trade execution for triple-confirmed signals
                 
+                // ENHANCED EXECUTION LOGGING
+                std::stringstream exec_log;
+                exec_log << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S")
+                         << " [TRIPLE_CONFIRMED] " << current_data.instrument
+                         << " Action=" << (signal.action == QuantumTradingSignal::BUY ? "BUY" : "SELL")
+                         << " Size=" << std::fixed << std::setprecision(0) << signal.suggested_position_size
+                         << " StopLoss=" << std::setprecision(5) << signal.stop_loss_distance
+                         << " TakeProfit=" << signal.take_profit_distance
+                         << " ExecuteFlag=TRUE REASON=\"Triple Confirmation Met: M1 " 
+                         << (signal.action == QuantumTradingSignal::BUY ? "BUY" : "SELL") << ", M5 " 
+                         << (mtf_confirmation.m5_confirms ? "CONFIRM" : "REJECT") << ", M15 " 
+                         << (mtf_confirmation.m15_confirms ? "CONFIRM" : "REJECT") << "\"";
+                         
+                std::cout << exec_log.str() << std::endl;
+                
                 std::cout << "[QuantumSignal] 🚀 MULTI-TIMEFRAME CONFIRMED SIGNAL: " << current_data.instrument
                           << " Action: " << (signal.action == QuantumTradingSignal::BUY ? "BUY" : "SELL")
                           << " Size: " << signal.suggested_position_size 
@@ -362,11 +398,32 @@ QuantumTradingSignal QuantumSignalBridge::analyzeMarketData(
             } else {
                 signal.action = QuantumTradingSignal::HOLD;
                 signal.should_execute = false;
+                
+                // LOG NON-EXECUTED SIGNALS
+                std::stringstream hold_log;
+                hold_log << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S")
+                         << " [SIGNAL_HOLD] " << current_data.instrument
+                         << " Action=HOLD ExecuteFlag=FALSE REASON=\"Awaiting M5/M15 Confirmation\"";
+                std::cout << hold_log.str() << std::endl;
+                
                 std::cout << "[QuantumSignal] ⏳ M1 Signal Detected - Awaiting M5/M15 Confirmation..." << std::endl;
             }
         } else {
             signal.action = QuantumTradingSignal::HOLD;
             signal.should_execute = false;
+            
+            // LOG THRESHOLD FAILURES
+            auto now = std::chrono::system_clock::now();
+            auto time_t = std::chrono::system_clock::to_time_t(now);
+            std::stringstream threshold_log;
+            threshold_log << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S")
+                         << " [THRESHOLD_FAIL] " << current_data.instrument
+                         << " Action=HOLD ExecuteFlag=FALSE REASON=\"Thresholds not met: Conf=" 
+                         << (meets_confidence ? "PASS" : "FAIL") << " Coh=" 
+                         << (meets_coherence ? "PASS" : "FAIL") << " Stab=" 
+                         << (meets_stability ? "PASS" : "FAIL") << "\"";
+            std::cout << threshold_log.str() << std::endl;
+            
             std::cout << "[QuantumSignal] Thresholds not met - HOLD" << std::endl;
         }
         
@@ -501,14 +558,25 @@ sep::trading::QuantumTradingSignal::Action sep::trading::QuantumSignalBridge::de
 }
 
 double sep::trading::QuantumSignalBridge::calculatePositionSize(float confidence, double account_balance) {
-    // Risk-adjusted position sizing based on confidence
-    double risk_percent = 0.02; // 2% max risk per trade
-    double base_units = 1000;   // Base position size
+    // ULTRA-CONSERVATIVE RISK MANAGEMENT FOR LIVE VALIDATION TRIAL
+    // Max 0.5% account risk per trade for initial live testing
+    double risk_percent = 0.005; // 0.5% max risk per trade (was 2%)
+    double base_units = 100;     // Small base position size (was 1000)
     
-    // Scale by confidence (higher confidence = larger position)
-    double confidence_multiplier = std::min(2.0, static_cast<double>(confidence) * 2.0);
+    // Scale by confidence but cap at conservative levels
+    double confidence_multiplier = std::min(1.5, static_cast<double>(confidence) * 1.2);
     
-    return base_units * confidence_multiplier;
+    // Calculate position based on account balance and risk
+    double max_risk_dollars = account_balance * risk_percent;
+    double conservative_position = base_units * confidence_multiplier;
+    
+    // Log the risk calculation for transparency
+    std::cout << "[RiskMgmt] Account=" << account_balance 
+              << " MaxRisk=" << max_risk_dollars 
+              << " Confidence=" << confidence 
+              << " Position=" << conservative_position << " units" << std::endl;
+    
+    return conservative_position;
 }
 
 double sep::trading::QuantumSignalBridge::calculateStopLoss(float coherence, double current_price) {
@@ -981,7 +1049,38 @@ void sep::trading::QuantumSignalBridge::onHigherTimeframeCandle(const Candle& ca
         mtf_analyzer_->updateSignalMap(timeframe_minutes, timestamp, signal);
     }
     
-    std::cout << "[RealTime] Updated " << timeframe_name << " signals map with " 
-              << new_signals.size() << " new signals" << std::endl;
+    std::cout << "[RealTime] Updated " << timeframe_name << " signals map with "
+    << new_signals.size() << " new signals" << std::endl;
+}
+
+void sep::trading::QuantumSignalBridge::loadOptimalConfig() {
+    const std::string config_path = "/sep/optimal_config.json";
+    
+    if (!std::filesystem::exists(config_path)) {
+        std::cout << "[QuantumSignal] No optimal config found, using defaults" << std::endl;
+        return;
+    }
+    
+    try {
+        std::ifstream file(config_path);
+        nlohmann::json config;
+        file >> config;
+        
+        // Load thresholds (weights are not used here but could be extended)
+        if (config.contains("confidence_threshold")) {
+            confidence_threshold_.store(config["confidence_threshold"].get<float>());
+        }
+        if (config.contains("coherence_threshold")) {
+            coherence_threshold_.store(config["coherence_threshold"].get<float>());
+        }
+        
+        std::cout << "[QuantumSignal] Loaded optimal config:" << std::endl;
+        std::cout << "  Confidence threshold: " << confidence_threshold_.load() << std::endl;
+        std::cout << "  Coherence threshold: " << coherence_threshold_.load() << std::endl;
+        std::cout << "  Expected profitability score: " << config.value("profitability_score", 0.0) << std::endl;
+        
+    } catch (const std::exception& e) {
+        std::cerr << "[QuantumSignal] Error loading optimal config: " << e.what() << std::endl;
+    }
 }
 
